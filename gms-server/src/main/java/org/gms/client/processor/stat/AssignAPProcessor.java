@@ -653,14 +653,20 @@ public class AssignAPProcessor {
                     int level = player.getLevel();
                     Job job = player.getJob();
                     boolean canWash = true;
-					if (job.isA(Job.SPEARMAN)) {
-                        canWash = mp >= 4 * level + 156;
+					if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
+                        canWash = mp >= 22 * level + 449;
+                    } else if (job.isA(Job.SPEARMAN)) {
+                        canWash = mp >= 4 * level + 155;
                     } else if (job.isA(Job.FIGHTER) || job.isA(Job.ARAN1)) {
-                        canWash = mp >= 4 * level + 56;
-                    } else if (job.isA(Job.THIEF) && job.getId() % 100 > 0) {
-                        canWash = mp >= level * 14 - 4;
+                        canWash = mp >= 4 * level + 55;
+                    } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
+                        canWash = mp >= 14 * level + 135;
+                    } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
+                        canWash = mp >= 14 * level + 135;
+                    } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
+                        canWash = mp >= 18 * level + 95;
                     } else {
-                        canWash = mp >= level * 14 + 148;
+                        canWash = mp >= 14 * level + 135;
                     }
                     if (!canWash) {
                         player.message("你的MP总量不足，无法进行重置。");
@@ -786,83 +792,62 @@ public class AssignAPProcessor {
         //========== 默认配置（适用于新手等未定义职业） ==========//
         int baseValue = 10;      // 基础增加值
         int resetValue = 8;      // AP重置时增加值
-        int randomMin = 8;       // 随机最小值
-        int randomMax = 12;      // 随机最大值
         Integer skillId = null;  // 需要检查的技能ID
 
         //========== 职业专属配置 ==========//
         // 战士/黎明战士（物理系职业）
         if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1)) {
-            baseValue = 20;       // 标准模式下基础值
-            resetValue = 20;      // 重置时增加值
-            randomMin = 18;       // 随机范围18-22
-            randomMax = 22;
+            baseValue = 20;
+            resetValue = 20;
             skillId = job.isA(Job.DAWNWARRIOR1) ?
                     DawnWarrior.MAX_HP_INCREASE :
                     Warrior.IMPROVED_MAXHP;
         }
         // 战神（特殊战士职业）
         else if (job.isA(Job.ARAN1)) {
-            baseValue = 28;       // 固定模式增加值
-            resetValue = 20;      // 重置时增加值
-            randomMin = 26;       // 随机范围26-30
-            randomMax = 30;
+            baseValue = 28;
+            resetValue = 20;
         }
         // 魔法师/烈焰巫师（法系职业）
         else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
             baseValue = 6;
             resetValue = 6;
-            randomMin = 5;
-            randomMax = 9;
         }
         // 飞侠/暗夜行者（敏捷系职业）
         else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
             baseValue = 16;
             resetValue = 16;
-            randomMin = 14;
-            randomMax = 18;
         }
         // 弓箭手/风灵使者（远程职业）
         else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
             baseValue = 16;
             resetValue = 16;
-            randomMin = 14;
-            randomMax = 18;
         }
         // 海盗/冲锋队长（力量系职业）
         else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
             baseValue = 18;
             resetValue = 18;
-            randomMin = 16;
-            randomMax = 20;
             skillId = job.isA(Job.PIRATE) ?
                     Brawler.IMPROVE_MAX_HP :
                     ThunderBreaker.IMPROVE_MAX_HP;
         }
 
-        //========== 技能加成处理 ==========//
-        /* 战士/海盗职业在非重置时有技能加成 */
-        if (!usedAPReset) {
-            if(skillId != null) {
-                Skill hpSkill = SkillFactory.getSkill(skillId);
-                int skillLevel = player.getSkillLevel(hpSkill);
+        int base = usedAPReset ? resetValue : baseValue;
 
-                if (skillLevel > 0) {
-                    // 添加技能效果的Y值（HP增加量）
-                    MaxHP += hpSkill.getEffect(skillLevel).getY();
-                }
+        //========== 技能加成（仅手动AP时生效） ==========//
+        if (!usedAPReset && skillId != null) {
+            Skill hpSkill = SkillFactory.getSkill(skillId);
+            int skillLevel = player.getSkillLevel(hpSkill);
+            if (skillLevel > 0) {
+                MaxHP += hpSkill.getEffect(skillLevel).getY();
             }
-        } else {
-            MaxHP += resetValue;    //基于洗血卷轴基础增加血量
         }
 
-        //========== HP基础值计算 ==========//
-        if (useRandomizeHpmpGain && usedAPReset) {
-            // 随机模式：使用随机范围值
-            MaxHP += Randomizer.rand(randomMin, randomMax);
+        //========== 基础值计算 ==========//
+        if (useRandomizeHpmpGain) {
+            MaxHP += Randomizer.rand(base - 2, base + 2);
         } else {
-            // 固定模式：使用基础值或重置值
-            MaxHP += usedAPReset ? resetValue : baseValue;
+            MaxHP += base;
         }
 
         return MaxHP;  // 返回最终计算结果
@@ -891,76 +876,59 @@ public class AssignAPProcessor {
         //========== 默认配置（适用于新手等未定义职业） ==========//
         int baseValue = 6;       // 基础增加值
         int resetValue = 6;      // AP重置时增加值
-        int randomMin = 4;       // 随机最小值
-        int randomMax = 6;       // 随机最大值
-        float intFactor = 0.5f;  // 智力系数（10%）
         boolean hasSkill = false;// 是否检查技能加成
 
         //========== 职业专属配置 ==========//
         // 战士/黎明战士/战神（物理系职业）
         if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
-            baseValue = 3;       // 标准模式下+3
-            resetValue = 2;      // 重置时+2
-            randomMin = 2;       // 随机范围2-4
-            randomMax = 4;
-            intFactor = 0.1f;    // 10%智力加成
+            baseValue = 3;
+            resetValue = 2;
         }
         // 魔法师/烈焰巫师（法系职业）
         else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
-            baseValue = 18;      // 标准模式下+18
-            resetValue = 18;     // 重置时保持+18
-            randomMin = 12;      // 随机范围12-16
-            randomMax = 16;
-            intFactor = 0.05f;  // 5%智力加成
-            hasSkill = true;     // 需要检查技能加成
+            baseValue = 18;
+            resetValue = 18;
+            hasSkill = true;
         }
         // 弓箭手/风灵使者（敏捷远程）
         else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
-            baseValue = 10;      // 标准+10
-            resetValue = 10;     // 重置+10
-            randomMin = 6;       // 随机6-8
-            randomMax = 8;
+            baseValue = 10;
+            resetValue = 10;
         }
         // 飞侠/暗夜行者（敏捷近战）
         else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
-            baseValue = 10;      // 配置同弓箭手
+            baseValue = 10;
             resetValue = 10;
-            randomMin = 6;
-            randomMax = 8;
         }
         // 海盗/冲锋队长（力量型）
         else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
-            baseValue = 14;      // 标准+14
-            resetValue = 14;     // 重置+14
-            randomMin = 7;       // 随机7-9
-            randomMax = 9;
+            baseValue = 14;
+            resetValue = 14;
         }
 
-        //========== 技能加成处理 ==========//
-        /* 仅魔法师系职业在非重置时有技能加成 */
+        int base = usedAPReset ? resetValue : baseValue;
+
+        //========== 技能加成（仅手动AP时生效） ==========//
         if (!usedAPReset && hasSkill) {
-            // 根据子职业选择正确的技能ID
             int skillId = job.isA(Job.BLAZEWIZARD1) ?
                     BlazeWizard.INCREASING_MAX_MP :
                     Magician.IMPROVED_MAX_MP_INCREASE;
-
             Skill mpSkill = SkillFactory.getSkill(skillId);
             int skillLevel = player.getSkillLevel(mpSkill);
-
             if (skillLevel > 0) {
-                // 添加技能效果的Y值（MP增加量）
                 MaxMP += mpSkill.getEffect(skillLevel).getY();
             }
         }
 
-        //========== MP基础值计算 ==========//
-        if (useRandomizeHpmpGain && usedAPReset) {
-            // 随机模式：基础随机值 + 智力系数加成
-            MaxMP += Randomizer.rand(randomMin, randomMax) + (int)(playerInt * intFactor);
+        //========== 基础值计算 ==========//
+        if (useRandomizeHpmpGain) {
+            MaxMP += Randomizer.rand(base - 2, base + 2);
         } else {
-            // 固定模式：使用基础值或重置值
-            MaxMP += usedAPReset ? resetValue : baseValue;
+            MaxMP += base;
         }
+
+        //========== INT加成（文档公式: INT/10 - 2，始终生效） ==========//
+        MaxMP += Math.max(0, playerInt / 10 - 2);
 
         return MaxMP;  // 返回最终计算结果
     }
@@ -1001,7 +969,7 @@ public class AssignAPProcessor {
         if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
             MaxMP += 4;
         } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
-            MaxMP += 31;
+            MaxMP += 30;
         } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
             MaxMP += 12;
         } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
