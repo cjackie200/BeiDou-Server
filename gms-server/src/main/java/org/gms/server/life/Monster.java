@@ -1367,6 +1367,15 @@ public class Monster extends AbstractLoadedLife {
         aggroUpdateController();
     }
 
+    public void resetMobVacPosition(Point newPoint) {
+        aggroRemoveController();
+
+        map.broadcastMessage(PacketCreator.killMonster(getObjectId(), false), getPosition());
+        setPosition(newPoint);
+        map.moveMonster(this, this.getPosition());
+        map.broadcastMessage(PacketCreator.spawnMonster(this, false), this.getPosition());
+    }
+
     private void debuffMobStat(MonsterStatus stat) {
         MonsterStatusEffect oldEffect;
         statiLock.lock();
