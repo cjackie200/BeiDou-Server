@@ -235,8 +235,8 @@ function learnSkill(skillId, skillName) {
             maxLevel = 20;
         }
         
-        // 直接学习技能，不检查职业限制
-        player.changeSkillLevel(skill, maxLevel, maxLevel, -1);
+        // 使用脚本管理器的学习接口，确保技能更新包和落库流程与普通 NPC 学技能一致。
+        cm.teachSkill(skillId, maxLevel, maxLevel, -1);
         
         return {
             success: true, 
@@ -271,7 +271,7 @@ function bindSkill(skillId, skillName, keyCode, keyName, keySymbol, alreadyLearn
         }
         
         message += "\r\n按键：" + keySymbol + "键";
-        message += "\r\n#e注意：#n换线后才能看到键位变化";
+        message += "\r\n#e注意：#n如果键位没有马上刷新，换线后即可看到";
         
         return {success: true, message: message};
         
@@ -298,7 +298,7 @@ function bindSkill(skillId, skillName, keyCode, keyName, keySymbol, alreadyLearn
             }
             
             message += "\r\n按键：" + keySymbol + "键";
-            message += "\r\n#e注意：#n换线后才能看到键位变化";
+            message += "\r\n#e注意：#n如果键位没有马上刷新，换线后即可看到";
             
             return {success: true, message: message};
             
