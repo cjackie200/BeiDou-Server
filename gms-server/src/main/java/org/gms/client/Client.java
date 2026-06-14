@@ -572,7 +572,8 @@ public class Client extends ChannelInboundHandlerAdapter {
     public int finishLogin() {
         encoderLock.lock();
         try {
-            if (getLoginState() > LOGIN_NOTLOGGEDIN) { // 0 = LOGIN_NOTLOGGEDIN, 1= LOGIN_SERVER_TRANSITION, 2 = LOGIN_LOGGEDIN
+            int loginState = getLoginState();
+            if (loginState == LOGIN_SERVER_TRANSITION) { // 0 = LOGIN_NOTLOGGEDIN, 1= LOGIN_SERVER_TRANSITION, 2 = LOGIN_LOGGEDIN
                 loggedIn = false;
                 return 7;
             }
@@ -687,7 +688,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                         return 3;
                     }
 
-                    if (getLoginState() > LOGIN_NOTLOGGEDIN) { // already loggedin
+                    if (getLoginState() == LOGIN_SERVER_TRANSITION) {
                         loggedIn = false;
                         loginok = 7;
                     } else if (GameConfig.getServerBoolean("use_debug") && GameConfig.getServerBoolean("no_password")) {
@@ -978,7 +979,13 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     public final void forceDisconnect() {
         if (canDisconnect()) {
-            disconnectInternal(true, false);
+            try {
+                disconnectInternal(true, false);
+            } finally {
+                if (ioChannel != null) {
+                    closeSession();
+                }
+            }
         }
     }
 

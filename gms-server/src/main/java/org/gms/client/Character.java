@@ -8161,44 +8161,74 @@ public class Character extends AbstractCharacterObject {
             effLock.unlock();
         }
 
-        if (GameConfig.getServerBoolean("use_server_auto_pot") || GameConfig.getServerBoolean("use_compulsory_auto_pot")) {
-            float autoHpAlert, autoMpAlert;
-            if (GameConfig.getServerBoolean("use_server_auto_pot")) {
-                autoHpAlert = hpMpAlertService.getHpAlertPer(id);
-                autoMpAlert = hpMpAlertService.getMpAlertPer(id);
-            } else {
-                autoHpAlert = (float) GameConfig.getServerFloat("pet_auto_hp_ratio");
-                autoMpAlert = (float) GameConfig.getServerFloat("pet_auto_mp_ratio");
-            }
-
-            if (hpchange < 0) {
-                KeyBinding autoHpPot = this.getKeymap().get(91);
-                if (autoHpPot != null) {
-                    int autoHpItemId = autoHpPot.getAction();
-                    if (((float) this.getHp()) / this.getCurrentMaxHp() <= autoHpAlert) {
-                        Item autoHpItem = this.getInventory(InventoryType.USE).findById(autoHpItemId);
-                        if (autoHpItem != null) {
-                            PetAutopotProcessor.runAutopotAction(client, autoHpItem.getPosition(), autoHpItemId);
-                        }
-                    }
-                }
-            }
-
-            if (mpchange < 0) {
-                KeyBinding autoMpPot = this.getKeymap().get(92);
-                if (autoMpPot != null) {
-                    int autoMpItemId = autoMpPot.getAction();
-                    if (((float) this.getMp()) / this.getCurrentMaxMp() <= autoMpAlert) {
-                        Item autoMpItem = this.getInventory(InventoryType.USE).findById(autoMpItemId);
-                        if (autoMpItem != null) {
-                            PetAutopotProcessor.runAutopotAction(client, autoMpItem.getPosition(), autoMpItemId);
-                        }
-                    }
-                }
-            }
-        } else {
+        if (!triggerPetAutopotIfNeeded(hpchange, mpchange)) {
             if (hpchange < 0) {
                 sendPacket(PacketCreator.onNotifyHPDecByField(hpchange * -1));
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void addHP(int delta) {
+        super.addHP(delta);
+        triggerPetAutopotIfNeeded(delta, 0);
+    }
+
+    @Override
+    public void addMP(int delta) {
+        super.addMP(delta);
+        triggerPetAutopotIfNeeded(0, delta);
+    }
+
+    @Override
+    public void addMPHP(int hpDelta, int mpDelta) {
+        super.addMPHP(hpDelta, mpDelta);
+        triggerPetAutopotIfNeeded(hpDelta, mpDelta);
+    }
+
+    private boolean triggerPetAutopotIfNeeded(int hpchange, int mpchange) {
+        if (client == null || getCurrentMaxHp() <= 0 || getCurrentMaxMp() <= 0) {
+            return false;
+        }
+
+        if (!(GameConfig.getServerBoolean("use_server_auto_pot") || GameConfig.getServerBoolean("use_compulsory_auto_pot"))) {
+            return false;
+        }
+
+        float autoHpAlert, autoMpAlert;
+        if (GameConfig.getServerBoolean("use_server_auto_pot")) {
+            autoHpAlert = hpMpAlertService.getHpAlertPer(id);
+            autoMpAlert = hpMpAlertService.getMpAlertPer(id);
+        } else {
+            autoHpAlert = (float) GameConfig.getServerFloat("pet_auto_hp_ratio");
+            autoMpAlert = (float) GameConfig.getServerFloat("pet_auto_mp_ratio");
+        }
+
+        if (hpchange < 0) {
+            KeyBinding autoHpPot = this.getKeymap().get(91);
+            if (autoHpPot != null) {
+                int autoHpItemId = autoHpPot.getAction();
+                if (((float) this.getHp()) / this.getCurrentMaxHp() <= autoHpAlert) {
+                    Item autoHpItem = this.getInventory(InventoryType.USE).findById(autoHpItemId);
+                    if (autoHpItem != null) {
+                        PetAutopotProcessor.runAutopotAction(client, autoHpItem.getPosition(), autoHpItemId);
+                    }
+                }
+            }
+        }
+
+        if (mpchange < 0) {
+            KeyBinding autoMpPot = this.getKeymap().get(92);
+            if (autoMpPot != null) {
+                int autoMpItemId = autoMpPot.getAction();
+                if (((float) this.getMp()) / this.getCurrentMaxMp() <= autoMpAlert) {
+                    Item autoMpItem = this.getInventory(InventoryType.USE).findById(autoMpItemId);
+                    if (autoMpItem != null) {
+                        PetAutopotProcessor.runAutopotAction(client, autoMpItem.getPosition(), autoMpItemId);
+                    }
+                }
             }
         }
 

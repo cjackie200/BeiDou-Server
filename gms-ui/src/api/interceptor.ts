@@ -4,6 +4,8 @@ import { Message } from '@arco-design/web-vue';
 import { useUserStore } from '@/store';
 import { getToken } from '@/utils/auth';
 
+let isRedirectingToLogin = false;
+
 /* eslint-disable no-bitwise */
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -26,10 +28,6 @@ if (import.meta.env.VITE_API_BASE_URL) {
 
 axios.interceptors.request.use(
   (config: AxiosRequestConfig) => {
-    // let each request carry token
-    // this example using the JWT token
-    // Authorization is a custom headers key
-    // please modify it according to the actual situation
     const token = getToken();
     if (token) {
       if (!config.headers) {
@@ -47,11 +45,10 @@ axios.interceptors.request.use(
     return config;
   },
   (error) => {
-    // do something
     return Promise.reject(error);
   }
 );
-// add response interceptors
+
 axios.interceptors.response.use(
   (response: AxiosResponse<HttpResponse | Blob>) => {
     if (response.config.responseType === 'blob') {
@@ -66,7 +63,6 @@ axios.interceptors.response.use(
       const url = window.URL.createObjectURL(new Blob([res]));
       const link = document.createElement('a');
       link.href = url;
-      // 从Content-Disposition中获取文件名
       link.setAttribute(
         'download',
         response.headers['content-disposition']
@@ -76,12 +72,10 @@ axios.interceptors.response.use(
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      // 释放URL对象
       window.URL.revokeObjectURL(url);
       return null;
     }
     const res = response.data as HttpResponse;
-    // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000) {
       Message.error({
         content: res.message || 'Error',
@@ -92,6 +86,21 @@ axios.interceptors.response.use(
     return res;
   },
   (error) => {
+    if (error.response?.status === 401) {
+      const userStore = useUserStore();
+
+      userStore.logoutCallBack();
+      if (!isRedirectingToLogin) {
+        isRedirectingToLogin = true;
+        Message.error({
+          content: '登录已过期，请重新登录',
+          duration: 5 * 1000,
+        });
+        window.location.href = '/';
+      }
+      return Promise.reject(new Error('登录已过期，请重新登录'));
+    }
+
     let errorMessage;
     if (error.message === 'Network Error') {
       errorMessage = '无法连接到服务器';
@@ -102,14 +111,6 @@ axios.interceptors.response.use(
       content: errorMessage,
       duration: 5 * 1000,
     });
-    if (error.response.status === 401) {
-      const userStore = useUserStore();
-
-      userStore.logoutCallBack();
-      // window.location.reload();
-      window.location.href = '/';
-      return Promise.reject(new Error('登录已过期'));
-    }
     return Promise.reject(error);
   }
 );

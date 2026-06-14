@@ -80,6 +80,19 @@
     sql: 'sql',
   };
   type LanguageMapKey = keyof typeof languageMap;
+  type MonacoWithTypescript = MonacoEditor & {
+    languages: MonacoEditor['languages'] & {
+      typescript: {
+        javascriptDefaults: {
+          addExtraLib: (content: string, filePath?: string) => void;
+          setCompilerOptions: (options: Record<string, unknown>) => void;
+        };
+        ScriptTarget: {
+          ES6: unknown;
+        };
+      };
+    };
+  };
 
   onUnmounted(() => {
     if (editorCompletionProvider.value)
@@ -107,13 +120,15 @@
       usingDts = localDts;
     }
 
-    monaco.languages.typescript.javascriptDefaults.addExtraLib(
+    const monacoWithTypescript = monaco as MonacoWithTypescript;
+
+    monacoWithTypescript.languages.typescript.javascriptDefaults.addExtraLib(
       usingDts,
       'beidoums-scripts-dts'
     );
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+    monacoWithTypescript.languages.typescript.javascriptDefaults.setCompilerOptions({
       allowJs: true,
-      target: monaco.languages.typescript.ScriptTarget.ES6,
+      target: monacoWithTypescript.languages.typescript.ScriptTarget.ES6,
       allowNonTsExtensions: true,
       noNonAsciiIdentifier: false,
       noLib: true,
