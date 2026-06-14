@@ -47,6 +47,7 @@ import java.sql.SQLException;
  */
 public final class AcceptFamilyHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(AcceptFamilyHandler.class);
+    private static final int INITIAL_FAMILY_REPUTATION = 999999;
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -117,6 +118,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                         chr.getFamilyEntry().join(inviterEntry);
                     }
                 }
+                grantInitialFamilyReputation(inviter.getFamilyEntry(), chr.getFamilyEntry());
                 c.getPlayer().getFamily().broadcast(PacketCreator.sendFamilyJoinResponse(true, c.getPlayer().getName()), c.getPlayer().getId());
                 c.sendPacket(PacketCreator.getSeniorMessage(inviter.getName()));
                 c.sendPacket(PacketCreator.getFamilyInfo(chr.getFamilyEntry()));
@@ -126,6 +128,21 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
             }
         }
         c.sendPacket(PacketCreator.sendFamilyMessage(0, 0));
+    }
+
+    private static void grantInitialFamilyReputation(FamilyEntry inviterEntry, FamilyEntry inviteeEntry) {
+        grantInitialFamilyReputation(inviterEntry);
+        if (inviteeEntry != inviterEntry) {
+            grantInitialFamilyReputation(inviteeEntry);
+        }
+    }
+
+    private static void grantInitialFamilyReputation(FamilyEntry entry) {
+        if (entry == null) {
+            return;
+        }
+        entry.gainReputation(INITIAL_FAMILY_REPUTATION, true);
+        entry.saveReputation();
     }
 
     private static void insertNewFamilyRecord(int characterID, int familyID, int seniorID, boolean updateChar) {
