@@ -136,7 +136,11 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         if (chr.isAlive()) {
             if (skill.getId() != Priest.MYSTIC_DOOR) {
                 if (skill.getId() % 10000000 != 1005) {
-                    skill.getEffect(skillLevel).applyTo(chr, pos);
+                    effect.applyTo(chr, pos);
+                    // 减少buff技能后摇: buff应用后立即解锁操作
+                    if (GameConfig.getServerBoolean("use_reduce_buff_delay") && effect.getDuration() > 0) {
+                        c.sendPacket(PacketCreator.enableActions());
+                    }
                 } else {
                     skill.getEffect(skillLevel).applyEchoOfHero(chr);
                 }
