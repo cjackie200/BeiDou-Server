@@ -161,6 +161,11 @@ public class StorageProcessor {
                                     c.sendPacket(PacketCreator.enableActions());
                                     return;
                                 }
+                                if (ii.isStorageRestricted(itemId)) {
+                                    chr.dropMessage(1, "该道具无法放入仓库");
+                                    c.sendPacket(PacketCreator.enableActions());
+                                    return;
+                                }
 
                                 if (ItemConstants.isRechargeable(itemId)) {
                                     quantity = item.getQuantity();

@@ -16573,6 +16573,50 @@
         <string name="name" value="Lilin&apos;s Ring"/>
         <string name="desc" value="Lilin&apos;s Ring that can be shared with any character in the same account. Cannot be put in a transaction with other accounts."/>
       </imgdir>
+      <imgdir name="1112415">
+        <string name="name" value="Monster Card Ring N"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112416">
+        <string name="name" value="Monster Card Ring I"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112417">
+        <string name="name" value="Monster Card Ring II"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112418">
+        <string name="name" value="Monster Card Ring III"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112419">
+        <string name="name" value="Monster Card Ring IV"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112420">
+        <string name="name" value="Monster Card Ring V"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112421">
+        <string name="name" value="Monster Card Ring VI"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112422">
+        <string name="name" value="Monster Card Ring VII"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112423">
+        <string name="name" value="Monster Card Ring VIII"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112424">
+        <string name="name" value="Monster Card Ring IX"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
+      <imgdir name="1112425">
+        <string name="name" value="Monster Card Ring X"/>
+        <string name="desc" value="A growth ring that can be shared with characters in the same account. Cannot be traded or sold."/>
+      </imgdir>
       <imgdir name="1112812">
         <string name="name" value="Shared Umbrella Ring"/>
       </imgdir>

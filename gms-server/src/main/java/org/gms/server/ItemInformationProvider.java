@@ -106,6 +106,7 @@ public class ItemInformationProvider {
     protected Map<Integer, Boolean> accountItemRestrictionCache = new HashMap<>();
     protected Map<Integer, Boolean> dropRestrictionCache = new HashMap<>();
     protected Map<Integer, Boolean> pickupRestrictionCache = new HashMap<>();
+    protected Map<Integer, Boolean> storageRestrictionCache = new HashMap<>();
     protected Map<Integer, Integer> getMesoCache = new HashMap<>();
     protected Map<Integer, Integer> monsterBookID = new HashMap<>();
     protected Map<Integer, Boolean> untradeableCache = new HashMap<>();
@@ -1451,6 +1452,23 @@ public class ItemInformationProvider {
         }
 
         pickupRestrictionCache.put(itemId, bRestricted);
+        return bRestricted;
+    }
+
+    public boolean isStorageRestricted(int itemId) {
+        if (storageRestrictionCache.containsKey(itemId)) {
+            return storageRestrictionCache.get(itemId);
+        }
+
+        boolean bRestricted = false;
+        if (itemId != 0) {
+            Data data = getItemData(itemId);
+            if (data != null) {
+                bRestricted = DataTool.getIntConvert("info/storageBlock", data, 0) == 1;
+            }
+        }
+
+        storageRestrictionCache.put(itemId, bRestricted);
         return bRestricted;
     }
 

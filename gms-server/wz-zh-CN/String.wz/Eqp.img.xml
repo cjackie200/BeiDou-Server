@@ -16539,6 +16539,50 @@
                 <string name="name" value="利琳的戒指" />
                 <string name="desc" value="放在仓库里后，可以在同一帐号下的不\n同角色间共享的戒指。无法和其他玩家\n交易。" />
             </imgdir>
+            <imgdir name="1112415">
+                <string name="name" value="怪物卡戒指N" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112416">
+                <string name="name" value="怪物卡戒指I" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112417">
+                <string name="name" value="怪物卡戒指II" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112418">
+                <string name="name" value="怪物卡戒指III" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112419">
+                <string name="name" value="怪物卡戒指IV" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112420">
+                <string name="name" value="怪物卡戒指V" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112421">
+                <string name="name" value="怪物卡戒指VI" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112422">
+                <string name="name" value="怪物卡戒指VII" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112423">
+                <string name="name" value="怪物卡戒指VIII" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112424">
+                <string name="name" value="怪物卡戒指IX" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
+            <imgdir name="1112425">
+                <string name="name" value="怪物卡戒指X" />
+                <string name="desc" value="怪物卡片图鉴戒指\n无法和其他玩家" />
+            </imgdir>
             <imgdir name="1112800">
                 <string name="name" value="四叶挚友戒指" />
                 <string name="desc" value="表示朋友之间友谊的戒指" />
