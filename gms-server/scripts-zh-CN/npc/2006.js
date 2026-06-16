@@ -59,10 +59,7 @@ function handleAction(mode, type, selection) {
     if (status == 0) {
         sendEntry();
     } else if (status == 1) {
-        if (flow == "claim") {
-            claimBaseRing();
-            flow = "close";
-        } else if (selection == 90) {
+        if (selection == 90) {
             prepareNextUpgradeTest();
             flow = "close";
         } else {
@@ -77,9 +74,8 @@ function sendEntry() {
     syncQuestState();
 
     if (MonsterCardRingQuest.canClaimBaseRing(cm.getPlayer())) {
-        flow = "claim";
-        cm.sendYesNo("你要领取 #b#i" + BASE_RING + "##t" + BASE_RING + "##k 吗？\r\n\r\n"
-            + "这是怪物卡戒指的起点，没有属性，但会用于后续升级。");
+        flow = "close";
+        cm.sendOk("请点击我头上的任务提示领取 #b#i" + BASE_RING + "##t" + BASE_RING + "##k。");
         return;
     }
 
@@ -87,7 +83,7 @@ function sendEntry() {
     if (validation.isOk()) {
         flow = "close";
         cm.sendOk(getProgressText(validation) + "\r\n\r\n"
-            + "#b条件已经满足。请点击头上的任务完成书本提示升级到 Lv" + validation.getTargetLevel() + "。#k");
+            + "#b条件已经满足。请点击任务完成书本提示升级到 Lv" + validation.getTargetLevel() + "。#k");
         return;
     }
 
@@ -100,31 +96,6 @@ function sendEntry() {
 
     flow = "close";
     cm.sendOk(text);
-}
-
-function claimBaseRing() {
-    syncQuestState();
-    if (!MonsterCardRingQuest.canClaimBaseRing(cm.getPlayer())) {
-        cm.sendOk("你已经拥有怪物卡戒指了，不能重复领取。");
-        syncQuestState();
-        return;
-    }
-
-    if (!cm.canHold(BASE_RING, 1)) {
-        cm.sendOk("请先在装备栏背包空出 1 格。");
-        syncQuestState();
-        return;
-    }
-
-    if (cm.gainRawEquip(BASE_RING) == null) {
-        cm.sendOk("装备栏空间不足，暂时无法领取。");
-        syncQuestState();
-        return;
-    }
-
-    syncQuestState();
-    cm.sendOk("拿着这个 #b#i" + BASE_RING + "##t" + BASE_RING + "##k。\r\n"
-        + "以后直接来找我，我会告诉你怪物卡和材料进度。");
 }
 
 function prepareNextUpgradeTest() {

@@ -76811,7 +76811,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29981"/>
+          <int name="id" value="29980"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76827,7 +76827,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29982"/>
+          <int name="id" value="29981"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76843,7 +76843,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29983"/>
+          <int name="id" value="29982"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76859,7 +76859,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29984"/>
+          <int name="id" value="29983"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76875,7 +76875,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29985"/>
+          <int name="id" value="29984"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76891,7 +76891,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29986"/>
+          <int name="id" value="29985"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76907,7 +76907,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29987"/>
+          <int name="id" value="29986"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76923,7 +76923,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29988"/>
+          <int name="id" value="29987"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76939,7 +76939,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29989"/>
+          <int name="id" value="29988"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>
@@ -76955,7 +76955,7 @@
       <string name="startscript" value="monsterCardRing"/>
       <imgdir name="quest">
         <imgdir name="0">
-          <int name="id" value="29990"/>
+          <int name="id" value="29989"/>
           <int name="state" value="2"/>
         </imgdir>
       </imgdir>

@@ -460,17 +460,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
             // Tell the client to use the custom scripts available for the NPCs provided, instead of the WZ entries.
             if (GameConfig.getServerBoolean("use_npcs_scriptable")) {
-
-                // Create a copy to prevent always adding entries to the server's list.
-                Map<Integer, String> npcsIds = GameConfig.getServerObject("npcs_scriptable", new HashMap<>());
-
-                // Any npc be specified as the rebirth npc. Allow the npc to use custom scripts explicitly.
-                if (GameConfig.getServerBoolean("use_rebirth_system")) {
-                    npcsIds.put(GameConfig.getServerInt("rebirth_npc_id"), "Rebirth");
-                }
-                npcsIds.put(MonsterCardRingQuest.NPC_ID, "怪物卡戒指");
-
-                c.sendPacket(PacketCreator.setNPCScriptable(npcsIds));
+                c.sendPacket(PacketCreator.setNPCScriptable(MonsterCardRingQuest.getScriptableNpcIds(player)));
             }
 
             if (newcomer) {

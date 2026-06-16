@@ -4,7 +4,10 @@ import org.gms.client.Character;
 import org.gms.client.QuestStatus;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
+import org.gms.config.GameConfig;
+import org.gms.util.PacketCreator;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public final class MonsterCardRingQuest {
@@ -111,25 +114,37 @@ public final class MonsterCardRingQuest {
         if (ringState.getTotal() == 0) {
             setQuestStatus(chr, CLAIM_QUEST_ID, QuestStatus.Status.NOT_STARTED, announce);
             resetUpgradeQuests(chr, announce);
+            syncNpcScriptable(chr, announce);
             return;
         }
 
         setQuestStatus(chr, CLAIM_QUEST_ID, QuestStatus.Status.COMPLETED, announce);
 
-        int readyTargetLevel = 0;
         RingInfo current = ringState.getCurrent();
-        if (ringState.getTotal() == 1 && current != null && current.getLevel() < MAX_LEVEL) {
-            int targetLevel = current.getLevel() + 1;
-            if (canShowUpgradeNotice(chr, current, targetLevel)) {
-                readyTargetLevel = targetLevel;
-            }
+        int currentLevel = current == null ? 0 : current.getLevel();
+        int nextTargetLevel = current != null && currentLevel < MAX_LEVEL ? currentLevel + 1 : 0;
+        int readyTargetLevel = 0;
+        if (ringState.getTotal() == 1 && nextTargetLevel > 0 && canShowUpgradeNotice(chr, current, nextTargetLevel)) {
+            readyTargetLevel = nextTargetLevel;
         }
 
         for (int level = 1; level <= MAX_LEVEL; level++) {
-            QuestStatus.Status status = level == readyTargetLevel
-                    ? QuestStatus.Status.STARTED
-                    : QuestStatus.Status.NOT_STARTED;
+            QuestStatus.Status status;
+            if (level <= currentLevel) {
+                status = QuestStatus.Status.COMPLETED;
+            } else if (level == readyTargetLevel) {
+                status = QuestStatus.Status.STARTED;
+            } else {
+                status = QuestStatus.Status.NOT_STARTED;
+            }
             setQuestStatus(chr, getUpgradeQuestId(level), status, announce);
+        }
+        syncNpcScriptable(chr, announce);
+    }
+
+    private static void syncNpcScriptable(Character chr, boolean announce) {
+        if (announce) {
+            syncNpcScriptable(chr);
         }
     }
 
@@ -179,6 +194,26 @@ public final class MonsterCardRingQuest {
 
     public static boolean canClaimBaseRing(Character chr) {
         return getRingState(chr).getTotal() == 0;
+    }
+
+    public static Map<Integer, String> getScriptableNpcIds(Character chr) {
+        Map<Integer, String> configuredNpcIds = GameConfig.getServerObject(
+                "npcs_scriptable", new HashMap<Integer, String>());
+        Map<Integer, String> npcsIds = new HashMap<>(configuredNpcIds);
+
+        if (GameConfig.getServerBoolean("use_rebirth_system")) {
+            npcsIds.put(GameConfig.getServerInt("rebirth_npc_id"), "Rebirth");
+        }
+
+        npcsIds.remove(NPC_ID);
+        return npcsIds;
+    }
+
+    public static void syncNpcScriptable(Character chr) {
+        if (chr == null || chr.getClient() == null || !GameConfig.getServerBoolean("use_npcs_scriptable")) {
+            return;
+        }
+        chr.getClient().sendPacket(PacketCreator.setNPCScriptable(getScriptableNpcIds(chr)));
     }
 
     public static UpgradeValidation validateUpgrade(Character chr) {
