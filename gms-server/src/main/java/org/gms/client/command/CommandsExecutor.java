@@ -81,6 +81,24 @@ public class CommandsExecutor {
 //        registerLv6Commands();
 
         commandService.loadCommands(registeredCommands, commandsNameDesc);
+        registerBuiltinFallbackCommand("kqjg", new OpenMobVacCommand());
+        registerBuiltinFallbackCommand("gbjg", new CloseMobVacCommand());
+        registerBuiltinFallbackCommand("mobvac", new MobVacCommand());
+        registerBuiltinFallbackCommand("noguai", new MobVacCommand());
+    }
+
+    private void registerBuiltinFallbackCommand(String syntax, Command command) {
+        String commandName = syntax.toLowerCase();
+        if (registeredCommands.containsKey(commandName)) {
+            return;
+        }
+        command.setRank(0);
+        registeredCommands.put(commandName, command);
+        if (!commandsNameDesc.isEmpty()) {
+            Pair<List<String>, List<String>> userCommands = commandsNameDesc.get(0);
+            userCommands.getLeft().add(commandName);
+            userCommands.getRight().add(command.getDescription());
+        }
     }
 
     public void handle(Client client, String message) {

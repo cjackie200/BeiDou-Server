@@ -136,8 +136,13 @@ function levelmain() {
 	text = "亲爱的玩家：#e#b#h ##k#n，感谢您持续在线支持！\r\n";
 	text += `#e今日已累积在线：#n${formatMinutes(g_OnlineMinutes)}\r\n`;
 	text += "我们为您准备了丰厚的在线时长奖励，点击领取下方的奖励：\r\n";
-	text += getOnlineRewardListText() + "\r\n\r\n";
-	text += "\r\n【领取说明】\r\n · 每份奖励需手动领取\r\n · #b每日0点#e#r重置#b#n累计时长#k\r\n · 背包空间不足将不会发放奖励\r\n · 坚持在线时间越长，获得奖励越丰厚！"
+	const rewardListText = getOnlineRewardListText();
+	const claimableCount = getClaimableRewardIndexes().length;
+	if (claimableCount > 0) {
+		text += `\r\n#L1000##e#b一键领取可领取奖励（${claimableCount}份）#n#k#l\r\n`;
+	}
+	text += rewardListText + "\r\n\r\n";
+	text += "\r\n【领取说明】\r\n · 可单独领取，也可一键领取所有已满足条件且未领取的奖励\r\n · #b每日0点#e#r重置#b#n累计时长#k\r\n · 背包空间不足将不会发放奖励\r\n · 坚持在线时间越长，获得奖励越丰厚！"
 	if (g_ClaimStatus == ((1 << config.reward.length) - 1)) {
 		cm.sendOkLevel("",text);	
 	} else {
@@ -146,8 +151,17 @@ function levelmain() {
 }
 
 function levelclaimrewards(Select) {
+	if (Select == 1000) {
+		const rewardIndexes = getClaimableRewardIndexes();
+		if (rewardIndexes.length === 0) {
+			cm.sendOkLevel("", "当前没有可领取的在线奖励。");
+			return;
+		}
+		const names = rewardIndexes.map(i => `#b${formatMinutes(config.reward[i].online)}#k`).join("、");
+		cm.sendYesNoLevel("", "claimAllRewards", `当前可一键领取以下在线奖励：\r\n\r\n${names}\r\n\r\n#e#b是否立即领取？#n#k`);
+		return;
+	}
 	const reward = config.reward[Select];
-	g_ClaimStatus |= (1 << Select);
 	let text = "\r\n";
 		text += getRewardList(Select);
 	if (reward.isReceive) {	//已领取
@@ -164,6 +178,10 @@ function levelclaimrewards(Select) {
 }
 function levelgiveRewardItems() {
 	cm.sendOkLevel("",giveRewardItems(g_Select,g_itemCount));
+}
+
+function levelclaimAllRewards() {
+	cm.sendOkLevel("", giveAllClaimableRewards());
 }
 /**
  * 生成奖励物品的显示列表
@@ -200,22 +218,71 @@ function giveRewardItems(Select,count = 1) {
 		return "输入的份数不能 ≤0 且 不能超过最大份数 " + g_itemCount;
 	}
 	const reward = config.reward[Select];
-	// 验证普通物品
-	const failedItems = [];
-	const normalItems = reward.itemlist.filter(obj => obj.id >= 1_000_000);
-
-	for (const {id, qty} of normalItems) {
-		const totalQty = qty * count;
-		if (!cm.canHold(id, totalQty)) {
-			failedItems.push(`#fUI/UIWindow.img/FadeYesNo/BtCancel/mouseOver/0# #i${id}#   #b#t${id}##k × #r${totalQty}#k`);
-		}
-	}
-
+	const failedItems = getFailedItemsForRewards([Select], count);
 	if (failedItems.length > 0) {
 		return ` 背包空间不足，无法兑换以下物品：\r\n\r\n${failedItems.join('\r\n')}`;
 	}
 
-	// 实际发放所有物品
+	const successItems = grantRewardItems(reward, count);
+	g_ClaimStatus |= (1 << Select);
+	saveOnlineStatus(g_ClaimStatus);//更新领取记录
+	cm.dropMessage(0,`你已成功领取了 ${reward.title.toString().replace(/#[a-zA-Z]/g,"")}！`);
+	return `#fUI/UIWindow.img/QuestIcon/4/0#\r\n\r\n${successItems.join('\r\n')}`;
+}
+
+function giveAllClaimableRewards() {
+	const rewardIndexes = getClaimableRewardIndexes();
+	if (rewardIndexes.length === 0) {
+		return "当前没有可领取的在线奖励。";
+	}
+
+	const failedItems = getFailedItemsForRewards(rewardIndexes, 1);
+	if (failedItems.length > 0) {
+		return ` 背包空间不足，无法一键领取以下物品：\r\n\r\n${failedItems.join('\r\n')}`;
+	}
+
+	const successItems = [];
+	for (const index of rewardIndexes) {
+		const reward = config.reward[index];
+		successItems.push(`\r\n#e#b${reward.title.toString().replace(/#[a-zA-Z]/g,"")}#n#k`);
+		successItems.push(...grantRewardItems(reward, 1));
+		g_ClaimStatus |= (1 << index);
+	}
+	saveOnlineStatus(g_ClaimStatus);//更新领取记录
+	cm.dropMessage(0,`你已成功一键领取 ${rewardIndexes.length} 份在线奖励！`);
+	return `#fUI/UIWindow.img/QuestIcon/4/0#\r\n${successItems.join('\r\n')}`;
+}
+
+function getClaimableRewardIndexes() {
+	return config.reward
+		.map((reward, index) => ({ reward, index }))
+		.filter(({ reward, index }) => (g_ClaimStatus & (1 << index)) === 0 && g_OnlineMinutes >= reward.online)
+		.map(({ index }) => index);
+}
+
+function getFailedItemsForRewards(rewardIndexes, count = 1) {
+	const requiredItems = {};
+	for (const index of rewardIndexes) {
+		const reward = config.reward[index];
+		for (const {id, qty} of reward.itemlist) {
+			if (id >= 1_000_000) {
+				requiredItems[id] = (requiredItems[id] || 0) + (qty * count);
+			}
+		}
+	}
+
+	const failedItems = [];
+	for (const idText in requiredItems) {
+		const id = parseInt(idText, 10);
+		const totalQty = requiredItems[idText];
+		if (!cm.canHold(id, totalQty)) {
+			failedItems.push(`#fUI/UIWindow.img/FadeYesNo/BtCancel/mouseOver/0# #i${id}#   #b#t${id}##k × #r${totalQty}#k`);
+		}
+	}
+	return failedItems;
+}
+
+function grantRewardItems(reward, count = 1) {
 	const successItems = [];
 	for (const {id, qty} of reward.itemlist) {
 		const totalQty = qty * count;
@@ -246,9 +313,7 @@ function giveRewardItems(Select,count = 1) {
 			successItems.push(`#fUI/Basic.img/CheckBox/1# ${succitemshow}`);
 		}
 	}
-	saveOnlineStatus(g_ClaimStatus);//更新领取记录
-	cm.dropMessage(0,`你已成功领取了 ${reward.title.toString().replace(/#[a-zA-Z]/g,"")}！`);
-	return `#fUI/UIWindow.img/QuestIcon/4/0#\r\n\r\n${successItems.join('\r\n')}`;
+	return successItems;
 }
 
 /**

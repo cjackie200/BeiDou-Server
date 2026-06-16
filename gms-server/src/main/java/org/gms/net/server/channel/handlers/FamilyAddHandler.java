@@ -51,8 +51,6 @@ public final class FamilyAddHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.sendFamilyMessage(69, 0));
         } else if (addChr.getLevel() <= 10) {
             c.sendPacket(PacketCreator.sendFamilyMessage(77, 0));
-        } else if (Math.abs(addChr.getLevel() - chr.getLevel()) > 20) {
-            c.sendPacket(PacketCreator.sendFamilyMessage(72, 0));
         } else if (addChr.getFamily() != null && addChr.getFamily() == chr.getFamily()) { //same family
             c.sendPacket(PacketCreator.enableActions());
         } else if (InviteCoordinator.hasInvite(InviteType.FAMILY, addChr.getId())) {

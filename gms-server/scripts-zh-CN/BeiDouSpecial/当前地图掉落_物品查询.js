@@ -37,6 +37,27 @@ var categoryRanges = {
     11: { name: "职业技能书", ranges: [[2280000,2299999]] } // 新增：技能书(228)和能手册(229)
 };
 
+function isEquipCategory(categoryId) {
+    return categoryId >= 1 && categoryId <= 7;
+}
+
+function getEquipReqLevel(itemId) {
+    try {
+        var stats = ItemInformationProvider.getInstance().getEquipStats(itemId);
+        if (stats == null) {
+            return null;
+        }
+        var level = stats.get("reqLevel");
+        if (level == null) {
+            return null;
+        }
+        level = parseInt(String(level));
+        return isNaN(level) || level <= 0 ? null : level;
+    } catch (e) {
+        return null;
+    }
+}
+
 function start() {
     levelStart();
 }
@@ -109,7 +130,8 @@ function loadCategoryItems(categoryId) {
             if (itemName != null && itemName != "MISSINGNO") {
                 categoryItems.push({
                     id: itemId,
-                    name: itemName
+                    name: itemName,
+                    level: isEquipCategory(categoryId) ? getEquipReqLevel(itemId) : null
                 });
             }
         }
@@ -147,7 +169,8 @@ function showCategoryItems() {
     
     for (var i = start; i < end; i++) {
         var item = categoryItems[i];
-        text += "#L" + item.id + "##v" + item.id + "# #b" + item.name + "#k (ID: " + item.id + ")#l\r\n";
+        var levelText = item.level == null ? "" : " #d[Lv." + item.level + "]#k";
+        text += "#L" + item.id + "##i" + item.id + "# #b" + item.name + "#k" + levelText + " (ID: " + item.id + ")#l\r\n";
     }
     
     text += "\r\n";

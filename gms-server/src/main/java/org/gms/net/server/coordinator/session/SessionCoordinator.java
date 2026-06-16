@@ -115,15 +115,28 @@ public class SessionCoordinator {
     public void updateOnlineClient(Client client) {
         if (client != null) {
             int accountId = client.getAccID();
-            disconnectClientIfOnline(accountId);
+            disconnectClientIfOnline(accountId, client);
             onlineClients.put(accountId, client);
         }
     }
 
     private void disconnectClientIfOnline(int accountId) {
+        disconnectClientIfOnline(accountId, null);
+    }
+
+    private void disconnectClientIfOnline(int accountId, Client replacementClient) {
         Client ingameClient = onlineClients.get(accountId);
-        if (ingameClient != null) {     // thanks MedicOP for finding out a loss of loggedin account uniqueness when using the CMS "Unstuck" feature
+        if (ingameClient != null && ingameClient != replacementClient) {     // thanks MedicOP for finding out a loss of loggedin account uniqueness when using the CMS "Unstuck" feature
             ingameClient.forceDisconnect();
+        }
+
+        for (var world : Server.getInstance().getWorlds()) {
+            for (Character chr : world.getPlayerStorage().getAllCharacters()) {
+                Client client = chr.getClient();
+                if (chr.getAccountId() == accountId && client != null && client != replacementClient) {
+                    client.forceDisconnect();
+                }
+            }
         }
     }
 
@@ -200,10 +213,16 @@ public class SessionCoordinator {
                 return AntiMulticlientResult.MANY_ACCOUNT_ATTEMPTS;
             } else if (routineCheck && !attemptAccountAccess(accountId, hwid, routineCheck)) {
                 return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
-            } else if (onlineRemoteHwids.contains(hwid)) {
-                return AntiMulticlientResult.REMOTE_LOGGEDIN;
             } else if (!attemptAccountAccess(accountId, hwid, routineCheck)) {
                 return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
+            }
+
+            if (!routineCheck) {
+                disconnectClientIfOnline(accountId);
+            }
+
+            if (onlineRemoteHwids.contains(hwid)) {
+                return AntiMulticlientResult.REMOTE_LOGGEDIN;
             }
 
             client.setHwid(hwid);

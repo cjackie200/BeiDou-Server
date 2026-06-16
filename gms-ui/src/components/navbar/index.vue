@@ -109,13 +109,13 @@
           />
           <template #content>
             <a-doption>
-              <a-space @click="$router.push({ name: 'Info' })">
+              <a-space @click="openPasswordModal">
                 <icon-user />
                 <span>{{ $t('settings.userCenter') }}</span>
               </a-space>
             </a-doption>
             <a-doption>
-              <a-space @click="$router.push({ name: 'Setting' })">
+              <a-space @click="openPasswordModal">
                 <icon-settings />
                 <span>{{ $t('settings.userSettings') }}</span>
               </a-space>
@@ -130,11 +130,58 @@
         </a-dropdown>
       </li>
     </ul>
+    <a-modal
+      v-model:visible="passwordModalVisible"
+      title="修改登录密码"
+      :ok-loading="passwordSubmitting"
+      @ok="handleChangePassword"
+      @cancel="resetPasswordForm"
+    >
+      <a-form ref="passwordFormRef" :model="passwordForm" layout="vertical">
+        <a-form-item
+          field="oldPwd"
+          label="当前密码"
+          :rules="[{ required: true, message: '请输入当前密码' }]"
+        >
+          <a-input-password
+            v-model="passwordForm.oldPwd"
+            autocomplete="current-password"
+          />
+        </a-form-item>
+        <a-form-item
+          field="newPwd"
+          label="新密码"
+          :rules="[
+            { required: true, message: '请输入新密码' },
+            { minLength: 6, message: '密码不能少于6位字符' },
+          ]"
+        >
+          <a-input-password
+            v-model="passwordForm.newPwd"
+            autocomplete="new-password"
+          />
+        </a-form-item>
+        <a-form-item
+          field="newPwdCheck"
+          label="确认新密码"
+          :rules="[
+            { required: true, message: '请再次输入新密码' },
+            { validator: validatePasswordCheck },
+          ]"
+        >
+          <a-input-password
+            v-model="passwordForm.newPwdCheck"
+            autocomplete="new-password"
+          />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { computed, inject, ref } from 'vue';
+  import { computed, inject, reactive, ref } from 'vue';
+  import { Message } from '@arco-design/web-vue';
   import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
   import useUser from '@/hooks/user';
@@ -142,6 +189,7 @@
   import useLocale from '@/hooks/locale';
   import { LOCALE_OPTIONS } from '@/locale';
   import { getVersion } from '@/api/dashboard';
+  import { updateAccountByUser } from '@/api/account';
   import useLoading from '@/hooks/loading';
 
   const { changeLocale, currentLocale } = useLocale();
@@ -175,6 +223,57 @@
   };
   const handleLogout = () => {
     logout();
+  };
+
+  const passwordModalVisible = ref(false);
+  const passwordSubmitting = ref(false);
+  const passwordFormRef = ref();
+  const passwordForm = reactive({
+    oldPwd: '',
+    newPwd: '',
+    newPwdCheck: '',
+  });
+  const resetPasswordForm = () => {
+    passwordForm.oldPwd = '';
+    passwordForm.newPwd = '';
+    passwordForm.newPwdCheck = '';
+    passwordFormRef.value?.clearValidate?.();
+  };
+  const openPasswordModal = () => {
+    resetPasswordForm();
+    passwordModalVisible.value = true;
+  };
+  const validatePasswordCheck = (
+    value: string | undefined,
+    cb: (error?: string) => void
+  ) => {
+    if (value !== passwordForm.newPwd) {
+      cb('两次输入的密码不匹配');
+      return;
+    }
+    cb();
+  };
+  const handleChangePassword = async () => {
+    const errors = await passwordFormRef.value?.validate?.();
+    if (errors) {
+      return false;
+    }
+
+    passwordSubmitting.value = true;
+    try {
+      await updateAccountByUser({
+        oldPwd: passwordForm.oldPwd,
+        newPwd: passwordForm.newPwd,
+        language: userStore.language ?? 3,
+      });
+      Message.success('密码修改成功，请使用新密码重新登录');
+      passwordModalVisible.value = false;
+      resetPasswordForm();
+      await logout();
+    } finally {
+      passwordSubmitting.value = false;
+    }
+    return true;
   };
   const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
 
