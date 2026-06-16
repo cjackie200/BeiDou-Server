@@ -47,3 +47,40 @@ Conventional Commit，例如 `fix: ...`。提交应保持小而聚焦。PR 需�
 
 不要提交真实凭据、token、生产数据库密码或本地备份配置。示例配置应保持通用。涉及
 MySQL 的变更需要按 MySQL 8 验证，因为项目不支持更低版本。
+
+## 服务端补丁打包规范
+
+服务端补丁必须以线上实际已部署的基线到目标版本为边界，例如
+`xjc -> v1.1.1`，不要默认使用最早 release tag。打包前先确认当前分支、目标 tag、
+线上基线 commit、`git status -sb` 和 `git diff --name-status $FROM..$TO`，并按差异判断
+代码、SQL、脚本、WZ、Web 后台和删除文件范围。
+
+Flyway SQL 以线上基线为准分类处理。已经属于线上基线的 migration 不得改名、不得复制成
+更高版本重复执行；只有目标版本相对基线新增的 migration 才需要保证版本号排在基线已执行
+版本之后。不得为了绕过版本顺序长期依赖 `spring.flyway.out-of-order=true`；只有明确的一次性
+救急场景才允许使用，并必须在交付说明中写明。打包前必须列出新增 SQL 的来源 commit、用途和
+是否属于当前补丁。
+
+服务端 jar 必须包含最新 Web 后台。若 `gms-ui` 有改动，必须执行
+`cd gms-ui && yarn build`，然后把 `gms-ui/dist` 产物打入
+`BeiDou.jar` 的 `BOOT-INF/classes/static/`。可以在 Maven 打包前同步到
+`gms-server/src/main/resources/static`，也可以在 Maven 打包后注入 jar，但最终必须用
+`jar tf` 或 `unzip -p` 验证 `BOOT-INF/classes/static/index.html` 及其引用的 hash
+资源确实来自本次 `gms-ui/dist`。只执行 `mvn -pl gms-server -am package` 不足以证明
+Web 后台已更新。
+
+服务端运行时会从工作目录读取 `scripts`、`scripts-zh-CN`、`wz`、`wz-zh-CN`，因此补丁
+除 `BeiDou.jar` 外，还必须包含 `$FROM..$TO` 中这些目录下新增或修改的文件。若差异中存在
+删除文件，补丁必须包含删除清单并由安装器执行删除，不能只覆盖文件导致旧脚本或旧 WZ 残留。
+
+服务端补丁交付物命名为 `BeiDou-Server-$FROM-to-$TO-patch.exe`，外层传输包命名为
+`BeiDou-Server-$FROM-to-$TO-patch.zip`。zip 内只放同名 exe，不放备用 `bat`、`ps1`、
+payload 目录或散文件。exe 必须是 Windows GUI 安装器，内嵌 `BeiDou.jar`、复制清单、删除
+清单和运行时资源；运行后让用户选择包含 `BeiDou.jar`、`scripts-zh-CN`、`wz`、`wz-zh-CN`
+的服务端工作目录，更新前检测服务是否仍在运行，备份所有将被覆盖或删除的文件，再执行删除和
+覆盖。
+
+服务端补丁生成后必须验证：`mvn -pl gms-server -am clean package` 成功；若 Web 后台有改动，
+`yarn build` 成功；安装器内嵌载荷包含 `payload/BeiDou.jar`、复制清单和删除清单；jar 内包含
+本次新增 migration 和最新 `BOOT-INF/classes/static`；zip 只包含一个 exe；输出 exe 与 zip 的
+SHA256。交付说明必须写明 SQL 版本结论、安装步骤、校验 hash 和是否存在删除文件。
