@@ -100,6 +100,9 @@ public class Quest {
         exploitableQuests.add((short) 3637);
         exploitableQuests.add((short) 3714);
         exploitableQuests.add((short) 21752);
+        for (short questId = MonsterCardRingQuest.CLAIM_QUEST_ID; questId <= MonsterCardRingQuest.LAST_QUEST_ID; questId++) {
+            exploitableQuests.add(questId);
+        }
     }
 
     protected short id;

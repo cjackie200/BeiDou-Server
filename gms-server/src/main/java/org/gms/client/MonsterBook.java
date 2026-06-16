@@ -23,6 +23,7 @@ package org.gms.client;
 
 import org.gms.dao.entity.MonsterbookDO;
 import org.gms.manager.ServerManager;
+import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.service.MonsterBookService;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
@@ -93,6 +94,8 @@ public final class MonsterBook {
         } else {
             c.sendPacket(PacketCreator.addCard(true, cardid, 5));
         }
+
+        MonsterCardRingQuest.syncQuestState(c.getPlayer());
     }
 
     private void calculateLevel() {
@@ -128,6 +131,89 @@ public final class MonsterBook {
         } finally {
             lock.unlock();
         }
+    }
+
+    public int fillCompletedCardSetsForTesting(Client c, int requiredSets) {
+        if (requiredSets <= 0) {
+            return 0;
+        }
+
+        Map<Integer, Integer> changedCards = new LinkedHashMap<>();
+        lock.lock();
+        try {
+            int completedSets = countCompletedSetsLocked();
+            if (completedSets >= requiredSets) {
+                return 0;
+            }
+
+            for (int cardId : loadTestCardIds(requiredSets)) {
+                Integer oldLevel = cards.get(cardId);
+                if (oldLevel != null && oldLevel >= 5) {
+                    continue;
+                }
+
+                if (oldLevel == null) {
+                    if (cardId / 1000 >= 2388) {
+                        specialCard++;
+                    } else {
+                        normalCard++;
+                    }
+                }
+
+                cards.put(cardId, 5);
+                changedCards.put(cardId, oldLevel == null ? 0 : oldLevel);
+                completedSets++;
+                if (completedSets >= requiredSets) {
+                    break;
+                }
+            }
+
+            calculateLevel();
+        } finally {
+            lock.unlock();
+        }
+
+        for (Map.Entry<Integer, Integer> changedCard : changedCards.entrySet()) {
+            int cardId = changedCard.getKey();
+            int oldLevel = changedCard.getValue();
+            for (int level = oldLevel + 1; level <= 5; level++) {
+                c.sendPacket(PacketCreator.addCard(false, cardId, level));
+            }
+        }
+        MonsterCardRingQuest.syncQuestState(c.getPlayer());
+        return changedCards.size();
+    }
+
+    private int countCompletedSetsLocked() {
+        int completedSets = 0;
+        for (Integer level : cards.values()) {
+            if (level != null && level >= 5) {
+                completedSets++;
+            }
+        }
+        return completedSets;
+    }
+
+    private static List<Integer> loadTestCardIds(int limit) {
+        final String query = """
+                SELECT cardid
+                FROM monstercarddata
+                ORDER BY cardid
+                LIMIT ?;
+                """;
+        List<Integer> cardIds = new ArrayList<>();
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, limit);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    cardIds.add(rs.getInt("cardid"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cardIds;
     }
 
     public int getTotalCards() {

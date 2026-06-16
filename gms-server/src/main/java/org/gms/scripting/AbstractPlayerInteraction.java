@@ -671,6 +671,36 @@ public class AbstractPlayerInteraction {
         return item;
     }
 
+    public Item gainRawEquip(int id) {
+        return gainRawEquip(id, true);
+    }
+
+    public Item gainRawEquip(int id, boolean showMessage) {
+        if (ItemConstants.getInventoryType(id) != InventoryType.EQUIP) {
+            return gainItem(id, (short) 1, false, showMessage);
+        }
+
+        Item item = ItemInformationProvider.getInstance().getEquipById(id);
+        if (item == null) {
+            return null;
+        }
+
+        if (!InventoryManipulator.checkSpace(c, id, 1, "")) {
+            c.getPlayer().dropMessage(1, "您的背包已满，请从" + ItemConstants.getInventoryType(id).name() + "栏移除一件物品。");
+            return null;
+        }
+
+        if (!InventoryManipulator.addFromDrop(c, item, false, -1)) {
+            return null;
+        }
+
+        if (showMessage) {
+            c.sendPacket(PacketCreator.getShowItemGain(id, (short) 1, true));
+        }
+
+        return item;
+    }
+
     public void gainFame(int delta) {
         getPlayer().gainFame(delta);
     }

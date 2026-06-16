@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.maps.MapleMap;
+import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.util.PacketCreator;
 
 import java.awt.*;
@@ -76,11 +77,16 @@ public class InventoryManipulator {
 
         Inventory inv = chr.getInventory(type);
         inv.lockInventory();
+        boolean added;
         try {
-            return addByIdInternal(c, chr, type, inv, itemId, quantity, owner, petid, flag, expiration);
+            added = addByIdInternal(c, chr, type, inv, itemId, quantity, owner, petid, flag, expiration);
         } finally {
             inv.unlockInventory();
         }
+        if (added) {
+            MonsterCardRingQuest.syncQuestStateIfRelevant(chr, itemId);
+        }
+        return added;
     }
 
     private static boolean addByIdInternal(Client c, Character chr, InventoryType type, Inventory inv, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
@@ -185,11 +191,16 @@ public class InventoryManipulator {
 
         Inventory inv = chr.getInventory(type);
         inv.lockInventory();
+        boolean added;
         try {
-            return addFromDropInternal(c, chr, type, inv, item, show, petId);
+            added = addFromDropInternal(c, chr, type, inv, item, show, petId);
         } finally {
             inv.unlockInventory();
         }
+        if (added) {
+            MonsterCardRingQuest.syncQuestStateIfRelevant(chr, item.getItemId());
+        }
+        return added;
     }
 
     private static boolean addFromDropInternal(Client c, Character chr, InventoryType type, Inventory inv, Item item, boolean show, int petId) {
@@ -411,6 +422,7 @@ public class InventoryManipulator {
         Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
         Item item = inv.getItem(slot);
+        int itemId = item.getItemId();
         boolean allowZero = consume && ItemConstants.isRechargeable(item.getItemId());
 
         if (type == InventoryType.EQUIPPED) {
@@ -444,6 +456,9 @@ public class InventoryManipulator {
                     announceModifyInventory(c, item, fromDrop, allowZero);
                 }
             }
+        }
+        if (type != InventoryType.CANHOLD) {
+            MonsterCardRingQuest.syncQuestStateIfRelevant(chr, itemId);
         }
     }
 
@@ -673,6 +688,9 @@ public class InventoryManipulator {
         mods.add(new ModifyInventory(2, source, src));
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
         chr.equipChanged();
+        if (MonsterCardRingQuest.isRingItem(source.getItemId()) || target != null && MonsterCardRingQuest.isRingItem(target.getItemId())) {
+            MonsterCardRingQuest.syncQuestState(chr);
+        }
     }
 
     public static void unequip(Client c, short src, short dst) {
@@ -724,6 +742,9 @@ public class InventoryManipulator {
         
         c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(2, source, src))));
         chr.equipChanged();
+        if (MonsterCardRingQuest.isRingItem(source.getItemId()) || target != null && MonsterCardRingQuest.isRingItem(target.getItemId())) {
+            MonsterCardRingQuest.syncQuestState(chr);
+        }
     }
 
     private static boolean isDisappearingItemDrop(Item it) {
@@ -845,6 +866,7 @@ public class InventoryManipulator {
         } else if (itemId == ItemId.ARPQ_SPIRIT_JEWEL) {
             chr.updateAriantScore(quantityNow);
         }
+        MonsterCardRingQuest.syncQuestStateIfRelevant(chr, itemId);
     }
 
     private static boolean isDroppedItemRestricted(Item it) {

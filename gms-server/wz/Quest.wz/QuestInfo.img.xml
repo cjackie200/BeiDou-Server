@@ -23797,4 +23797,81 @@ Able to proceed to &apos;Merry-go-round in Kampung&apos; as next quest.
     <string name="2" value="Umi&apos;s spiced vegetables sure sound enticing. I should go get some later~!"/>
     <int name="area" value="48"/>
   </imgdir>
+  <imgdir name="29980">
+    <string name="name" value="Claim Monster Card Ring N"/>
+    <string name="0" value="Tienk can issue Monster Card Ring N. Talk to #b#p0002006##k."/>
+    <string name="1" value="Claim Monster Card Ring N."/>
+    <string name="2" value="Monster Card Ring N has been claimed."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29981">
+    <string name="name" value="Monster Card Ring Upgrade Lv1"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv1."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv1."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29982">
+    <string name="name" value="Monster Card Ring Upgrade Lv2"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv2."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv2."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29983">
+    <string name="name" value="Monster Card Ring Upgrade Lv3"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv3."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv3."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29984">
+    <string name="name" value="Monster Card Ring Upgrade Lv4"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv4."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv4."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29985">
+    <string name="name" value="Monster Card Ring Upgrade Lv5"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv5."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv5."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29986">
+    <string name="name" value="Monster Card Ring Upgrade Lv6"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv6."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv6."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29987">
+    <string name="name" value="Monster Card Ring Upgrade Lv7"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv7."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv7."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29988">
+    <string name="name" value="Monster Card Ring Upgrade Lv8"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv8."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv8."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29989">
+    <string name="name" value="Monster Card Ring Upgrade Lv9"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv9."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv9."/>
+    <int name="area" value="30"/>
+  </imgdir>
+  <imgdir name="29990">
+    <string name="name" value="Monster Card Ring Upgrade Lv10"/>
+    <string name="0" value="Monster Card Ring can be upgraded. Talk to #b#p0002006##k."/>
+    <string name="1" value="Upgrade Monster Card Ring to Lv10."/>
+    <string name="2" value="Monster Card Ring has been upgraded to Lv10."/>
+    <int name="area" value="30"/>
+  </imgdir>
 </imgdir>

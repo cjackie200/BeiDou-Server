@@ -62,6 +62,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.life.MobSkill;
+import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.service.NoteService;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
@@ -248,6 +249,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentApplyDiseases(diseases);
             }
 
+            MonsterCardRingQuest.syncQuestStateSilently(player);
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
@@ -466,6 +468,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 if (GameConfig.getServerBoolean("use_rebirth_system")) {
                     npcsIds.put(GameConfig.getServerInt("rebirth_npc_id"), "Rebirth");
                 }
+                npcsIds.put(MonsterCardRingQuest.NPC_ID, "怪物卡戒指");
 
                 c.sendPacket(PacketCreator.setNPCScriptable(npcsIds));
             }

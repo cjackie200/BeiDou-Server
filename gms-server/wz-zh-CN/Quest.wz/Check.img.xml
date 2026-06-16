@@ -77728,4 +77728,173 @@
             <int name="npc" value="9310041"/>
         </imgdir>
     </imgdir>
+    <imgdir name="29980">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29981">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29981"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29982">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29982"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29983">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29983"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29984">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29984"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29985">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29985"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29986">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29986"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29987">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29987"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29988">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29988"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29989">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29989"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="29990">
+        <imgdir name="0">
+            <int name="npc" value="2006"/>
+            <string name="startscript" value="monsterCardRing"/>
+            <imgdir name="quest">
+                <imgdir name="0">
+                    <int name="id" value="29990"/>
+                    <int name="state" value="2"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="2006"/>
+            <string name="endscript" value="monsterCardRing"/>
+        </imgdir>
+    </imgdir>
 </imgdir>
