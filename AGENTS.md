@@ -48,6 +48,44 @@ Conventional Commit，例如 `fix: ...`。提交应保持小而聚焦。PR 需�
 不要提交真实凭据、token、生产数据库密码或本地备份配置。示例配置应保持通用。涉及
 MySQL 的变更需要按 MySQL 8 验证，因为项目不支持更低版本。
 
+## 怪物卡戒指任务入口经验
+
+特安可 NPC ID 是 `2006`，`1002006` 是吉夫；修改前必须用客户端和服务端 WZ 实际节点确认，
+不要只按文件名或记忆判断。NPC 对话入口可能来自 `String/Npc.img` 的 `d0/d1`、`Npc.img`
+的 `info/script`、服务端 `npcs_scriptable`、任务灯泡和任务完成书本；同一 NPC 不要混用多套
+入口承载同一功能。
+
+不要依赖 `SET_NPC_SCRIPTABLE` 动态移除客户端“其他”入口，客户端进程可能缓存旧入口。怪物卡
+戒指使用任务链承载入口：`29980` 只负责领取 0 级戒指，`29981..29990` 负责下一档进度查看和
+升级；升级任务的开始条件必须依赖上一档任务完成，而不是依赖自身完成。服务端由
+`MonsterCardRingQuest.syncQuestState` 控制 `NOT_STARTED`、`STARTED`、`COMPLETED`，任务
+`start` 脚本显示进度和 GM 测试补齐，任务 `end` 脚本执行升级。
+
+涉及任务、NPC 或 WZ 的改动必须同时同步服务端 `wz`、`wz-zh-CN` 和客户端 `Data/Quest`、
+`Data/String`。验证时用 `WzPatchTool ring-verify`、`inspect` 检查关键节点，例如
+`Check.img/29981` 应依赖 `29980` 完成，`Check.img/29990` 应依赖 `29989` 完成。验收前必须
+重启服务端、完全退出并重开客户端、重新登录角色；同时确认数据库 `game_config.npcs_scriptable`
+没有残留测试 NPC。提交客户端补丁时排除 `config.ini`、`.wzpatch-backup` 和临时备份目录。
+
+## 客户端补丁打包规范
+
+客户端补丁以 `v旧版本 -> v新版本` 为边界，例如 `v1.0.0 -> v1.1.1`。打包前必须确认
+客户端仓库分支、tag 和本地状态，记录实际 commit hash，并用
+`git diff --name-only $FROM $TO` 锁定差异文件。补丁只能包含这批差异文件，不得包含
+`config.ini`、备份、日志、临时工具输出或初始化大文件提交中的无关内容。
+
+补丁载荷使用目标版本导出，而不是复制工作区文件，示例：
+`git archive --format=zip -o patch.zip $TO -- $(git diff --name-only $FROM $TO)`。导出后用
+`unzip -Z -1 patch.zip | grep -v '/$'` 校验文件清单，并确认没有
+`config.ini`。
+
+分发包命名为 `BeiDou-Client-Patch-$FROM-to-$TO.zip`。优先提供 Windows 自包含
+`BeiDouPatchInstaller.exe`；同时保留 `Install-BeiDouPatch.bat`、
+`Install-BeiDouPatch.ps1`、`patch.zip` 和 `README.txt` 作为备用。安装器必须让玩家选择
+包含 `BeiDou.exe` 和 `Data` 的客户端根目录，覆盖前备份到
+`backup\patch-$TO-时间戳`，安装完成后写入 `patch-$TO.log`。WSL/Linux 侧只能验证构建和
+压缩包内容，最终必须在 Windows 客户端目录实际运行一次安装验证。
+
 ## 服务端补丁打包规范
 
 服务端补丁必须以线上实际已部署的基线到目标版本为边界，例如
