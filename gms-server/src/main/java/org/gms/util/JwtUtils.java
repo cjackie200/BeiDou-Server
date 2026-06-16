@@ -1,6 +1,11 @@
 package org.gms.util;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +25,7 @@ public class JwtUtils {
 
     public String generateJwtToken(String username) {
         return Jwts.builder()
-                .setSubject((username))
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtDuration))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -36,15 +41,15 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            logger.error("访问者的Token签名无效: {}", e.getMessage());
+            logger.warn("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            logger.error("访问者的Token无效: {}", e.getMessage());
+            logger.warn("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            logger.error("访问者的Token已过期: {}", e.getMessage());
+            logger.debug("Expired JWT token: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            logger.error("访问者的Token不被支持: {}", e.getMessage());
+            logger.warn("Unsupported JWT token: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            logger.error("访问者的Token参数为空: {}", e.getMessage());
+            logger.warn("JWT claims string is empty: {}", e.getMessage());
         }
 
         return false;

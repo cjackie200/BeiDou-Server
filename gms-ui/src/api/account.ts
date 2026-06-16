@@ -30,6 +30,12 @@ export interface GMUpdateForm {
   language?: number;
 }
 
+export interface UserPasswordForm {
+  oldPwd: string;
+  newPwd: string;
+  language?: number;
+}
+
 export function getAccountList(
   page: number,
   size: number,
@@ -56,6 +62,10 @@ export function addAccount(data: RegisterForm) {
 
 export function updateAccountByGM(id: number, data: GMUpdateForm) {
   return axios.put(`/account/v1/${id}`, data);
+}
+
+export function updateAccountByUser(data: UserPasswordForm) {
+  return axios.put('/account/v1', data);
 }
 
 export function deleteAccount(id: number) {

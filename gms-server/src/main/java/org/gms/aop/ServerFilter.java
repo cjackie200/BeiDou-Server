@@ -11,6 +11,7 @@ import org.gms.exception.BizException;
 import org.gms.service.AccountService;
 import org.gms.util.RateLimitUtil;
 import org.gms.util.RequireUtil;
+import org.gms.util.SuspiciousRequestUtil;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -39,6 +40,11 @@ public class ServerFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        if (SuspiciousRequestUtil.isRepositoryProbe(request.getRequestURI())) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+
         try {
             String forwardedIp = request.getHeader("X-Forwarded-For");
             String realIp = request.getHeader("X-Real-IP");
