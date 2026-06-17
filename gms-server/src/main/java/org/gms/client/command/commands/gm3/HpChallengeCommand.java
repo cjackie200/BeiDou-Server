@@ -38,6 +38,10 @@ public class HpChallengeCommand extends Command {
                 }
                 result = HpChallengeService.gmComplete(player, target, stage, params[3], params[4]);
             }
+            case "next" -> {
+                Character target = params.length >= 2 ? findTarget(c, params[1]) : player;
+                result = HpChallengeService.gmCompleteCurrent(player, target);
+            }
             case "reset" -> {
                 if (params.length < 3) {
                     showUsage(player);
@@ -97,6 +101,7 @@ public class HpChallengeCommand extends Command {
 
     private static void showUsage(Character player) {
         player.yellowMessage("用法：!hpchallenge status [角色]");
+        player.yellowMessage("用法：!hpchallenge next [角色]");
         player.yellowMessage("用法：!hpchallenge complete <角色> <阶段> <main_common|main_job|optional> <task_key>");
         player.yellowMessage("用法：!hpchallenge reset <角色> <阶段>");
         player.yellowMessage("用法：!hpchallenge rollback <角色>");

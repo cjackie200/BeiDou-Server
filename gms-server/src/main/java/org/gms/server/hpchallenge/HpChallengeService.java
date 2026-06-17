@@ -394,6 +394,60 @@ public final class HpChallengeService {
         }
     }
 
+    public static String gmCompleteCurrent(Character operator, Character target) {
+        if (target == null) {
+            return "目标角色不存在。";
+        }
+        if (!ensureStateAndProgress(target)) {
+            return openRequirementText(target);
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            con.setAutoCommit(false);
+            try {
+                State state = loadState(con, target.getId());
+                if (state == null) {
+                    con.rollback();
+                    return "目标角色尚未开启挑战洗血。";
+                }
+                lockStageProgress(con, target.getId(), state.currentStage());
+                ActiveTask activeTask = loadActiveTask(con, target, state.currentStage());
+                if (activeTask == null) {
+                    if (isOptionalChoiceAvailable(con, target.getId(), state.currentStage())) {
+                        con.rollback();
+                        return "当前需要先选择第 " + (selectedOptionalCount(con, target.getId(), state.currentStage()) + 1)
+                                + " 个附加挑战。";
+                    }
+                    if (isStageReady(target.getId(), state.currentStage())) {
+                        con.rollback();
+                        return "当前阶段任务已经完成，可以领取奖励。";
+                    }
+                    con.rollback();
+                    return "没有可补齐的当前任务，请检查进度。";
+                }
+                if (!completeTask(con, target.getId(), state.currentStage(), activeTask.task().group(),
+                        activeTask.task().key(), true)) {
+                    con.rollback();
+                    return "当前任务已经变化，请重新查看进度。";
+                }
+                activateNextTaskIfNeeded(con, target, state.currentStage());
+                String nextStep = nextStepText(con, target, state.currentStage());
+                con.commit();
+                logGm(operator, target.getId(), "complete_current",
+                        "stage=" + state.currentStage() + ", group=" + activeTask.task().group().code
+                                + ", key=" + activeTask.task().key());
+                return "已补齐当前任务：" + activeTask.task().description() + "\r\n" + nextStep;
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            log.warn("gm complete current hp challenge task failed", e);
+            return "补齐当前任务失败。";
+        }
+    }
+
     public static String gmResetStage(Character operator, Character target, int stage) {
         if (target == null) {
             return "目标角色不存在。";
