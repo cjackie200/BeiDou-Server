@@ -32,8 +32,22 @@ job = 310;
 spawnPnpc = false;
 spawnPnpcFee = 7000000;
 jobType = 3;
+var hpChallengeMode = false;
+var hpChallengeStatus = -1;
+var hpChallengeSkipOriginal = false;
 
 function start() {
+    const HpChallengeService = Java.type('org.gms.server.hpchallenge.HpChallengeService');
+    if (!hpChallengeSkipOriginal && HpChallengeService.shouldOfferNpcEntry(cm.getPlayer(), cm.getNpc())) {
+        hpChallengeMode = true;
+        hpChallengeStatus = -1;
+        cm.sendSimple(HpChallengeService.buildRootMenu(cm.getPlayer()));
+        return;
+    }
+    originalStart();
+}
+
+function originalStart() {
     const GameConstants = Java.type('org.gms.constants.game.GameConstants');
     if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {
         spawnPnpc = true;
@@ -74,7 +88,56 @@ function start() {
     }
 }
 
+function handleHpChallenge(mode, type, selection) {
+    const HpChallengeService = Java.type('org.gms.server.hpchallenge.HpChallengeService');
+    if (mode <= 0) {
+        cm.dispose();
+        return;
+    }
+
+    hpChallengeStatus++;
+    if (hpChallengeStatus === 0) {
+        if (selection === 9001) {
+            hpChallengeMode = false;
+            hpChallengeSkipOriginal = true;
+            status = -1;
+            originalStart();
+            return;
+        }
+        if (selection !== 9000) {
+            cm.dispose();
+            return;
+        }
+        cm.sendSimple(HpChallengeService.buildMainMenu(cm.getPlayer()));
+        return;
+    }
+
+    if (hpChallengeStatus === 1) {
+        if (selection === 2) {
+            cm.sendSimple(HpChallengeService.buildOptionalMenu(cm.getPlayer()));
+            hpChallengeStatus = 10;
+            return;
+        }
+        cm.sendOk(HpChallengeService.handleMainSelection(cm.getPlayer(), selection));
+        cm.dispose();
+        return;
+    }
+
+    if (hpChallengeStatus === 11) {
+        cm.sendOk(HpChallengeService.selectOptional(cm.getPlayer(), selection));
+        cm.dispose();
+        return;
+    }
+
+    cm.dispose();
+}
+
 function action(mode, type, selection) {
+    if (hpChallengeMode) {
+        handleHpChallenge(mode, type, selection);
+        return;
+    }
+
     status++;
     if (mode == -1 && selection == -1) {
         cm.dispose();

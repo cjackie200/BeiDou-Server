@@ -39,6 +39,7 @@ import org.gms.server.StatEffect;
 import org.gms.server.ThreadManager;
 import org.gms.server.TimerManager;
 import org.gms.server.expeditions.Expedition;
+import org.gms.server.hpchallenge.HpChallengeService;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.server.life.NPC;
@@ -820,6 +821,7 @@ public class EventInstanceManager {
     public void clearPQ() {
         try {
             invokeScriptFunction("clearPQ", EventInstanceManager.this);
+            HpChallengeService.onPartyQuestCleared(this);
         } catch (ScriptException | NoSuchMethodException ex) {
             ex.printStackTrace();
         }

@@ -78,6 +78,7 @@ import org.gms.server.life.*;
 import org.gms.server.maps.*;
 import org.gms.server.maps.MiniGame.MiniGameResult;
 import org.gms.server.minigame.RockPaperScissor;
+import org.gms.server.hpchallenge.HpChallengeService;
 import org.gms.server.partyquest.AriantColiseum;
 import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
@@ -1749,6 +1750,7 @@ public class Character extends AbstractCharacterObject {
             setPosition(pos);
             map.addPlayer(this);
             visitMap(map);
+            HpChallengeService.onMapChanged(this);
 
             prtLock.lock();
             try {
