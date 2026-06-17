@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -34,6 +33,7 @@ public final class HpChallengeService {
 
     private static final int MIN_LEVEL = 120;
     private static final int MAX_STAT = 30000;
+    private static final int OPTIONAL_REQUIRED_COUNT = 3;
     private static final Set<Integer> INSTRUCTOR_IDS = Set.of(1022000, 1032001, 1012100, 1052001, 1090000);
     private static final Map<Integer, StageConfig> STAGES = buildStages();
 
@@ -61,6 +61,7 @@ public final class HpChallengeService {
         PQ_TOY_OR_PIRATE,
         MESO,
         SCROLL_100,
+        NPC_TALK,
         JUMP_MANUAL
     }
 
@@ -99,6 +100,9 @@ public final class HpChallengeService {
     private record RewardTarget(int targetHp, int targetMp) {
     }
 
+    private record ActiveTask(Task task, ProgressRow row) {
+    }
+
     public static boolean shouldOfferNpcEntry(Character chr, int npcId) {
         return chr != null && INSTRUCTOR_IDS.contains(npcId) && isInstructorForJob(chr, npcId);
     }
@@ -131,15 +135,43 @@ public final class HpChallengeService {
     }
 
     public static String buildMainMenu(Character chr) {
-        ensureStateAndProgress(chr);
+        if (!ensureStateAndProgress(chr)) {
+            return openRequirementText(chr);
+        }
+        State state = loadState(chr.getId());
+        StageConfig stage = stage(state.currentStage());
+        ActiveTask activeTask = loadActiveTask(chr, stage.stage());
+        boolean optionalChoiceAvailable = isOptionalChoiceAvailable(chr.getId(), stage.stage());
+        boolean stageReady = isStageReady(chr.getId(), stage.stage());
         StringBuilder sb = new StringBuilder();
         sb.append("#e挑战洗血#n\r\n\r\n");
         sb.append(buildSummary(chr)).append("\r\n");
-        sb.append("#b#L1#查看当前进度#l\r\n");
-        sb.append("#L2#选择附加挑战#l\r\n");
-        sb.append("#L3#缴纳当前阶段金币挑战#l\r\n");
-        sb.append("#L4#消耗任意 100% 卷轴挑战说明#l\r\n");
-        sb.append("#L5#提交并领取阶段奖励#l\r\n");
+        if (activeTask != null) {
+            sb.append("当前任务：").append(activeTask.task().description())
+                    .append("（").append(activeTask.row().currentCount).append("/")
+                    .append(activeTask.row().requiredCount).append("）\r\n");
+        } else if (optionalChoiceAvailable) {
+            sb.append("当前任务：选择第 ").append(nextOptionalSlot(chr.getId(), stage.stage()))
+                    .append(" 个附加挑战\r\n");
+        } else if (stageReady) {
+            sb.append("当前任务：领取阶段奖励\r\n");
+        } else {
+            sb.append("当前任务：暂无可推进任务，请联系 GM 检查进度。\r\n");
+        }
+        sb.append("\r\n#b#L1#查看当前任务和已完成记录#l\r\n");
+        if (optionalChoiceAvailable) {
+            sb.append("#L2#选择第 ").append(nextOptionalSlot(chr.getId(), stage.stage()))
+                    .append(" 个附加挑战#l\r\n");
+        }
+        if (activeTask != null && activeTask.task().targetType() == TargetType.MESO) {
+            sb.append("#L3#缴纳当前金币挑战#l\r\n");
+        }
+        if (activeTask != null && activeTask.task().targetType() == TargetType.SCROLL_100) {
+            sb.append("#L4#消耗任意 100% 卷轴挑战说明#l\r\n");
+        }
+        if (stageReady) {
+            sb.append("#L5#领取阶段奖励#l\r\n");
+        }
         sb.append("#L6#查看规则说明#l#k");
         return sb.toString();
     }
@@ -147,6 +179,7 @@ public final class HpChallengeService {
     public static String handleMainSelection(Character chr, int selection) {
         return switch (selection) {
             case 1 -> buildProgressText(chr);
+            case 2 -> buildOptionalMenu(chr);
             case 3 -> paySelectedMesoOption(chr);
             case 4 -> "选择了“使用任意 100% 卷轴”的附加挑战后，成功使用任意成功率为 100% 的卷轴会自动计数。失败、不可用或非 100% 卷轴不计数。";
             case 5 -> claimCurrentStageReward(chr);
@@ -156,16 +189,25 @@ public final class HpChallengeService {
     }
 
     public static String buildOptionalMenu(Character chr) {
-        ensureStateAndProgress(chr);
+        if (!ensureStateAndProgress(chr)) {
+            return openRequirementText(chr);
+        }
         State state = loadState(chr.getId());
         StageConfig stage = stage(state.currentStage());
+        if (!isOptionalChoiceAvailable(chr.getId(), stage.stage())) {
+            return "当前还不能选择附加挑战。请先完成当前线性任务。";
+        }
+        int slot = nextOptionalSlot(chr.getId(), stage.stage());
         StringBuilder sb = new StringBuilder();
-        sb.append("#e选择附加挑战#n\r\n");
-        sb.append("每阶段只能选择 3 个附加挑战，选择后才开始计数，未选择前不追溯。\r\n\r\n");
+        sb.append("#e选择第 ").append(slot).append(" 个附加挑战#n\r\n");
+        sb.append("每次只能选择 1 个附加挑战，完成后才会开放下一次选择。未选择前不追溯。\r\n\r\n");
         Map<String, ProgressRow> rows = loadProgress(chr.getId(), state.currentStage(), TaskGroup.OPTIONAL);
         for (Task task : stage.optionalTasks()) {
             ProgressRow row = rows.get(task.key());
-            String status = row != null && row.selected ? selectedStatus(row) : "未选择";
+            if (row != null && row.selected) {
+                continue;
+            }
+            String status = row != null && row.completed ? "完成" : "可选择";
             sb.append("#L").append(task.optionNo()).append("#").append(task.optionNo()).append(". ")
                     .append(task.description()).append(" [").append(status).append("]#l\r\n");
         }
@@ -173,7 +215,9 @@ public final class HpChallengeService {
     }
 
     public static String selectOptional(Character chr, int optionNo) {
-        ensureStateAndProgress(chr);
+        if (!ensureStateAndProgress(chr)) {
+            return openRequirementText(chr);
+        }
         State state = loadState(chr.getId());
         StageConfig stage = stage(state.currentStage());
         Task task = stage.optionalTasks().stream()
@@ -185,25 +229,49 @@ public final class HpChallengeService {
         }
 
         try (Connection con = DatabaseConnection.getConnection()) {
-            if (isTaskSelected(con, chr.getId(), state.currentStage(), task.key())) {
-                return "该附加挑战已经选择。";
+            con.setAutoCommit(false);
+            try {
+                lockStageProgress(con, chr.getId(), state.currentStage());
+                if (!isOptionalChoiceAvailable(con, chr.getId(), state.currentStage())) {
+                    con.rollback();
+                    return "当前还不能选择附加挑战。请先完成当前线性任务。";
+                }
+                if (isTaskSelected(con, chr.getId(), state.currentStage(), task.key())) {
+                    con.rollback();
+                    return "该附加挑战已经选择。";
+                }
+                int selectedCount = selectedOptionalCount(con, chr.getId(), state.currentStage());
+                if (selectedCount >= OPTIONAL_REQUIRED_COUNT) {
+                    con.rollback();
+                    return "本阶段已经选择 3 个附加挑战，不能继续选择。";
+                }
+                int taskOrder = nextTaskOrder(con, chr.getId(), state.currentStage());
+                try (PreparedStatement ps = con.prepareStatement("""
+                        UPDATE hp_challenge_progress
+                        SET selected = 1, active = 1, task_order = ?, current_count = 0, completed = 0,
+                            accepted_at = CURRENT_TIMESTAMP, completed_at = NULL
+                        WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
+                            AND selected = 0 AND completed = 0
+                        """)) {
+                    ps.setInt(1, taskOrder);
+                    ps.setInt(2, chr.getId());
+                    ps.setInt(3, state.currentStage());
+                    ps.setString(4, TaskGroup.OPTIONAL.code);
+                    ps.setString(5, task.key());
+                    int updated = ps.executeUpdate();
+                    if (updated <= 0) {
+                        con.rollback();
+                        return "选择附加挑战失败，请重新打开菜单。";
+                    }
+                }
+                con.commit();
+                return "已选择第 " + (selectedCount + 1) + " 个附加挑战：" + task.description();
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setAutoCommit(true);
             }
-            int selectedCount = selectedOptionalCount(con, chr.getId(), state.currentStage());
-            if (selectedCount >= 3) {
-                return "本阶段已经选择 3 个附加挑战，不能继续选择。";
-            }
-            try (PreparedStatement ps = con.prepareStatement("""
-                    UPDATE hp_challenge_progress
-                    SET selected = 1, current_count = 0, completed = 0
-                    WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
-                    """)) {
-                ps.setInt(1, chr.getId());
-                ps.setInt(2, state.currentStage());
-                ps.setString(3, TaskGroup.OPTIONAL.code);
-                ps.setString(4, task.key());
-                ps.executeUpdate();
-            }
-            return "已选择附加挑战：" + task.description();
         } catch (SQLException e) {
             log.warn("select hp challenge optional failed", e);
             return "选择附加挑战失败，请稍后再试。";
@@ -242,6 +310,46 @@ public final class HpChallengeService {
         incrementMatching(chr, TargetType.SCROLL_100, scrollId, "scroll:" + scrollId + ":" + System.nanoTime(), null);
     }
 
+    public static String tryCompleteNpcTalk(Character chr, int npcId) {
+        if (chr == null || !INSTRUCTOR_IDS.contains(npcId)) {
+            return null;
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            State state = loadState(con, chr.getId());
+            if (state == null || !isOpenJob(chr) || chr.getLevel() < MIN_LEVEL) {
+                return null;
+            }
+            con.setAutoCommit(false);
+            try {
+                lockStageProgress(con, chr.getId(), state.currentStage());
+                ensureProgressRows(con, chr, state.currentStage());
+                ActiveTask activeTask = loadActiveTask(con, chr, state.currentStage());
+                if (activeTask == null || activeTask.task().targetType() != TargetType.NPC_TALK
+                        || !activeTask.task().targetIds().contains(npcId)) {
+                    con.rollback();
+                    return null;
+                }
+                if (!completeTask(con, chr.getId(), state.currentStage(), activeTask.task().group(),
+                        activeTask.task().key(), true)) {
+                    con.rollback();
+                    return null;
+                }
+                activateNextTaskIfNeeded(con, chr, state.currentStage());
+                con.commit();
+                return "已完成当前拜访：" + activeTask.task().description() + "\r\n\r\n"
+                        + nextStepText(con, chr, state.currentStage());
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            log.warn("complete hp challenge npc talk failed", e);
+            return "拜访任务处理失败，请稍后再试。";
+        }
+    }
+
     public static String gmStatus(Character chr) {
         if (chr == null) {
             return "角色不存在。";
@@ -254,22 +362,32 @@ public final class HpChallengeService {
             return "目标角色不存在。";
         }
         ensureStateAndProgress(target);
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("""
+        try (Connection con = DatabaseConnection.getConnection()) {
+            con.setAutoCommit(false);
+            try (PreparedStatement ps = con.prepareStatement("""
                      UPDATE hp_challenge_progress
-                     SET current_count = required_count, completed = 1
+                     SET current_count = required_count, completed = 1, active = 0, completed_at = CURRENT_TIMESTAMP
                      WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
                      """)) {
-            ps.setInt(1, target.getId());
-            ps.setInt(2, stage);
-            ps.setString(3, taskGroup);
-            ps.setString(4, taskKey);
-            int updated = ps.executeUpdate();
-            if (updated <= 0) {
-                return "没有找到指定任务。";
+                ps.setInt(1, target.getId());
+                ps.setInt(2, stage);
+                ps.setString(3, taskGroup);
+                ps.setString(4, taskKey);
+                int updated = ps.executeUpdate();
+                if (updated <= 0) {
+                    con.rollback();
+                    return "没有找到指定任务。";
+                }
+                activateNextTaskIfNeeded(con, target, stage);
+                con.commit();
+                logGm(operator, target.getId(), "complete", "stage=" + stage + ", group=" + taskGroup + ", key=" + taskKey);
+                return "已补齐任务：" + taskGroup + "/" + taskKey;
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setAutoCommit(true);
             }
-            logGm(operator, target.getId(), "complete", "stage=" + stage + ", group=" + taskGroup + ", key=" + taskKey);
-            return "已补齐任务：" + taskGroup + "/" + taskKey;
         } catch (SQLException e) {
             log.warn("gm complete hp challenge task failed", e);
             return "补齐任务失败。";
@@ -433,47 +551,64 @@ public final class HpChallengeService {
         if (!ensureStateAndProgress(chr)) {
             return;
         }
-        State state = loadState(chr.getId());
-        StageConfig stage = stage(state.currentStage());
-        List<Task> tasks = new ArrayList<>();
-        tasks.addAll(stage.commonTasks());
-        tasks.addAll(stage.jobTasks().getOrDefault(branch(chr.getJob()), List.of()));
-        tasks.addAll(stage.optionalTasks());
-
-        for (Task task : tasks) {
-            if (!matches(task, eventType, eventId, eventName)) {
-                continue;
-            }
-            incrementTask(chr.getId(), stage.stage(), task, eventKey != null ? eventKey : task.key() + ":" + eventId + ":" + System.nanoTime());
-        }
-    }
-
-    private static void incrementTask(int characterId, int stage, Task task, String eventKey) {
         try (Connection con = DatabaseConnection.getConnection()) {
-            if (task.isOptional() && !isTaskSelected(con, characterId, stage, task.key())) {
-                return;
-            }
-            ProgressRow row = loadProgressRow(con, characterId, stage, task.group(), task.key());
-            if (row == null || row.completed) {
-                return;
-            }
-            if (task.isUniqueEvent() && !insertUniqueEvent(con, characterId, stage, task, eventKey)) {
-                return;
-            }
-            try (PreparedStatement ps = con.prepareStatement("""
-                    UPDATE hp_challenge_progress
-                    SET current_count = LEAST(required_count, current_count + 1),
-                        completed = CASE WHEN current_count + 1 >= required_count THEN 1 ELSE completed END
-                    WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ? AND completed = 0
-                    """)) {
-                ps.setInt(1, characterId);
-                ps.setInt(2, stage);
-                ps.setString(3, task.group().code);
-                ps.setString(4, task.key());
-                ps.executeUpdate();
+            con.setAutoCommit(false);
+            try {
+                State state = loadState(con, chr.getId());
+                if (state == null) {
+                    con.rollback();
+                    return;
+                }
+                ActiveTask activeTask = loadActiveTask(con, chr, state.currentStage());
+                if (activeTask == null || !matches(activeTask.task(), eventType, eventId, eventName)) {
+                    con.rollback();
+                    return;
+                }
+                incrementTask(con, chr, state.currentStage(), activeTask.task(),
+                        eventKey != null ? eventKey : activeTask.task().key() + ":" + eventId + ":" + System.nanoTime());
+                con.commit();
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setAutoCommit(true);
             }
         } catch (SQLException e) {
             log.warn("increment hp challenge task failed", e);
+        }
+    }
+
+    private static void incrementTask(Connection con, Character chr, int stage, Task task, String eventKey) throws SQLException {
+        ProgressRow row = loadProgressRow(con, chr.getId(), stage, task.group(), task.key());
+        if (row == null || row.completed || !row.active) {
+            return;
+        }
+        if (task.isOptional() && !row.selected) {
+            return;
+        }
+        if (task.isUniqueEvent() && !insertUniqueEvent(con, chr.getId(), stage, task, eventKey)) {
+            return;
+        }
+        try (PreparedStatement ps = con.prepareStatement("""
+                UPDATE hp_challenge_progress
+                SET current_count = LEAST(required_count, current_count + 1),
+                    completed = CASE WHEN current_count + 1 >= required_count THEN 1 ELSE completed END,
+                    active = CASE WHEN current_count + 1 >= required_count THEN 0 ELSE active END,
+                    completed_at = CASE WHEN current_count + 1 >= required_count THEN CURRENT_TIMESTAMP ELSE completed_at END
+                WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
+                    AND active = 1 AND completed = 0
+                """)) {
+            ps.setInt(1, chr.getId());
+            ps.setInt(2, stage);
+            ps.setString(3, task.group().code);
+            ps.setString(4, task.key());
+            if (ps.executeUpdate() <= 0) {
+                return;
+            }
+        }
+        ProgressRow updated = loadProgressRow(con, chr.getId(), stage, task.group(), task.key());
+        if (updated != null && updated.completed) {
+            activateNextTaskIfNeeded(con, chr, stage);
         }
     }
 
@@ -483,27 +618,34 @@ public final class HpChallengeService {
         }
         State state = loadState(chr.getId());
         StageConfig stage = stage(state.currentStage());
-        Task mesoTask = stage.optionalTasks().stream()
-                .filter(t -> t.targetType() == TargetType.MESO)
-                .findFirst()
-                .orElse(null);
-        if (mesoTask == null) {
-            return "当前阶段没有金币挑战。";
-        }
         try (Connection con = DatabaseConnection.getConnection()) {
-            ProgressRow row = loadProgressRow(con, chr.getId(), stage.stage(), TaskGroup.OPTIONAL, mesoTask.key());
-            if (row == null || !row.selected) {
-                return "请先在附加挑战中选择金币挑战。";
+            con.setAutoCommit(false);
+            try {
+                lockStageProgress(con, chr.getId(), stage.stage());
+                ActiveTask activeTask = loadActiveTask(con, chr, stage.stage());
+                if (activeTask == null || activeTask.task().targetType() != TargetType.MESO) {
+                    con.rollback();
+                    return "当前步骤不是金币挑战。";
+                }
+                Task mesoTask = activeTask.task();
+                if (chr.getMeso() < mesoTask.mesoCost()) {
+                    con.rollback();
+                    return "金币不足，需要 " + mesoTask.mesoCost() + " 金币。";
+                }
+                if (!completeTask(con, chr.getId(), stage.stage(), mesoTask.group(), mesoTask.key(), true)) {
+                    con.rollback();
+                    return "当前金币挑战已经处理，请重新打开菜单确认。";
+                }
+                chr.gainMeso(-mesoTask.mesoCost(), true, true, true);
+                activateNextTaskIfNeeded(con, chr, stage.stage());
+                con.commit();
+                return "已缴纳 " + mesoTask.mesoCost() + " 金币，金币挑战完成。";
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setAutoCommit(true);
             }
-            if (row.completed) {
-                return "金币挑战已经完成。";
-            }
-            if (chr.getMeso() < mesoTask.mesoCost()) {
-                return "金币不足，需要 " + mesoTask.mesoCost() + " 金币。";
-            }
-            chr.gainMeso(-mesoTask.mesoCost(), true, true, true);
-            completeTask(con, chr.getId(), stage.stage(), mesoTask.group(), mesoTask.key());
-            return "已缴纳 " + mesoTask.mesoCost() + " 金币，金币挑战完成。";
         } catch (SQLException e) {
             log.warn("pay hp challenge meso failed", e);
             return "缴纳金币失败。";
@@ -537,16 +679,15 @@ public final class HpChallengeService {
 
     private static void ensureProgressRows(Connection con, Character chr, int stageNo) throws SQLException {
         StageConfig stage = stage(stageNo);
-        List<Task> tasks = new ArrayList<>();
-        tasks.addAll(stage.commonTasks());
-        tasks.addAll(stage.jobTasks().getOrDefault(branch(chr.getJob()), List.of()));
-        tasks.addAll(stage.optionalTasks());
-
+        List<Task> tasks = orderedStageTasks(chr, stage);
+        int taskOrder = 1;
         for (Task task : tasks) {
+            int initialOrder = task.isOptional() ? 0 : taskOrder++;
             try (PreparedStatement ps = con.prepareStatement("""
                     INSERT INTO hp_challenge_progress
-                    (character_id, stage, task_group, task_key, target_type, target_id, current_count, required_count, selected, completed)
-                    SELECT ?, ?, ?, ?, ?, ?, 0, ?, ?, 0
+                    (character_id, stage, task_group, task_key, task_order, target_type, target_id, current_count,
+                     required_count, selected, active, completed, accepted_at)
+                    SELECT ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 0, 0, NULL
                     WHERE NOT EXISTS (
                         SELECT 1 FROM hp_challenge_progress
                         WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
@@ -556,23 +697,26 @@ public final class HpChallengeService {
                 ps.setInt(2, stageNo);
                 ps.setString(3, task.group().code);
                 ps.setString(4, task.key());
-                ps.setString(5, task.targetType().name());
-                ps.setInt(6, task.primaryTarget());
-                ps.setInt(7, task.requiredCount());
-                ps.setInt(8, task.isOptional() ? 0 : 1);
-                ps.setInt(9, chr.getId());
-                ps.setInt(10, stageNo);
-                ps.setString(11, task.group().code);
-                ps.setString(12, task.key());
+                ps.setInt(5, initialOrder);
+                ps.setString(6, task.targetType().name());
+                ps.setInt(7, task.primaryTarget());
+                ps.setInt(8, task.requiredCount());
+                ps.setInt(9, task.isOptional() ? 0 : 1);
+                ps.setInt(10, chr.getId());
+                ps.setInt(11, stageNo);
+                ps.setString(12, task.group().code);
+                ps.setString(13, task.key());
                 ps.executeUpdate();
             }
         }
+        activateNextTaskIfNeeded(con, chr, stageNo);
     }
 
     private static boolean matches(Task task, TargetType eventType, int eventId, String eventName) {
         return switch (task.targetType()) {
             case KILL, BOSS -> eventType == TargetType.KILL && task.targetIds().contains(eventId);
             case MAP -> eventType == TargetType.MAP && task.targetIds().contains(eventId);
+            case NPC_TALK -> eventType == TargetType.NPC_TALK && task.targetIds().contains(eventId);
             case PQ_ANY -> eventType == TargetType.PQ_ANY;
             case PQ_PIRATE -> eventType == TargetType.PQ_ANY && containsEventName(eventName, "pirate");
             case PQ_TOY_OR_PIRATE -> eventType == TargetType.PQ_ANY && (containsEventName(eventName, "pirate") || containsEventName(eventName, "ludi"));
@@ -587,9 +731,10 @@ public final class HpChallengeService {
 
     private static boolean isStageReady(int characterId, int stage) {
         try (Connection con = DatabaseConnection.getConnection()) {
-            return incompleteCount(con, characterId, stage, TaskGroup.MAIN_COMMON) == 0
+            return activeCount(con, characterId, stage) == 0
+                    && incompleteCount(con, characterId, stage, TaskGroup.MAIN_COMMON) == 0
                     && incompleteCount(con, characterId, stage, TaskGroup.MAIN_JOB) == 0
-                    && completedSelectedOptionalCount(con, characterId, stage) >= 3;
+                    && completedSelectedOptionalCount(con, characterId, stage) >= OPTIONAL_REQUIRED_COUNT;
         } catch (SQLException e) {
             log.warn("check hp challenge stage ready failed", e);
             return false;
@@ -618,36 +763,60 @@ public final class HpChallengeService {
         StageConfig stage = stage(state.currentStage());
         StringBuilder sb = new StringBuilder();
         sb.append(buildSummary(chr)).append("\r\n\r\n");
-        sb.append("#e公共阶段核心#n\r\n");
-        appendProgress(sb, chr.getId(), stage, stage.commonTasks(), TaskGroup.MAIN_COMMON);
-        sb.append("\r\n#e职业主线分支#n\r\n");
-        appendProgress(sb, chr.getId(), stage, stage.jobTasks().getOrDefault(branch(chr.getJob()), List.of()), TaskGroup.MAIN_JOB);
-        sb.append("\r\n#e8 选 3 附加挑战#n\r\n");
-        appendProgress(sb, chr.getId(), stage, stage.optionalTasks(), TaskGroup.OPTIONAL);
+        ActiveTask activeTask = loadActiveTask(chr, stage.stage());
+        if (activeTask != null) {
+            sb.append("#e当前任务#n\r\n");
+            appendTaskProgress(sb, activeTask.task(), activeTask.row());
+        } else if (isOptionalChoiceAvailable(chr.getId(), stage.stage())) {
+            sb.append("#e当前任务#n\r\n");
+            sb.append("选择第 ").append(nextOptionalSlot(chr.getId(), stage.stage()))
+                    .append(" 个附加挑战。\r\n");
+        } else if (isStageReady(chr.getId(), stage.stage())) {
+            sb.append("#e当前任务#n\r\n领取阶段奖励。\r\n");
+        }
+
+        sb.append("\r\n#e已完成记录#n\r\n");
+        appendCompletedProgress(sb, chr, stage);
         return sb.toString();
     }
 
-    private static void appendProgress(StringBuilder sb, int characterId, StageConfig stage, List<Task> tasks, TaskGroup group) {
-        Map<String, ProgressRow> rows = loadProgress(characterId, stage.stage(), group);
-        for (Task task : tasks) {
+    private static void appendCompletedProgress(StringBuilder sb, Character chr, StageConfig stage) {
+        boolean appended = false;
+        Map<String, ProgressRow> commonRows = loadProgress(chr.getId(), stage.stage(), TaskGroup.MAIN_COMMON);
+        Map<String, ProgressRow> jobRows = loadProgress(chr.getId(), stage.stage(), TaskGroup.MAIN_JOB);
+        Map<String, ProgressRow> optionalRows = loadProgress(chr.getId(), stage.stage(), TaskGroup.OPTIONAL);
+        for (Task task : orderedStageTasks(chr, stage)) {
+            Map<String, ProgressRow> rows = switch (task.group()) {
+                case MAIN_COMMON -> commonRows;
+                case MAIN_JOB -> jobRows;
+                case OPTIONAL -> optionalRows;
+            };
             ProgressRow row = rows.get(task.key());
-            String progress = row == null ? "0/" + task.requiredCount() : row.currentCount + "/" + row.requiredCount;
-            if (group == TaskGroup.OPTIONAL && (row == null || !row.selected)) {
-                sb.append("- ").append(task.description()).append("：未选择\r\n");
-            } else {
-                sb.append("- ").append(task.description()).append("：").append(progress)
-                        .append(row != null && row.completed ? "，完成" : "").append("\r\n");
+            if (row == null || !row.completed || task.isOptional() && !row.selected) {
+                continue;
             }
+            appendTaskProgress(sb, task, row);
+            appended = true;
         }
+        if (!appended) {
+            sb.append("暂无已完成任务。\r\n");
+        }
+    }
+
+    private static void appendTaskProgress(StringBuilder sb, Task task, ProgressRow row) {
+        String prefix = task.isOptional() ? "附加挑战 " + task.optionNo() + "：" : "";
+        sb.append("- ").append(prefix).append(task.description()).append("：")
+                .append(row.currentCount).append("/").append(row.requiredCount)
+                .append(row.completed ? "，完成" : "").append("\r\n");
     }
 
     private static String buildRulesText(Character chr) {
         return "挑战洗血规则：\r\n"
                 + "1. 120 级四转冒险家可以开启。\r\n"
-                + "2. 每阶段必须完成公共阶段核心、职业主线分支和 3 个附加挑战。\r\n"
+                + "2. 每阶段任务按顺序逐个完成，未解锁任务不提前计数。\r\n"
                 + "3. 领取首次奖励后锁定挑战洗血路线，不能再通过 AP 操作洗 HP/MP。\r\n"
                 + "4. 奖励直接补到阶段目标 maxhp/maxmp，不使用血量戒指。\r\n"
-                + "5. 怪物和 Boss 计数要求死亡时同地图并造成过伤害。";
+                + "5. 附加挑战每次只选择 1 个，完成 3 个后才可领取阶段奖励。";
     }
 
     private static String openRequirementText(Character chr) {
@@ -693,12 +862,26 @@ public final class HpChallengeService {
         if (chr == null || chr.getLevel() < MIN_LEVEL || !isOpenJob(chr)) {
             return false;
         }
-        Job job = chr.getJob();
-        return job.isA(Job.WARRIOR) && npcId == 1022000
-                || job.isA(Job.MAGICIAN) && npcId == 1032001
-                || job.isA(Job.BOWMAN) && npcId == 1012100
-                || job.isA(Job.THIEF) && npcId == 1052001
-                || job.isA(Job.PIRATE) && npcId == 1090000;
+        return instructorNpcForJob(chr.getJob()) == npcId;
+    }
+
+    private static int instructorNpcForJob(Job job) {
+        if (job.isA(Job.WARRIOR)) {
+            return 1022000;
+        }
+        if (job.isA(Job.MAGICIAN)) {
+            return 1032001;
+        }
+        if (job.isA(Job.BOWMAN)) {
+            return 1012100;
+        }
+        if (job.isA(Job.THIEF)) {
+            return 1052001;
+        }
+        if (job.isA(Job.PIRATE)) {
+            return 1090000;
+        }
+        return 0;
     }
 
     private static JobBranch branch(Job job) {
@@ -762,6 +945,10 @@ public final class HpChallengeService {
                 "向一转教官缴纳金币 " + meso, List.of(), optionNo, meso);
     }
 
+    private static Task npcVisit(String key, int npcId, String npcName) {
+        return t(key, TaskGroup.MAIN_COMMON, TargetType.NPC_TALK, 1, "拜访" + npcName, npcId);
+    }
+
     private static Map<JobBranch, List<Task>> jobs(List<Task> warrior, List<Task> mage, List<Task> bowman,
                                                    List<Task> thief, List<Task> pirate) {
         Map<JobBranch, List<Task>> map = new LinkedHashMap<>();
@@ -777,7 +964,11 @@ public final class HpChallengeService {
         Map<Integer, StageConfig> stages = new LinkedHashMap<>();
         stages.put(1, new StageConfig(1, 120, 1850, 15000, 10200, 8950, 4800,
                 List.of(
-                        t("visit_victoria_towns", TaskGroup.MAIN_COMMON, TargetType.MAP, 5, "访问五大职业基础区域", 100000000, 101000000, 102000000, 103000000, 120000000),
+                        npcVisit("visit_instructor_athena", 1012100, "赫丽娜"),
+                        npcVisit("visit_instructor_grendel", 1032001, "汉斯"),
+                        npcVisit("visit_instructor_balrog", 1022000, "武术教练"),
+                        npcVisit("visit_instructor_dark_lord", 1052001, "达克鲁"),
+                        npcVisit("visit_instructor_kyrin", 1090000, "凯琳"),
                         t("kill_crimson_balrog", TaskGroup.MAIN_COMMON, TargetType.BOSS, 1, "参与击杀蝙蝠魔", 8150000)
                 ),
                 jobs(
@@ -858,7 +1049,8 @@ public final class HpChallengeService {
         return stages;
     }
 
-    private record ProgressRow(int currentCount, int requiredCount, boolean selected, boolean completed) {
+    private record ProgressRow(int currentCount, int requiredCount, boolean selected, boolean active, boolean completed,
+                               int taskOrder) {
     }
 
     private record RewardLog(int id, int stage, int beforeMaxHp, int beforeMaxMp, int beforeHp, int beforeMp) {
@@ -893,7 +1085,7 @@ public final class HpChallengeService {
         try (Connection con = DatabaseConnection.getConnection()) {
             Map<String, ProgressRow> rows = new HashMap<>();
             try (PreparedStatement ps = con.prepareStatement("""
-                    SELECT task_key, current_count, required_count, selected, completed
+                    SELECT task_key, current_count, required_count, selected, active, completed, task_order
                     FROM hp_challenge_progress
                     WHERE character_id = ? AND stage = ? AND task_group = ?
                     """)) {
@@ -903,7 +1095,8 @@ public final class HpChallengeService {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         rows.put(rs.getString("task_key"), new ProgressRow(rs.getInt("current_count"),
-                                rs.getInt("required_count"), rs.getBoolean("selected"), rs.getBoolean("completed")));
+                                rs.getInt("required_count"), rs.getBoolean("selected"), rs.getBoolean("active"),
+                                rs.getBoolean("completed"), rs.getInt("task_order")));
                     }
                 }
             }
@@ -916,7 +1109,7 @@ public final class HpChallengeService {
 
     private static ProgressRow loadProgressRow(Connection con, int characterId, int stage, TaskGroup group, String taskKey) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement("""
-                SELECT current_count, required_count, selected, completed
+                SELECT current_count, required_count, selected, active, completed, task_order
                 FROM hp_challenge_progress
                 WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
                 """)) {
@@ -929,9 +1122,174 @@ public final class HpChallengeService {
                     return null;
                 }
                 return new ProgressRow(rs.getInt("current_count"), rs.getInt("required_count"),
-                        rs.getBoolean("selected"), rs.getBoolean("completed"));
+                        rs.getBoolean("selected"), rs.getBoolean("active"), rs.getBoolean("completed"),
+                        rs.getInt("task_order"));
             }
         }
+    }
+
+    private static ActiveTask loadActiveTask(Character chr, int stage) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            return loadActiveTask(con, chr, stage);
+        } catch (SQLException e) {
+            log.warn("load hp challenge active task failed", e);
+            return null;
+        }
+    }
+
+    private static ActiveTask loadActiveTask(Connection con, Character chr, int stageNo) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("""
+                SELECT task_group, task_key, current_count, required_count, selected, active, completed, task_order
+                FROM hp_challenge_progress
+                WHERE character_id = ? AND stage = ? AND active = 1 AND completed = 0
+                ORDER BY task_order, id
+                LIMIT 1
+                """)) {
+            ps.setInt(1, chr.getId());
+            ps.setInt(2, stageNo);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                TaskGroup group = TaskGroup.valueOf(rs.getString("task_group").toUpperCase(Locale.ROOT));
+                String taskKey = rs.getString("task_key");
+                Task task = orderedStageTasks(chr, stage(stageNo)).stream()
+                        .filter(t -> t.group() == group && t.key().equals(taskKey))
+                        .findFirst()
+                        .orElse(null);
+                if (task == null) {
+                    return null;
+                }
+                ProgressRow row = new ProgressRow(rs.getInt("current_count"), rs.getInt("required_count"),
+                        rs.getBoolean("selected"), rs.getBoolean("active"), rs.getBoolean("completed"),
+                        rs.getInt("task_order"));
+                return new ActiveTask(task, row);
+            }
+        }
+    }
+
+    private static void activateNextTaskIfNeeded(Connection con, Character chr, int stageNo) throws SQLException {
+        if (activeCount(con, chr.getId(), stageNo) > 0) {
+            return;
+        }
+        StageConfig stage = stage(stageNo);
+        for (Task task : orderedMainTasks(chr, stage)) {
+            ProgressRow row = loadProgressRow(con, chr.getId(), stageNo, task.group(), task.key());
+            if (row != null && !row.completed) {
+                activateTask(con, chr.getId(), stageNo, task);
+                return;
+            }
+        }
+        Task selectedOptional = firstSelectedIncompleteOptional(con, chr, stageNo);
+        if (selectedOptional != null) {
+            activateTask(con, chr.getId(), stageNo, selectedOptional);
+        }
+    }
+
+    private static void activateTask(Connection con, int characterId, int stage, Task task) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("""
+                UPDATE hp_challenge_progress
+                SET active = 1, accepted_at = COALESCE(accepted_at, CURRENT_TIMESTAMP)
+                WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
+                    AND completed = 0
+                """)) {
+            ps.setInt(1, characterId);
+            ps.setInt(2, stage);
+            ps.setString(3, task.group().code);
+            ps.setString(4, task.key());
+            ps.executeUpdate();
+        }
+    }
+
+    private static Task firstSelectedIncompleteOptional(Connection con, Character chr, int stageNo) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("""
+                SELECT task_key
+                FROM hp_challenge_progress
+                WHERE character_id = ? AND stage = ? AND task_group = 'optional'
+                    AND selected = 1 AND completed = 0
+                ORDER BY task_order, id
+                LIMIT 1
+                """)) {
+            ps.setInt(1, chr.getId());
+            ps.setInt(2, stageNo);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                String taskKey = rs.getString("task_key");
+                return stage(stageNo).optionalTasks().stream()
+                        .filter(task -> task.key().equals(taskKey))
+                        .findFirst()
+                        .orElse(null);
+            }
+        }
+    }
+
+    private static String nextStepText(Connection con, Character chr, int stageNo) throws SQLException {
+        ActiveTask activeTask = loadActiveTask(con, chr, stageNo);
+        if (activeTask != null) {
+            return "下一步：" + activeTask.task().description();
+        }
+        if (isOptionalChoiceAvailable(con, chr.getId(), stageNo)) {
+            return "下一步：选择第 " + (selectedOptionalCount(con, chr.getId(), stageNo) + 1) + " 个附加挑战。";
+        }
+        if (incompleteCount(con, chr.getId(), stageNo, TaskGroup.MAIN_COMMON) == 0
+                && incompleteCount(con, chr.getId(), stageNo, TaskGroup.MAIN_JOB) == 0
+                && completedSelectedOptionalCount(con, chr.getId(), stageNo) >= OPTIONAL_REQUIRED_COUNT) {
+            return "下一步：领取阶段奖励。";
+        }
+        return "下一步：请重新打开导师菜单查看当前任务。";
+    }
+
+    private static List<Task> orderedStageTasks(Character chr, StageConfig stage) {
+        List<Task> tasks = new ArrayList<>(orderedMainTasks(chr, stage));
+        tasks.addAll(stage.optionalTasks());
+        return tasks;
+    }
+
+    private static List<Task> orderedMainTasks(Character chr, StageConfig stage) {
+        List<Task> tasks = new ArrayList<>();
+        tasks.addAll(orderedCommonTasks(chr, stage));
+        tasks.addAll(stage.jobTasks().getOrDefault(branch(chr.getJob()), List.of()));
+        return tasks;
+    }
+
+    private static List<Task> orderedCommonTasks(Character chr, StageConfig stage) {
+        if (stage.stage() != 1) {
+            return stage.commonTasks();
+        }
+        List<Task> tasks = new ArrayList<>();
+        for (Integer npcId : instructorVisitOrderForJob(chr.getJob())) {
+            stage.commonTasks().stream()
+                    .filter(task -> task.targetType() == TargetType.NPC_TALK && task.primaryTarget() == npcId)
+                    .findFirst()
+                    .ifPresent(tasks::add);
+        }
+        for (Task task : stage.commonTasks()) {
+            if (task.targetType() != TargetType.NPC_TALK) {
+                tasks.add(task);
+            }
+        }
+        return tasks;
+    }
+
+    static List<Integer> instructorVisitOrderForJob(Job job) {
+        return instructorVisitOrderForInstructor(instructorNpcForJob(job));
+    }
+
+    static List<Integer> instructorVisitOrderForInstructor(int ownInstructor) {
+        List<Integer> order = new ArrayList<>();
+        for (Task task : stage(1).commonTasks()) {
+            if (task.targetType() == TargetType.NPC_TALK && task.primaryTarget() != ownInstructor) {
+                order.add(task.primaryTarget());
+            }
+        }
+        for (Task task : stage(1).commonTasks()) {
+            if (task.targetType() == TargetType.NPC_TALK && task.primaryTarget() == ownInstructor) {
+                order.add(task.primaryTarget());
+            }
+        }
+        return order;
     }
 
     private static int selectedOptionalCount(Connection con, int characterId, int stage) throws SQLException {
@@ -939,6 +1297,54 @@ public final class HpChallengeService {
                 SELECT COUNT(*) FROM hp_challenge_progress
                 WHERE character_id = ? AND stage = ? AND task_group = 'optional' AND selected = 1
                 """, characterId, stage);
+    }
+
+    private static int activeCount(Connection con, int characterId, int stage) throws SQLException {
+        return count(con, """
+                SELECT COUNT(*) FROM hp_challenge_progress
+                WHERE character_id = ? AND stage = ? AND active = 1 AND completed = 0
+                """, characterId, stage);
+    }
+
+    private static int nextOptionalSlot(int characterId, int stage) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            return selectedOptionalCount(con, characterId, stage) + 1;
+        } catch (SQLException e) {
+            log.warn("load hp challenge optional slot failed", e);
+            return 1;
+        }
+    }
+
+    private static boolean isOptionalChoiceAvailable(int characterId, int stage) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            return isOptionalChoiceAvailable(con, characterId, stage);
+        } catch (SQLException e) {
+            log.warn("check hp challenge optional choice failed", e);
+            return false;
+        }
+    }
+
+    private static boolean isOptionalChoiceAvailable(Connection con, int characterId, int stage) throws SQLException {
+        int selected = selectedOptionalCount(con, characterId, stage);
+        return activeCount(con, characterId, stage) == 0
+                && incompleteCount(con, characterId, stage, TaskGroup.MAIN_COMMON) == 0
+                && incompleteCount(con, characterId, stage, TaskGroup.MAIN_JOB) == 0
+                && selected < OPTIONAL_REQUIRED_COUNT
+                && selected == completedSelectedOptionalCount(con, characterId, stage);
+    }
+
+    private static int nextTaskOrder(Connection con, int characterId, int stage) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("""
+                SELECT COALESCE(MAX(task_order), 0) + 1
+                FROM hp_challenge_progress
+                WHERE character_id = ? AND stage = ?
+                """)) {
+            ps.setInt(1, characterId);
+            ps.setInt(2, stage);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getInt(1) : 1;
+            }
+        }
     }
 
     private static int completedSelectedOptionalCount(Connection con, int characterId, int stage) throws SQLException {
@@ -960,6 +1366,24 @@ public final class HpChallengeService {
             bind(ps, params);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next() ? rs.getInt(1) : 0;
+            }
+        }
+    }
+
+    private static void lockStageProgress(Connection con, int characterId, int stage) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("""
+                SELECT id
+                FROM hp_challenge_progress
+                WHERE character_id = ? AND stage = ?
+                ORDER BY id
+                FOR UPDATE
+                """)) {
+            ps.setInt(1, characterId);
+            ps.setInt(2, stage);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    // Consume all rows to acquire the row locks for this stage.
+                }
             }
         }
     }
@@ -994,17 +1418,20 @@ public final class HpChallengeService {
         }
     }
 
-    private static void completeTask(Connection con, int characterId, int stage, TaskGroup group, String taskKey) throws SQLException {
+    private static boolean completeTask(Connection con, int characterId, int stage, TaskGroup group, String taskKey,
+                                        boolean requireActive) throws SQLException {
+        String activeClause = requireActive ? " AND active = 1" : "";
         try (PreparedStatement ps = con.prepareStatement("""
                 UPDATE hp_challenge_progress
-                SET current_count = required_count, completed = 1
+                SET current_count = required_count, completed = 1, active = 0, completed_at = CURRENT_TIMESTAMP
                 WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
-                """)) {
+                    AND completed = 0
+                """ + activeClause)) {
             ps.setInt(1, characterId);
             ps.setInt(2, stage);
             ps.setString(3, group.code);
             ps.setString(4, taskKey);
-            ps.executeUpdate();
+            return ps.executeUpdate() > 0;
         }
     }
 
@@ -1064,13 +1491,6 @@ public final class HpChallengeService {
         } catch (SQLException e) {
             log.warn("write hp challenge gm log failed", e);
         }
-    }
-
-    private static String selectedStatus(ProgressRow row) {
-        if (row.completed) {
-            return "完成";
-        }
-        return row.currentCount + "/" + row.requiredCount;
     }
 
     private static void bind(PreparedStatement ps, Object... params) throws SQLException {
