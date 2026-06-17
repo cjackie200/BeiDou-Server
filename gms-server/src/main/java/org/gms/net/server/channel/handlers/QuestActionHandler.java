@@ -27,6 +27,7 @@ import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.scripting.quest.QuestScriptManager;
+import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.life.NPC;
 import org.gms.server.quest.Quest;
 import org.gms.util.I18nUtil;
@@ -122,6 +123,10 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 break;
             }
             case 3: // forfeit quest
+                if (LifeProofQuest.isForfeitBlocked(questid)) {
+                    player.dropMessage(5, "生命之证任务不能放弃。");
+                    return;
+                }
                 quest.forfeit(player);
                 break;
             case 4: { // scripted start quest

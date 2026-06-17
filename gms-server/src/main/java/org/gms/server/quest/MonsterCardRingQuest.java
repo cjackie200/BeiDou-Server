@@ -5,7 +5,6 @@ import org.gms.client.QuestStatus;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.config.GameConfig;
-import org.gms.server.hpchallenge.HpChallengeService;
 import org.gms.util.PacketCreator;
 
 import java.util.HashMap;
@@ -205,8 +204,6 @@ public final class MonsterCardRingQuest {
         if (GameConfig.getServerBoolean("use_rebirth_system")) {
             npcsIds.put(GameConfig.getServerInt("rebirth_npc_id"), "Rebirth");
         }
-        npcsIds.putAll(HpChallengeService.getScriptableNpcIds(chr));
-
         npcsIds.remove(NPC_ID);
         return npcsIds;
     }

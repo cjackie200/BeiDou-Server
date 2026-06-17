@@ -8,7 +8,7 @@ import org.gms.util.StringUtil;
 
 public class HpChallengeCommand extends Command {
     {
-        setDescription("挑战洗血进度管理");
+        setDescription("生命之证进度管理");
     }
 
     @Override

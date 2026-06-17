@@ -561,7 +561,7 @@ public class AssignAPProcessor {
         try {
             Character player = c.getPlayer();
             if (HpChallengeService.blocksHpMpAp(player, APFrom, APTo)) {
-                player.message("你已锁定挑战洗血路线，不能再通过AP操作洗HP/MP。");
+                player.message("你已锁定生命之证路线，不能再通过AP操作洗HP/MP。");
                 c.sendPacket(PacketCreator.enableActions());
                 return false;
             }
@@ -720,7 +720,7 @@ public class AssignAPProcessor {
 
     private static boolean addStat(Character chr, int apTo, boolean usedAPReset) {
         if (HpChallengeService.blocksHpMpAp(chr, apTo)) {
-            chr.message("你已锁定挑战洗血路线，不能再通过AP操作洗HP/MP。");
+            chr.message("你已锁定生命之证路线，不能再通过AP操作洗HP/MP。");
             chr.sendPacket(PacketCreator.enableActions());
             return false;
         }

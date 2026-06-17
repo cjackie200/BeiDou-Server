@@ -34,8 +34,8 @@ import java.util.stream.Collectors;
 public final class HpChallengeService {
     private static final Logger log = LoggerFactory.getLogger(HpChallengeService.class);
 
-    private static final int MIN_LEVEL = 120;
-    private static final int MAX_STAT = 30000;
+    static final int MIN_LEVEL = 120;
+    static final int MAX_STAT = 30000;
     private static final int OPTIONAL_REQUIRED_COUNT = 3;
     private static final Set<Integer> INSTRUCTOR_IDS = Set.of(1022000, 1032001, 1012100, 1052001, 1090000);
     private static final Map<Integer, StageConfig> STAGES = buildStages();
@@ -43,7 +43,7 @@ public final class HpChallengeService {
     private HpChallengeService() {
     }
 
-    private enum TaskGroup {
+    enum TaskGroup {
         MAIN_COMMON("main_common"),
         MAIN_JOB("main_job"),
         OPTIONAL("optional");
@@ -55,7 +55,7 @@ public final class HpChallengeService {
         }
     }
 
-    private enum TargetType {
+    enum TargetType {
         KILL,
         BOSS,
         MAP,
@@ -68,7 +68,7 @@ public final class HpChallengeService {
         JUMP_MANUAL
     }
 
-    private enum JobBranch {
+    enum JobBranch {
         WARRIOR,
         MAGE,
         BOWMAN,
@@ -76,7 +76,7 @@ public final class HpChallengeService {
         PIRATE
     }
 
-    private record Task(String key, TaskGroup group, TargetType targetType, int requiredCount, String description,
+    record Task(String key, TaskGroup group, TargetType targetType, int requiredCount, String description,
                         List<Integer> targetIds, int optionNo, int mesoCost) {
         int primaryTarget() {
             return targetIds.isEmpty() ? 0 : targetIds.getFirst();
@@ -91,7 +91,7 @@ public final class HpChallengeService {
         }
     }
 
-    private record StageConfig(int stage, int requiredLevel, int mageHp, int mageMp, int warriorHp, int brawlerHp,
+    record StageConfig(int stage, int requiredLevel, int mageHp, int mageMp, int warriorHp, int brawlerHp,
                                int otherHp, List<Task> commonTasks, Map<JobBranch, List<Task>> jobTasks,
                                List<Task> optionalTasks) {
     }
@@ -100,7 +100,7 @@ public final class HpChallengeService {
                          String status) {
     }
 
-    private record RewardTarget(int targetHp, int targetMp) {
+    record RewardTarget(int targetHp, int targetMp) {
     }
 
     private record ActiveTask(Task task, ProgressRow row) {
@@ -119,10 +119,10 @@ public final class HpChallengeService {
 
         int ownInstructor = instructorNpcForJob(chr.getJob());
         if (ownInstructor > 0) {
-            npcIds.put(ownInstructor, "挑战洗血");
+            npcIds.put(ownInstructor, "生命之证");
         }
 
-        currentNpcTalkTargets(chr).forEach(npcId -> npcIds.put(npcId, "挑战洗血"));
+        currentNpcTalkTargets(chr).forEach(npcId -> npcIds.put(npcId, "生命之证"));
         return npcIds;
     }
 
@@ -144,11 +144,11 @@ public final class HpChallengeService {
 
     public static String buildRootMenu(Character chr) {
         StringBuilder sb = new StringBuilder();
-        sb.append("#e挑战洗血#n\r\n");
+        sb.append("#e生命之证#n\r\n");
         if (!isOpenJob(chr)) {
             sb.append("当前角色暂未满足开启条件。\r\n\r\n");
         }
-        sb.append("#b#L9000#挑战洗血#l\r\n");
+        sb.append("#b#L9000#生命之证#l\r\n");
         sb.append("#L9001#职业相关对话#l#k");
         return sb.toString();
     }
@@ -164,7 +164,7 @@ public final class HpChallengeService {
         boolean optionalChoiceAvailable = isOptionalChoiceAvailable(chr.getId(), stage.stage());
         boolean stageReady = isStageReady(chr.getId(), stage.stage());
         StringBuilder sb = new StringBuilder();
-        sb.append("#e挑战洗血#n\r\n\r\n");
+        sb.append("#e生命之证#n\r\n\r\n");
         sb.append(buildSummary(chr)).append("\r\n");
         if (activeTask != null) {
             sb.append("当前任务：").append(activeTask.task().description())
@@ -300,17 +300,14 @@ public final class HpChallengeService {
     }
 
     public static void onMapChanged(Character chr) {
-        if (chr == null) {
-            return;
-        }
-        incrementMatching(chr, TargetType.MAP, chr.getMapId(), "map:" + chr.getMapId(), null);
+        // 地图探查已改为生命之证收集任务，保留 hook 但不再写旧进度表。
     }
 
     public static void onMonsterKilled(Character chr, int mobId) {
         if (chr == null) {
             return;
         }
-        incrementMatching(chr, TargetType.KILL, mobId, null, null);
+        LifeProofQuest.onMonsterKilled(chr, mobId);
     }
 
     public static void onPartyQuestCleared(EventInstanceManager eim) {
@@ -320,7 +317,7 @@ public final class HpChallengeService {
         String eventName = eim.getName() == null ? "" : eim.getName();
         Collection<Character> players = eim.getPlayers();
         for (Character chr : players) {
-            incrementMatching(chr, TargetType.PQ_ANY, 0, null, eventName);
+            LifeProofQuest.onPartyQuestCleared(chr, eventName);
         }
     }
 
@@ -328,7 +325,7 @@ public final class HpChallengeService {
         if (chr == null || !success || !isOneHundredPercentScroll(scrollId)) {
             return;
         }
-        incrementMatching(chr, TargetType.SCROLL_100, scrollId, "scroll:" + scrollId + ":" + System.nanoTime(), null);
+        LifeProofQuest.onScrollUsed(chr, scrollId);
     }
 
     public static String tryCompleteNpcTalk(Character chr, int npcId) {
@@ -376,6 +373,10 @@ public final class HpChallengeService {
         if (chr == null) {
             return "角色不存在。";
         }
+        String lifeProofStatus = LifeProofQuest.gmStatus(chr);
+        if (lifeProofStatus != null) {
+            return lifeProofStatus;
+        }
         return buildProgressText(chr);
     }
 
@@ -421,6 +422,10 @@ public final class HpChallengeService {
         if (target == null) {
             return "目标角色不存在。";
         }
+        String lifeProofResult = LifeProofQuest.gmCompleteCurrent(operator, target);
+        if (lifeProofResult != null) {
+            return lifeProofResult;
+        }
         if (!ensureStateAndProgress(target)) {
             return openRequirementText(target);
         }
@@ -430,7 +435,7 @@ public final class HpChallengeService {
                 State state = loadState(con, target.getId());
                 if (state == null) {
                     con.rollback();
-                    return "目标角色尚未开启挑战洗血。";
+                    return "目标角色尚未开启生命之证。";
                 }
                 lockStageProgress(con, target.getId(), state.currentStage());
                 ActiveTask activeTask = loadActiveTask(con, target, state.currentStage());
@@ -505,7 +510,7 @@ public final class HpChallengeService {
             ps.setInt(1, target.getId());
             ps.executeUpdate();
             logGm(operator, target.getId(), "unlock_route", "route_locked=0");
-            return "已解除挑战洗血路线锁定。";
+            return "已解除生命之证路线锁定。";
         } catch (SQLException e) {
             log.warn("gm unlock hp challenge route failed", e);
             return "解除路线锁定失败。";
@@ -620,6 +625,75 @@ public final class HpChallengeService {
 
         ensureStateAndProgress(chr);
         syncNpcScriptable(chr);
+        return "领取成功。\r\n"
+                + "HP：" + beforeMaxHp + " -> " + afterMaxHp + "\r\n"
+                + "MP：" + beforeMaxMp + " -> " + afterMaxMp + "\r\n"
+                + "当前 HP 和 MP 已回满。";
+    }
+
+    public static String claimLifeProofStageReward(Character chr, int stageNo) {
+        if (!ensureLifeProofState(chr)) {
+            return openRequirementText(chr);
+        }
+        StageConfig stage = stage(stageNo);
+        if (chr.getLevel() < stage.requiredLevel()) {
+            return "当前阶段需要等级达到 " + stage.requiredLevel() + "。";
+        }
+        if (hasActiveReward(chr.getId(), stage.stage())) {
+            return "该阶段奖励已经领取。";
+        }
+
+        RewardTarget target = rewardTarget(chr, stage);
+        int beforeMaxHp = chr.getMaxHp();
+        int beforeMaxMp = chr.getMaxMp();
+        int beforeHp = chr.getHp();
+        int beforeMp = chr.getMp();
+        int afterMaxHp = Math.min(MAX_STAT, Math.max(beforeMaxHp, target.targetHp()));
+        int afterMaxMp = Math.min(MAX_STAT, Math.max(beforeMaxMp, target.targetMp()));
+
+        chr.updateMaxHpMaxMp(afterMaxHp, afterMaxMp);
+        chr.updateHp(afterMaxHp);
+        chr.updateMp(afterMaxMp);
+
+        try (Connection con = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("""
+                    INSERT INTO hp_challenge_reward_log
+                    (character_id, stage, job_id, before_maxhp, before_maxmp, before_hp, before_mp,
+                     after_maxhp, after_maxmp, after_hp, after_mp, operator)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)
+                    """)) {
+                ps.setInt(1, chr.getId());
+                ps.setInt(2, stage.stage());
+                ps.setInt(3, chr.getJob().getId());
+                ps.setInt(4, beforeMaxHp);
+                ps.setInt(5, beforeMaxMp);
+                ps.setInt(6, beforeHp);
+                ps.setInt(7, beforeMp);
+                ps.setInt(8, afterMaxHp);
+                ps.setInt(9, afterMaxMp);
+                ps.setInt(10, afterMaxHp);
+                ps.setInt(11, afterMaxMp);
+                ps.executeUpdate();
+            }
+            int nextStage = Math.min(7, stage.stage() + 1);
+            String status = stage.stage() >= 7 ? "COMPLETED" : "STARTED";
+            try (PreparedStatement ps = con.prepareStatement("""
+                    UPDATE hp_challenge_state
+                    SET route_locked = 1, highest_rewarded_stage = GREATEST(highest_rewarded_stage, ?),
+                        current_stage = GREATEST(current_stage, ?), status = ?
+                    WHERE character_id = ?
+                    """)) {
+                ps.setInt(1, stage.stage());
+                ps.setInt(2, nextStage);
+                ps.setString(3, status);
+                ps.setInt(4, chr.getId());
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            log.warn("claim life proof reward failed", e);
+            return "奖励已经写入角色，但奖励日志写入失败，请联系 GM 检查。";
+        }
+
         return "领取成功。\r\n"
                 + "HP：" + beforeMaxHp + " -> " + afterMaxHp + "\r\n"
                 + "MP：" + beforeMaxMp + " -> " + afterMaxMp + "\r\n"
@@ -762,6 +836,29 @@ public final class HpChallengeService {
         }
     }
 
+    static boolean ensureLifeProofState(Character chr) {
+        if (chr == null || !isOpenJob(chr) || chr.getLevel() < MIN_LEVEL) {
+            return false;
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            State state = loadState(con, chr.getId());
+            if (state != null) {
+                return true;
+            }
+            try (PreparedStatement ps = con.prepareStatement("""
+                    INSERT INTO hp_challenge_state (character_id, route_locked, current_stage, highest_rewarded_stage, status)
+                    VALUES (?, 0, 1, 0, 'STARTED')
+                    """)) {
+                ps.setInt(1, chr.getId());
+                ps.executeUpdate();
+            }
+            return true;
+        } catch (SQLException e) {
+            log.warn("ensure life proof state failed", e);
+            return false;
+        }
+    }
+
     private static void ensureProgressRows(Connection con, Character chr, int stageNo) throws SQLException {
         StageConfig stage = stage(stageNo);
         List<Task> tasks = orderedStageTasks(chr, stage);
@@ -896,28 +993,28 @@ public final class HpChallengeService {
     }
 
     private static String buildRulesText(Character chr) {
-        return "挑战洗血规则：\r\n"
+        return "生命之证规则：\r\n"
                 + "1. 120 级四转冒险家可以开启。\r\n"
                 + "2. 每阶段任务按顺序逐个完成，未解锁任务不提前计数。\r\n"
-                + "3. 领取首次奖励后锁定挑战洗血路线，不能再通过 AP 操作洗 HP/MP。\r\n"
+                + "3. 领取首次奖励后锁定生命之证路线，不能再通过 AP 操作洗 HP/MP。\r\n"
                 + "4. 奖励直接补到阶段目标 maxhp/maxmp，不使用血量戒指。\r\n"
                 + "5. 附加挑战每次只选择 1 个，完成 3 个后才可领取阶段奖励。";
     }
 
-    private static String openRequirementText(Character chr) {
+    static String openRequirementText(Character chr) {
         if (chr == null) {
             return "角色不存在。";
         }
         if (!isOpenJob(chr)) {
-            return "挑战洗血仅开放给四转冒险家职业。";
+            return "生命之证仅开放给四转冒险家职业。";
         }
         if (chr.getLevel() < MIN_LEVEL) {
-            return "挑战洗血需要达到 120 级后开启。";
+            return "生命之证需要达到 120 级后开启。";
         }
-        return "暂时无法开启挑战洗血。";
+        return "暂时无法开启生命之证。";
     }
 
-    private static RewardTarget rewardTarget(Character chr, StageConfig stage) {
+    static RewardTarget rewardTarget(Character chr, StageConfig stage) {
         Job job = chr.getJob();
         if (job.isA(Job.MAGICIAN)) {
             return new RewardTarget(stage.mageHp(), stage.mageMp());
@@ -931,11 +1028,11 @@ public final class HpChallengeService {
         return new RewardTarget(stage.otherHp(), chr.getMaxMp());
     }
 
-    private static boolean isOpenJob(Character chr) {
+    static boolean isOpenJob(Character chr) {
         return chr != null && isOpenJob(chr.getJob());
     }
 
-    private static boolean isOpenJob(Job job) {
+    static boolean isOpenJob(Job job) {
         return switch (job) {
             case HERO, PALADIN, DARKKNIGHT, FP_ARCHMAGE, IL_ARCHMAGE, BISHOP, BOWMASTER, MARKSMAN,
                  NIGHTLORD, SHADOWER, BUCCANEER, CORSAIR -> true;
@@ -983,7 +1080,7 @@ public final class HpChallengeService {
         chr.getClient().sendPacket(PacketCreator.setNPCScriptable(MonsterCardRingQuest.getScriptableNpcIds(chr)));
     }
 
-    private static int instructorNpcForJob(Job job) {
+    static int instructorNpcForJob(Job job) {
         if (job.isA(Job.WARRIOR)) {
             return 1022000;
         }
@@ -1002,7 +1099,7 @@ public final class HpChallengeService {
         return 0;
     }
 
-    private static JobBranch branch(Job job) {
+    static JobBranch branch(Job job) {
         if (job.isA(Job.WARRIOR)) {
             return JobBranch.WARRIOR;
         }
@@ -1032,7 +1129,7 @@ public final class HpChallengeService {
         return ap == 2048 || ap == 8192;
     }
 
-    private static boolean isOneHundredPercentScroll(int scrollId) {
+    static boolean isOneHundredPercentScroll(int scrollId) {
         if (ItemConstants.getInventoryType(scrollId) != org.gms.client.inventory.InventoryType.USE) {
             return false;
         }
@@ -1040,7 +1137,7 @@ public final class HpChallengeService {
         return stats != null && Objects.equals(stats.get("success"), 100);
     }
 
-    private static StageConfig stage(int stage) {
+    static StageConfig stage(int stage) {
         StageConfig config = STAGES.get(stage);
         if (config == null) {
             throw new IllegalArgumentException("Unknown hp challenge stage: " + stage);
@@ -1359,20 +1456,20 @@ public final class HpChallengeService {
         return "下一步：请重新打开导师菜单查看当前任务。";
     }
 
-    private static List<Task> orderedStageTasks(Character chr, StageConfig stage) {
+    static List<Task> orderedStageTasks(Character chr, StageConfig stage) {
         List<Task> tasks = new ArrayList<>(orderedMainTasks(chr, stage));
         tasks.addAll(stage.optionalTasks());
         return tasks;
     }
 
-    private static List<Task> orderedMainTasks(Character chr, StageConfig stage) {
+    static List<Task> orderedMainTasks(Character chr, StageConfig stage) {
         List<Task> tasks = new ArrayList<>();
         tasks.addAll(orderedCommonTasks(chr, stage));
         tasks.addAll(stage.jobTasks().getOrDefault(branch(chr.getJob()), List.of()));
         return tasks;
     }
 
-    private static List<Task> orderedCommonTasks(Character chr, StageConfig stage) {
+    static List<Task> orderedCommonTasks(Character chr, StageConfig stage) {
         if (stage.stage() != 1) {
             return stage.commonTasks();
         }
@@ -1553,7 +1650,7 @@ public final class HpChallengeService {
         }
     }
 
-    private static boolean hasActiveReward(int characterId, int stage) {
+    static boolean hasActiveReward(int characterId, int stage) {
         try (Connection con = DatabaseConnection.getConnection()) {
             return count(con, """
                     SELECT COUNT(*) FROM hp_challenge_reward_log
@@ -1591,7 +1688,7 @@ public final class HpChallengeService {
                 """, characterId, stage) > 0;
     }
 
-    private static void logGm(Character operator, int targetCharacterId, String action, String detail) {
+    static void logGm(Character operator, int targetCharacterId, String action, String detail) {
         if (operator == null) {
             return;
         }
