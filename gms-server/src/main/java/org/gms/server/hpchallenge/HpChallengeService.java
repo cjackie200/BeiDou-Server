@@ -3,9 +3,11 @@ package org.gms.server.hpchallenge;
 import org.gms.client.Character;
 import org.gms.client.Job;
 import org.gms.client.Stat;
+import org.gms.config.GameConfig;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.ItemInformationProvider;
+import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -104,7 +107,23 @@ public final class HpChallengeService {
     }
 
     public static boolean shouldOfferNpcEntry(Character chr, int npcId) {
-        return chr != null && INSTRUCTOR_IDS.contains(npcId) && isInstructorForJob(chr, npcId);
+        return chr != null && INSTRUCTOR_IDS.contains(npcId)
+                && (isInstructorForJob(chr, npcId) || isCurrentNpcTalkTarget(chr, npcId));
+    }
+
+    public static Map<Integer, String> getScriptableNpcIds(Character chr) {
+        Map<Integer, String> npcIds = new LinkedHashMap<>();
+        if (chr == null || !isOpenJob(chr) || chr.getLevel() < MIN_LEVEL) {
+            return npcIds;
+        }
+
+        int ownInstructor = instructorNpcForJob(chr.getJob());
+        if (ownInstructor > 0) {
+            npcIds.put(ownInstructor, "挑战洗血");
+        }
+
+        currentNpcTalkTargets(chr).forEach(npcId -> npcIds.put(npcId, "挑战洗血"));
+        return npcIds;
     }
 
     public static boolean isRouteLocked(Character chr) {
@@ -138,6 +157,7 @@ public final class HpChallengeService {
         if (!ensureStateAndProgress(chr)) {
             return openRequirementText(chr);
         }
+        syncNpcScriptable(chr);
         State state = loadState(chr.getId());
         StageConfig stage = stage(state.currentStage());
         ActiveTask activeTask = loadActiveTask(chr, stage.stage());
@@ -265,6 +285,7 @@ public final class HpChallengeService {
                     }
                 }
                 con.commit();
+                syncNpcScriptable(chr);
                 return "已选择第 " + (selectedCount + 1) + " 个附加挑战：" + task.description();
             } catch (SQLException e) {
                 con.rollback();
@@ -336,6 +357,7 @@ public final class HpChallengeService {
                 }
                 activateNextTaskIfNeeded(con, chr, state.currentStage());
                 con.commit();
+                syncNpcScriptable(chr);
                 return "已完成当前拜访：" + activeTask.task().description() + "\r\n\r\n"
                         + nextStepText(con, chr, state.currentStage());
             } catch (SQLException e) {
@@ -380,6 +402,7 @@ public final class HpChallengeService {
                 }
                 activateNextTaskIfNeeded(con, target, stage);
                 con.commit();
+                syncNpcScriptable(target);
                 logGm(operator, target.getId(), "complete", "stage=" + stage + ", group=" + taskGroup + ", key=" + taskKey);
                 return "已补齐任务：" + taskGroup + "/" + taskKey;
             } catch (SQLException e) {
@@ -432,6 +455,7 @@ public final class HpChallengeService {
                 activateNextTaskIfNeeded(con, target, state.currentStage());
                 String nextStep = nextStepText(con, target, state.currentStage());
                 con.commit();
+                syncNpcScriptable(target);
                 logGm(operator, target.getId(), "complete_current",
                         "stage=" + state.currentStage() + ", group=" + activeTask.task().group().code
                                 + ", key=" + activeTask.task().key());
@@ -595,6 +619,7 @@ public final class HpChallengeService {
         }
 
         ensureStateAndProgress(chr);
+        syncNpcScriptable(chr);
         return "领取成功。\r\n"
                 + "HP：" + beforeMaxHp + " -> " + afterMaxHp + "\r\n"
                 + "MP：" + beforeMaxMp + " -> " + afterMaxMp + "\r\n"
@@ -605,6 +630,7 @@ public final class HpChallengeService {
         if (!ensureStateAndProgress(chr)) {
             return;
         }
+        boolean matched = false;
         try (Connection con = DatabaseConnection.getConnection()) {
             con.setAutoCommit(false);
             try {
@@ -620,6 +646,7 @@ public final class HpChallengeService {
                 }
                 incrementTask(con, chr, state.currentStage(), activeTask.task(),
                         eventKey != null ? eventKey : activeTask.task().key() + ":" + eventId + ":" + System.nanoTime());
+                matched = true;
                 con.commit();
             } catch (SQLException e) {
                 con.rollback();
@@ -629,6 +656,9 @@ public final class HpChallengeService {
             }
         } catch (SQLException e) {
             log.warn("increment hp challenge task failed", e);
+        }
+        if (matched) {
+            syncNpcScriptable(chr);
         }
     }
 
@@ -693,6 +723,7 @@ public final class HpChallengeService {
                 chr.gainMeso(-mesoTask.mesoCost(), true, true, true);
                 activateNextTaskIfNeeded(con, chr, stage.stage());
                 con.commit();
+                syncNpcScriptable(chr);
                 return "已缴纳 " + mesoTask.mesoCost() + " 金币，金币挑战完成。";
             } catch (SQLException e) {
                 con.rollback();
@@ -917,6 +948,39 @@ public final class HpChallengeService {
             return false;
         }
         return instructorNpcForJob(chr.getJob()) == npcId;
+    }
+
+    private static boolean isCurrentNpcTalkTarget(Character chr, int npcId) {
+        return currentNpcTalkTargets(chr).contains(npcId);
+    }
+
+    private static Set<Integer> currentNpcTalkTargets(Character chr) {
+        if (chr == null || chr.getLevel() < MIN_LEVEL || !isOpenJob(chr)) {
+            return Set.of();
+        }
+        try {
+            State state = loadState(chr.getId());
+            if (state == null) {
+                return Set.of();
+            }
+            ActiveTask activeTask = loadActiveTask(chr, state.currentStage());
+            if (activeTask == null || activeTask.task().targetType() != TargetType.NPC_TALK) {
+                return Set.of();
+            }
+            return activeTask.task().targetIds().stream()
+                    .filter(INSTRUCTOR_IDS::contains)
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+        } catch (RuntimeException e) {
+            log.warn("load hp challenge npc talk target failed", e);
+            return Set.of();
+        }
+    }
+
+    private static void syncNpcScriptable(Character chr) {
+        if (chr == null || chr.getClient() == null || !GameConfig.getServerBoolean("use_npcs_scriptable")) {
+            return;
+        }
+        chr.getClient().sendPacket(PacketCreator.setNPCScriptable(MonsterCardRingQuest.getScriptableNpcIds(chr)));
     }
 
     private static int instructorNpcForJob(Job job) {

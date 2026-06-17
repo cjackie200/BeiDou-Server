@@ -39,12 +39,6 @@ var hpChallengeSkipOriginal = false;
 
 function start() {
     const HpChallengeService = Java.type('org.gms.server.hpchallenge.HpChallengeService');
-    const hpChallengeTalk = HpChallengeService.tryCompleteNpcTalk(cm.getPlayer(), cm.getNpc());
-    if (hpChallengeTalk != null) {
-        cm.sendOk(hpChallengeTalk);
-        cm.dispose();
-        return;
-    }
     if (!hpChallengeSkipOriginal && HpChallengeService.shouldOfferNpcEntry(cm.getPlayer(), cm.getNpc())) {
         hpChallengeMode = true;
         hpChallengeStatus = -1;
@@ -112,6 +106,12 @@ function handleHpChallenge(mode, type, selection) {
             return;
         }
         if (selection !== 9000) {
+            cm.dispose();
+            return;
+        }
+        const hpChallengeTalk = HpChallengeService.tryCompleteNpcTalk(cm.getPlayer(), cm.getNpc());
+        if (hpChallengeTalk != null) {
+            cm.sendOk(hpChallengeTalk);
             cm.dispose();
             return;
         }
