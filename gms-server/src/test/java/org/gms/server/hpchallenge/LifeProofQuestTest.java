@@ -1,7 +1,13 @@
 package org.gms.server.hpchallenge;
 
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,5 +75,61 @@ class LifeProofQuestTest {
         assertEquals(75, temple.requiredCount());
         assertEquals(List.of(8200005, 8200006, 8200007, 8200008, 8200009, 8200010, 8200011, 8200012),
                 temple.droppers());
+    }
+
+    @Test
+    void questInfoOrderStaysWithinClientSafeRange() throws Exception {
+        assertLifeProofQuestInfoOrder(resolveQuestInfoXml("wz/Quest.wz/QuestInfo.img.xml"));
+        assertLifeProofQuestInfoOrder(resolveQuestInfoXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml"));
+    }
+
+    private static void assertLifeProofQuestInfoOrder(Path path) throws Exception {
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(path.toFile());
+        NodeList quests = document.getDocumentElement().getElementsByTagName("imgdir");
+        int count = 0;
+        int maxOrder = 0;
+
+        for (int i = 0; i < quests.getLength(); i++) {
+            Element quest = (Element) quests.item(i);
+            String name = quest.getAttribute("name");
+            if (!name.matches("\\d+")) {
+                continue;
+            }
+            int questId = Integer.parseInt(name);
+            if (!LifeProofQuest.isVisibleQuestId(questId)) {
+                continue;
+            }
+            if (!"生命之证".equals(childValue(quest, "string", "parent"))) {
+                continue;
+            }
+
+            count++;
+            int order = Integer.parseInt(childValue(quest, "int", "order"));
+            maxOrder = Math.max(maxOrder, order);
+            assertTrue(order >= 1 && order <= 31, "unsafe QuestInfo.order for quest " + questId + " in " + path);
+        }
+
+        assertEquals(645, count, "visible life proof quest count in " + path);
+        assertEquals(21, maxOrder, "life proof max QuestInfo.order in " + path);
+    }
+
+    private static String childValue(Element parent, String tagName, String childName) {
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child
+                    && tagName.equals(child.getTagName())
+                    && childName.equals(child.getAttribute("name"))) {
+                return child.getAttribute("value");
+            }
+        }
+        throw new AssertionError("missing child " + childName + " under " + parent.getAttribute("name"));
+    }
+
+    private static Path resolveQuestInfoXml(String relativePath) {
+        Path modulePath = Path.of(relativePath);
+        if (Files.exists(modulePath)) {
+            return modulePath;
+        }
+        return Path.of("gms-server").resolve(relativePath);
     }
 }
