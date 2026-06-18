@@ -8,9 +8,9 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,11 +20,12 @@ class LifeProofQuestTest {
 
     @Test
     void questIdsFollowStageJobBlockFormula() {
-        assertEquals(30100, LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR, 0));
-        assertEquals(30125, LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE, 0));
-        assertEquals(30225, LifeProofQuest.questId(2, HpChallengeService.JobBranch.WARRIOR, 0));
-        assertEquals(30950, LifeProofQuest.questId(7, HpChallengeService.JobBranch.PIRATE, 0));
-        assertEquals(30970, LifeProofQuest.questId(7, HpChallengeService.JobBranch.PIRATE, LifeProofQuest.REWARD_SLOT));
+        assertEquals(5100, LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR, 0));
+        assertEquals(5125, LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE, 0));
+        assertEquals(5225, LifeProofQuest.questId(2, HpChallengeService.JobBranch.WARRIOR, 0));
+        assertEquals(5950, LifeProofQuest.questId(7, HpChallengeService.JobBranch.PIRATE, 0));
+        assertEquals(5970, LifeProofQuest.questId(7, HpChallengeService.JobBranch.PIRATE, LifeProofQuest.REWARD_SLOT));
+        assertTrue(LifeProofQuest.LAST_QUEST_ID < 30000);
     }
 
     @Test
@@ -41,9 +42,9 @@ class LifeProofQuestTest {
     void firstStageWarriorVisitsOwnInstructorLast() {
         List<LifeProofQuest.QuestMeta> quests = LifeProofQuest.stageBranchVisibleQuests(1, HpChallengeService.JobBranch.WARRIOR);
 
-        assertEquals(30100, quests.get(0).questId());
+        assertEquals(5100, quests.get(0).questId());
         assertEquals(List.of(1012100), quests.get(0).objective().targetIds());
-        assertEquals(30104, quests.get(4).questId());
+        assertEquals(5104, quests.get(4).questId());
         assertEquals(List.of(1022000), quests.get(4).objective().targetIds());
     }
 
@@ -51,7 +52,7 @@ class LifeProofQuestTest {
     void mapTasksAreConvertedToCollectionItems() {
         LifeProofQuest.QuestMeta t2Common = LifeProofQuest.stageBranchVisibleQuests(2, HpChallengeService.JobBranch.WARRIOR)
                 .stream()
-                .filter(meta -> meta.questId() == 30225)
+                .filter(meta -> meta.questId() == 5225)
                 .findFirst()
                 .orElseThrow();
         assertEquals(LifeProofQuest.ObjectiveType.ITEM, t2Common.objective().type());
@@ -60,7 +61,7 @@ class LifeProofQuestTest {
 
         LifeProofQuest.QuestMeta t1OptionalMap = LifeProofQuest.stageBranchVisibleQuests(1, HpChallengeService.JobBranch.WARRIOR)
                 .stream()
-                .filter(meta -> meta.questId() == 30115)
+                .filter(meta -> meta.questId() == 5115)
                 .findFirst()
                 .orElseThrow();
         assertEquals(LifeProofQuest.ObjectiveType.ITEM, t1OptionalMap.objective().type());
@@ -80,20 +81,22 @@ class LifeProofQuestTest {
     }
 
     @Test
-    void questInfoOrderStaysWithinClientSafeRange() throws Exception {
-        assertLifeProofQuestInfoClientSafe(resolveQuestInfoXml("wz/Quest.wz/QuestInfo.img.xml"));
-        assertLifeProofQuestInfoClientSafe(resolveQuestInfoXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml"));
+    void questInfoUsesMinimalClientSafeFields() throws Exception {
+        assertLifeProofQuestInfoClientSafe(resolveQuestXml("wz/Quest.wz/QuestInfo.img.xml"));
+        assertLifeProofQuestInfoClientSafe(resolveQuestXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml"));
+    }
+
+    @Test
+    void questWzDoesNotContainClientDanglingLifeProofNodes() throws Exception {
+        assertLifeProofQuestWzClientSafe("wz/Quest.wz");
+        assertLifeProofQuestWzClientSafe("wz-zh-CN/Quest.wz");
     }
 
     private static void assertLifeProofQuestInfoClientSafe(Path path) throws Exception {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(path.toFile());
-        NodeList quests = document.getDocumentElement().getElementsByTagName("imgdir");
         int count = 0;
-        int maxOrder = 0;
-        Map<String, Integer> parentCounts = new HashMap<>();
 
-        for (int i = 0; i < quests.getLength(); i++) {
-            Element quest = (Element) quests.item(i);
+        for (Element quest : topLevelImgDirs(document)) {
             String name = quest.getAttribute("name");
             if (!name.matches("\\d+")) {
                 continue;
@@ -102,24 +105,103 @@ class LifeProofQuestTest {
             if (!LifeProofQuest.isVisibleQuestId(questId)) {
                 continue;
             }
-            String parent = childValue(quest, "string", "parent");
-            if (!parent.startsWith("生命之证")) {
-                continue;
-            }
 
             count++;
-            int order = Integer.parseInt(childValue(quest, "int", "order"));
-            maxOrder = Math.max(maxOrder, order);
-            parentCounts.merge(parent, 1, Integer::sum);
-            assertTrue(parent.contains("："), "life proof parent must be split by stage and job for " + questId);
-            assertTrue(order >= 1 && order <= 31, "unsafe QuestInfo.order for quest " + questId + " in " + path);
+            assertEquals("", childValue(quest, "string", "parent"),
+                    "life proof QuestInfo.parent must be omitted for quest " + questId + " in " + path);
+            assertEquals("", childValue(quest, "int", "order"),
+                    "life proof QuestInfo.order must be omitted for quest " + questId + " in " + path);
+            assertEquals("30", childValue(quest, "int", "area"),
+                    "life proof QuestInfo.area must stay in General for quest " + questId + " in " + path);
         }
 
         assertEquals(645, count, "visible life proof quest count in " + path);
-        assertEquals(21, maxOrder, "life proof max QuestInfo.order in " + path);
-        assertEquals(35, parentCounts.size(), "life proof parent group count in " + path);
-        parentCounts.forEach((parent, parentCount) ->
-                assertTrue(parentCount <= 21, "unsafe QuestInfo.parent group size for " + parent + " in " + path));
+    }
+
+    private static void assertLifeProofQuestWzClientSafe(String questDir) throws Exception {
+        Path infoPath = resolveQuestXml(questDir + "/QuestInfo.img.xml");
+        Path checkPath = resolveQuestXml(questDir + "/Check.img.xml");
+        Path actPath = resolveQuestXml(questDir + "/Act.img.xml");
+
+        Set<Integer> infoIds = topLevelLifeProofQuestIds(infoPath, false);
+        Set<Integer> checkIds = topLevelLifeProofQuestIds(checkPath, false);
+        Set<Integer> actIds = topLevelLifeProofQuestIds(actPath, false);
+
+        assertEquals(750, infoIds.size(), "life proof QuestInfo count in " + infoPath);
+        assertEquals(infoIds, checkIds,
+                "Check.img must not contain life proof quest nodes missing from QuestInfo.img in " + questDir);
+        assertEquals(infoIds, actIds,
+                "Act.img must contain every life proof quest node present in QuestInfo.img in " + questDir);
+
+        for (int oldQuestId : topLevelLifeProofQuestIds(infoPath, true)) {
+            assertFalse(oldQuestId >= 30100 && oldQuestId <= 30999,
+                    "old 30000-range life proof QuestInfo id must not remain: " + oldQuestId);
+        }
+        for (int oldQuestId : topLevelLifeProofQuestIds(checkPath, true)) {
+            assertFalse(oldQuestId >= 30100 && oldQuestId <= 30999,
+                    "old 30000-range life proof Check id must not remain: " + oldQuestId);
+        }
+        for (int oldQuestId : topLevelLifeProofQuestIds(actPath, true)) {
+            assertFalse(oldQuestId >= 30100 && oldQuestId <= 30999,
+                    "old 30000-range life proof Act id must not remain: " + oldQuestId);
+        }
+
+        Document checkDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(checkPath.toFile());
+        for (int stage = 1; stage <= 7; stage++) {
+            for (HpChallengeService.JobBranch branch : List.of(
+                    HpChallengeService.JobBranch.WARRIOR,
+                    HpChallengeService.JobBranch.MAGE,
+                    HpChallengeService.JobBranch.BOWMAN,
+                    HpChallengeService.JobBranch.THIEF,
+                    HpChallengeService.JobBranch.PIRATE)) {
+                int reservedQuestId = LifeProofQuest.reservedQuestId(stage, branch);
+                for (int slot = LifeProofQuest.BRIDGE_SLOT_START; slot < LifeProofQuest.RESERVED_SLOT; slot++) {
+                    int bridgeQuestId = LifeProofQuest.questId(stage, branch, slot);
+                    Element bridge = topLevelImgDir(checkDocument, bridgeQuestId);
+                    assertEquals(Integer.toString(reservedQuestId),
+                            childValue(bridge, "0", "quest", "0", "int", "id"),
+                            "bridge quest must depend on its reserved lock quest in " + questDir + ": " + bridgeQuestId);
+                    assertEquals("2",
+                            childValue(bridge, "0", "quest", "0", "int", "state"),
+                            "bridge quest lock must require completed reserved quest in " + questDir + ": " + bridgeQuestId);
+                }
+            }
+        }
+    }
+
+    private static Set<Integer> topLevelLifeProofQuestIds(Path path, boolean includeOldRange) throws Exception {
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(path.toFile());
+        Set<Integer> ids = new HashSet<>();
+        for (Element quest : topLevelImgDirs(document)) {
+            String name = quest.getAttribute("name");
+            if (!name.matches("\\d+")) {
+                continue;
+            }
+            int questId = Integer.parseInt(name);
+            if (LifeProofQuest.isQuestId(questId) || includeOldRange && questId >= 30100 && questId <= 30999) {
+                ids.add(questId);
+            }
+        }
+        return ids;
+    }
+
+    private static List<Element> topLevelImgDirs(Document document) {
+        NodeList children = document.getDocumentElement().getChildNodes();
+        return java.util.stream.IntStream.range(0, children.getLength())
+                .mapToObj(children::item)
+                .filter(Element.class::isInstance)
+                .map(Element.class::cast)
+                .filter(element -> "imgdir".equals(element.getTagName()))
+                .toList();
+    }
+
+    private static Element topLevelImgDir(Document document, int questId) {
+        for (Element element : topLevelImgDirs(document)) {
+            if (Integer.toString(questId).equals(element.getAttribute("name"))) {
+                return element;
+            }
+        }
+        throw new AssertionError("missing top-level quest node: " + questId);
     }
 
     private static String childValue(Element parent, String tagName, String childName) {
@@ -131,10 +213,30 @@ class LifeProofQuestTest {
                 return child.getAttribute("value");
             }
         }
-        throw new AssertionError("missing child " + childName + " under " + parent.getAttribute("name"));
+        return "";
     }
 
-    private static Path resolveQuestInfoXml(String relativePath) {
+    private static String childValue(Element parent, String firstImgDir, String secondImgDir, String thirdImgDir,
+                                     String tagName, String childName) {
+        Element first = childImgDir(parent, firstImgDir);
+        Element second = childImgDir(first, secondImgDir);
+        Element third = childImgDir(second, thirdImgDir);
+        return childValue(third, tagName, childName);
+    }
+
+    private static Element childImgDir(Element parent, String childName) {
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child
+                    && "imgdir".equals(child.getTagName())
+                    && childName.equals(child.getAttribute("name"))) {
+                return child;
+            }
+        }
+        throw new AssertionError("missing child imgdir " + childName + " under " + parent.getAttribute("name"));
+    }
+
+    private static Path resolveQuestXml(String relativePath) {
         Path modulePath = Path.of(relativePath);
         if (Files.exists(modulePath)) {
             return modulePath;

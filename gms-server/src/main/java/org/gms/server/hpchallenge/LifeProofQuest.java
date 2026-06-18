@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 public final class LifeProofQuest {
-    public static final int FIRST_QUEST_ID = 30100;
-    public static final int LAST_QUEST_ID = 30999;
+    public static final int FIRST_QUEST_ID = 5100;
+    public static final int LAST_QUEST_ID = 5974;
     public static final int BLOCK_SIZE = 25;
     public static final int MAIN_SLOT_START = 0;
     public static final int MAIN_SLOT_END = 8;
