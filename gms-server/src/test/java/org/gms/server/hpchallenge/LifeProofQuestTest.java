@@ -8,7 +8,9 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -79,15 +81,16 @@ class LifeProofQuestTest {
 
     @Test
     void questInfoOrderStaysWithinClientSafeRange() throws Exception {
-        assertLifeProofQuestInfoOrder(resolveQuestInfoXml("wz/Quest.wz/QuestInfo.img.xml"));
-        assertLifeProofQuestInfoOrder(resolveQuestInfoXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml"));
+        assertLifeProofQuestInfoClientSafe(resolveQuestInfoXml("wz/Quest.wz/QuestInfo.img.xml"));
+        assertLifeProofQuestInfoClientSafe(resolveQuestInfoXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml"));
     }
 
-    private static void assertLifeProofQuestInfoOrder(Path path) throws Exception {
+    private static void assertLifeProofQuestInfoClientSafe(Path path) throws Exception {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(path.toFile());
         NodeList quests = document.getDocumentElement().getElementsByTagName("imgdir");
         int count = 0;
         int maxOrder = 0;
+        Map<String, Integer> parentCounts = new HashMap<>();
 
         for (int i = 0; i < quests.getLength(); i++) {
             Element quest = (Element) quests.item(i);
@@ -99,18 +102,24 @@ class LifeProofQuestTest {
             if (!LifeProofQuest.isVisibleQuestId(questId)) {
                 continue;
             }
-            if (!"生命之证".equals(childValue(quest, "string", "parent"))) {
+            String parent = childValue(quest, "string", "parent");
+            if (!parent.startsWith("生命之证")) {
                 continue;
             }
 
             count++;
             int order = Integer.parseInt(childValue(quest, "int", "order"));
             maxOrder = Math.max(maxOrder, order);
+            parentCounts.merge(parent, 1, Integer::sum);
+            assertTrue(parent.contains("："), "life proof parent must be split by stage and job for " + questId);
             assertTrue(order >= 1 && order <= 31, "unsafe QuestInfo.order for quest " + questId + " in " + path);
         }
 
         assertEquals(645, count, "visible life proof quest count in " + path);
         assertEquals(21, maxOrder, "life proof max QuestInfo.order in " + path);
+        assertEquals(35, parentCounts.size(), "life proof parent group count in " + path);
+        parentCounts.forEach((parent, parentCount) ->
+                assertTrue(parentCount <= 21, "unsafe QuestInfo.parent group size for " + parent + " in " + path));
     }
 
     private static String childValue(Element parent, String tagName, String childName) {
