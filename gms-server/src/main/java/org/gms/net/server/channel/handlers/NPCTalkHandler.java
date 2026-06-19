@@ -89,8 +89,6 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                LifeProofQuest.onNpcTalk(c.getPlayer(), npc.getId());
-
                 // Custom handling to reduce the amount of scripts needed.
                 if (npc.getId() >= NpcId.GACHAPON_MIN && npc.getId() <= NpcId.GACHAPON_MAX) {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "gachapon", null);

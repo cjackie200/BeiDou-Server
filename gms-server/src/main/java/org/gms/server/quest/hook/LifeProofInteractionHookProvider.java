@@ -34,7 +34,7 @@ final class LifeProofInteractionHookProvider implements InteractionHookProvider 
 
     @Override
     public boolean shouldFallbackNpcClick(Character chr, int npcId) {
-        return LifeProofQuest.markProgressOnlyNpcTalk(chr, npcId);
+        return false;
     }
 
     @Override

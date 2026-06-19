@@ -104,9 +104,9 @@ selectionId
 - `ShouldIntercept` 按三个 active scope 依次扫描。
 - 收到 `REPLACE_SCOPE` 时暂存 `scope + batchId` 批次，全部收齐后按 `batchIndex` 拼接并原子替换该 scope。
 - 收到普通 scope 的 `CLEAR_SCOPE` 时立即清空对应 scope，不进入 pending batch。
-- 收到 `CLEAR_SCOPE ALL_RULES` 时立即清空全部 active rules、pending batches、pending packets、pending local quest actions、NPC 映射和当前 Hook 对话上下文。
+- 收到 `CLEAR_SCOPE ALL_RULES` 时立即清空全部 active rules、pending batches、active pending、NPC 映射和当前 Hook 对话上下文。
 - 5 秒未收齐的 pending batch 丢弃，继续使用旧 active rules。
-- v4 普通 scope 替换不清 `pendingPackets`、`pendingLocalQuestActions`。
+- v4 普通 scope 替换不清 active pending。
 - `SET_FIELD` 只清空旧地图 `objectId -> npcId` 映射，不清角色任务规则。
 
 ## 验收

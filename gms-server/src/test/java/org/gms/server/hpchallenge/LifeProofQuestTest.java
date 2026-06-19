@@ -15,6 +15,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LifeProofQuestTest {
@@ -50,22 +51,72 @@ class LifeProofQuestTest {
     }
 
     @Test
-    void activeLifeProofProgressCanOpenAtHomeInstructorAndTargetNpc() {
+    void activeLifeProofProgressCanOpenAtStartAndCompleteNpc() {
         assertTrue(LifeProofQuest.canOpenProgressAtNpc(5125, 1032001));
         assertTrue(LifeProofQuest.canOpenProgressAtNpc(5125, 1012100));
         assertFalse(LifeProofQuest.canOpenProgressAtNpc(5125, 1022000));
     }
 
     @Test
-    void firstStageNpcTalkQuestsCompleteAtHomeInstructor() throws Exception {
+    void firstStageNpcTalkQuestsCompleteAtTargetInstructor() throws Exception {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(resolveQuestXml("wz-zh-CN/Quest.wz/Check.img.xml").toFile());
 
-        assertQuestStartAndEndNpc(document, 5100, 1022000, 1022000);
-        assertQuestStartAndEndNpc(document, 5125, 1032001, 1032001);
-        assertQuestStartAndEndNpc(document, 5150, 1012100, 1012100);
-        assertQuestStartAndEndNpc(document, 5175, 1052001, 1052001);
-        assertQuestStartAndEndNpc(document, 5200, 1090000, 1090000);
+        assertQuestStartAndEndNpc(document, 5100, 1022000, 1012100);
+        assertQuestStartAndEndNpc(document, 5101, 1022000, 1032001);
+        assertQuestStartAndEndNpc(document, 5102, 1022000, 1052001);
+        assertQuestStartAndEndNpc(document, 5103, 1022000, 1090000);
+        assertQuestStartAndEndNpc(document, 5104, 1022000, 1022000);
+
+        assertQuestStartAndEndNpc(document, 5125, 1032001, 1012100);
+        assertQuestStartAndEndNpc(document, 5126, 1032001, 1022000);
+        assertQuestStartAndEndNpc(document, 5127, 1032001, 1052001);
+        assertQuestStartAndEndNpc(document, 5128, 1032001, 1090000);
+        assertQuestStartAndEndNpc(document, 5129, 1032001, 1032001);
+
+        assertQuestStartAndEndNpc(document, 5150, 1012100, 1032001);
+        assertQuestStartAndEndNpc(document, 5151, 1012100, 1022000);
+        assertQuestStartAndEndNpc(document, 5152, 1012100, 1052001);
+        assertQuestStartAndEndNpc(document, 5153, 1012100, 1090000);
+        assertQuestStartAndEndNpc(document, 5154, 1012100, 1012100);
+
+        assertQuestStartAndEndNpc(document, 5175, 1052001, 1012100);
+        assertQuestStartAndEndNpc(document, 5176, 1052001, 1032001);
+        assertQuestStartAndEndNpc(document, 5177, 1052001, 1022000);
+        assertQuestStartAndEndNpc(document, 5178, 1052001, 1090000);
+        assertQuestStartAndEndNpc(document, 5179, 1052001, 1052001);
+
+        assertQuestStartAndEndNpc(document, 5200, 1090000, 1012100);
+        assertQuestStartAndEndNpc(document, 5201, 1090000, 1032001);
+        assertQuestStartAndEndNpc(document, 5202, 1090000, 1022000);
+        assertQuestStartAndEndNpc(document, 5203, 1090000, 1052001);
+        assertQuestStartAndEndNpc(document, 5204, 1090000, 1090000);
+    }
+
+    @Test
+    void npcTalkObjectiveOnlyExistsForFirstStageInstructorVisits() {
+        List<LifeProofQuest.QuestMeta> npcTalkQuests = LifeProofQuest.allVisibleQuests().stream()
+                .filter(LifeProofQuest::isNpcTalkVisitQuest)
+                .toList();
+
+        assertEquals(25, npcTalkQuests.size());
+        for (LifeProofQuest.QuestMeta meta : npcTalkQuests) {
+            assertEquals(1, meta.stage(), "NPC_TALK must only be used by first-stage instructor visits");
+            assertTrue(meta.slot() >= LifeProofQuest.MAIN_SLOT_START && meta.slot() < 5,
+                    "NPC_TALK must stay in first-stage instructor visit slots: " + meta.questId());
+            assertEquals(LifeProofQuest.startNpcId(meta), LifeProofQuest.branchInfo(meta.branch()).instructorNpcId());
+            assertEquals(meta.objective().targetIds().getFirst(), LifeProofQuest.completeNpcId(meta));
+        }
+    }
+
+    @Test
+    void npcTalkQuestInfoTellsPlayerToCompleteAtTargetInstructor() throws Exception {
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(resolveQuestXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml").toFile());
+
+        assertQuestInfoContains(document, 5100, "前往#p1012100#，点击任务完成图标");
+        assertQuestInfoContains(document, 5126, "前往#p1022000#，点击任务完成图标");
+        assertQuestInfoContains(document, 5204, "前往#p1090000#，点击任务完成图标");
     }
 
     @Test
@@ -145,13 +196,20 @@ class LifeProofQuestTest {
                 continue;
             }
 
+            if (meta.objective().type() == LifeProofQuest.ObjectiveType.NPC_TALK) {
+                assertNull(childImgDirOrNull(complete, "infoex"),
+                        "NPC_TALK completion icon must be available at target NPC before progress is written: "
+                                + meta.questId());
+                continue;
+            }
+
             if (meta.kind() != LifeProofQuest.QuestKind.REWARD) {
                 assertTrue(hasCompletionGate(complete),
                         "visible life proof quest must not be completable by npc/script only: " + meta.questId());
             }
         }
 
-        assertEquals(161, gated, "life proof custom progress completion gate count");
+        assertEquals(136, gated, "life proof custom progress completion gate count");
     }
 
     @Test
@@ -364,11 +422,19 @@ class LifeProofQuestTest {
     private static void assertQuestStartAndEndNpc(Document document, int questId, int startNpcId, int endNpcId) {
         Element quest = topLevelImgDir(document, questId);
         assertEquals(Integer.toString(startNpcId), childValue(childImgDir(quest, "0"), "int", "npc"),
-                "quest start NPC must stay at home instructor: " + questId);
+                "quest start NPC must be branch instructor: " + questId);
         assertEquals(Integer.toString(endNpcId), childValue(childImgDir(quest, "1"), "int", "npc"),
-                "quest end NPC must be home instructor: " + questId);
+                "quest end NPC must be target instructor: " + questId);
+        assertNull(childImgDirOrNull(childImgDir(quest, "1"), "infoex"),
+                "NPC talk quest must not require infoex before the client shows target NPC completion icon: " + questId);
         assertFalse(hasProofItemRequirement(quest),
                 "NPC talk quest must not require proof item after InteractionHook handles progress: " + questId);
+    }
+
+    private static void assertQuestInfoContains(Document document, int questId, String expectedText) {
+        Element quest = topLevelImgDir(document, questId);
+        assertTrue(childValue(quest, "string", "1").contains(expectedText),
+                "life proof QuestInfo text must mention target instructor completion for quest " + questId);
     }
 
     private static boolean hasProofItemRequirement(Element quest) {
@@ -392,7 +458,7 @@ class LifeProofQuestTest {
 
     private static boolean requiresInfoExCompletionGate(LifeProofQuest.QuestMeta meta) {
         return switch (meta.objective().type()) {
-            case NPC_TALK, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION -> true;
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION -> true;
             default -> false;
         };
     }

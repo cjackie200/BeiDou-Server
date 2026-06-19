@@ -2,6 +2,7 @@ package org.gms.server.quest.hook;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.constants.id.NpcId;
 import org.gms.net.packet.InPacket;
 import org.gms.server.life.NPC;
 import org.gms.server.maps.MapObject;
@@ -57,7 +58,7 @@ public final class InteractionHookManager {
         if (target == null) {
             return false;
         }
-        return open(client, 0, target.questId(), npcId, target.action(), false);
+        return open(client, null, target.questId(), npcId, target.action(), false);
     }
 
     public static boolean handleNativeQuestAction(Client client, int questId, int npcId, int rawAction) {
@@ -69,7 +70,7 @@ public final class InteractionHookManager {
         if (questId <= 0 || action == null || !InteractionHookRegistry.hasQuestHook(client.getPlayer(), questId, action)) {
             return false;
         }
-        return open(client, 0, questId, npcId, action, false);
+        return open(client, null, questId, npcId, action, false);
     }
 
     public static boolean handleNativeDialogSelection(Client client, byte mode, byte lastMessage, int selection) {
@@ -97,7 +98,7 @@ public final class InteractionHookManager {
         if (target == null) {
             return false;
         }
-        return open(client, 0, target.questId(), npcId, target.action(), false);
+        return open(client, null, target.questId(), npcId, target.action(), false);
     }
 
     public static boolean hasContext(Client client) {
@@ -142,7 +143,7 @@ public final class InteractionHookManager {
         if (provider != null && provider.shouldFallbackNpcClick(client.getPlayer(), npcId)) {
             return fallbackOriginal(client, event.requestId());
         }
-        return open(client, event.requestId(), target.questId(), npcId, target.action(), true);
+        return open(client, event, target.questId(), npcId, target.action(), true);
     }
 
     private static boolean handleDialogSelectionEvent(Client client, InteractionHookEvent event) {
@@ -150,7 +151,7 @@ public final class InteractionHookManager {
         if (context != null) {
             if (context.dialogState() == InteractionHookProtocol.DIALOG_STATE_OPEN) {
                 context.close();
-                sendResult(client, event.requestId(), InteractionHookResultCode.HANDLED_DIALOG);
+                sendHandledUpdate(client, event);
                 return true;
             }
             InteractionHookProvider provider = InteractionHookRegistry.provider(context.questId());
@@ -159,8 +160,18 @@ public final class InteractionHookManager {
                 dispose(client);
                 return true;
             }
-            provider.action(context, (byte) event.rawAction(), (byte) 0, event.selection());
-            sendResult(client, event.requestId(), InteractionHookResultCode.HANDLED_DIALOG);
+            boolean preAckSent = sendPreDialogResultIfNeeded(client, event, context, true);
+            try {
+                context.resetVisibleDialogSent();
+                provider.action(context, (byte) event.rawAction(), (byte) 0, event.selection());
+                sendPostDialogResultIfNeeded(client, event, context, true, preAckSent);
+            } catch (RuntimeException e) {
+                log.error("交互 Hook 对话继续执行失败: questId={}, npcId={}, action={}",
+                        context.questId(), context.sourceNpcId(), context.action(), e);
+                if (!preAckSent && !context.hasVisibleDialogSent()) {
+                    sendResult(client, event.requestId(), InteractionHookResultCode.ERROR);
+                }
+            }
             return true;
         }
 
@@ -172,7 +183,7 @@ public final class InteractionHookManager {
         if (target == null) {
             return fallbackOriginal(client, event.requestId());
         }
-        return open(client, event.requestId(), target.questId(), npcId, target.action(), true);
+        return open(client, event, target.questId(), npcId, target.action(), true);
     }
 
     private static boolean handleQuestActionEvent(Client client, InteractionHookEvent event) {
@@ -183,32 +194,35 @@ public final class InteractionHookManager {
         }
 
         int npcId = event.resolvedNpcId();
-        return open(client, event.requestId(), questId, npcId, action, true);
+        return open(client, event, questId, npcId, action, true);
     }
 
-    private static boolean open(Client client, int requestId, int questId, int npcId, InteractionHookAction action, boolean sendResult) {
+    private static boolean open(Client client, InteractionHookEvent event, int questId, int npcId,
+                                InteractionHookAction action, boolean sendResult) {
         InteractionHookProvider provider = InteractionHookRegistry.provider(questId);
         if (provider == null || !provider.supports(questId, action)) {
             if (sendResult) {
-                sendResult(client, requestId, InteractionHookResultCode.FALLBACK_ORIGINAL);
+                sendResult(client, event == null ? 0 : event.requestId(), InteractionHookResultCode.FALLBACK_ORIGINAL);
             }
             return false;
         }
 
+        int requestId = event == null ? 0 : event.requestId();
         InteractionHookContext context = new InteractionHookContext(client, requestId, questId, npcId, action);
+        boolean preAckSent = false;
         try {
             context.closeNativeScripts();
             CONTEXTS.put(client, context);
             client.setClickedNPC();
+            preAckSent = sendPreDialogResultIfNeeded(client, event, context, sendResult);
+            context.resetVisibleDialogSent();
             provider.open(context);
-            if (sendResult) {
-                sendResult(client, requestId, InteractionHookResultCode.HANDLED_DIALOG);
-            }
+            sendPostDialogResultIfNeeded(client, event, context, sendResult, preAckSent);
             return true;
         } catch (RuntimeException e) {
             CONTEXTS.remove(client);
             log.error("交互 Hook 执行失败: questId={}, npcId={}, action={}", questId, npcId, action, e);
-            if (sendResult) {
+            if (sendResult && !preAckSent && !context.hasVisibleDialogSent()) {
                 sendResult(client, requestId, InteractionHookResultCode.ERROR);
             }
             return true;
@@ -220,6 +234,56 @@ public final class InteractionHookManager {
         InteractionHookPackets.clearDialogTempRules(client);
         sendResult(client, requestId, InteractionHookResultCode.FALLBACK_ORIGINAL);
         return true;
+    }
+
+    private static boolean sendPreDialogResultIfNeeded(Client client, InteractionHookEvent event,
+                                                       InteractionHookContext context, boolean sendResult) {
+        if (!shouldSendResult(event, sendResult) || canUseNpcTalkAck(event, context)) {
+            return false;
+        }
+        sendResult(client, event.requestId(), InteractionHookResultCode.HANDLED_UPDATE);
+        return true;
+    }
+
+    private static void sendPostDialogResultIfNeeded(Client client, InteractionHookEvent event,
+                                                     InteractionHookContext context, boolean sendResult,
+                                                     boolean preAckSent) {
+        if (!shouldSendResult(event, sendResult) || preAckSent || context.hasVisibleDialogSent()) {
+            return;
+        }
+        sendResult(client, event.requestId(), InteractionHookResultCode.HANDLED_UPDATE);
+    }
+
+    private static void sendHandledUpdate(Client client, InteractionHookEvent event) {
+        if (event == null || event.requestId() <= 0) {
+            return;
+        }
+        sendResult(client, event.requestId(), InteractionHookResultCode.HANDLED_UPDATE);
+    }
+
+    private static boolean shouldSendResult(InteractionHookEvent event, boolean sendResult) {
+        return sendResult && event != null && event.requestId() > 0;
+    }
+
+    static boolean canUseNpcTalkAck(InteractionHookEvent event, InteractionHookContext context) {
+        if (event == null || context == null || event.requestId() <= 0) {
+            return false;
+        }
+        int expectedNpcId = expectedDialogNpcId(event);
+        return expectedNpcId > 0 && expectedNpcId == context.displayNpcId();
+    }
+
+    static int expectedDialogNpcId(InteractionHookEvent event) {
+        if (event == null) {
+            return 0;
+        }
+        return switch (event.eventType()) {
+            case InteractionHookProtocol.EVENT_NPC_CLICK, InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION ->
+                    event.resolvedNpcId() > 0 ? event.resolvedNpcId() : 0;
+            case InteractionHookProtocol.EVENT_QUEST_ACTION ->
+                    event.resolvedNpcId() > 0 ? event.resolvedNpcId() : NpcId.MAPLE_ADMINISTRATOR;
+            default -> 0;
+        };
     }
 
     private static void sendResult(Client client, int requestId, InteractionHookResultCode resultCode) {

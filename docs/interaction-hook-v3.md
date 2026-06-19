@@ -193,13 +193,35 @@ resultCode
   Hook 对话上下文。
 - `S2C_INTERACTION_HOOK_RESULT(0x1002)`：处理 pending 请求。
 
+Hook 对话发包：
+
+- `InteractionHookContext` 发送 NPC 对话时必须和原生 `NPCConversationManager` 使用相同的
+  `NPC_TALK` 布局。
+- `sendOk` 使用 `msgType=0` 和结尾字节 `00 00`。
+- `sendYesNo` 使用 `msgType=1` 和空结尾字节。
+- `sendSimple` 使用 `msgType=4` 和空结尾字节。
+- 不允许为了 Hook 对话额外补结尾字节，否则客户端窗口刷新行为会和普通 NPC 对话不一致，出现闪烁。
+- 服务端成功显示可见 Hook 对话时，不在 `NPC_TALK` 后追加 `HANDLED_DIALOG`。客户端以匹配的
+  `NPC_TALK.npcId` 作为本次 Hook 请求的成功 ACK 并清理 pending。
+- 客户端无法预测本次可见对话 NPC 时，服务端必须在业务对话发送前先返回 `HANDLED_UPDATE` 清理
+  pending，再继续发送原生 `NPC_TALK`。
+- `QUEST_ACTION` 上报 `npcId <= 0` 时，客户端和服务端统一使用 `9010000` 作为 fallback 显示
+  NPC。`NPC_CLICK` 和 `NPC_DIALOG_SELECTION` 只有客户端已知 NPC ID 且与服务端显示 NPC 一致时，
+  才允许使用 `NPC_TALK` ACK。
+
 pending 行为：
 
 - 命中网络发包规则后保存原始 `COutPacket` 字节、opcode、requestId、时间戳。
 - 命中本地任务入口规则后保存原始点击对象和参数。
+- 客户端同一时间只允许存在一个 active pending；active pending 未清理前的重复 Hook 点击直接吞掉，
+  不再创建第二个请求。
+- active pending 记录本次期望的 `NPC_TALK.npcId`。收到匹配的 `NPC_TALK` 后立即清理 pending，
+  不等待额外 result 包。
 - `FALLBACK_ORIGINAL` 时带重放标记重新发送原始包，或重放原始本地点击函数，避免客户端再次 Hook。
-- `HANDLED_DIALOG/HANDLED_UPDATE` 时丢弃 pending。
+- `HANDLED_DIALOG/HANDLED_UPDATE` 时丢弃 pending；正常可见 Hook 对话不应再依赖
+  `HANDLED_DIALOG`。
 - `REJECTED/ERROR` 或 5 秒超时时丢弃 pending，不自动 fallback，只恢复客户端操作状态。
+- 客户端接收包只按稳定的 opcode 偏移解析自定义 Hook 包；自定义包 payload 校验失败时不改运行态。
 
 生命周期：
 
@@ -218,7 +240,8 @@ pending 行为：
   每包最多 100 条，超出必须分批。客户端收齐完整 batch 后才替换 active rules。
 - `NPC_CLICK` 必须使用当前地图 `objectId` 解析真实 `serverNpcId`；业务判断只信 `serverNpcId`，`clientNpcId` 只用于校验日志。
 - 返回 `FALLBACK_ORIGINAL` 时，在 `Client` 上设置一次性 `skipNextNativeInteractionHook`，下一次对应 native handler 只走原逻辑，消费后立即清除。
-- `NPCMoreTalkHandler` 的 Hook 判断放在 `QM/CM` 原始分发之前；`HANDLED_DIALOG` 时关闭或替换当前 `CM/QM`，建立 `InteractionHookContext`；fallback 时不清理原上下文。
+- `NPCMoreTalkHandler` 的 Hook 判断放在 `QM/CM` 原始分发之前；命中 Hook 时关闭或替换当前
+  `CM/QM`，建立 `InteractionHookContext`；fallback 时不清理原上下文。
 - `NPCTalkHandler` 在进入 NPC 默认脚本、商店、职业导师对话前允许 Hook 预处理；fallback 时保持原逻辑。
 - `QuestActionHandler` 任务状态入口统一走 `InteractionHook`。
 

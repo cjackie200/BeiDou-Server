@@ -140,7 +140,7 @@ public final class LifeProofQuest {
         }
         return QUESTS.values().stream()
                 .filter(QuestMeta::isVisible)
-                .filter(meta -> canOpenProgressAtNpc(meta.questId(), npcId))
+                .filter(meta -> canOpenStartedQuestAtNpc(meta, npcId))
                 .filter(meta -> chr.getQuestStatus(meta.questId()) == QuestStatus.Status.STARTED.getId())
                 .mapToInt(QuestMeta::questId)
                 .findFirst()
@@ -179,13 +179,13 @@ public final class LifeProofQuest {
         Set<Integer> npcIds = new LinkedHashSet<>();
         QuestMeta active = currentStartedVisibleQuest(chr);
         if (active != null) {
-            npcIds.add(branchInfo.instructorNpcId());
-            npcIds.add(submitNpcId(active));
+            npcIds.add(startNpcId(active));
+            npcIds.add(completeNpcId(active));
             return List.copyOf(npcIds);
         }
         QuestMeta next = nextAvailableQuest(chr, branch);
         if (next != null) {
-            npcIds.add(branchInfo.instructorNpcId());
+            npcIds.add(startNpcId(next));
         }
         return List.copyOf(npcIds);
     }
@@ -243,20 +243,12 @@ public final class LifeProofQuest {
         }
         if (chr.getQuestStatus(questId) == QuestStatus.Status.STARTED.getId()) {
             QuestMeta meta = QUESTS.get(questId);
-            int npcId = meta == null ? 0 : submitNpcId(meta);
+            int npcId = meta == null ? 0 : completeNpcId(meta);
             return meta != null && objectiveSatisfied(chr, meta, npcId)
                     ? InteractionHookAction.QUERY_COMPLETE
                     : InteractionHookAction.QUERY_PROGRESS;
         }
         return InteractionHookAction.QUERY_PROGRESS;
-    }
-
-    public static boolean markProgressOnlyNpcTalk(Character chr, int npcId) {
-        QuestMeta active = currentStartedVisibleQuest(chr);
-        if (active == null || active.objective().type() != ObjectiveType.NPC_TALK || npcId == submitNpcId(active)) {
-            return false;
-        }
-        return markNpcTalkProgress(chr, active, npcId, true);
     }
 
     public static void openHook(InteractionHookContext context) {
@@ -270,9 +262,13 @@ public final class LifeProofQuest {
             return;
         }
 
-        int npcId = effectiveNpcId(context, meta);
+        int npcId = effectiveNpcId(context);
         byte status = chr.getQuestStatus(meta.questId());
         if (status == QuestStatus.Status.NOT_STARTED.getId()) {
+            if (npcId <= 0 || npcId != startNpcId(meta)) {
+                context.sendOk("请前往#p" + startNpcId(meta) + "#领取这一步生命之证试炼。");
+                return;
+            }
             if (meta.kind() == QuestKind.SELECTOR) {
                 context.sendSimple(selectionMenu(chr, meta.questId()));
                 return;
@@ -308,7 +304,7 @@ public final class LifeProofQuest {
             return;
         }
 
-        int npcId = effectiveNpcId(context, meta);
+        int npcId = effectiveNpcId(context);
         byte status = chr.getQuestStatus(meta.questId());
         if (status == QuestStatus.Status.NOT_STARTED.getId()) {
             startFromHook(context, chr, meta, npcId, selection);
@@ -321,18 +317,15 @@ public final class LifeProofQuest {
         context.sendOk(meta.name() + "已经完成。");
     }
 
-    private static int effectiveNpcId(InteractionHookContext context, QuestMeta meta) {
-        if (context.sourceNpcId() > 0) {
-            return context.sourceNpcId();
-        }
-        return submitNpcId(meta);
+    private static int effectiveNpcId(InteractionHookContext context) {
+        return context.sourceNpcId();
     }
 
     private static void startFromHook(InteractionHookContext context, Character chr, QuestMeta meta, int npcId,
                                       int selection) {
         Quest quest = Quest.getInstance(meta.questId());
-        if (!canUseNpc(chr, npcId) || !quest.canStart(chr, npcId)) {
-            context.sendOk("请前往#p" + submitNpcId(meta) + "#领取这一步生命之证试炼。");
+        if (!canStartAtNpc(chr, quest, meta, npcId)) {
+            context.sendOk("请前往#p" + startNpcId(meta) + "#领取这一步生命之证试炼。");
             return;
         }
 
@@ -382,8 +375,7 @@ public final class LifeProofQuest {
         if (meta == null || !meta.isVisible() || npcId <= 0) {
             return false;
         }
-        return npcId == BRANCH_INFO.get(meta.branch()).instructorNpcId()
-                || npcId == targetNpcId(meta);
+        return canOpenStartedQuestAtNpc(meta, npcId);
     }
 
     static Collection<QuestMeta> allVisibleQuests() {
@@ -417,8 +409,11 @@ public final class LifeProofQuest {
         StringBuilder sb = new StringBuilder();
         sb.append("#e").append(meta.name()).append("#n\r\n\r\n");
         sb.append(stageStory(meta.stage())).append("\r\n\r\n");
+        if (meta.objective().type() == ObjectiveType.NPC_TALK) {
+            sb.append(mentorStartLine(meta)).append("\r\n\r\n");
+        }
         sb.append("目标：").append(meta.objective().description()).append("\r\n");
-        appendObjectiveHint(sb, meta.objective());
+        appendObjectiveHint(sb, meta);
         sb.append("\r\n是否接受这一步试炼？");
         return sb.toString();
     }
@@ -542,15 +537,24 @@ public final class LifeProofQuest {
         if (meta == null || !meta.isVisible()) {
             return "这个任务暂时无法处理。";
         }
+        return completePrompt(chr, meta, completeNpcId(meta));
+    }
+
+    private static String completePrompt(Character chr, QuestMeta meta, int npcId) {
         StringBuilder sb = new StringBuilder();
         sb.append("#e").append(meta.name()).append("#n\r\n\r\n");
         if (meta.kind() == QuestKind.REWARD) {
             sb.append("这枚印记已经完整。确认领取本阶段的生命之证奖励？");
             return sb.toString();
         }
+        if (meta.objective().type() == ObjectiveType.NPC_TALK) {
+            sb.append(mentorCompletionLine(npcId)).append("\r\n\r\n");
+            sb.append("确认由#p").append(npcId).append("#记录这一步生命之证？");
+            return sb.toString();
+        }
         sb.append("确认提交这一步试炼？\r\n\r\n");
         sb.append("目标：").append(meta.objective().description());
-        appendObjectiveHint(sb, meta.objective());
+        appendObjectiveHint(sb, meta);
         return sb.toString();
     }
 
@@ -566,9 +570,8 @@ public final class LifeProofQuest {
         if (chr.getQuest(quest).getStatus() != QuestStatus.Status.STARTED) {
             return error("这一步生命之证试炼当前没有进行中。");
         }
-        markNpcTalkProgress(chr, meta, npcId, false);
-        if (canSubmitAtNpc(chr, quest, npcId)) {
-            return ready(completePrompt(chr, questId));
+        if (canConfirmAtNpc(chr, quest, meta, npcId)) {
+            return ready(completePrompt(chr, meta, npcId));
         }
         return info(progressPrompt(chr, meta, npcId));
     }
@@ -582,7 +585,9 @@ public final class LifeProofQuest {
         if (chr.getQuest(quest).getStatus() != QuestStatus.Status.STARTED) {
             return error("这一步生命之证试炼当前没有进行中。");
         }
-        markNpcTalkProgress(chr, meta, npcId, false);
+        if (meta.objective().type() == ObjectiveType.NPC_TALK && npcId == completeNpcId(meta)) {
+            markNpcTalkProgress(chr, meta, npcId, false);
+        }
         if (!canSubmitAtNpc(chr, quest, npcId)) {
             return error(submitBlockedText(chr, meta, npcId));
         }
@@ -626,9 +631,12 @@ public final class LifeProofQuest {
     }
 
     private static String submitBlockedText(Character chr, QuestMeta meta, int npcId) {
-        int submitNpcId = submitNpcId(meta);
-        if (npcId != submitNpcId) {
-            return "请前往#p" + submitNpcId + "#提交这一步生命之证试炼。";
+        int completeNpcId = completeNpcId(meta);
+        if (npcId != completeNpcId) {
+            if (meta.objective().type() == ObjectiveType.NPC_TALK) {
+                return "请前往#p" + completeNpcId + "#，点击任务完成图标，由对方确认这一步生命之证。";
+            }
+            return "请前往#p" + completeNpcId + "#提交这一步生命之证试炼。";
         }
         return "当前目标还没有完成。\r\n\r\n" + progressPrompt(chr, meta, npcId);
     }
@@ -651,21 +659,27 @@ public final class LifeProofQuest {
     }
 
     private static String nextStepText(Character chr, QuestMeta meta, int npcId) {
-        int submitNpcId = submitNpcId(meta);
+        int completeNpcId = completeNpcId(meta);
+        if (meta.objective().type() == ObjectiveType.NPC_TALK) {
+            if (npcId == completeNpcId) {
+                return "点击确定后，由#p" + completeNpcId + "#确认这一步生命之证。";
+            }
+            return "前往#p" + completeNpcId + "#，点击任务完成图标，由对方确认这一步生命之证。";
+        }
         if (!objectiveSatisfied(chr, meta, npcId)) {
             return switch (meta.objective().type()) {
-                case NPC_TALK -> "前往#p" + targetNpcId(meta) + "#完成拜访，然后回#p" + submitNpcId + "#提交。";
                 case ITEM -> "继续收集#t" + meta.objective().itemId() + "#。";
                 case KILL, BOSS -> "继续完成目标怪物击杀。";
-                case MESO -> "准备足够金币后回#p" + submitNpcId + "#提交。";
+                case MESO -> "准备足够金币后回#p" + completeNpcId + "#提交。";
                 case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
-                        "继续完成试炼进度，然后回#p" + submitNpcId + "#提交。";
+                        "继续完成试炼进度，然后回#p" + completeNpcId + "#提交。";
                 case SELECT_OPTION -> "重新打开任务，选择本轮附加试炼。";
-                case REWARD -> "完成本阶段全部试炼后回#p" + submitNpcId + "#领取奖励。";
+                case REWARD -> "完成本阶段全部试炼后回#p" + completeNpcId + "#领取奖励。";
+                case NPC_TALK -> throw new IllegalStateException("handled above");
             };
         }
-        if (npcId != submitNpcId) {
-            return "条件已满足，请前往#p" + submitNpcId + "#提交。";
+        if (npcId != completeNpcId) {
+            return "条件已满足，请前往#p" + completeNpcId + "#提交。";
         }
         return "条件已满足，可以提交这一步试炼。";
     }
@@ -684,8 +698,15 @@ public final class LifeProofQuest {
         };
     }
 
-    private static int submitNpcId(QuestMeta meta) {
+    static int startNpcId(QuestMeta meta) {
         return BRANCH_INFO.get(meta.branch()).instructorNpcId();
+    }
+
+    static int completeNpcId(QuestMeta meta) {
+        if (meta.objective().type() == ObjectiveType.NPC_TALK) {
+            return targetNpcId(meta);
+        }
+        return startNpcId(meta);
     }
 
     private static int targetNpcId(QuestMeta meta) {
@@ -693,14 +714,36 @@ public final class LifeProofQuest {
         if (!objective.targetIds().isEmpty()) {
             return objective.targetIds().getFirst();
         }
-        return submitNpcId(meta);
+        return startNpcId(meta);
+    }
+
+    static boolean isNpcTalkVisitQuest(QuestMeta meta) {
+        return meta != null && meta.isVisible() && meta.objective().type() == ObjectiveType.NPC_TALK;
+    }
+
+    private static boolean canOpenStartedQuestAtNpc(QuestMeta meta, int npcId) {
+        return npcId == startNpcId(meta) || npcId == completeNpcId(meta);
+    }
+
+    private static boolean canStartAtNpc(Character chr, Quest quest, QuestMeta meta, int npcId) {
+        return canUseNpc(chr, npcId) && npcId == startNpcId(meta) && quest.canStart(chr, npcId);
+    }
+
+    private static boolean canConfirmAtNpc(Character chr, Quest quest, QuestMeta meta, int npcId) {
+        if (!canUseNpc(chr, npcId) || npcId != completeNpcId(meta)) {
+            return false;
+        }
+        if (meta.objective().type() == ObjectiveType.NPC_TALK) {
+            return quest.canComplete(chr, npcId);
+        }
+        return objectiveSatisfied(chr, meta, npcId) && quest.canComplete(chr, npcId);
     }
 
     private static boolean canSubmitAtNpc(Character chr, Quest quest, int npcId) {
         QuestMeta meta = QUESTS.get((int) quest.getId());
         return meta != null
                 && canUseNpc(chr, npcId)
-                && npcId == submitNpcId(meta)
+                && npcId == completeNpcId(meta)
                 && objectiveSatisfied(chr, meta, npcId)
                 && quest.canComplete(chr, npcId);
     }
@@ -762,11 +805,6 @@ public final class LifeProofQuest {
             return;
         }
         incrementCustomProgress(chr, ObjectiveType.SCROLL_100, "", "100% 卷轴使用成功");
-    }
-
-    public static boolean onNpcTalk(Character chr, int npcId) {
-        QuestMeta active = currentStartedVisibleQuest(chr);
-        return markNpcTalkProgress(chr, active, npcId, true);
     }
 
     public static void onMonsterKilled(Character chr, int mobId) {
@@ -1066,7 +1104,7 @@ public final class LifeProofQuest {
         if (chr == null || meta == null || npcId <= 0 || !meta.isVisible()
                 || meta.objective().type() != ObjectiveType.NPC_TALK
                 || chr.getQuestStatus(meta.questId()) != QuestStatus.Status.STARTED.getId()
-                || !meta.objective().targetIds().contains(npcId)) {
+                || npcId != completeNpcId(meta)) {
             return false;
         }
         int current = customProgress(chr, meta);
@@ -1078,13 +1116,9 @@ public final class LifeProofQuest {
         status.setProgress(CUSTOM_PROGRESS_KEY, StringUtil.getLeftPaddedStr(Integer.toString(next), '0', 3));
         chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
         chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-        if (next >= meta.objective().requiredCount()) {
-            completeCustomProgress(chr, meta, next);
-            return true;
-        }
         if (showMessage) {
             chr.yellowMessage("生命之证：" + meta.objective().description() + " " + next + "/"
-                    + meta.objective().requiredCount() + "，请回一转教官提交。");
+                    + meta.objective().requiredCount() + "，请由#p" + completeNpcId(meta) + "#确认。");
         }
         return true;
     }
@@ -1181,7 +1215,7 @@ public final class LifeProofQuest {
                         Integer.toString(objective.requiredCount()), '0', 3));
                 target.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
                 target.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-                Quest.getInstance(active.questId()).forceComplete(target, submitNpcId(active));
+                Quest.getInstance(active.questId()).forceComplete(target, completeNpcId(active));
                 yield "已完成当前生命之证拜访任务：" + active.name();
             }
             case SELECT_OPTION -> "当前需要通过任务菜单选择附加试炼。";
@@ -1344,13 +1378,44 @@ public final class LifeProofQuest {
         };
     }
 
-    private static void appendObjectiveHint(StringBuilder sb, Objective objective) {
+    private static String mentorStartLine(QuestMeta meta) {
+        int targetNpcId = completeNpcId(meta);
+        return switch (startNpcId(meta)) {
+            case 1012100 -> "风会记住脚步，也会记住迟疑。先去见#p" + targetNpcId
+                    + "#，让对方确认你的呼吸没有乱。";
+            case 1032001 -> "生命之证不是蛮力的试炼。去见#p" + targetNpcId
+                    + "#，让不同职业的秩序为你留下第一道记录。";
+            case 1022000 -> "先别急着说自己准备好了。去见#p" + targetNpcId
+                    + "#，站稳，听完，再把确认带回来写进生命之证。";
+            case 1052001 -> "影子会暴露犹豫。去见#p" + targetNpcId
+                    + "#，让对方判断你是不是能活着走过这条路。";
+            case 1090000 -> "别绕远路。去找#p" + targetNpcId
+                    + "#，让对方直接确认你有没有继续前进的胆量。";
+            default -> "前往#p" + targetNpcId + "#，完成这一步生命之证确认。";
+        };
+    }
+
+    private static String mentorCompletionLine(int npcId) {
+        return switch (npcId) {
+            case 1012100 -> "你的呼吸还算平稳。风没有把急躁留在你身上，这一步我会为你确认。";
+            case 1032001 -> "你的魔力流动没有失序。能沉下心观察自己，才有资格继续生命之证。";
+            case 1022000 -> "站得住，也听得进话。少说空话，多把身体练到能撑住下一场试炼。";
+            case 1052001 -> "你没有被阴影吓退。记住这种警惕，活下来的人才配继续往前。";
+            case 1090000 -> "眼神没有躲。海风会吹散犹豫，我认可你继续走生命之证。";
+            default -> "这一步生命之证已经确认。";
+        };
+    }
+
+    private static void appendObjectiveHint(StringBuilder sb, QuestMeta meta) {
+        Objective objective = meta.objective();
         switch (objective.type()) {
             case ITEM -> sb.append("\r\n#i").append(objective.itemId()).append("# #t").append(objective.itemId())
                     .append("# #b#c").append(objective.itemId()).append("# / ")
                     .append(objective.requiredCount()).append("#k");
             case MESO -> sb.append("\r\n需要缴纳金币：").append(objective.mesoCost());
-            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, NPC_TALK, JUMP_MANUAL ->
+            case NPC_TALK -> sb.append("\r\n前往#p").append(completeNpcId(meta))
+                    .append("#，点击任务完成图标，由对方确认这一步生命之证。");
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
                     sb.append("\r\n进度达成后回一转教官提交。");
             default -> {
             }

@@ -3,7 +3,9 @@ package org.gms.server.quest.hook;
 import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.client.Client;
+import org.gms.constants.id.NpcId;
 import org.gms.net.packet.Packet;
+import org.gms.util.PacketCreator;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -43,6 +45,14 @@ class InteractionHookRegistryTest {
 
         assertTrue(provider.mapNpcRules(null, Set.of(1032001)).isEmpty());
         assertTrue(InteractionHookRegistry.mapNpcRules(null).isEmpty());
+    }
+
+    @Test
+    void lifeProofNpcClickFallbackDoesNotMutateProgress() {
+        LifeProofInteractionHookProvider provider = new LifeProofInteractionHookProvider();
+
+        assertFalse(provider.shouldFallbackNpcClick(null, 1012100));
+        assertFalse(provider.shouldFallbackNpcClick(null, 1032001));
     }
 
     @Test
@@ -102,6 +112,63 @@ class InteractionHookRegistryTest {
         assertTrue(second > first);
     }
 
+    @Test
+    void hookDialogPacketsMatchNativeNpcDialogLayout() {
+        CapturingClient client = new CapturingClient();
+        InteractionHookContext context = new InteractionHookContext(client, 1, LifeProofQuest.FIRST_QUEST_ID,
+                1032001, InteractionHookAction.QUERY_PROGRESS);
+
+        assertFalse(context.hasVisibleDialogSent());
+        context.sendOk("ok");
+        assertTrue(context.hasVisibleDialogSent());
+        assertPacketEquals(PacketCreator.getNPCTalk(1032001, (byte) 0, "ok", "00 00", (byte) 0), client.lastPacket);
+
+        context.resetVisibleDialogSent();
+        assertFalse(context.hasVisibleDialogSent());
+        context.sendYesNo("yes");
+        assertTrue(context.hasVisibleDialogSent());
+        assertPacketEquals(PacketCreator.getNPCTalk(1032001, (byte) 1, "yes", "", (byte) 0), client.lastPacket);
+
+        context.resetVisibleDialogSent();
+        context.sendSimple("simple");
+        assertTrue(context.hasVisibleDialogSent());
+        assertPacketEquals(PacketCreator.getNPCTalk(1032001, (byte) 4, "simple", "", (byte) 0), client.lastPacket);
+
+        InteractionHookContext fallbackContext = new InteractionHookContext(client, 1, LifeProofQuest.FIRST_QUEST_ID,
+                0, InteractionHookAction.QUERY_PROGRESS);
+        assertEquals(NpcId.MAPLE_ADMINISTRATOR, fallbackContext.displayNpcId());
+    }
+
+    @Test
+    void npcTalkAckUsesClientPredictableDialogNpcOnly() {
+        CapturingClient client = new CapturingClient();
+        InteractionHookContext instructorContext = new InteractionHookContext(client, 1, LifeProofQuest.FIRST_QUEST_ID,
+                1032001, InteractionHookAction.QUERY_PROGRESS);
+        InteractionHookContext fallbackContext = new InteractionHookContext(client, 1, LifeProofQuest.FIRST_QUEST_ID,
+                0, InteractionHookAction.QUERY_PROGRESS);
+
+        assertTrue(InteractionHookManager.canUseNpcTalkAck(
+                event(1, InteractionHookProtocol.EVENT_QUEST_ACTION, InteractionHookProtocol.TARGET_QUEST,
+                        LifeProofQuest.FIRST_QUEST_ID, 0, 1032001, LifeProofQuest.FIRST_QUEST_ID, -1),
+                instructorContext));
+        assertTrue(InteractionHookManager.canUseNpcTalkAck(
+                event(2, InteractionHookProtocol.EVENT_QUEST_ACTION, InteractionHookProtocol.TARGET_QUEST,
+                        LifeProofQuest.FIRST_QUEST_ID, 0, 0, LifeProofQuest.FIRST_QUEST_ID, -1),
+                fallbackContext));
+        assertTrue(InteractionHookManager.canUseNpcTalkAck(
+                event(3, InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION, InteractionHookProtocol.TARGET_DIALOG_SELECTION,
+                        0, 0, 1032001, 0, 0),
+                instructorContext));
+        assertFalse(InteractionHookManager.canUseNpcTalkAck(
+                event(4, InteractionHookProtocol.EVENT_NPC_CLICK, InteractionHookProtocol.TARGET_NPC,
+                        0, 100, 0, 0, -1),
+                instructorContext));
+        assertFalse(InteractionHookManager.canUseNpcTalkAck(
+                event(5, InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION, InteractionHookProtocol.TARGET_DIALOG_SELECTION,
+                        0, 0, 1032002, 0, 0),
+                instructorContext));
+    }
+
     private static void assertRuleHeader(Packet packet, int scope, int batchId, int batchIndex, int batchCount,
                                          int replaceMode, int ruleCount) {
         byte[] bytes = packet.getBytes();
@@ -126,5 +193,29 @@ class InteractionHookRegistryTest {
                 | ((bytes[offset + 1] & 0xFF) << 8)
                 | ((bytes[offset + 2] & 0xFF) << 16)
                 | ((bytes[offset + 3] & 0xFF) << 24);
+    }
+
+    private static void assertPacketEquals(Packet expected, Packet actual) {
+        org.junit.jupiter.api.Assertions.assertArrayEquals(expected.getBytes(), actual.getBytes());
+    }
+
+    private static InteractionHookEvent event(int requestId, int eventType, int targetType, int targetId, int objectId,
+                                              int npcId, int questId, int selection) {
+        return new InteractionHookEvent(requestId, eventType, targetType, targetId, objectId, npcId, questId,
+                InteractionHookProtocol.QUEST_STATE_NONE, 0, selection,
+                InteractionHookProtocol.DIALOG_CONTEXT_NONE, InteractionHookProtocol.DIALOG_STATE_NONE, 0);
+    }
+
+    private static final class CapturingClient extends Client {
+        private Packet lastPacket;
+
+        private CapturingClient() {
+            super(null, -1, null, null, -123, -123);
+        }
+
+        @Override
+        public void sendPacket(Packet packet) {
+            lastPacket = packet;
+        }
     }
 }
