@@ -30,7 +30,7 @@ import org.gms.provider.DataTool;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -38,7 +38,7 @@ import java.util.Map;
  */
 public class MobRequirement extends AbstractQuestRequirement {
     private static final Logger log = LoggerFactory.getLogger(MobRequirement.class);
-    Map<Integer, Integer> mobs = new HashMap<>();
+    Map<Integer, Integer> mobs = new LinkedHashMap<>();
     private final int questID;
 
     public MobRequirement(Quest quest, Data data) {

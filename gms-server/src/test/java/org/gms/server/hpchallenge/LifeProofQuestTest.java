@@ -9,9 +9,12 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -33,7 +36,7 @@ class LifeProofQuestTest {
     @Test
     void visibleAndHiddenQuestCountsMatchLayout() {
         assertEquals(785, LifeProofQuest.allQuestMetas().size());
-        assertEquals(645, LifeProofQuest.allVisibleQuests().size());
+        assertEquals(470, LifeProofQuest.allVisibleQuests().size());
 
         int bridge = LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR, LifeProofQuest.BRIDGE_SLOT_START);
         assertTrue(LifeProofQuest.isQuestId(bridge));
@@ -154,7 +157,7 @@ class LifeProofQuestTest {
         assertEquals(4033001, t2Common.objective().itemId());
         assertEquals(20, t2Common.objective().requiredCount());
 
-        LifeProofQuest.QuestMeta t1OptionalMap = LifeProofQuest.stageBranchVisibleQuests(1, HpChallengeService.JobBranch.WARRIOR)
+        LifeProofQuest.QuestMeta t1OptionalMap = LifeProofQuest.allQuestMetas()
                 .stream()
                 .filter(meta -> meta.questId() == 5115)
                 .findFirst()
@@ -181,25 +184,66 @@ class LifeProofQuestTest {
     }
 
     @Test
-    void visibleLifeProofQuestsUseStageSeriesParentAndMetadataNextQuest() throws Exception {
+    void visibleLifeProofQuestsUseStageBranchParentAndMetadataNextQuest() throws Exception {
         Document info = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(resolveQuestXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml").toFile());
         Document act = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(resolveQuestXml("wz-zh-CN/Quest.wz/Act.img.xml").toFile());
 
+        Map<String, Integer> parentCounts = new HashMap<>();
         for (LifeProofQuest.QuestMeta meta : LifeProofQuest.allVisibleQuests()) {
             Element quest = topLevelImgDir(info, meta.questId());
-            int expectedOrder = stageBranchVisibleQuests(meta).indexOf(meta) + 1;
-            assertEquals(LifeProofQuest.stageTitle(meta.stage()), childValue(quest, "string", "parent"),
-                    "visible life proof quest parent must be stage series: " + meta.questId());
-            assertEquals(Integer.toString(expectedOrder), childValue(quest, "int", "order"),
+            assertEquals(LifeProofQuest.questListParent(meta), childValue(quest, "string", "parent"),
+                    "visible life proof quest parent must be stage+branch series: " + meta.questId());
+            assertEquals(Integer.toString(LifeProofQuest.questListOrder(meta)), childValue(quest, "int", "order"),
                     "visible life proof quest order must follow branch stage metadata: " + meta.questId());
+            parentCounts.merge(LifeProofQuest.questListParent(meta), 1, Integer::sum);
 
             int expectedNextQuest = LifeProofQuest.staticNextQuestId(meta);
             String actualNextQuest = childValue(childImgDir(topLevelImgDir(act, meta.questId()), "1"),
                     "int", "nextQuest");
             assertEquals(expectedNextQuest <= 0 ? "" : Integer.toString(expectedNextQuest), actualNextQuest,
                     "static nextQuest must match deterministic metadata only: " + meta.questId());
+        }
+
+        for (LifeProofQuest.QuestMeta meta : LifeProofQuest.allVisibleQuests()) {
+            int expectedCount = meta.stage() == 1 ? 16 : 13;
+            assertEquals(expectedCount, parentCounts.get(LifeProofQuest.questListParent(meta)),
+                    "quest parent must contain only one branch-stage series: " + LifeProofQuest.questListParent(meta));
+        }
+    }
+
+    @Test
+    void questInfoProgressMacrosMatchQuestProgressOrder() throws Exception {
+        Document info = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(resolveQuestXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml").toFile());
+        Document check = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(resolveQuestXml("wz-zh-CN/Quest.wz/Check.img.xml").toFile());
+
+        for (LifeProofQuest.QuestMeta meta : LifeProofQuest.allVisibleQuests()) {
+            String detail = childValue(topLevelImgDir(info, meta.questId()), "string", "1");
+            switch (meta.objective().type()) {
+                case ITEM -> assertTrue(detail.contains("#c" + meta.objective().itemId() + "# / "
+                                + meta.objective().requiredCount()),
+                        "item quest detail must use #c progress macro: " + meta.questId());
+                case KILL, BOSS -> assertMobProgressMacros(check, detail, meta);
+                case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
+                        assertProgressMacroWithoutTargetSuffix(detail, "#a" + meta.questId() + "1#",
+                                meta.questId());
+                case OPTION_SLOT -> assertProgressMacroWithoutTargetSuffix(detail, "#a" + meta.questId() + "1#",
+                        meta.questId());
+                case NPC_TALK -> assertTrue(detail.contains("#a" + meta.questId() + "1# / 1"),
+                        "npc talk quest detail must keep explicit visit target count: " + meta.questId());
+                case MESO -> {
+                    assertTrue(detail.contains("#a" + meta.questId() + "1# / 1"),
+                            "meso quest detail must use virtual #a progress macro: " + meta.questId());
+                    assertTrue(detail.contains("需要缴纳金币：" + meta.objective().mesoCost()),
+                            "meso quest detail must keep meso cost visible: " + meta.questId());
+                }
+                case SELECT_OPTION, REWARD -> {
+                    // Selector and reward tasks are completed by hook flow and do not expose quantity progress.
+                }
+            }
         }
     }
 
@@ -256,7 +300,7 @@ class LifeProofQuestTest {
             }
         }
 
-        assertEquals(136, gated, "life proof custom progress completion gate count");
+        assertEquals(211, gated, "life proof custom progress completion gate count");
     }
 
     @Test
@@ -285,16 +329,17 @@ class LifeProofQuestTest {
                     .filter(candidate -> candidate.questId() == questId)
                     .findFirst()
                     .orElseThrow();
-            assertEquals(LifeProofQuest.stageTitle(meta.stage()), childValue(quest, "string", "parent"),
-                    "visible life proof QuestInfo.parent must be stage series for quest " + questId + " in " + path);
-            assertEquals(Integer.toString(stageBranchVisibleQuests(meta).indexOf(meta) + 1),
+            assertEquals(LifeProofQuest.questListParent(meta), childValue(quest, "string", "parent"),
+                    "visible life proof QuestInfo.parent must be stage+branch series for quest " + questId + " in "
+                            + path);
+            assertEquals(Integer.toString(LifeProofQuest.questListOrder(meta)),
                     childValue(quest, "int", "order"),
                     "visible life proof QuestInfo.order must follow metadata for quest " + questId + " in " + path);
             assertEquals("31", childValue(quest, "int", "area"),
                     "life proof QuestInfo.area must stay in Legend Road for quest " + questId + " in " + path);
         }
 
-        assertEquals(645, count, "visible life proof quest count in " + path);
+        assertEquals(470, count, "visible life proof quest count in " + path);
     }
 
     private static void assertLegendRoadQuestCategory(Path path) throws Exception {
@@ -368,6 +413,17 @@ class LifeProofQuestTest {
                     HpChallengeService.JobBranch.THIEF,
                     HpChallengeService.JobBranch.PIRATE)) {
                 int reservedQuestId = LifeProofQuest.reservedQuestId(stage, branch);
+                for (int slot = LifeProofQuest.OPTION_SLOT_START + LifeProofQuest.OPTIONAL_REQUIRED_COUNT;
+                     slot <= LifeProofQuest.OPTION_SLOT_END; slot++) {
+                    int retiredQuestId = LifeProofQuest.questId(stage, branch, slot);
+                    Element retiredInfo = topLevelImgDir(infoDocument, retiredQuestId);
+                    assertEquals("", childValue(retiredInfo, "string", "parent"),
+                            "retired optional QuestInfo.parent must be omitted from quest list: "
+                                    + retiredQuestId);
+                    assertEquals("", childValue(retiredInfo, "int", "order"),
+                            "retired optional QuestInfo.order must be omitted from quest list: "
+                                    + retiredQuestId);
+                }
                 for (int slot = LifeProofQuest.BRIDGE_SLOT_START; slot < LifeProofQuest.RESERVED_SLOT; slot++) {
                     int bridgeQuestId = LifeProofQuest.questId(stage, branch, slot);
                     Element bridgeInfo = topLevelImgDir(infoDocument, bridgeQuestId);
@@ -455,10 +511,11 @@ class LifeProofQuestTest {
                     ? previousVisibleQuest(meta).questId()
                     : LifeProofQuest.questId(meta.stage(), meta.branch(),
                             LifeProofQuest.BRIDGE_SLOT_START + meta.selectorNo() - 2);
-            case OPTION -> LifeProofQuest.reservedQuestId(meta.stage(), meta.branch());
+            case OPTION_SLOT -> LifeProofQuest.questId(meta.stage(), meta.branch(),
+                    LifeProofQuest.SELECTOR_SLOT_START + meta.selectorNo() - 1);
             case REWARD -> LifeProofQuest.questId(meta.stage(), meta.branch(),
                     LifeProofQuest.BRIDGE_SLOT_START + LifeProofQuest.OPTIONAL_REQUIRED_COUNT - 1);
-            case BRIDGE, RESERVED -> 0;
+            case BRIDGE, RESERVED, RETIRED_OPTION -> 0;
         };
     }
 
@@ -469,7 +526,7 @@ class LifeProofQuestTest {
             case ITEM -> assertItemGate(complete, meta);
             case MESO -> assertEquals(Integer.toString(objective.mesoCost()), childValue(complete, "int", "money"),
                     "meso completion gate must match metadata: " + meta.questId());
-            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION ->
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION, OPTION_SLOT ->
                     assertEquals(String.format("%03d", objective.requiredCount()),
                             childValue(complete, "infoex", "0", "string", "value"),
                             "custom progress completion gate must match metadata: " + meta.questId());
@@ -498,6 +555,44 @@ class LifeProofQuestTest {
             assertEquals(Integer.toString(meta.objective().requiredCount()), childValue(gate, "int", "count"),
                     "mob gate count must match metadata: " + meta.questId());
         }
+    }
+
+    private static void assertMobProgressMacros(Document check, String detail, LifeProofQuest.QuestMeta meta) {
+        Element complete = childImgDir(topLevelImgDir(check, meta.questId()), "1");
+        Element mob = childImgDir(complete, "mob");
+        List<Element> gates = childImgDirs(mob);
+        assertEquals(meta.objective().targetIds().size(), gates.size(),
+                "mob progress macro target count must match metadata: " + meta.questId());
+        for (int i = 0; i < gates.size(); i++) {
+            int mobId = Integer.parseInt(childValue(gates.get(i), "int", "id"));
+            String expected = "#o" + mobId + "# #r#a" + meta.questId() + (i + 1) + "##k";
+            assertTrue(detail.contains(expected),
+                    "#a index must follow WZ mob insertion order for quest " + meta.questId() + ": " + expected);
+            assertProgressMacroWithoutTargetSuffix(detail, "#r#a" + meta.questId() + (i + 1) + "##k",
+                    meta.questId());
+            assertEquals(meta.objective().targetIds().get(i), mobId,
+                    "WZ mob order must match LifeProofQuest metadata: " + meta.questId());
+        }
+    }
+
+    private static void assertProgressMacroWithoutTargetSuffix(String detail, String macro, int questId) {
+        assertTrue(detail.contains(macro), "quest detail must contain progress macro for quest " + questId + ": "
+                + macro);
+        assertFalse(Pattern.compile(Pattern.quote(macro) + "\\s*/\\s*\\d+").matcher(detail).find(),
+                "quest detail must not append explicit target count after client progress macro: " + questId);
+    }
+
+    @Test
+    void mesoProgressUsesSingleVirtualStep() {
+        LifeProofQuest.QuestMeta meso = LifeProofQuest.allQuestMetas()
+                .stream()
+                .filter(meta -> meta.objective().type() == LifeProofQuest.ObjectiveType.MESO)
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals("000", LifeProofQuest.mesoProgressValue(meso, meso.objective().mesoCost() - 1));
+        assertEquals("001", LifeProofQuest.mesoProgressValue(meso, meso.objective().mesoCost()));
+        assertEquals("001", LifeProofQuest.mesoProgressValue(meso, meso.objective().mesoCost() + 1));
     }
 
     private static void assertItemGate(Element complete, LifeProofQuest.QuestMeta meta) {
@@ -661,7 +756,8 @@ class LifeProofQuestTest {
 
     private static boolean requiresInfoExCompletionGate(LifeProofQuest.QuestMeta meta) {
         return switch (meta.objective().type()) {
-            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION -> true;
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION,
+                 OPTION_SLOT -> true;
             default -> false;
         };
     }
