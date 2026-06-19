@@ -9,9 +9,19 @@
 - 领取入口：每个任务都通过本职业一转教官领取。
 - 提交入口：T1 拜访教官任务到目标教官提交，其余任务回本职业一转教官提交。
 - 表现：使用原生任务灯泡、打开的书、闭合的书，不再通过 NPC 其他入口挂旧菜单。
-- 任务列表归类：生命之证可见任务不写 `QuestInfo.parent` 和 `QuestInfo.order`，统一使用
-  `area=30`。旧客户端任务窗口打开时会解析分组和排序字段，生命之证任务数量较多，写入
-  `parent/order` 后可能导致任务列表崩溃。
+- 入口：点击 NPC 时使用客户端原生任务入口，例如 `生命之证 I：拜访赫丽娜(进行中)`；不做
+  `生命之证 / 职业相关对话` 两级自定义 NPC 菜单。
+- 任务列表归类：生命之证可见任务不写 `QuestInfo.parent` 和 `QuestInfo.order`。分类使用
+  `QuestInfo.area=31`，`wz-zh-CN/Etc.wz/QuestCategory.img` 和客户端 `Data/Etc/QuestCategory.img`
+  的 `31` 命名为 `传奇之路`。旧客户端任务
+  窗口打开时会解析分组和排序字段，生命之证任务数量较多，写入 `parent/order` 后可能导致
+  任务列表崩溃。
+- 同属长期成长线的怪物卡戒指任务 `29980..29990` 也归入 `传奇之路`，服务端
+  `wz-zh-CN/Quest.wz` 和客户端 `Data/Quest/QuestInfo.img` 必须保持 `area=31`。
+- 中文服自定义任务只维护 `wz-zh-CN` 和 `scripts-zh-CN`。基础 `wz`、`scripts` 保留原生内容，
+  不放生命之证和怪物卡戒指任务节点或脚本，避免两套资源改岔。
+- 语言：项目固定为中文服，服务端语言固定 `zh-CN`，账号语言固定 `3`。客户端不提供语言切换；
+  `SwitchChinese` 视为历史残留配置，不作为功能开关和验收条件。
 - 阶段：I 到 VII，对应等级 120、130、140、150、160、170、180。
 - 奖励：不发血量戒指，直接保底写入 `maxhp/maxmp`，并回满当前 HP/MP。
 - 路线锁定：首次领取任意阶段奖励后，锁定生命之证路线，禁止 AP 操作 HP/MP。
@@ -38,6 +48,17 @@ base+20     阶段奖励任务
 base+21..23 隐藏桥接任务
 base+24     保留锁定任务
 ```
+
+任务分类使用现有空槽位 `31`，不追加 `52` 这类新编号。客户端原始
+`Etc.wz/QuestCategory.img` 已有 `31=empty` 和 `32=empty`，复用 `31` 可以避免旧客户端对
+分类数量或索引范围有隐含限制。基础 `wz/Etc.wz/QuestCategory.img.xml` 仍保持 `31=empty`。
+落地时必须同时更新：
+
+- 服务端 `gms-server/wz-zh-CN/Etc.wz/QuestCategory.img.xml`
+- 客户端 `Data/Etc/QuestCategory.img`
+- 服务端 `wz-zh-CN` 和客户端生命之证、怪物卡戒指 `QuestInfo.area`
+
+`传奇之路` 只作为任务窗口分类名，不替代系列名称 `生命之证`。
 
 职业配置：
 
@@ -76,6 +97,107 @@ T1 拜访一转教官时，自己的教官排在最后。例如战士顺序是�
 `base+24` 永不完成，也不写入 WZ，所以隐藏桥不会在可领取任务里显示。服务端在具体附加任务
 完成后通过脚本强制完成对应隐藏桥，用它解锁下一个 selector 或阶段奖励任务。
 
+## 进行中对话文案口径
+
+当前任务已经领取但尚未完成时，再次点击任务 NPC 不允许落到默认 NPC 文本、职业转职文本、
+商店文本或旧洗血菜单。生命之证必须接管进行中对话，让玩家看到当前任务上下文、完成进度和
+下一步行动。
+
+客户端 `ijl15` 使用 `InteractionHook v3` 接管 NPC 点击、NPC 对话选项点击和任务状态点击。
+命中服务端下发 rules 后，客户端改发 `CUSTOM_PACKET(0x3713)` 的
+`C2S_INTERACTION_HOOK_EVENT(0x1003)`，并阻止原生点击逻辑；未命中或服务端返回
+`FALLBACK_ORIGINAL` 时，原生逻辑继续执行。服务端由 `InteractionHookManager` 接管对话上下文，
+后续 `NPC_TALK_MORE` 确认、取消和关闭都回到 Hook 管理器。是否真正可以提交仍由
+`LifeProofQuest.complete()` 调用 `Quest.canComplete()` 做最终校验。
+
+生命之证允许 Hook `NPC_TALK(0x003A)`，但业务身份不得来自 NPC 对话文本。客户端只上报
+`objectId` 和本地映射出的 `clientNpcId`；服务端必须用当前地图 `objectId` 解析真实
+`serverNpcId`，业务判断只信服务端解析结果。普通职业导师对话、商店和其他 NPC 功能未命中
+rules 或返回 fallback 时必须保持原逻辑。
+
+T1 拜访教官任务拆开“拜访目标 NPC”和“提交 NPC”：目标 NPC 点击只记录 `QuestStatus` 进度并
+继续执行该 NPC 原始对话；提交仍回本职业一转教官。不再使用 `4033011` 作为完成证明绕路道具，
+任务完成条件以服务端进度和 `Quest.canComplete()` 为准。
+
+进行中对话统一由生命之证任务逻辑生成，入口包括：
+
+- 点击当前进行中任务的打开书本图标。
+- 点击本职业一转教官。
+
+T1 拜访教官任务中，点击当前目标一转教官只记录拜访进度并显示屏幕黄字，
+然后继续显示该 NPC 原本对话；目标 NPC 不承载生命之证进行中对话，除非目标正好就是玩家自己
+的本职业一转教官。
+
+进行中对话必须包含以下内容：
+
+- 标题：当前任务名，例如 `生命之证 I：拜访赫丽娜`。
+- 阶段叙事：使用对应阶段故事文本，让对话仍然属于生命之证流程。
+- 当前目标：使用任务目标描述，不能只显示“任务进行中”。
+- 当前进度：按任务类型显示已完成数量和需求数量。
+- 下一步：明确告诉玩家继续完成、去哪个 NPC 提交，或条件已满足可以提交。
+
+基础文本结构：
+
+```text
+#e{任务名}#n
+
+{阶段叙事}
+
+当前目标：{目标描述}
+当前进度：{进度文本}
+下一步：{行动提示}
+```
+
+不同任务类型的进度文本：
+
+- `NPC_TALK`：显示 `已拜访/未拜访` 和目标 NPC，例如 `目标 NPC：#p1012100#`。
+- `KILL`、`BOSS`：显示击杀进度，例如 `12/30`；多目标任意击杀任务显示共享进度。
+- `ITEM`：显示收集物图标、持有数量和需求数量，例如 `#i4033001# #t4033001# 8/20`。
+- `MESO`：显示当前金币和需缴纳金币，例如 `当前金币 5,000,000 / 需要 20,000,000`。
+- `PQ_ANY`、`PQ_PIRATE`、`PQ_TOY_OR_PIRATE`、`SCROLL_100`、`JUMP_MANUAL`：显示自定义进度；
+  已达成时提示回一转教官提交。
+- `SELECT_OPTION`：再次点击时仍显示 8 选 3 菜单；已经选择后不再显示 selector 默认文本。
+- `REWARD`：显示本阶段奖励确认文案、领奖后 HP/MP 保底目标和路线锁定提示。
+
+下一步提示规则：
+
+- 目标未完成：提示继续完成当前目标，不弹出提交确认。
+- 目标已完成且当前 NPC 是提交 NPC：提示可以提交，并进入完成确认。
+- 目标已完成但当前 NPC 不是提交 NPC：提示回到正确 NPC 提交。
+- 背包、金币或其他提交条件不足：提示缺少的具体条件，不显示默认失败文本。
+
+示例：
+
+```text
+#e生命之证 I：拜访赫丽娜#n
+
+导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。
+
+当前目标：拜访赫丽娜
+当前进度：目标 NPC：#p1012100#，尚未确认
+下一步：前往赫丽娜处完成这一步试炼。
+```
+
+```text
+#e生命之证 II：收集龙林生命之证#n
+
+龙林中的气息开始回应，必须证明你能在神木村独自站稳。
+
+当前目标：收集#t4033001#
+当前进度：#i4033001# #t4033001# 8/20
+下一步：继续从龙林怪物身上取得生命之证碎片。
+```
+
+```text
+#e生命之证 III：使用 100% 卷轴#n
+
+时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。
+
+当前目标：成功使用 100% 卷轴 5 次
+当前进度：5/5，已完成
+下一步：回到本职业一转教官提交这一步试炼。
+```
+
 ## 任务数据来源
 
 阶段数值、公共主线、职业主线和 8 选 3 内容继续以 `HpChallengeService.buildStages()` 为唯一来源。
@@ -85,7 +207,7 @@ T1 拜访一转教官时，自己的教官排在最后。例如战士顺序是�
 - `KILL` 和 `BOSS` 写入 WZ `mob` 完成条件。
 - 多目标击杀或 Boss 目标表示“任意一种”，服务端在击杀 hook 中同步其他目标 mob 的进度，避免原生 WZ 把多个 mob 当成全部要求。
 - `MESO` 写入 WZ `money` 完成条件，并由脚本扣除金币。
-- `PQ_ANY`、`PQ_PIRATE`、`PQ_TOY_OR_PIRATE`、`SCROLL_100`、`JUMP_MANUAL` 使用自定义进度，达成后发放 `4033011 试炼完成印记`，完成任务时扣除。
+- `PQ_ANY`、`PQ_PIRATE`、`PQ_TOY_OR_PIRATE`、`SCROLL_100`、`JUMP_MANUAL` 使用服务端自定义进度。
 - 原 `MAP` 类型全部替换为收集任务。
 
 ## 地图任务替换物
@@ -104,28 +226,40 @@ T1 拜访一转教官时，自己的教官排在最后。例如战士顺序是�
 4033008 神殿生命之证: T6 公共主线, 35 个, 8200005/8200006/8200009/8200010
 4033009 回忆生命之证: T6 附加试炼 7, 75 个, 8200005/8200006/8200007/8200008/8200009/8200010/8200011/8200012
 4033010 终印生命之证: T7 公共主线, 15 个, 8190004/8200011/8200012
-4033011 试炼完成印记: 自定义进度任务完成证明
+4033011 试炼完成印记: 历史证明物，生命之证不再依赖该物品完成任务
 ```
 
 ## 文件落点
 
 - Java 服务：`gms-server/src/main/java/org/gms/server/hpchallenge/LifeProofQuest.java`
+- 通用交互 Hook：`gms-server/src/main/java/org/gms/server/quest/hook`
 - 旧奖励和 AP 锁定：`HpChallengeService`
 - Quest fallback：`QuestScriptManager`
 - 禁止放弃：`QuestActionHandler`
 - 动态掉落：`MapleMap.dropFromMonster`
-- 任务脚本：`gms-server/scripts/quest/lifeProof.js` 和 `scripts-zh-CN/quest/lifeProof.js`
-- 任务 WZ：`gms-server/wz/Quest.wz` 和 `wz-zh-CN/Quest.wz`
+- 任务脚本：`gms-server/scripts-zh-CN/quest/lifeProof.js` 和
+  `gms-server/scripts-zh-CN/quest/monsterCardRing.js`。`scripts` 保留原生脚本，中文服自定义
+  脚本只放 `scripts-zh-CN`。
+- 任务 WZ：`gms-server/wz-zh-CN/Quest.wz`。基础 `gms-server/wz/Quest.wz` 不保留生命之证
+  `5100..5974` 和怪物卡戒指 `29980..29990` 节点。
+- 任务分类 WZ：`gms-server/wz-zh-CN/Etc.wz/QuestCategory.img.xml`。基础
+  `gms-server/wz/Etc.wz/QuestCategory.img.xml` 保持 `31=empty`。
 - 物品 WZ：`gms-server/wz/Item.wz/Etc/0403.img.xml`
 - 物品文字：`gms-server/wz/String.wz/Etc.img.xml` 和 `wz-zh-CN/String.wz/Etc.img.xml`
 - 数据清理：`V1.11.5__reset_hp_challenge_for_life_proof.sql`
 - 旧任务状态清理：`V1.11.8__remove_old_life_proof_quest_status.sql`
+- 账号语言清理：`V1.11.9__force_accounts_language_zh_cn.sql`
 
 ## 验收要点
 
 - GM 辅助：`!hpchallenge status [角色]` 显示当前原生任务状态；`!hpchallenge next [角色]`
   补齐当前任务的击杀进度、收集物、金币或自定义证明，用于快速走完整条任务链。
 - 点击一转教官时，不应出现旧的“生命之证 -> 生命之证”菜单嵌套。
+- `scripts/quest/lifeProof.js` 和 `scripts/quest/monsterCardRing.js` 不应存在，两个系列脚本只维护
+  中文服目录。
+- 基础 `wz/Quest.wz/QuestInfo.img.xml`、`Check.img.xml`、`Act.img.xml` 不应包含生命之证
+  `5100..5974` 或怪物卡戒指 `29980..29990` 节点。
+- `!changel` 不应再注册；新建、更新和登录账号后语言都应保持 `3`。
 - 任务窗口只显示当前可领取、进行中、已完成任务，不应一次显示全部阶段。
 - T1 第一个任务只显示本职业块的第一个拜访任务。
 - 完成每一步后，下一个任务才出现灯泡。
@@ -133,5 +267,5 @@ T1 拜访一转教官时，自己的教官排在最后。例如战士顺序是�
 - 完成一个附加试炼后，下一 selector 才出现。
 - 完成第三个附加试炼后，阶段奖励任务才出现。
 - 收集物掉落只在对应任务进行中出现，且达到需求后不再追加动态掉落。
-- PQ、100% 卷轴和人工跳跳任务完成后，角色获得 `4033011`。
+- PQ、100% 卷轴和人工跳跳任务完成后，直接写入当前任务进度。
 - 领奖后 `maxhp/maxmp` 保底到阶段目标，当前 HP/MP 回满，并写入奖励日志。

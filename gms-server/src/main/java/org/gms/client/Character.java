@@ -6509,7 +6509,7 @@ public class Character extends AbstractCharacterObject {
         AccountsDO accountsDO = accountService.findById(charactersDO.getAccountid());
         chr.getClient().setAccountName(accountsDO.getName());
         chr.getClient().setCharacterSlots(Optional.ofNullable(accountsDO.getCharacterslots()).map(Integer::byteValue).orElse((byte) 0));
-        chr.getClient().setLanguage(accountsDO.getLanguage());
+        chr.getClient().setLanguage(Client.FIXED_LANGUAGE);
 
         List<AreaInfoDO> areaInfoDOList = characterService.getAreaInfoByCharacter(charactersDO.getId());
         areaInfoDOList.forEach(areaInfoDO -> chr.getAreaInfos().put(Optional.ofNullable(areaInfoDO.getArea()).map(Integer::shortValue).orElse((short) 0),

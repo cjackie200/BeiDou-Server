@@ -11,6 +11,7 @@ MYSQL_USER="${MYSQL_USER:-root}"
 MYSQL_PASSWORD="${MYSQL_PASSWORD:-root}"
 EXPECTED_MYSQL_DATADIR="${EXPECTED_MYSQL_DATADIR:-/var/lib/mysql/}"
 ALLOW_EMPTY_DB="${ALLOW_EMPTY_DB:-0}"
+MYSQL_CONNECT_TIMEOUT="${MYSQL_CONNECT_TIMEOUT:-5}"
 
 WEB_PORT="${WEB_PORT:-8686}"
 LOGIN_PORT="${LOGIN_PORT:-8484}"
@@ -69,7 +70,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 mysql_cmd() {
-    MYSQL_PWD="$MYSQL_PASSWORD" mysql --protocol=tcp \
+    MYSQL_PWD="$MYSQL_PASSWORD" timeout "$MYSQL_CONNECT_TIMEOUT" mysql --protocol=tcp --connect-timeout="$MYSQL_CONNECT_TIMEOUT" \
         -h"$MYSQL_HOST" -P"$MYSQL_PORT" -u"$MYSQL_USER" "$@"
 }
 
@@ -78,7 +79,7 @@ mysql_scalar() {
 }
 
 mysql_ping() {
-    MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin --protocol=tcp \
+    MYSQL_PWD="$MYSQL_PASSWORD" timeout "$MYSQL_CONNECT_TIMEOUT" mysqladmin --protocol=tcp --connect-timeout="$MYSQL_CONNECT_TIMEOUT" \
         -h"$MYSQL_HOST" -P"$MYSQL_PORT" -u"$MYSQL_USER" ping >/dev/null 2>&1
 }
 

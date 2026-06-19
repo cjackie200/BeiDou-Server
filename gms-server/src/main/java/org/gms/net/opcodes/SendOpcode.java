@@ -357,6 +357,8 @@ public enum SendOpcode implements Opcode {
     VEGA_SCROLL(0x166), // VEGA卷轴
 
     UPDATE_HPMPAALERT(0x1000), // 更新HP/MP/EXP警报
+    INTERACTION_HOOK_RULES(0x1001), // 通用交互 Hook 规则表
+    INTERACTION_HOOK_RESULT(0x1002), // 通用交互 Hook 处理结果
     ;
     private int code = -2;
 

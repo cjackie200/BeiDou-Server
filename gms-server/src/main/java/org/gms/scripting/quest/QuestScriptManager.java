@@ -116,7 +116,10 @@ public class QuestScriptManager extends AbstractScriptManager {
 
     public void end(Client c, short questid, int npc) {
         Quest quest = Quest.getInstance(questid);
-        if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED) || (!c.getPlayer().getMap().containsNPC(npc) && !quest.isAutoComplete())) {
+        boolean lifeProofProgress = LifeProofQuest.isVisibleQuestId(questid)
+                && c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED);
+        if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED)
+                || (!lifeProofProgress && !c.getPlayer().getMap().containsNPC(npc) && !quest.isAutoComplete())) {
             dispose(c);
             return;
         }

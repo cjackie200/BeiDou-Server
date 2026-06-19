@@ -26,6 +26,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestScriptManager;
+import org.gms.server.quest.hook.InteractionHookManager;
+import org.gms.util.PacketCreator;
 
 /**
  * @author Matze
@@ -39,6 +41,9 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
         if (lastMsg == 2) {
             if (action != 0) {
                 String returnText = p.readString();
+                if (InteractionHookManager.handleNativeDialogSelection(c, action, lastMsg, -1)) {
+                    return;
+                }
                 if (c.getQM() != null) {
                     c.getQM().setGetText(returnText);
                     if (c.getQM().isStart()) {
@@ -46,14 +51,20 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
                     } else {
                         QuestScriptManager.getInstance().end(c, action, lastMsg, -1);
                     }
-                } else {
+                } else if (c.getCM() != null) {
                     c.getCM().setGetText(returnText);
                     cmRouting(c, action, lastMsg, -1);
+                } else {
+                    c.sendPacket(PacketCreator.enableActions());
                 }
             } else if (c.getQM() != null) {
                 c.getQM().dispose();
-            } else {
+            } else if (c.getCM() != null) {
                 c.getCM().dispose();
+            } else if (InteractionHookManager.hasContext(c)) {
+                InteractionHookManager.dispose(c);
+            } else {
+                c.sendPacket(PacketCreator.enableActions());
             }
         } else {
             int selection = -1;
@@ -61,6 +72,9 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
                 selection = p.readInt();
             } else if (p.available() > 0) {
                 selection = p.readUnsignedByte();
+            }
+            if (InteractionHookManager.handleNativeDialogSelection(c, action, lastMsg, selection)) {
+                return;
             }
             if (c.getQM() != null) {
                 if (c.getQM().isStart()) {
@@ -70,6 +84,8 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
                 }
             } else if (c.getCM() != null) {
                 cmRouting(c, action, lastMsg, selection);
+            } else {
+                c.sendPacket(PacketCreator.enableActions());
             }
         }
     }

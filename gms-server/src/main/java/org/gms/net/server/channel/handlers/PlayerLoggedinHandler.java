@@ -63,6 +63,7 @@ import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.life.MobSkill;
 import org.gms.server.quest.MonsterCardRingQuest;
+import org.gms.server.quest.hook.InteractionHookPackets;
 import org.gms.service.NoteService;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
@@ -462,6 +463,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (GameConfig.getServerBoolean("use_npcs_scriptable")) {
                 c.sendPacket(PacketCreator.setNPCScriptable(MonsterCardRingQuest.getScriptableNpcIds(player)));
             }
+            InteractionHookPackets.sendRules(c);
 
             if (newcomer) {
                 player.setLoginTime(System.currentTimeMillis());

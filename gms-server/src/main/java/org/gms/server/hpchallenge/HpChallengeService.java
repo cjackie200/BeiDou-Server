@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -106,26 +105,6 @@ public final class HpChallengeService {
     private record ActiveTask(Task task, ProgressRow row) {
     }
 
-    public static boolean shouldOfferNpcEntry(Character chr, int npcId) {
-        return chr != null && INSTRUCTOR_IDS.contains(npcId)
-                && (isInstructorForJob(chr, npcId) || isCurrentNpcTalkTarget(chr, npcId));
-    }
-
-    public static Map<Integer, String> getScriptableNpcIds(Character chr) {
-        Map<Integer, String> npcIds = new LinkedHashMap<>();
-        if (chr == null || !isOpenJob(chr) || chr.getLevel() < MIN_LEVEL) {
-            return npcIds;
-        }
-
-        int ownInstructor = instructorNpcForJob(chr.getJob());
-        if (ownInstructor > 0) {
-            npcIds.put(ownInstructor, "生命之证");
-        }
-
-        currentNpcTalkTargets(chr).forEach(npcId -> npcIds.put(npcId, "生命之证"));
-        return npcIds;
-    }
-
     public static boolean isRouteLocked(Character chr) {
         if (chr == null) {
             return false;
@@ -140,163 +119,6 @@ public final class HpChallengeService {
 
     public static boolean blocksHpMpAp(Character chr, int apTo) {
         return isRouteLocked(chr) && isHpMpAp(apTo);
-    }
-
-    public static String buildRootMenu(Character chr) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("#e生命之证#n\r\n");
-        if (!isOpenJob(chr)) {
-            sb.append("当前角色暂未满足开启条件。\r\n\r\n");
-        }
-        sb.append("#b#L9000#生命之证#l\r\n");
-        sb.append("#L9001#职业相关对话#l#k");
-        return sb.toString();
-    }
-
-    public static String buildMainMenu(Character chr) {
-        if (!ensureStateAndProgress(chr)) {
-            return openRequirementText(chr);
-        }
-        syncNpcScriptable(chr);
-        State state = loadState(chr.getId());
-        StageConfig stage = stage(state.currentStage());
-        ActiveTask activeTask = loadActiveTask(chr, stage.stage());
-        boolean optionalChoiceAvailable = isOptionalChoiceAvailable(chr.getId(), stage.stage());
-        boolean stageReady = isStageReady(chr.getId(), stage.stage());
-        StringBuilder sb = new StringBuilder();
-        sb.append("#e生命之证#n\r\n\r\n");
-        sb.append(buildSummary(chr)).append("\r\n");
-        if (activeTask != null) {
-            sb.append("当前任务：").append(activeTask.task().description())
-                    .append("（").append(activeTask.row().currentCount).append("/")
-                    .append(activeTask.row().requiredCount).append("）\r\n");
-        } else if (optionalChoiceAvailable) {
-            sb.append("当前任务：选择第 ").append(nextOptionalSlot(chr.getId(), stage.stage()))
-                    .append(" 个附加挑战\r\n");
-        } else if (stageReady) {
-            sb.append("当前任务：领取阶段奖励\r\n");
-        } else {
-            sb.append("当前任务：暂无可推进任务，请联系 GM 检查进度。\r\n");
-        }
-        sb.append("\r\n#b#L1#查看当前任务和已完成记录#l\r\n");
-        if (optionalChoiceAvailable) {
-            sb.append("#L2#选择第 ").append(nextOptionalSlot(chr.getId(), stage.stage()))
-                    .append(" 个附加挑战#l\r\n");
-        }
-        if (activeTask != null && activeTask.task().targetType() == TargetType.MESO) {
-            sb.append("#L3#缴纳当前金币挑战#l\r\n");
-        }
-        if (activeTask != null && activeTask.task().targetType() == TargetType.SCROLL_100) {
-            sb.append("#L4#消耗任意 100% 卷轴挑战说明#l\r\n");
-        }
-        if (stageReady) {
-            sb.append("#L5#领取阶段奖励#l\r\n");
-        }
-        sb.append("#L6#查看规则说明#l#k");
-        return sb.toString();
-    }
-
-    public static String handleMainSelection(Character chr, int selection) {
-        return switch (selection) {
-            case 1 -> buildProgressText(chr);
-            case 2 -> buildOptionalMenu(chr);
-            case 3 -> paySelectedMesoOption(chr);
-            case 4 -> "选择了“使用任意 100% 卷轴”的附加挑战后，成功使用任意成功率为 100% 的卷轴会自动计数。失败、不可用或非 100% 卷轴不计数。";
-            case 5 -> claimCurrentStageReward(chr);
-            case 6 -> buildRulesText(chr);
-            default -> "请选择一个有效选项。";
-        };
-    }
-
-    public static String buildOptionalMenu(Character chr) {
-        if (!ensureStateAndProgress(chr)) {
-            return openRequirementText(chr);
-        }
-        State state = loadState(chr.getId());
-        StageConfig stage = stage(state.currentStage());
-        if (!isOptionalChoiceAvailable(chr.getId(), stage.stage())) {
-            return "当前还不能选择附加挑战。请先完成当前线性任务。";
-        }
-        int slot = nextOptionalSlot(chr.getId(), stage.stage());
-        StringBuilder sb = new StringBuilder();
-        sb.append("#e选择第 ").append(slot).append(" 个附加挑战#n\r\n");
-        sb.append("每次只能选择 1 个附加挑战，完成后才会开放下一次选择。未选择前不追溯。\r\n\r\n");
-        Map<String, ProgressRow> rows = loadProgress(chr.getId(), state.currentStage(), TaskGroup.OPTIONAL);
-        for (Task task : stage.optionalTasks()) {
-            ProgressRow row = rows.get(task.key());
-            if (row != null && row.selected) {
-                continue;
-            }
-            String status = row != null && row.completed ? "完成" : "可选择";
-            sb.append("#L").append(task.optionNo()).append("#").append(task.optionNo()).append(". ")
-                    .append(task.description()).append(" [").append(status).append("]#l\r\n");
-        }
-        return sb.toString();
-    }
-
-    public static String selectOptional(Character chr, int optionNo) {
-        if (!ensureStateAndProgress(chr)) {
-            return openRequirementText(chr);
-        }
-        State state = loadState(chr.getId());
-        StageConfig stage = stage(state.currentStage());
-        Task task = stage.optionalTasks().stream()
-                .filter(t -> t.optionNo() == optionNo)
-                .findFirst()
-                .orElse(null);
-        if (task == null) {
-            return "附加挑战不存在。";
-        }
-
-        try (Connection con = DatabaseConnection.getConnection()) {
-            con.setAutoCommit(false);
-            try {
-                lockStageProgress(con, chr.getId(), state.currentStage());
-                if (!isOptionalChoiceAvailable(con, chr.getId(), state.currentStage())) {
-                    con.rollback();
-                    return "当前还不能选择附加挑战。请先完成当前线性任务。";
-                }
-                if (isTaskSelected(con, chr.getId(), state.currentStage(), task.key())) {
-                    con.rollback();
-                    return "该附加挑战已经选择。";
-                }
-                int selectedCount = selectedOptionalCount(con, chr.getId(), state.currentStage());
-                if (selectedCount >= OPTIONAL_REQUIRED_COUNT) {
-                    con.rollback();
-                    return "本阶段已经选择 3 个附加挑战，不能继续选择。";
-                }
-                int taskOrder = nextTaskOrder(con, chr.getId(), state.currentStage());
-                try (PreparedStatement ps = con.prepareStatement("""
-                        UPDATE hp_challenge_progress
-                        SET selected = 1, active = 1, task_order = ?, current_count = 0, completed = 0,
-                            accepted_at = CURRENT_TIMESTAMP, completed_at = NULL
-                        WHERE character_id = ? AND stage = ? AND task_group = ? AND task_key = ?
-                            AND selected = 0 AND completed = 0
-                        """)) {
-                    ps.setInt(1, taskOrder);
-                    ps.setInt(2, chr.getId());
-                    ps.setInt(3, state.currentStage());
-                    ps.setString(4, TaskGroup.OPTIONAL.code);
-                    ps.setString(5, task.key());
-                    int updated = ps.executeUpdate();
-                    if (updated <= 0) {
-                        con.rollback();
-                        return "选择附加挑战失败，请重新打开菜单。";
-                    }
-                }
-                con.commit();
-                syncNpcScriptable(chr);
-                return "已选择第 " + (selectedCount + 1) + " 个附加挑战：" + task.description();
-            } catch (SQLException e) {
-                con.rollback();
-                throw e;
-            } finally {
-                con.setAutoCommit(true);
-            }
-        } catch (SQLException e) {
-            log.warn("select hp challenge optional failed", e);
-            return "选择附加挑战失败，请稍后再试。";
-        }
     }
 
     public static void onMapChanged(Character chr) {
@@ -1038,39 +860,6 @@ public final class HpChallengeService {
                  NIGHTLORD, SHADOWER, BUCCANEER, CORSAIR -> true;
             default -> false;
         };
-    }
-
-    private static boolean isInstructorForJob(Character chr, int npcId) {
-        if (chr == null || chr.getLevel() < MIN_LEVEL || !isOpenJob(chr)) {
-            return false;
-        }
-        return instructorNpcForJob(chr.getJob()) == npcId;
-    }
-
-    private static boolean isCurrentNpcTalkTarget(Character chr, int npcId) {
-        return currentNpcTalkTargets(chr).contains(npcId);
-    }
-
-    private static Set<Integer> currentNpcTalkTargets(Character chr) {
-        if (chr == null || chr.getLevel() < MIN_LEVEL || !isOpenJob(chr)) {
-            return Set.of();
-        }
-        try {
-            State state = loadState(chr.getId());
-            if (state == null) {
-                return Set.of();
-            }
-            ActiveTask activeTask = loadActiveTask(chr, state.currentStage());
-            if (activeTask == null || activeTask.task().targetType() != TargetType.NPC_TALK) {
-                return Set.of();
-            }
-            return activeTask.task().targetIds().stream()
-                    .filter(INSTRUCTOR_IDS::contains)
-                    .collect(Collectors.toCollection(LinkedHashSet::new));
-        } catch (RuntimeException e) {
-            log.warn("load hp challenge npc talk target failed", e);
-            return Set.of();
-        }
     }
 
     private static void syncNpcScriptable(Character chr) {

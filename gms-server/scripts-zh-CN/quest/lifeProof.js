@@ -1,12 +1,30 @@
 var LifeProofQuest = Java.type('org.gms.server.hpchallenge.LifeProofQuest');
 var status = -1;
+var endAction = '';
 
 function isOk(result) {
     return String(result).indexOf('OK|') == 0;
 }
 
+function isErr(result) {
+    return String(result).indexOf('ERR|') == 0;
+}
+
+function isInfo(result) {
+    return String(result).indexOf('INFO|') == 0;
+}
+
+function isReady(result) {
+    return String(result).indexOf('READY|') == 0;
+}
+
 function message(result) {
-    return String(result).substring(3);
+    var text = String(result);
+    var separator = text.indexOf('|');
+    if (separator < 0) {
+        return text;
+    }
+    return text.substring(separator + 1);
 }
 
 function selectedQuestId(result) {
@@ -99,10 +117,26 @@ function end(mode, type, selection) {
 
     var questId = qm.getQuest();
     if (status == 0) {
-        qm.sendYesNo(LifeProofQuest.completePrompt(qm.getPlayer(), questId));
+        var prompt = LifeProofQuest.endPrompt(qm.getPlayer(), questId, qm.getNpc());
+        if (isReady(prompt)) {
+            endAction = 'ready';
+            qm.sendYesNo(message(prompt));
+            return;
+        }
+        if (isInfo(prompt) || isErr(prompt)) {
+            endAction = 'done';
+            qm.sendOk(message(prompt));
+            return;
+        }
+        endAction = 'done';
+        qm.sendOk(String(prompt));
         return;
     }
     if (status == 1) {
+        if (endAction != 'ready') {
+            qm.dispose();
+            return;
+        }
         var result = LifeProofQuest.complete(qm.getPlayer(), questId, qm.getNpc());
         if (isOk(result)) {
             qm.forceCompleteQuest();

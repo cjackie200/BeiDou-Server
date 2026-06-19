@@ -76529,7 +76529,176 @@
             <int name="npc" value="1061005"/>
         </imgdir>
     </imgdir>
-    <imgdir name="5100">
+      <imgdir name="29980">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29981">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29980"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29982">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29981"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29983">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29982"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29984">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29983"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29985">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29984"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29986">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29985"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29987">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29986"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29988">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29987"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29989">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29988"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+  <imgdir name="29990">
+  <imgdir name="0">
+    <int name="npc" value="2006"/>
+    <string name="startscript" value="monsterCardRing"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29989"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="2006"/>
+    <string name="endscript" value="monsterCardRing"/>
+  </imgdir>
+</imgdir>
+<imgdir name="5100">
         <imgdir name="0">
             <int name="npc" value="1022000"/>
             <int name="lvmin" value="120"/>
@@ -76541,7 +76710,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1012100"/>
+            <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -76563,7 +76732,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1032001"/>
+            <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -76585,7 +76754,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1052001"/>
+            <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -76607,7 +76776,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1090000"/>
+            <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -76835,12 +77004,6 @@
         <imgdir name="1">
             <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5113">
@@ -76891,12 +77054,6 @@
         <imgdir name="1">
             <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5115">
@@ -77026,12 +77183,6 @@
         <imgdir name="1">
             <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5120">
@@ -77101,7 +77252,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1012100"/>
+            <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -77123,7 +77274,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1022000"/>
+            <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -77145,7 +77296,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1052001"/>
+            <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -77167,7 +77318,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1090000"/>
+            <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -77391,12 +77542,6 @@
         <imgdir name="1">
             <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5138">
@@ -77447,12 +77592,6 @@
         <imgdir name="1">
             <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5140">
@@ -77582,12 +77721,6 @@
         <imgdir name="1">
             <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5145">
@@ -77656,7 +77789,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1032001"/>
+            <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -77677,7 +77810,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1022000"/>
+            <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -77698,7 +77831,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1052001"/>
+            <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -77719,7 +77852,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1090000"/>
+            <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -77934,12 +78067,6 @@
         <imgdir name="1">
             <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5163">
@@ -77988,12 +78115,6 @@
         <imgdir name="1">
             <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5165">
@@ -78118,12 +78239,6 @@
         <imgdir name="1">
             <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5170">
@@ -78191,7 +78306,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1012100"/>
+            <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -78212,7 +78327,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1032001"/>
+            <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -78233,7 +78348,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1022000"/>
+            <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -78254,7 +78369,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1090000"/>
+            <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -78469,12 +78584,6 @@
         <imgdir name="1">
             <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5188">
@@ -78523,12 +78632,6 @@
         <imgdir name="1">
             <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5190">
@@ -78653,12 +78756,6 @@
         <imgdir name="1">
             <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5195">
@@ -78726,7 +78823,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1012100"/>
+            <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -78747,7 +78844,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1032001"/>
+            <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -78768,7 +78865,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1022000"/>
+            <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -78789,7 +78886,7 @@
             </imgdir>
         </imgdir>
         <imgdir name="1">
-            <int name="npc" value="1052001"/>
+            <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
         </imgdir>
     </imgdir>
@@ -79004,12 +79101,6 @@
         <imgdir name="1">
             <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5213">
@@ -79058,12 +79149,6 @@
         <imgdir name="1">
             <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5215">
@@ -79188,12 +79273,6 @@
         <imgdir name="1">
             <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5220">
@@ -79747,12 +79826,6 @@
         <imgdir name="1">
             <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5245">
@@ -80307,12 +80380,6 @@
         <imgdir name="1">
             <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5270">
@@ -80850,12 +80917,6 @@
         <imgdir name="1">
             <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5295">
@@ -81392,12 +81453,6 @@
         <imgdir name="1">
             <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5320">
@@ -81934,12 +81989,6 @@
         <imgdir name="1">
             <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5345">
@@ -82394,12 +82443,6 @@
         <imgdir name="1">
             <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5368">
@@ -82926,12 +82969,6 @@
         <imgdir name="1">
             <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5393">
@@ -83443,12 +83480,6 @@
         <imgdir name="1">
             <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5418">
@@ -83957,12 +83988,6 @@
         <imgdir name="1">
             <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5443">
@@ -84246,12 +84271,6 @@
         <imgdir name="1">
             <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5459">
@@ -84471,12 +84490,6 @@
         <imgdir name="1">
             <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5468">
@@ -87490,12 +87503,6 @@
         <imgdir name="1">
             <int name="npc" value="1022000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5614">
@@ -88038,12 +88045,6 @@
         <imgdir name="1">
             <int name="npc" value="1032001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5639">
@@ -88575,12 +88576,6 @@
         <imgdir name="1">
             <int name="npc" value="1012100"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5664">
@@ -89105,12 +89100,6 @@
         <imgdir name="1">
             <int name="npc" value="1052001"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5689">
@@ -89639,12 +89628,6 @@
         <imgdir name="1">
             <int name="npc" value="1090000"/>
             <string name="endscript" value="lifeProof"/>
-            <imgdir name="item">
-                <imgdir name="0">
-                    <int name="id" value="4033011"/>
-                    <int name="count" value="1"/>
-                </imgdir>
-            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="5714">
