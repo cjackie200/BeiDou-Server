@@ -32,7 +32,6 @@ job = 410;
 spawnPnpc = false;
 spawnPnpcFee = 7000000;
 jobType = 4;
-
 function start() {
     const GameConstants = Java.type('org.gms.constants.game.GameConstants');
     if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {

@@ -8,12 +8,22 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class ServiceProperty {
-    private String language;
+    private static final String FIXED_LANGUAGE = "zh-CN";
+
+    private String language = FIXED_LANGUAGE;
     private RateLimitProperty rateLimit;
     private String wanHost;
     private String lanHost;
     private String localhost;
     private int loginPort;
+
+    public String getLanguage() {
+        return FIXED_LANGUAGE;
+    }
+
+    public void setLanguage(String language) {
+        this.language = FIXED_LANGUAGE;
+    }
 
     @Data
     public static class RateLimitProperty {

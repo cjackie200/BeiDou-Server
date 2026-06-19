@@ -34,7 +34,6 @@ spawnPnpcFee = 7000000;
 jobType = 5;
 
 var advQuest = 0;
-
 function start() {
     const GameConstants = Java.type('org.gms.constants.game.GameConstants');
     if (cm.isQuestStarted(6330)) {

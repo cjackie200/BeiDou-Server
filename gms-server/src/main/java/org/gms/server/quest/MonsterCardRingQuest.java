@@ -4,11 +4,20 @@ import org.gms.client.Character;
 import org.gms.client.QuestStatus;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
+import org.gms.client.inventory.Item;
 import org.gms.config.GameConfig;
+import org.gms.constants.inventory.ItemConstants;
+import org.gms.server.ItemInformationProvider;
+import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.server.quest.hook.InteractionHookAction;
+import org.gms.server.quest.hook.InteractionHookContext;
 import org.gms.util.PacketCreator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public final class MonsterCardRingQuest {
     public static final int NPC_ID = 2006;
@@ -64,6 +73,105 @@ public final class MonsterCardRingQuest {
 
     public static boolean isQuestId(int questId) {
         return questId >= CLAIM_QUEST_ID && questId <= LAST_QUEST_ID;
+    }
+
+    public static boolean isMonsterCardRingQuest(int questId) {
+        return isQuestId(questId);
+    }
+
+    public static List<Integer> getAllQuestIds() {
+        List<Integer> questIds = new ArrayList<>();
+        for (short questId = CLAIM_QUEST_ID; questId <= LAST_QUEST_ID; questId++) {
+            questIds.add((int) questId);
+        }
+        return questIds;
+    }
+
+    public static List<Integer> getHookNpcIds(Character chr) {
+        return List.of(NPC_ID);
+    }
+
+    public static Optional<Integer> resolveCurrentQuestId(Character chr) {
+        if (chr == null) {
+            return Optional.empty();
+        }
+        syncQuestStateSilently(chr);
+        if (canClaimBaseRing(chr)) {
+            return Optional.of((int) CLAIM_QUEST_ID);
+        }
+        RingState ringState = getRingState(chr);
+        RingInfo current = ringState.getCurrent();
+        if (current == null || current.getLevel() >= MAX_LEVEL) {
+            return Optional.empty();
+        }
+        return Optional.of((int) getUpgradeQuestId(current.getLevel() + 1));
+    }
+
+    public static Optional<Integer> resolveNpcHook(Character chr, int npcId) {
+        if (npcId != NPC_ID) {
+            return Optional.empty();
+        }
+        return resolveCurrentQuestId(chr);
+    }
+
+    public static InteractionHookAction resolveCurrentAction(Character chr, int questId) {
+        if (questId == CLAIM_QUEST_ID && canClaimBaseRing(chr)) {
+            return InteractionHookAction.QUERY_START;
+        }
+        if (isUpgradeQuest(questId) && validateUpgrade(chr).isOk()) {
+            return InteractionHookAction.QUERY_COMPLETE;
+        }
+        return InteractionHookAction.QUERY_PROGRESS;
+    }
+
+    public static void openHook(InteractionHookContext context) {
+        if (context == null || context.player() == null) {
+            return;
+        }
+        Character chr = context.player();
+        syncQuestState(chr);
+        int questId = context.questId();
+        if (questId == CLAIM_QUEST_ID) {
+            if (canClaimBaseRing(chr)) {
+                context.sendYesNo(claimPrompt());
+            } else {
+                context.sendOk(progressText(chr));
+            }
+            return;
+        }
+        if (isUpgradeQuest(questId)) {
+            UpgradeValidation validation = validateUpgrade(chr);
+            if (validation.isOk() && context.action() == InteractionHookAction.QUERY_COMPLETE) {
+                context.sendYesNo(upgradePrompt(validation));
+                return;
+            }
+            context.sendOk(progressText(chr, validation));
+            return;
+        }
+        context.sendOk("这个怪物卡戒指任务暂时无法处理。");
+    }
+
+    public static void handleHookAction(InteractionHookContext context, byte mode, byte lastMessage, int selection) {
+        if (context == null || context.player() == null) {
+            return;
+        }
+        if (mode <= 0) {
+            context.close();
+            return;
+        }
+
+        Character chr = context.player();
+        int questId = context.questId();
+        if (questId == CLAIM_QUEST_ID) {
+            context.sendOk(claimBaseRing(chr));
+            return;
+        }
+        if (isUpgradeQuest(questId)) {
+            UpgradeResult result = upgradeRing(chr);
+            context.sendOk(result.message());
+            return;
+        }
+        context.sendOk("这个怪物卡戒指任务暂时无法处理。");
     }
 
     public static boolean isClaimQuest(int questId) {
@@ -196,6 +304,133 @@ public final class MonsterCardRingQuest {
         return getRingState(chr).getTotal() == 0;
     }
 
+    public static String claimPrompt() {
+        return "你要领取 #b#i" + BASE_RING + "##t" + BASE_RING + "##k 吗？\r\n\r\n"
+                + "这是怪物卡戒指的起点，没有属性，但会用于后续升级。";
+    }
+
+    public static String claimBaseRing(Character chr) {
+        syncQuestState(chr);
+        if (!canClaimBaseRing(chr)) {
+            syncQuestState(chr);
+            return "你已经拥有怪物卡戒指了，不能重复领取。";
+        }
+        if (gainRawEquip(chr, BASE_RING) == null) {
+            syncQuestState(chr);
+            return "请先在装备栏背包空出 1 格。";
+        }
+        syncQuestState(chr);
+        return "拿着这个 #b#i" + BASE_RING + "##t" + BASE_RING + "##k。\r\n"
+                + "以后直接来找我，我会告诉你怪物卡和材料进度。\r\n\r\n"
+                + progressText(chr, validateUpgrade(chr));
+    }
+
+    public static String progressText(Character chr) {
+        return progressText(chr, validateUpgrade(chr));
+    }
+
+    public static String progressText(Character chr, UpgradeValidation validation) {
+        int completedSets = countCompletedCardSets(chr);
+        RingState ringState = getRingState(chr);
+        RingInfo current = ringState.getCurrent();
+        StringBuilder text = new StringBuilder("#e怪物卡戒指进度#n\r\n\r\n");
+
+        text.append("满套怪物卡：#b").append(completedSets).append("#k 套\r\n");
+        if (current == null) {
+            text.append("当前戒指：未领取\r\n\r\n");
+            text.append("请先领取 #b#i").append(BASE_RING).append("##t").append(BASE_RING).append("##k。");
+            return text.toString();
+        }
+
+        text.append("当前戒指：#b#i").append(current.getId()).append("##t").append(current.getId())
+                .append("# Lv").append(current.getLevel()).append("#k\r\n");
+        if (current.getLevel() >= MAX_LEVEL) {
+            text.append("\r\n你的怪物卡戒指已经达到最高等级。");
+            return text.toString();
+        }
+
+        int targetLevel = current.getLevel() + 1;
+        int requiredSets = targetLevel * SETS_PER_LEVEL;
+        int material = getMaterialForLevel(targetLevel);
+        int materialCount = chr.getItemQuantity(material, false);
+
+        text.append("\r\n#e下一档升级：Lv").append(targetLevel).append("#n\r\n");
+        text.append("需要满套怪物卡：#b").append(completedSets).append("#k / #r")
+                .append(requiredSets).append("#k 套\r\n");
+        text.append("需要宝石：#b#i").append(material).append("##t").append(material)
+                .append("# ").append(materialCount).append(" / ").append(MATERIAL_QTY).append("#k\r\n");
+        text.append("上一级戒指：");
+        if (current.getInBag() > 0) {
+            text.append("#b已在装备栏背包#k\r\n");
+        } else if (current.getEquipped() > 0) {
+            text.append("#r当前穿戴中，请先卸下再兑换#k\r\n");
+        } else {
+            text.append("#r未在装备栏背包#k\r\n");
+        }
+
+        if (validation != null && !validation.isOk()) {
+            text.append("\r\n#r当前不能升级：#k").append(validation.getMessage());
+        } else {
+            text.append("\r\n#b条件已经满足。点击完成书本可升级到 Lv").append(targetLevel).append("。#k");
+        }
+        return text.toString();
+    }
+
+    public static String upgradePrompt(UpgradeValidation validation) {
+        if (validation == null || !validation.isOk()) {
+            return validation == null ? "当前不能升级。" : validation.getMessage();
+        }
+        int targetLevel = validation.getTargetLevel();
+        int oldRing = validation.getCurrent().getId();
+        int newRing = BASE_RING + targetLevel;
+        int material = validation.getMaterial();
+
+        return "要把 #b#i" + oldRing + "##t" + oldRing + "##k 升级为 #r#i" + newRing + "##t" + newRing
+                + "##k 吗？\r\n\r\n"
+                + "需要满套怪物卡：#b" + validation.getRequiredSets() + "#k 套\r\n"
+                + "消耗材料：#b#i" + material + "##t" + material + "# x" + MATERIAL_QTY + "#k\r\n\r\n"
+                + "升级后会消耗上一级戒指。";
+    }
+
+    public static UpgradeResult upgradeRing(Character chr) {
+        UpgradeValidation validation = validateUpgrade(chr);
+        if (!validation.isOk()) {
+            syncQuestState(chr);
+            return UpgradeResult.fail(validation.getMessage());
+        }
+
+        int targetLevel = validation.getTargetLevel();
+        int oldRing = validation.getCurrent().getId();
+        int newRing = BASE_RING + targetLevel;
+        int material = validation.getMaterial();
+
+        InventoryManipulator.removeById(chr.getClient(), InventoryType.EQUIP, oldRing, 1, true, false);
+        Item gained = gainRawEquip(chr, newRing);
+        if (gained == null) {
+            gainRawEquip(chr, oldRing);
+            syncQuestState(chr);
+            return UpgradeResult.fail("装备栏空间不足，升级没有完成。请整理装备栏后再试。");
+        }
+
+        InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(material), material,
+                MATERIAL_QTY, true, false);
+        chr.sendPacket(PacketCreator.getShowItemGain(material, (short) -MATERIAL_QTY, true));
+        syncQuestState(chr);
+        return UpgradeResult.success("升级完成。\r\n你获得了 #b#i" + newRing + "##t" + newRing + "##k。");
+    }
+
+    private static Item gainRawEquip(Character chr, int itemId) {
+        Item item = ItemInformationProvider.getInstance().getEquipById(itemId);
+        if (item == null || !InventoryManipulator.checkSpace(chr.getClient(), itemId, 1, "")) {
+            return null;
+        }
+        if (!InventoryManipulator.addFromDrop(chr.getClient(), item, false, -1)) {
+            return null;
+        }
+        chr.sendPacket(PacketCreator.getShowItemGain(itemId, (short) 1, true));
+        return item;
+    }
+
     public static Map<Integer, String> getScriptableNpcIds(Character chr) {
         Map<Integer, String> configuredNpcIds = GameConfig.getServerObject(
                 "npcs_scriptable", new HashMap<Integer, String>());
@@ -204,7 +439,6 @@ public final class MonsterCardRingQuest {
         if (GameConfig.getServerBoolean("use_rebirth_system")) {
             npcsIds.put(GameConfig.getServerInt("rebirth_npc_id"), "Rebirth");
         }
-
         npcsIds.remove(NPC_ID);
         return npcsIds;
     }
@@ -449,6 +683,16 @@ public final class MonsterCardRingQuest {
 
         public int getMaterial() {
             return material;
+        }
+    }
+
+    public record UpgradeResult(boolean success, String message) {
+        private static UpgradeResult success(String message) {
+            return new UpgradeResult(true, message);
+        }
+
+        private static UpgradeResult fail(String message) {
+            return new UpgradeResult(false, message);
         }
     }
 

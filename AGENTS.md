@@ -10,6 +10,18 @@
 `scripts`、`wz-zh-CN` 和 `wz`。前端代码在 `gms-ui/src`，生产构建产物可复制到
 `gms-server/src/main/resources/static`。
 
+## 必读文档
+
+接手非平凡任务时，先按顺序阅读：
+
+1. `docs/README.md`：文档索引和新增文档规则。
+2. `docs/guides/ai-rules.md`：AI / 自动编码统一规约。
+3. `docs/guides/coding-style.md`：防御性编码、脚本、WZ、客户端 DLL 和测试规范。
+4. 任务相关设计文档，例如 `docs/life-proof-quest-chain.md`、`docs/interaction-hook-v3.md`。
+
+代码、协议、SQL、脚本、WZ、客户端资源、测试和文档必须同向落地；发现设计与实现不一致时，
+先收敛不一致，再继续新增能力。
+
 ## 构建、测试与本地开发命令
 
 - `mvn -pl gms-server -am test`：编译服务端模块并运行 JUnit 测试。
@@ -28,6 +40,9 @@ Java 目标版本为 OpenJDK 21。使用 4 空格缩进，包名保持在 `org.g
 相关代码应放入现有包族。前端使用 Vue 3、TypeScript、ESLint、Stylelint 和
 Prettier；Prettier 配置为 2 空格、分号、单引号和 80 列。不要手工修改打包产物，除非
 通过项目工具重新构建。
+
+新增和重构代码遵守 `docs/guides/coding-style.md`：函数入口优先处理 `null`、空值、非法枚举、
+越界参数、缺失配置和依赖错误；不要复制旧临时绕路逻辑；业务权威判断放在服务端。
 
 ## 测试指南
 
@@ -61,8 +76,10 @@ MySQL 的变更需要按 MySQL 8 验证，因为项目不支持更低版本。
 `MonsterCardRingQuest.syncQuestState` 控制 `NOT_STARTED`、`STARTED`、`COMPLETED`，任务
 `start` 脚本显示进度和 GM 测试补齐，任务 `end` 脚本执行升级。
 
-涉及任务、NPC 或 WZ 的改动必须同时同步服务端 `wz`、`wz-zh-CN` 和客户端 `Data/Quest`、
-`Data/String`。验证时用 `WzPatchTool ring-verify`、`inspect` 检查关键节点，例如
+涉及生命之证、怪物卡戒指等中文服自定义任务、NPC 或 WZ 的改动，只维护服务端
+`scripts-zh-CN`、`wz-zh-CN` 和客户端 `Data/Quest`、`Data/String`、`Data/Etc`；基础
+`scripts`、`wz` 保留原生内容，不承载中文服自定义任务节点。验证时用
+`WzPatchTool ring-verify`、`inspect` 检查关键节点，例如
 `Check.img/29981` 应依赖 `29980` 完成，`Check.img/29990` 应依赖 `29989` 完成。验收前必须
 重启服务端、完全退出并重开客户端、重新登录角色；同时确认数据库 `game_config.npcs_scriptable`
 没有残留测试 NPC。提交客户端补丁时排除 `config.ini`、`.wzpatch-backup` 和临时备份目录。

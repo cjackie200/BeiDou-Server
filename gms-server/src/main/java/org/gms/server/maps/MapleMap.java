@@ -58,6 +58,7 @@ import org.gms.server.events.gm.Fitness;
 import org.gms.server.events.gm.Ola;
 import org.gms.server.events.gm.OxQuiz;
 import org.gms.server.events.gm.Snowball;
+import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.LifeFactory.selfDestruction;
 import org.gms.server.life.Monster;
@@ -765,7 +766,9 @@ public class MapleMap {
         List<MonsterDropEntry> lootEntry = GameConfig.getServerBoolean("use_spawn_relevant_loot") ? mob.retrieveRelevantDrops() : mi.retrieveEffectiveDrop(mob.getId());
         sortDropEntries(lootEntry, dropEntry, visibleQuestEntry, otherQuestEntry, chr);     // thanks Articuno, Limit, Rohenn for noticing quest loots not showing up in only-quest item drops scenario
 
-        if (lootEntry.isEmpty()) {   // thanks resinate
+        LifeProofQuest.addDynamicQuestDrops(chr, mob.getId(), visibleQuestEntry);
+
+        if (lootEntry.isEmpty() && visibleQuestEntry.isEmpty()) {   // thanks resinate
             return;
         }
 

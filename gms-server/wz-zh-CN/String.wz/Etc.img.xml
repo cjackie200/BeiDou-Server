@@ -9478,5 +9478,53 @@
             <string name="desc" value="支持铜人活动的核心，也是用来 研究机关的道具"/>
             <string name="name" value="铜人心"/>
         </imgdir>
+        <imgdir name="4033000">
+            <string name="name" value="初醒隐秘生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033001">
+            <string name="name" value="龙林生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033002">
+            <string name="name" value="龙巢生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033003">
+            <string name="name" value="时间裂缝生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033004">
+            <string name="name" value="玩具塔生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033005">
+            <string name="name" value="远征生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033006">
+            <string name="name" value="深海生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033007">
+            <string name="name" value="暗流生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033008">
+            <string name="name" value="神殿生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033009">
+            <string name="name" value="回忆生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033010">
+            <string name="name" value="终印生命之证"/>
+            <string name="desc" value="生命之证试炼中获得的证明。"/>
+        </imgdir>
+        <imgdir name="4033011">
+            <string name="name" value="试炼完成印记"/>
+            <string name="desc" value="完成人工核验试炼后获得的证明。"/>
+        </imgdir>
     </imgdir>
 </imgdir>

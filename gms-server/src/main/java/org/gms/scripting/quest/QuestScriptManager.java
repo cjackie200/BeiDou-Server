@@ -24,6 +24,7 @@ package org.gms.scripting.quest;
 import org.gms.client.Client;
 import org.gms.client.QuestStatus;
 import org.gms.constants.game.GameConstants;
+import org.gms.server.hpchallenge.LifeProofQuest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractScriptManager;
@@ -54,6 +55,9 @@ public class QuestScriptManager extends AbstractScriptManager {
         ScriptEngine engine = getInvocableScriptEngine("quest/" + questid + ".js", c);
         if (engine == null && MonsterCardRingQuest.isQuestId(questid)) {
             engine = getInvocableScriptEngine("quest/monsterCardRing.js");
+        }
+        if (engine == null && LifeProofQuest.isVisibleQuestId(questid)) {
+            engine = getInvocableScriptEngine("quest/lifeProof.js", c);
         }
         if (engine == null && GameConstants.isMedalQuest(questid)) {
             engine = getInvocableScriptEngine("quest/medalQuest.js", c);   // start generic medal quest
@@ -112,7 +116,10 @@ public class QuestScriptManager extends AbstractScriptManager {
 
     public void end(Client c, short questid, int npc) {
         Quest quest = Quest.getInstance(questid);
-        if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED) || (!c.getPlayer().getMap().containsNPC(npc) && !quest.isAutoComplete())) {
+        boolean lifeProofProgress = LifeProofQuest.isVisibleQuestId(questid)
+                && c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED);
+        if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED)
+                || (!lifeProofProgress && !c.getPlayer().getMap().containsNPC(npc) && !quest.isAutoComplete())) {
             dispose(c);
             return;
         }

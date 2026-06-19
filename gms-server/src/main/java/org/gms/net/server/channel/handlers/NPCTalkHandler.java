@@ -28,6 +28,8 @@ import org.gms.constants.id.MapId;
 import org.gms.constants.id.NpcId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.hook.InteractionHookManager;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +72,12 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
+
+                if (InteractionHookManager.handleNativeNpcClick(c, oid, npc.getId())) {
+                    return;
+                }
+
+                LifeProofQuest.onNpcTalk(c.getPlayer(), npc.getId());
 
                 // Custom handling to reduce the amount of scripts needed.
                 if (npc.getId() >= NpcId.GACHAPON_MIN && npc.getId() <= NpcId.GACHAPON_MAX) {

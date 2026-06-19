@@ -41,6 +41,7 @@ import org.gms.constants.skills.Magician;
 import org.gms.constants.skills.ThunderBreaker;
 import org.gms.constants.skills.Warrior;
 import org.gms.net.packet.InPacket;
+import org.gms.server.hpchallenge.HpChallengeService;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
@@ -559,6 +560,11 @@ public class AssignAPProcessor {
         c.lockClient();
         try {
             Character player = c.getPlayer();
+            if (HpChallengeService.blocksHpMpAp(player, APFrom, APTo)) {
+                player.message("你已锁定生命之证路线，不能再通过AP操作洗HP/MP。");
+                c.sendPacket(PacketCreator.enableActions());
+                return false;
+            }
 
             switch (APFrom) {
                 case 64 -> { // str
@@ -713,6 +719,12 @@ public class AssignAPProcessor {
     }
 
     private static boolean addStat(Character chr, int apTo, boolean usedAPReset) {
+        if (HpChallengeService.blocksHpMpAp(chr, apTo)) {
+            chr.message("你已锁定生命之证路线，不能再通过AP操作洗HP/MP。");
+            chr.sendPacket(PacketCreator.enableActions());
+            return false;
+        }
+
         int maxHp, maxMp;
         switch (apTo) {
             case 64 -> { // 力量(STR)

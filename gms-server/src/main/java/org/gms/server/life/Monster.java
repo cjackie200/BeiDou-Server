@@ -57,12 +57,14 @@ import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.StatEffect;
 import org.gms.server.TimerManager;
+import org.gms.server.hpchallenge.HpChallengeService;
 import org.gms.server.life.LifeFactory.BanishInfo;
 import org.gms.server.loot.LootManager;
 import org.gms.server.maps.AbstractAnimatedMapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Summon;
+import org.gms.server.quest.medal.VeteranHunterMedal;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -469,6 +471,12 @@ public class Monster extends AbstractLoadedLife {
             dispatchMonsterDamaged(from, trueDamage);
         }
 
+        // ========== 通知事件实例记录伤害 ==========
+        EventInstanceManager eim = getMap().getEventInstance();
+        if (eim != null && !fake) {
+            eim.addDamage(from, trueDamage);
+        }
+
         if (!takenDamage.containsKey(from.getId())) {
             takenDamage.put(from.getId(), new AtomicLong(trueDamage));
         } else {
@@ -610,6 +618,13 @@ public class Monster extends AbstractLoadedLife {
         Map<Character, Long> soloExpDist = new HashMap<>();
 
         Map<Integer, Character> mapPlayers = map.getMapAllPlayers();
+        Set<Integer> challengeParticipants = new HashSet<>();
+        for (Integer characterId : takenDamage.keySet()) {
+            Character chr = mapPlayers.get(characterId);
+            if (chr != null && challengeParticipants.add(chr.getId())) {
+                HpChallengeService.onMonsterKilled(chr, getId());
+            }
+        }
 
         int totalEntries = 0;   // counts "participant parties", players who no longer are available in the map is an "independent party"
         for (Entry<Integer, AtomicLong> e : takenDamage.entrySet()) {
@@ -765,6 +780,7 @@ public class Monster extends AbstractLoadedLife {
             attacker.gainExp(_personalExp, _partyExp, true, false, white);
             attacker.increaseEquipExp(_personalExp);
             attacker.raiseQuestMobCount(getId());
+            VeteranHunterMedal.onMonsterKilled(attacker, this);
         }
     }
 

@@ -46,7 +46,7 @@ spring:
 
 gms:
   service:
-    # zh-CN en-US
+    # 固定中文服，不支持运行时语言切换
     language: zh-CN
     rate-limit:
       # 是否开启限流

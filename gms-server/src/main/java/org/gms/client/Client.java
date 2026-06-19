@@ -61,6 +61,7 @@ import org.gms.scripting.npc.NPCConversationManager;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestActionManager;
 import org.gms.scripting.quest.QuestScriptManager;
+import org.gms.server.quest.hook.InteractionHookManager;
 import org.gms.server.MapleLeafLogger;
 import org.gms.server.ThreadManager;
 import org.gms.server.TimerManager;
@@ -105,6 +106,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     public static final int LOGIN_NOTLOGGEDIN = 0;
     public static final int LOGIN_SERVER_TRANSITION = 1;
     public static final int LOGIN_LOGGEDIN = 2;
+    public static final int FIXED_LANGUAGE = 3;
 
     private final Type type;
     private final long sessionId;
@@ -146,8 +148,9 @@ public class Client extends ChannelInboundHandlerAdapter {
     private int voteTime = -1;
     private int visibleWorlds;
     private long lastNpcClick;
+    private boolean skipNextNativeInteractionHook;
     private long lastPacket = System.currentTimeMillis();
-    private int lang = 0;
+    private int lang = FIXED_LANGUAGE;
     // 提供公共方法来获取 sysRescue
     @Getter
     private static SystemRescue sysRescue;
@@ -662,7 +665,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
 
         try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT id, password, gender, banned, pin, pic, characterslots, tos, language FROM accounts WHERE name = ?")) {
+             PreparedStatement ps = con.prepareStatement("SELECT id, password, gender, banned, pin, pic, characterslots, tos FROM accounts WHERE name = ?")) {
             ps.setString(1, login);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -680,7 +683,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                     pic = rs.getString("pic");
                     gender = rs.getByte("gender");
                     characterSlots = rs.getByte("characterslots");
-                    lang = rs.getInt("language");
+                    setLanguage(FIXED_LANGUAGE);
                     String passhash = rs.getString("password");
                     byte tos = rs.getByte("tos");
 
@@ -1588,6 +1591,16 @@ public class Client extends ChannelInboundHandlerAdapter {
         lastNpcClick = 0;
     }
 
+    public void markSkipNextNativeInteractionHook() {
+        skipNextNativeInteractionHook = true;
+    }
+
+    public boolean consumeSkipNextNativeInteractionHook() {
+        boolean skip = skipNextNativeInteractionHook;
+        skipNextNativeInteractionHook = false;
+        return skip;
+    }
+
     public int getVisibleWorlds() {
         return visibleWorlds;
     }
@@ -1601,6 +1614,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         this.removeClickedNPC();
         NPCScriptManager.getInstance().dispose(this);
         QuestScriptManager.getInstance().dispose(this);
+        InteractionHookManager.dispose(this);
     }
 
     public boolean attemptCsCoupon() {
@@ -1630,11 +1644,11 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public int getLanguage() {
-        return lang;
+        return FIXED_LANGUAGE;
     }
 
     public void setLanguage(int lingua) {
-        this.lang = lingua;
+        this.lang = FIXED_LANGUAGE;
     }
 
     /**

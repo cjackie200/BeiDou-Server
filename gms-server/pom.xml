@@ -35,6 +35,7 @@
 
         <!-- Maven plugins -->
         <spring-boot-maven-plugin>3.3.1</spring-boot-maven-plugin> <!-- Disabled. (for building thin jar) -->
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
 
         <!-- Dependencies -->
         <graalvm-js.version>23.0.4</graalvm-js.version>
@@ -241,6 +242,11 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

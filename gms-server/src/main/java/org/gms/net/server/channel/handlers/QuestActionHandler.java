@@ -23,11 +23,14 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.QuestStatus;
 import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.scripting.quest.QuestScriptManager;
+import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.life.NPC;
+import org.gms.server.quest.hook.InteractionHookManager;
 import org.gms.server.quest.Quest;
 import org.gms.util.I18nUtil;
 
@@ -68,6 +71,12 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         return true;
     }
 
+    private static boolean shouldOpenLifeProofEndScript(Character player, Quest quest, short questId) {
+        return player != null
+                && LifeProofQuest.isVisibleQuestId(questId)
+                && player.getQuest(quest).getStatus() == QuestStatus.Status.STARTED;
+    }
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte action = p.readByte();
@@ -86,6 +95,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 break;
             case 1: { // Start Quest
                 int npc = p.readInt();
+                if (InteractionHookManager.handleNativeQuestAction(c, questid, npc, action)) {
+                    return;
+                }
                 if (!isNpcNearby(p, player, quest, npc)) {
                     return;
                 }
@@ -102,30 +114,45 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             }
             case 2: { // Complete Quest
                 int npc = p.readInt();
-                if (!isNpcNearby(p, player, quest, npc)) {
+                if (InteractionHookManager.handleNativeQuestAction(c, questid, npc, action)) {
                     return;
                 }
-                if (quest.canComplete(player, npc)) {
-                    boolean success = QuestScriptManager.getInstance().checkFunctionExists(c, questid, npc, "end");
+                boolean lifeProofProgress = shouldOpenLifeProofEndScript(player, quest, questid);
+                boolean npcNearby = isNpcNearby(p, player, quest, npc);
+                if (!npcNearby && !lifeProofProgress) {
+                    return;
+                }
+                int scriptNpc = npcNearby ? npc : 0;
+                if (quest.canComplete(player, scriptNpc)) {
+                    boolean success = QuestScriptManager.getInstance().checkFunctionExists(c, questid, scriptNpc, "end");
                     boolean hasScriptRequirement = quest.hasScriptRequirement(true);
                     if (hasScriptRequirement && success) {
-                        QuestScriptManager.getInstance().end(c, questid, npc);
+                        QuestScriptManager.getInstance().end(c, questid, scriptNpc);
                     } else {
                         if (p.available() >= 2) {
                             int selection = p.readShort();
-                            quest.complete(player, npc, selection);
+                            quest.complete(player, scriptNpc, selection);
                         } else {
-                            quest.complete(player, npc);
+                            quest.complete(player, scriptNpc);
                         }
                     }
+                } else if (shouldOpenLifeProofEndScript(player, quest, questid)) {
+                    QuestScriptManager.getInstance().end(c, questid, scriptNpc);
                 }
                 break;
             }
             case 3: // forfeit quest
+                if (LifeProofQuest.isForfeitBlocked(questid)) {
+                    player.dropMessage(5, "生命之证任务不能放弃。");
+                    return;
+                }
                 quest.forfeit(player);
                 break;
             case 4: { // scripted start quest
                 int npc = p.readInt();
+                if (InteractionHookManager.handleNativeQuestAction(c, questid, npc, action)) {
+                    return;
+                }
                 if (!isNpcNearby(p, player, quest, npc)) {
                     return;
                 }
@@ -136,11 +163,17 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             }
             case 5: { // scripted end quests
                 int npc = p.readInt();
-                if (!isNpcNearby(p, player, quest, npc)) {
+                if (InteractionHookManager.handleNativeQuestAction(c, questid, npc, action)) {
                     return;
                 }
-                if (quest.canComplete(player, npc)) {
-                    QuestScriptManager.getInstance().end(c, questid, npc);
+                boolean lifeProofProgress = shouldOpenLifeProofEndScript(player, quest, questid);
+                boolean npcNearby = isNpcNearby(p, player, quest, npc);
+                if (!npcNearby && !lifeProofProgress) {
+                    return;
+                }
+                int scriptNpc = npcNearby ? npc : 0;
+                if (quest.canComplete(player, scriptNpc) || lifeProofProgress) {
+                    QuestScriptManager.getInstance().end(c, questid, scriptNpc);
                 }
                 break;
             }

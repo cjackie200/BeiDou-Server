@@ -14,8 +14,6 @@ package org.gms.constants.string;
  */
 
 import lombok.Getter;
-import org.gms.manager.ServerManager;
-import org.gms.property.ServiceProperty;
 
 import java.nio.charset.Charset;
 import java.util.Locale;
@@ -25,11 +23,11 @@ public class CharsetConstants {
     private static final Language SERVICE_LANGUAGE = loadServiceLanguage();
 
     public static Charset getCharset(int language) {
-        return Charset.forName(Language.fromLang(language).getCharset());
+        return Charset.forName(Language.LANGUAGE_CN.getCharset());
     }
 
     public static Locale getLanguageLocale(int language) {
-        return Locale.forLanguageTag(Language.fromLang(language).getLanguageTag());
+        return Locale.forLanguageTag(Language.LANGUAGE_CN.getLanguageTag());
     }
 
     public static boolean isZhCN() {
@@ -37,13 +35,7 @@ public class CharsetConstants {
     }
 
     private static Language loadServiceLanguage() {
-        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-        String language = serviceProperty.getLanguage();
-        if (language.equals("zh-CN")) {
-            return Language.LANGUAGE_CN;
-        } else {
-            return Language.LANGUAGE_US;
-        }
+        return Language.LANGUAGE_CN;
     }
 
     /**

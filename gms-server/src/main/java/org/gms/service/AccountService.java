@@ -36,6 +36,8 @@ import static org.gms.dao.entity.table.IpbansDOTableDef.IPBANS_D_O;
 @Service
 @AllArgsConstructor
 public class AccountService {
+    private static final int FIXED_LANGUAGE = 3;
+
     private final AccountsMapper accountsMapper;
     private final CharactersMapper charactersMapper;
     private final IpbansMapper ipbansMapper;
@@ -81,15 +83,13 @@ public class AccountService {
     }
 
     public void addAccount(AddAccountDTO submitData) throws NoSuchAlgorithmException {
-        // 防止swagger调用，后续的语言路由都受影响
-        RequireUtil.requireNotNull(submitData.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
         RequireUtil.requireNull(findByName(submitData.getName()), I18nUtil.getExceptionMessage("AccountService.addAccount.exception1"));
         AccountsDO account = AccountsDO.builder()
                 .name(submitData.getName())
                 .password(encryptPassword(submitData.getPassword()))
                 .birthday(submitData.getBirthday())
                 .tempban(Timestamp.valueOf(DefaultDates.getTempban()))
-                .language(submitData.getLanguage())
+                .language(FIXED_LANGUAGE)
                 .lastlogin(Timestamp.valueOf(DefaultDates.getTempban()))
                 .build();
         // 可以直接用insertSelective忽略null值
@@ -99,8 +99,6 @@ public class AccountService {
     public void updateAccountByUser(UpdateAccountByUserDTO submitData) throws NoSuchAlgorithmException {
         AccountsDO account = getCurrentUser();
         RequireUtil.requireTrue(checkPassword(submitData.getOldPwd(), account), I18nUtil.getExceptionMessage("AccountService.updateAccountByUser.oldPassword"));
-        // 防止swagger调用，后续的语言路由都受影响
-        RequireUtil.requireNotNull(submitData.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
 
         AccountsDO newData = new AccountsDO();
         newData.setId(account.getId());
@@ -112,7 +110,7 @@ public class AccountService {
         newData.setBirthday(submitData.getBirthday());
         newData.setNick(submitData.getNick());
         newData.setEmail(submitData.getEmail());
-        newData.setLanguage(submitData.getLanguage());
+        newData.setLanguage(FIXED_LANGUAGE);
 
         accountsMapper.update(newData);
     }
@@ -120,8 +118,6 @@ public class AccountService {
     public void updateAccountByGM(int id, UpdateAccountByGmDTO submitData) throws NoSuchAlgorithmException {
         AccountsDO account = findById(id);
         RequireUtil.requireNotNull(account, I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
-        // 防止swagger调用，后续的语言路由都受影响
-        RequireUtil.requireNotNull(account.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
         RequireUtil.requireFalse(account.getLoggedin() == LOGIN_LOGGEDIN, I18nUtil.getExceptionMessage("AccountService.isOnline"));
         if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
             account.setPassword(encryptPassword(submitData.getNewPwd()));
@@ -140,7 +136,7 @@ public class AccountService {
         account.setEmail(submitData.getEmail());
         account.setRewardpoints(submitData.getRewardpoints());
         account.setVotepoints(submitData.getVotepoints());
-        account.setLanguage(submitData.getLanguage());
+        account.setLanguage(FIXED_LANGUAGE);
 
         accountsMapper.update(account);
     }

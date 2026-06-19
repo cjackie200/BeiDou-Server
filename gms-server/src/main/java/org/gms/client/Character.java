@@ -78,6 +78,7 @@ import org.gms.server.life.*;
 import org.gms.server.maps.*;
 import org.gms.server.maps.MiniGame.MiniGameResult;
 import org.gms.server.minigame.RockPaperScissor;
+import org.gms.server.hpchallenge.HpChallengeService;
 import org.gms.server.partyquest.AriantColiseum;
 import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
@@ -1749,6 +1750,7 @@ public class Character extends AbstractCharacterObject {
             setPosition(pos);
             map.addPlayer(this);
             visitMap(map);
+            HpChallengeService.onMapChanged(this);
 
             prtLock.lock();
             try {
@@ -6507,7 +6509,7 @@ public class Character extends AbstractCharacterObject {
         AccountsDO accountsDO = accountService.findById(charactersDO.getAccountid());
         chr.getClient().setAccountName(accountsDO.getName());
         chr.getClient().setCharacterSlots(Optional.ofNullable(accountsDO.getCharacterslots()).map(Integer::byteValue).orElse((byte) 0));
-        chr.getClient().setLanguage(accountsDO.getLanguage());
+        chr.getClient().setLanguage(Client.FIXED_LANGUAGE);
 
         List<AreaInfoDO> areaInfoDOList = characterService.getAreaInfoByCharacter(charactersDO.getId());
         areaInfoDOList.forEach(areaInfoDO -> chr.getAreaInfos().put(Optional.ofNullable(areaInfoDO.getArea()).map(Integer::shortValue).orElse((short) 0),
