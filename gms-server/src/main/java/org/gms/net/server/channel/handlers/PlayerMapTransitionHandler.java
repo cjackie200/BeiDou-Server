@@ -27,6 +27,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapObject;
+import org.gms.server.quest.hook.InteractionHookPackets;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -44,6 +45,7 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
 
         Character chr = c.getPlayer();
         chr.setMapTransitionComplete();
+        InteractionHookPackets.sendMapNpcRules(c);
 
         int beaconid = chr.getBuffSource(BuffStat.HOMING_BEACON);
         if (beaconid != -1) {

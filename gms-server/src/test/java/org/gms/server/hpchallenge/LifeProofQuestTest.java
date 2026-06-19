@@ -125,6 +125,36 @@ class LifeProofQuestTest {
     }
 
     @Test
+    void customLifeProofCompletionUsesProgressGate() throws Exception {
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(resolveQuestXml("wz-zh-CN/Quest.wz/Check.img.xml").toFile());
+        int gated = 0;
+
+        for (LifeProofQuest.QuestMeta meta : LifeProofQuest.allVisibleQuests()) {
+            Element complete = childImgDir(topLevelImgDir(document, meta.questId()), "1");
+            if (requiresInfoExCompletionGate(meta)) {
+                gated++;
+                assertEquals(String.format("%03d", meta.objective().requiredCount()),
+                        childValue(complete, "infoex", "0", "string", "value"),
+                        "life proof custom progress quest must require progress before completion: "
+                                + meta.questId());
+                assertEquals("",
+                        childValue(complete, "int", "infoNumber"),
+                        "life proof custom progress quest should use its own quest progress by default: "
+                                + meta.questId());
+                continue;
+            }
+
+            if (meta.kind() != LifeProofQuest.QuestKind.REWARD) {
+                assertTrue(hasCompletionGate(complete),
+                        "visible life proof quest must not be completable by npc/script only: " + meta.questId());
+            }
+        }
+
+        assertEquals(161, gated, "life proof custom progress completion gate count");
+    }
+
+    @Test
     void baseWzDoesNotContainZhCnCustomQuestSeries() throws Exception {
         assertNoCustomQuestSeries(resolveQuestXml("wz/Quest.wz/QuestInfo.img.xml"));
         assertNoCustomQuestSeries(resolveQuestXml("wz/Quest.wz/Check.img.xml"));
@@ -312,6 +342,13 @@ class LifeProofQuestTest {
         return childValue(third, tagName, childName);
     }
 
+    private static String childValue(Element parent, String firstImgDir, String secondImgDir,
+                                     String tagName, String childName) {
+        Element first = childImgDir(parent, firstImgDir);
+        Element second = childImgDir(first, secondImgDir);
+        return childValue(second, tagName, childName);
+    }
+
     private static Element childImgDir(Element parent, String childName) {
         NodeList children = parent.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
@@ -344,6 +381,32 @@ class LifeProofQuestTest {
             }
         }
         return false;
+    }
+
+    private static boolean hasCompletionGate(Element complete) {
+        return childImgDirOrNull(complete, "mob") != null
+                || childImgDirOrNull(complete, "item") != null
+                || childImgDirOrNull(complete, "infoex") != null
+                || !childValue(complete, "int", "money").isEmpty();
+    }
+
+    private static boolean requiresInfoExCompletionGate(LifeProofQuest.QuestMeta meta) {
+        return switch (meta.objective().type()) {
+            case NPC_TALK, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION -> true;
+            default -> false;
+        };
+    }
+
+    private static Element childImgDirOrNull(Element parent, String childName) {
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child
+                    && "imgdir".equals(child.getTagName())
+                    && childName.equals(child.getAttribute("name"))) {
+                return child;
+            }
+        }
+        return null;
     }
 
     private static Path resolveQuestXml(String relativePath) {

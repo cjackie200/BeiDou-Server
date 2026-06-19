@@ -26,6 +26,20 @@ public final class InteractionHookManager {
             sendResult(client, 0, InteractionHookResultCode.ERROR);
             return true;
         }
+        log.info(
+                "InteractionHook event player={} requestId={} eventType={} targetType={} targetId={} objectId={} npcId={} questId={} questState={} rawAction={} selection={}",
+                client.getPlayer() == null ? "?" : client.getPlayer().getName(),
+                event.requestId(),
+                event.eventType(),
+                event.targetType(),
+                event.targetId(),
+                event.objectId(),
+                event.clientNpcId(),
+                event.questId(),
+                event.questState(),
+                event.rawAction(),
+                event.selection()
+        );
         return handleEvent(client, event);
     }
 
@@ -65,6 +79,10 @@ public final class InteractionHookManager {
 
         InteractionHookContext context = CONTEXTS.get(client);
         if (context != null) {
+            if (context.dialogState() == InteractionHookProtocol.DIALOG_STATE_OPEN) {
+                context.close();
+                return true;
+            }
             InteractionHookProvider provider = InteractionHookRegistry.provider(context.questId());
             if (provider == null) {
                 dispose(client);
@@ -91,7 +109,8 @@ public final class InteractionHookManager {
             return;
         }
         CONTEXTS.remove(client);
-        InteractionHookPackets.sendRules(client);
+        InteractionHookPackets.sendCharacterQuestRules(client);
+        InteractionHookPackets.clearDialogTempRules(client);
     }
 
     private static boolean handleEvent(Client client, InteractionHookEvent event) {
@@ -129,6 +148,11 @@ public final class InteractionHookManager {
     private static boolean handleDialogSelectionEvent(Client client, InteractionHookEvent event) {
         InteractionHookContext context = CONTEXTS.get(client);
         if (context != null) {
+            if (context.dialogState() == InteractionHookProtocol.DIALOG_STATE_OPEN) {
+                context.close();
+                sendResult(client, event.requestId(), InteractionHookResultCode.HANDLED_DIALOG);
+                return true;
+            }
             InteractionHookProvider provider = InteractionHookRegistry.provider(context.questId());
             if (provider == null) {
                 sendResult(client, event.requestId(), InteractionHookResultCode.ERROR);
@@ -193,11 +217,16 @@ public final class InteractionHookManager {
 
     private static boolean fallbackOriginal(Client client, int requestId) {
         client.markSkipNextNativeInteractionHook();
+        InteractionHookPackets.clearDialogTempRules(client);
         sendResult(client, requestId, InteractionHookResultCode.FALLBACK_ORIGINAL);
         return true;
     }
 
     private static void sendResult(Client client, int requestId, InteractionHookResultCode resultCode) {
+        log.info("InteractionHook result player={} requestId={} result={}",
+                client == null || client.getPlayer() == null ? "?" : client.getPlayer().getName(),
+                requestId,
+                resultCode);
         InteractionHookPackets.sendResult(client, requestId, resultCode);
     }
 

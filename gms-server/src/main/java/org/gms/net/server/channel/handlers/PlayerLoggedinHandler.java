@@ -463,7 +463,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (GameConfig.getServerBoolean("use_npcs_scriptable")) {
                 c.sendPacket(PacketCreator.setNPCScriptable(MonsterCardRingQuest.getScriptableNpcIds(player)));
             }
-            InteractionHookPackets.sendRules(c);
+            InteractionHookPackets.sendInitialRules(c);
 
             if (newcomer) {
                 player.setLoginTime(System.currentTimeMillis());

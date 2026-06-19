@@ -87,6 +87,25 @@ public final class MonsterCardRingQuest {
         return questIds;
     }
 
+    public static List<Integer> getHookQuestIds(Character chr) {
+        if (chr == null) {
+            return getAllQuestIds();
+        }
+        syncQuestStateSilently(chr);
+        List<Integer> questIds = new ArrayList<>();
+        for (short questId = CLAIM_QUEST_ID; questId <= LAST_QUEST_ID; questId++) {
+            if (chr.getQuestStatus(questId) != QuestStatus.Status.NOT_STARTED.getId()) {
+                questIds.add((int) questId);
+            }
+        }
+        resolveCurrentQuestId(chr).ifPresent(questId -> {
+            if (!questIds.contains(questId)) {
+                questIds.add(questId);
+            }
+        });
+        return questIds;
+    }
+
     public static List<Integer> getHookNpcIds(Character chr) {
         return List.of(NPC_ID);
     }
@@ -141,7 +160,7 @@ public final class MonsterCardRingQuest {
         }
         if (isUpgradeQuest(questId)) {
             UpgradeValidation validation = validateUpgrade(chr);
-            if (validation.isOk() && context.action() == InteractionHookAction.QUERY_COMPLETE) {
+            if (validation.isOk()) {
                 context.sendYesNo(upgradePrompt(validation));
                 return;
             }

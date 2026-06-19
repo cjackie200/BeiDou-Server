@@ -30,9 +30,12 @@ import org.gms.net.packet.InPacket;
 import org.gms.scripting.quest.QuestScriptManager;
 import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.life.NPC;
-import org.gms.server.quest.hook.InteractionHookManager;
+import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.Quest;
+import org.gms.server.quest.hook.InteractionHookManager;
 import org.gms.util.I18nUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 
@@ -40,6 +43,7 @@ import java.awt.*;
  * @author Matze
  */
 public final class QuestActionHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(QuestActionHandler.class);
 
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, Character player, Quest quest, int npcId) {
@@ -77,6 +81,17 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 && player.getQuest(quest).getStatus() == QuestStatus.Status.STARTED;
     }
 
+    private static boolean handleInteractionHook(Client c, short questId, int npcId, byte action) {
+        boolean handled = InteractionHookManager.handleNativeQuestAction(c, questId, npcId, action);
+        Character player = c.getPlayer();
+        if (player != null && (LifeProofQuest.isVisibleQuestId(questId)
+                || MonsterCardRingQuest.isMonsterCardRingQuest(questId))) {
+            log.info("Native QUEST_ACTION player={} action={} questId={} npcId={} hookHandled={}",
+                    player.getName(), action, questId, npcId, handled);
+        }
+        return handled;
+    }
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte action = p.readByte();
@@ -95,7 +110,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 break;
             case 1: { // Start Quest
                 int npc = p.readInt();
-                if (InteractionHookManager.handleNativeQuestAction(c, questid, npc, action)) {
+                if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
                 if (!isNpcNearby(p, player, quest, npc)) {
@@ -114,7 +129,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             }
             case 2: { // Complete Quest
                 int npc = p.readInt();
-                if (InteractionHookManager.handleNativeQuestAction(c, questid, npc, action)) {
+                if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
                 boolean lifeProofProgress = shouldOpenLifeProofEndScript(player, quest, questid);
@@ -150,7 +165,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 break;
             case 4: { // scripted start quest
                 int npc = p.readInt();
-                if (InteractionHookManager.handleNativeQuestAction(c, questid, npc, action)) {
+                if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
                 if (!isNpcNearby(p, player, quest, npc)) {
@@ -163,7 +178,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             }
             case 5: { // scripted end quests
                 int npc = p.readInt();
-                if (InteractionHookManager.handleNativeQuestAction(c, questid, npc, action)) {
+                if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
                 boolean lifeProofProgress = shouldOpenLifeProofEndScript(player, quest, questid);
