@@ -199,17 +199,9 @@ public final class LifeProofQuest {
     }
 
     public static List<Integer> getHookQuestIds(Character chr) {
-        if (chr == null) {
-            return visibleQuestIds();
-        }
-        Set<Integer> questIds = new LinkedHashSet<>();
-        for (QuestMeta meta : QUESTS.values()) {
-            if (meta.isVisible() && chr.getQuestStatus(meta.questId()) != QuestStatus.Status.NOT_STARTED.getId()) {
-                questIds.add(meta.questId());
-            }
-        }
-        resolveCurrentQuestId(chr).ifPresent(questIds::add);
-        return List.copyOf(questIds);
+        return resolveCurrentQuestId(chr)
+                .map(List::of)
+                .orElseGet(List::of);
     }
 
     public static List<Integer> getCurrentInstructorNpcIds(Character chr) {
@@ -370,7 +362,7 @@ public final class LifeProofQuest {
         context.sendOk(resultMessage(result));
     }
 
-    static boolean canOpenProgressAtNpc(int questId, int npcId) {
+    public static boolean canOpenProgressAtNpc(int questId, int npcId) {
         QuestMeta meta = QUESTS.get(questId);
         if (meta == null || !meta.isVisible() || npcId <= 0) {
             return false;

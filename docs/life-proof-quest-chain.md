@@ -102,23 +102,32 @@ T1 拜访一转教官时，自己的教官排在最后。例如战士顺序是�
 当前任务已经领取但尚未完成时，再次点击任务条目的打开书本图标，不允许落到客户端本地默认文本。
 生命之证必须接管进行中对话，让玩家看到当前任务上下文、完成进度和下一步行动。
 
-客户端 `ijl15` 使用 `InteractionHook v4` 接管 NPC 点击、NPC 对话选项点击和任务状态点击。
-命中服务端下发 rules 后，客户端改发 `CUSTOM_PACKET(0x3713)` 的
+客户端 `ijl15` 使用 `InteractionHook v4` 接管任务状态点击。命中服务端下发 rules 后，客户端改发
+`CUSTOM_PACKET(0x3713)` 的
 `C2S_INTERACTION_HOOK_EVENT(0x1003)`，并阻止原生点击逻辑；未命中或服务端返回
 `FALLBACK_ORIGINAL` 时，原生逻辑继续执行。服务端由 `InteractionHookManager` 接管对话上下文，
 后续 `NPC_TALK_MORE` 确认、取消和关闭都回到 Hook 管理器。是否真正可以提交仍由
 `LifeProofQuest.complete()` 调用 `Quest.canComplete()` 做最终校验。
 进行中任务的打开书本入口属于客户端本地任务条目点击，可能不会先发出原生 `QUEST_ACTION`；
 `ijl15` 必须在客户端读取本地 `Quest/Say.img` 或 NPC 默认文本前完成本地点击 Hook，命中后直接
-转发给服务端生成生命之证当前任务对话。
-生命之证是线性任务链，服务端下发 rules 时只把当前角色已有状态、当前可接或进行中的
-`QUEST_ACTION` 任务放入 `CHARACTER_QUEST_RULES`；普通 NPC 点击不下发生命之证规则。
+转发给服务端生成生命之证当前任务对话。本地任务条目点击必须先判断 `InteractionHook` rules，
+命中后优先发送 Hook 事件；普通 NPC 对话关闭后留下的一次性抑制状态不能吞掉合法任务入口点击。
+生命之证是线性任务链，服务端下发 rules 时只把当前角色唯一当前任务放入
+`CHARACTER_QUEST_RULES`；已完成任务、未来任务和非当前阶段任务不下发。普通 NPC 点击不下发
+生命之证规则。
 不允许把 645 个可见任务一次性下发给客户端。超出单包上限时必须由 v4 分批下发，客户端收齐后
 再替换 active rules，避免本地任务点击回退到客户端默认任务文本。
 
 生命之证不拦截普通 `NPC_TALK(0x003A)` 和旧自定义菜单选择项。点击一转教官的普通对话、
 其他入口、职业转职文本、商店和其他 NPC 功能必须保持原逻辑。普通双击 NPC 不允许写入
 生命之证进度，也不允许完成生命之证任务。
+生命之证自定义 Hook 事件必须来自 `DIALOG_CONTEXT_QUEST` 的当前任务条目；`DIALOG_CONTEXT_NPC`、
+`DIALOG_CONTEXT_NONE`、错误 NPC、非当前任务、未来任务和非法 action 一律返回 `REJECTED`，
+不得 fallback 重放原始点击。普通 NPC 对话关闭后，客户端会进入一次性抑制状态；尾随的
+生命之证原生 `QUEST_ACTION` 由服务端消费并提示“请通过生命之证任务入口继续。”，不能进入
+原生 `quest.start`、`quest.complete` 或 `QuestScriptManager.end`。该抑制状态只保护未命中
+Hook rule 的尾随原生包；已经命中 `CHARACTER_QUEST_RULES` 的本地任务入口点击必须一次进入
+生命之证 Hook 对话。
 
 T1 拜访教官任务拆开“领取 NPC”和“完成 NPC”：玩家从本职业一转教官领取任务，目标导师 NPC
 显示原生任务完成图标或书本。玩家点击目标导师的任务入口后，由 `QUEST_ACTION` Hook 展示生命之证

@@ -7,7 +7,7 @@
 - 规则按作用域拆成全部清理、角色任务、当前地图 NPC、临时对话四类。
 - 每个业务作用域独立分批下发，客户端收齐完整批次后原子替换对应作用域。
 - `ALL_RULES` 只用于清空，防止切频道、重登、断线后的旧规则残留。
-- 生命之证只走任务条目 `QUEST_ACTION`，普通 NPC 点击保持原逻辑。
+- 生命之证只走当前唯一任务条目 `QUEST_ACTION`，普通 NPC 点击保持原逻辑。
 - 地图 NPC Hook 只按当前地图存在的 NPC 下发。
 
 ## 协议
@@ -78,7 +78,8 @@ selectionId
 
 规则生成：
 
-- `CHARACTER_QUEST_RULES` 只包含当前角色已有状态、当前可接、当前进行中的 `QUEST_ACTION` 规则。
+- `CHARACTER_QUEST_RULES` 中生命之证只包含当前角色唯一当前任务；已完成、未来和非当前阶段生命之证任务不下发。
+  其他任务系列仍按各自 provider 生成当前需要的 `QUEST_ACTION` 规则。
 - `MAP_NPC_RULES` 只遍历当前 `chr.getMap().getMapObjects()` 中的 `MapObjectType.NPC`，provider 只能为这些 NPC 生成 `NPC_CLICK` rule。
 - `DIALOG_TEMP_RULES` 本轮只实现协议能力和清理能力，不接入任何业务临时规则。
 
@@ -93,7 +94,10 @@ selectionId
 
 业务接入：
 
-- 生命之证不生成 `NPC_CLICK` 或旧菜单 selection rule，只生成 `CHARACTER_QUEST_RULES` 的 `QUEST_ACTION` rule。
+- 生命之证不生成 `NPC_CLICK` 或旧菜单 selection rule，只生成当前唯一任务的
+  `CHARACTER_QUEST_RULES` `QUEST_ACTION` rule。生命之证自定义事件必须携带
+  `dialogContext=DIALOG_CONTEXT_QUEST`；普通 NPC 对话、旧菜单、普通 NPC 对话关闭后的尾随
+  `QUEST_ACTION` 和原生生命之证任务包都不能推进任务。
 - 怪物卡戒指任务规则进入 `CHARACTER_QUEST_RULES`。
 - 特安可 NPC 点击规则进入 `MAP_NPC_RULES`，且仅在当前地图存在特安可时下发。
 - 怪物卡戒指旧长期 `selectionRule(MENU_SELECTION_ID)` 本轮移除，不再下发。
@@ -108,6 +112,13 @@ selectionId
 - 5 秒未收齐的 pending batch 丢弃，继续使用旧 active rules。
 - v4 普通 scope 替换不清 active pending。
 - `SET_FIELD` 只清空旧地图 `objectId -> npcId` 映射，不清角色任务规则。
+- 客户端普通 NPC 对话关闭后进入一次性抑制状态；抑制状态不因 `STAT_CHANGED enableActions` 清除，
+  只在放行一条匹配的尾随 `QUEST_ACTION` 或匹配忽略超时后清除。
+- 本地任务条目点击必须先按 active rules 判断 `QUEST_ACTION` Hook。命中
+  `CHARACTER_QUEST_RULES` 时优先发送 Hook 事件，并清理普通 NPC 对话留下的抑制状态；未命中时才
+  继续使用抑制状态保护尾随原生包。
+- Outgoing `QUEST_ACTION` 包路径仍然先执行抑制状态保护，不使用本地任务条目点击的优先级，避免
+  普通 NPC 对话关闭后的尾随原生包绕过保护。
 
 ## 验收
 

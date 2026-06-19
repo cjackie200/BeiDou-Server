@@ -258,8 +258,13 @@ pending 行为：
 
 生命之证：
 
-- 任务可领取、进行中、可完成入口都通过 `QUEST_ACTION` 接入 Hook。
+- 当前唯一可领取、进行中或可完成任务入口通过 `QUEST_ACTION` 接入 Hook；已完成、未来和非当前阶段
+  生命之证任务不下发 Hook rule。
 - 普通一转教官 NPC 点击、其他入口和职业相关对话不接入生命之证 Hook，必须保持原逻辑。
+- 生命之证自定义事件必须来自 `DIALOG_CONTEXT_QUEST`；普通 NPC 对话、旧菜单选择和普通 NPC 对话
+  关闭后的尾随 `QUEST_ACTION` 都不能推进生命之证。
+- 原生生命之证 `QUEST_ACTION` 包由 `QuestActionHandler` 消费并提示重新通过任务入口继续，不允许
+  落入原生 `quest.start`、`quest.complete` 或 `QuestScriptManager.end`。
 - 进行中对话显示当前阶段、目标、进度、下一步。
 - 不允许落到职业导师默认文本。
 - 不再使用 `4033011` 作为任务完成绕路道具。

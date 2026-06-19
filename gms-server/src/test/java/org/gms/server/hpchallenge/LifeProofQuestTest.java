@@ -58,6 +58,11 @@ class LifeProofQuestTest {
     }
 
     @Test
+    void lifeProofHookRulesDoNotFallBackToFullQuestListWithoutCurrentCharacter() {
+        assertTrue(LifeProofQuest.getHookQuestIds(null).isEmpty());
+    }
+
+    @Test
     void firstStageNpcTalkQuestsCompleteAtTargetInstructor() throws Exception {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(resolveQuestXml("wz-zh-CN/Quest.wz/Check.img.xml").toFile());

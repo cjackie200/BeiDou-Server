@@ -4,6 +4,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.constants.id.NpcId;
 import org.gms.net.packet.InPacket;
+import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.life.NPC;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
@@ -28,7 +29,7 @@ public final class InteractionHookManager {
             return true;
         }
         log.info(
-                "InteractionHook event player={} requestId={} eventType={} targetType={} targetId={} objectId={} npcId={} questId={} questState={} rawAction={} selection={}",
+                "InteractionHook event player={} requestId={} eventType={} targetType={} targetId={} objectId={} npcId={} questId={} questState={} rawAction={} selection={} dialogContext={} dialogState={}",
                 client.getPlayer() == null ? "?" : client.getPlayer().getName(),
                 event.requestId(),
                 event.eventType(),
@@ -39,7 +40,9 @@ public final class InteractionHookManager {
                 event.questId(),
                 event.questState(),
                 event.rawAction(),
-                event.selection()
+                event.selection(),
+                event.dialogContext(),
+                event.dialogState()
         );
         return handleEvent(client, event);
     }
@@ -189,12 +192,45 @@ public final class InteractionHookManager {
     private static boolean handleQuestActionEvent(Client client, InteractionHookEvent event) {
         int questId = event.resolvedQuestId();
         InteractionHookAction action = event.questAction();
+        if (LifeProofQuest.isVisibleQuestId(questId)) {
+            return handleLifeProofQuestActionEvent(client, event, questId, action);
+        }
+
         if (questId <= 0 || action == null || !InteractionHookRegistry.hasQuestHook(client.getPlayer(), questId, action)) {
             return fallbackOriginal(client, event.requestId());
         }
 
         int npcId = event.resolvedNpcId();
         return open(client, event, questId, npcId, action, true);
+    }
+
+    private static boolean handleLifeProofQuestActionEvent(Client client, InteractionHookEvent event, int questId,
+                                                           InteractionHookAction action) {
+        if (!isValidLifeProofQuestEvent(client.getPlayer(), event, questId, action)) {
+            return reject(client, event.requestId());
+        }
+
+        int npcId = event.resolvedNpcId();
+        return open(client, event, questId, npcId, action, true);
+    }
+
+    static boolean isValidLifeProofQuestEvent(Character chr, InteractionHookEvent event, int questId,
+                                              InteractionHookAction action) {
+        if (chr == null || questId <= 0 || !isLifeProofQuestEventSourceValid(event, action)) {
+            return false;
+        }
+        if (!LifeProofQuest.resolveCurrentQuestId(chr).filter(current -> current == questId).isPresent()) {
+            return false;
+        }
+        return LifeProofQuest.canOpenProgressAtNpc(questId, event.resolvedNpcId());
+    }
+
+    static boolean isLifeProofQuestEventSourceValid(InteractionHookEvent event, InteractionHookAction action) {
+        if (event == null || action == null) {
+            return false;
+        }
+        return event.eventType() == InteractionHookProtocol.EVENT_QUEST_ACTION
+                && event.dialogContext() == InteractionHookProtocol.DIALOG_CONTEXT_QUEST;
     }
 
     private static boolean open(Client client, InteractionHookEvent event, int questId, int npcId,
@@ -208,7 +244,7 @@ public final class InteractionHookManager {
         }
 
         int requestId = event == null ? 0 : event.requestId();
-        InteractionHookContext context = new InteractionHookContext(client, requestId, questId, npcId, action);
+        InteractionHookContext context = new InteractionHookContext(client, requestId, questId, npcId, action, event);
         boolean preAckSent = false;
         try {
             context.closeNativeScripts();
@@ -233,6 +269,12 @@ public final class InteractionHookManager {
         client.markSkipNextNativeInteractionHook();
         InteractionHookPackets.clearDialogTempRules(client);
         sendResult(client, requestId, InteractionHookResultCode.FALLBACK_ORIGINAL);
+        return true;
+    }
+
+    private static boolean reject(Client client, int requestId) {
+        InteractionHookPackets.clearDialogTempRules(client);
+        sendResult(client, requestId, InteractionHookResultCode.REJECTED);
         return true;
     }
 

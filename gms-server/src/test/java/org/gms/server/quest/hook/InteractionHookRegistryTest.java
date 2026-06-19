@@ -26,7 +26,7 @@ class InteractionHookRegistryTest {
                 .filter(rule -> rule.eventMask() == InteractionHookProtocol.EVENT_MASK_QUEST_ACTION)
                 .collect(Collectors.toMap(InteractionHookRule::questId, rule -> rule));
 
-        assertEquals(InteractionHookAction.ALL_MASK, questRules.get(LifeProofQuest.FIRST_QUEST_ID).actionMask());
+        assertFalse(questRules.containsKey(LifeProofQuest.FIRST_QUEST_ID));
         assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) MonsterCardRingQuest.CLAIM_QUEST_ID).actionMask());
         assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) MonsterCardRingQuest.LAST_QUEST_ID).actionMask());
         assertFalse(questRules.containsKey(1000));
@@ -169,6 +169,28 @@ class InteractionHookRegistryTest {
                 instructorContext));
     }
 
+    @Test
+    void lifeProofQuestEventsOnlyAcceptQuestDialogContext() {
+        InteractionHookEvent valid = event(1, InteractionHookProtocol.EVENT_QUEST_ACTION,
+                InteractionHookProtocol.TARGET_QUEST, LifeProofQuest.FIRST_QUEST_ID, 0, 1032001,
+                LifeProofQuest.FIRST_QUEST_ID, -1, 5, InteractionHookProtocol.DIALOG_CONTEXT_QUEST);
+        InteractionHookEvent npcDialog = event(2, InteractionHookProtocol.EVENT_QUEST_ACTION,
+                InteractionHookProtocol.TARGET_QUEST, LifeProofQuest.FIRST_QUEST_ID, 0, 1032001,
+                LifeProofQuest.FIRST_QUEST_ID, -1, 5, InteractionHookProtocol.DIALOG_CONTEXT_NPC);
+        InteractionHookEvent noDialog = event(3, InteractionHookProtocol.EVENT_QUEST_ACTION,
+                InteractionHookProtocol.TARGET_QUEST, LifeProofQuest.FIRST_QUEST_ID, 0, 1032001,
+                LifeProofQuest.FIRST_QUEST_ID, -1, 5, InteractionHookProtocol.DIALOG_CONTEXT_NONE);
+        InteractionHookEvent wrongEventType = event(4, InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION,
+                InteractionHookProtocol.TARGET_DIALOG_SELECTION, 0, 0, 1032001,
+                LifeProofQuest.FIRST_QUEST_ID, 0, 5, InteractionHookProtocol.DIALOG_CONTEXT_QUEST);
+
+        assertTrue(InteractionHookManager.isLifeProofQuestEventSourceValid(valid, InteractionHookAction.QUERY_PROGRESS));
+        assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(npcDialog, InteractionHookAction.QUERY_PROGRESS));
+        assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(noDialog, InteractionHookAction.QUERY_PROGRESS));
+        assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(wrongEventType, InteractionHookAction.QUERY_PROGRESS));
+        assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(valid, null));
+    }
+
     private static void assertRuleHeader(Packet packet, int scope, int batchId, int batchIndex, int batchCount,
                                          int replaceMode, int ruleCount) {
         byte[] bytes = packet.getBytes();
@@ -201,9 +223,15 @@ class InteractionHookRegistryTest {
 
     private static InteractionHookEvent event(int requestId, int eventType, int targetType, int targetId, int objectId,
                                               int npcId, int questId, int selection) {
+        return event(requestId, eventType, targetType, targetId, objectId, npcId, questId, selection, 0,
+                InteractionHookProtocol.DIALOG_CONTEXT_NONE);
+    }
+
+    private static InteractionHookEvent event(int requestId, int eventType, int targetType, int targetId, int objectId,
+                                              int npcId, int questId, int selection, int rawAction, int dialogContext) {
         return new InteractionHookEvent(requestId, eventType, targetType, targetId, objectId, npcId, questId,
-                InteractionHookProtocol.QUEST_STATE_NONE, 0, selection,
-                InteractionHookProtocol.DIALOG_CONTEXT_NONE, InteractionHookProtocol.DIALOG_STATE_NONE, 0);
+                InteractionHookProtocol.QUEST_STATE_NONE, rawAction, selection,
+                dialogContext, InteractionHookProtocol.DIALOG_STATE_NONE, 0);
     }
 
     private static final class CapturingClient extends Client {
