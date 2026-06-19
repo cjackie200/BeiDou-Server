@@ -10,10 +10,10 @@ import org.gms.util.PacketCreator;
 public final class InteractionHookContext {
     private final Client client;
     private final int requestId;
-    private final int questId;
-    private final int sourceNpcId;
-    private final int displayNpcId;
-    private final InteractionHookAction action;
+    private int questId;
+    private int sourceNpcId;
+    private int displayNpcId;
+    private InteractionHookAction action;
     private final int eventType;
     private final int sourceDialogContext;
     private final int sourceDialogState;
@@ -93,6 +93,13 @@ public final class InteractionHookContext {
 
     public void resetVisibleDialogSent() {
         visibleDialogSent = false;
+    }
+
+    public void switchQuest(int questId, int sourceNpcId, InteractionHookAction action) {
+        this.questId = questId;
+        this.sourceNpcId = sourceNpcId;
+        this.displayNpcId = sourceNpcId > 0 ? sourceNpcId : NpcId.MAPLE_ADMINISTRATOR;
+        this.action = action;
     }
 
     public void sendOk(String text) {

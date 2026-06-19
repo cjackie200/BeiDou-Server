@@ -138,8 +138,13 @@ public final class LifeProofQuest {
         if (chr == null || npcId <= 0) {
             return 0;
         }
+        HpChallengeService.JobBranch branch = lifeProofBranch(chr);
+        if (branch == null) {
+            return 0;
+        }
         return QUESTS.values().stream()
                 .filter(QuestMeta::isVisible)
+                .filter(meta -> meta.branch() == branch)
                 .filter(meta -> canOpenStartedQuestAtNpc(meta, npcId))
                 .filter(meta -> chr.getQuestStatus(meta.questId()) == QuestStatus.Status.STARTED.getId())
                 .mapToInt(QuestMeta::questId)
@@ -156,12 +161,11 @@ public final class LifeProofQuest {
             return 0;
         }
         HpChallengeService.JobBranch branch = HpChallengeService.branch(chr.getJob());
-        BranchInfo branchInfo = BRANCH_INFO.get(branch);
-        if (branchInfo == null || branchInfo.instructorNpcId() != npcId || currentStartedVisibleQuest(chr) != null) {
+        if (BRANCH_INFO.get(branch) == null || currentStartedVisibleQuest(chr) != null) {
             return 0;
         }
         QuestMeta next = nextAvailableQuest(chr, branch);
-        if (next == null || !canOpenProgressAtNpc(next.questId(), npcId)) {
+        if (next == null || startNpcId(next) != npcId) {
             return 0;
         }
         return next.questId();
@@ -335,6 +339,7 @@ public final class LifeProofQuest {
             quest.forceStart(chr, npcId);
             quest.forceComplete(chr, npcId);
             Quest.getInstance(selectedQuest).forceStart(chr, npcId);
+            sendNextQuestUpdate(chr, meta.questId(), npcId, selectedQuest);
             onStarted(chr, selectedQuest);
             context.sendOk(selectedMessage(result));
             return;
@@ -358,6 +363,13 @@ public final class LifeProofQuest {
         String result = complete(chr, meta.questId(), npcId);
         if (isOkResult(result)) {
             Quest.getInstance(meta.questId()).forceComplete(chr, npcId);
+            QuestMeta next = nextContinuationAtNpc(chr, meta, npcId);
+            if (next != null) {
+                sendNextQuestUpdate(chr, meta.questId(), npcId, next.questId());
+                context.switchQuest(next.questId(), npcId, resolveCurrentAction(chr, next.questId()));
+                openHook(context);
+                return;
+            }
         }
         context.sendOk(resultMessage(result));
     }
@@ -691,6 +703,19 @@ public final class LifeProofQuest {
     }
 
     static int startNpcId(QuestMeta meta) {
+        if (meta == null) {
+            return 0;
+        }
+        if (isFirstStageVisitQuest(meta) && meta.slot() > MAIN_SLOT_START) {
+            QuestMeta previous = previousVisibleQuest(meta);
+            if (previous != null && isFirstStageVisitQuest(previous)) {
+                return completeNpcId(previous);
+            }
+        }
+        return branchInstructorNpcId(meta);
+    }
+
+    static int branchInstructorNpcId(QuestMeta meta) {
         return BRANCH_INFO.get(meta.branch()).instructorNpcId();
     }
 
@@ -711,6 +736,17 @@ public final class LifeProofQuest {
 
     static boolean isNpcTalkVisitQuest(QuestMeta meta) {
         return meta != null && meta.isVisible() && meta.objective().type() == ObjectiveType.NPC_TALK;
+    }
+
+    static int staticNextQuestId(QuestMeta meta) {
+        if (meta == null || meta.kind() != QuestKind.MAIN) {
+            return 0;
+        }
+        QuestMeta next = nextVisibleQuest(meta);
+        if (next == null || next.kind() != QuestKind.MAIN && next.kind() != QuestKind.SELECTOR) {
+            return 0;
+        }
+        return next.questId();
     }
 
     private static boolean canOpenStartedQuestAtNpc(QuestMeta meta, int npcId) {
@@ -771,8 +807,13 @@ public final class LifeProofQuest {
         if (chr == null || visibleQuestEntry == null) {
             return;
         }
+        HpChallengeService.JobBranch branch = lifeProofBranch(chr);
+        if (branch == null) {
+            return;
+        }
         QuestMeta active = QUESTS.values().stream()
                 .filter(meta -> meta.isVisible() && meta.objective().isCollection())
+                .filter(meta -> meta.branch() == branch)
                 .filter(meta -> chr.getQuestStatus(meta.questId()) == QuestStatus.Status.STARTED.getId())
                 .filter(meta -> meta.objective().targetIds().contains(mobId))
                 .findFirst()
@@ -803,8 +844,13 @@ public final class LifeProofQuest {
         if (chr == null) {
             return;
         }
+        HpChallengeService.JobBranch branch = lifeProofBranch(chr);
+        if (branch == null) {
+            return;
+        }
         QuestMeta active = QUESTS.values().stream()
                 .filter(meta -> meta.isVisible())
+                .filter(meta -> meta.branch() == branch)
                 .filter(meta -> meta.objective().type() == ObjectiveType.KILL
                         || meta.objective().type() == ObjectiveType.BOSS)
                 .filter(meta -> meta.objective().targetIds().size() > 1)
@@ -1134,8 +1180,13 @@ public final class LifeProofQuest {
         if (chr == null) {
             return null;
         }
+        HpChallengeService.JobBranch branch = lifeProofBranch(chr);
+        if (branch == null) {
+            return null;
+        }
         return QUESTS.values().stream()
                 .filter(meta -> meta.isVisible() && meta.objective().isCustomProgress())
+                .filter(meta -> meta.branch() == branch)
                 .filter(meta -> chr.getQuestStatus(meta.questId()) == QuestStatus.Status.STARTED.getId())
                 .findFirst()
                 .orElse(null);
@@ -1145,24 +1196,40 @@ public final class LifeProofQuest {
         if (chr == null) {
             return null;
         }
+        HpChallengeService.JobBranch branch = lifeProofBranch(chr);
+        if (branch == null) {
+            return null;
+        }
         return QUESTS.values().stream()
                 .filter(QuestMeta::isVisible)
+                .filter(meta -> meta.branch() == branch)
                 .filter(meta -> chr.getQuestStatus(meta.questId()) == QuestStatus.Status.STARTED.getId())
                 .findFirst()
                 .orElse(null);
+    }
+
+    private static HpChallengeService.JobBranch lifeProofBranch(Character chr) {
+        if (chr == null || chr.getJob() == null) {
+            return null;
+        }
+        HpChallengeService.JobBranch branch = HpChallengeService.branch(chr.getJob());
+        BranchInfo info = BRANCH_INFO.get(branch);
+        if (info == null || !info.jobIds().contains(chr.getJob().getId())) {
+            return null;
+        }
+        return branch;
     }
 
     private static QuestMeta nextAvailableQuest(Character chr, HpChallengeService.JobBranch branch) {
         if (chr == null || branch == null) {
             return null;
         }
-        int instructorNpcId = BRANCH_INFO.get(branch).instructorNpcId();
         for (int stage = 1; stage <= 7; stage++) {
             for (QuestMeta meta : stageBranchVisibleQuests(stage, branch)) {
                 if (chr.getQuestStatus(meta.questId()) != QuestStatus.Status.NOT_STARTED.getId()) {
                     continue;
                 }
-                if (Quest.getInstance(meta.questId()).canStart(chr, instructorNpcId)) {
+                if (Quest.getInstance(meta.questId()).canStart(chr, startNpcId(meta))) {
                     return meta;
                 }
             }
@@ -1314,6 +1381,53 @@ public final class LifeProofQuest {
             }
             return;
         }
+    }
+
+    private static QuestMeta nextContinuationAtNpc(Character chr, QuestMeta current, int npcId) {
+        if (chr == null || current == null || npcId <= 0) {
+            return null;
+        }
+        QuestMeta next = nextAvailableQuest(chr, current.branch());
+        if (next == null || startNpcId(next) != npcId
+                || !Quest.getInstance(next.questId()).canStart(chr, npcId)) {
+            return null;
+        }
+        return next;
+    }
+
+    private static void sendNextQuestUpdate(Character chr, int currentQuestId, int npcId, int nextQuestId) {
+        if (chr == null || currentQuestId <= 0 || npcId <= 0 || nextQuestId <= 0) {
+            return;
+        }
+        chr.sendPacket(PacketCreator.updateQuestFinish((short) currentQuestId, npcId, (short) nextQuestId));
+    }
+
+    static boolean isFirstStageVisitQuest(QuestMeta meta) {
+        return meta != null
+                && meta.stage() == 1
+                && meta.kind() == QuestKind.MAIN
+                && meta.slot() >= MAIN_SLOT_START
+                && meta.slot() < 5
+                && meta.isVisible()
+                && meta.objective().type() == ObjectiveType.NPC_TALK;
+    }
+
+    private static QuestMeta previousVisibleQuest(QuestMeta meta) {
+        List<QuestMeta> visible = stageBranchVisibleQuests(meta.stage(), meta.branch());
+        int index = visible.indexOf(meta);
+        if (index <= 0) {
+            return null;
+        }
+        return visible.get(index - 1);
+    }
+
+    private static QuestMeta nextVisibleQuest(QuestMeta meta) {
+        List<QuestMeta> visible = stageBranchVisibleQuests(meta.stage(), meta.branch());
+        int index = visible.indexOf(meta);
+        if (index < 0 || index + 1 >= visible.size()) {
+            return null;
+        }
+        return visible.get(index + 1);
     }
 
     private static List<QuestMeta> availableOptions(Character chr, QuestMeta selector) {
