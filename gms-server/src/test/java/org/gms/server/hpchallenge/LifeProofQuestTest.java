@@ -353,11 +353,36 @@ class LifeProofQuestTest {
         Path checkPath = resolveQuestXml(questDir + "/Check.img.xml");
         Path actPath = resolveQuestXml(questDir + "/Act.img.xml");
 
-        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(infoPath.toFile());
+        Document info = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(infoPath.toFile());
+        Document check = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(checkPath.toFile());
+        Document act = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(actPath.toFile());
         for (int questId = MonsterCardRingQuest.CLAIM_QUEST_ID; questId <= MonsterCardRingQuest.LAST_QUEST_ID; questId++) {
-            Element quest = topLevelImgDir(document, questId);
+            int order = questId - MonsterCardRingQuest.CLAIM_QUEST_ID + 1;
+            Element quest = topLevelImgDir(info, questId);
+            assertEquals("怪物卡戒指", childValue(quest, "string", "parent"),
+                    "monster card ring QuestInfo.parent must group the series for quest " + questId + " in " + infoPath);
+            assertEquals(Integer.toString(order), childValue(quest, "int", "order"),
+                    "monster card ring QuestInfo.order must be the 11-step series order for quest " + questId + " in "
+                            + infoPath);
             assertEquals("31", childValue(quest, "int", "area"),
                     "monster card ring QuestInfo.area must stay in Legend Road for quest " + questId + " in " + infoPath);
+
+            if (questId > MonsterCardRingQuest.CLAIM_QUEST_ID) {
+                Element complete = childImgDir(topLevelImgDir(check, questId), "1");
+                assertEquals("001", childValue(complete, "infoex", "0", "string", "value"),
+                        "monster card ring upgrade must use infoex completion gate for quest " + questId + " in "
+                                + checkPath);
+            }
+
+            Element completeAct = childImgDir(topLevelImgDir(act, questId), "1");
+            if (questId < MonsterCardRingQuest.LAST_QUEST_ID) {
+                assertEquals(Integer.toString(questId + 1), childValue(completeAct, "int", "nextQuest"),
+                        "monster card ring Act.nextQuest must chain to the next step for quest " + questId + " in "
+                                + actPath);
+            } else {
+                assertEquals("", childValue(completeAct, "int", "nextQuest"),
+                        "monster card ring final step must not define Act.nextQuest in " + actPath);
+            }
         }
 
         Set<Integer> infoIds = topLevelMonsterCardRingQuestIds(infoPath);

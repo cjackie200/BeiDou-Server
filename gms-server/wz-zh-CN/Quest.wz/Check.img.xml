@@ -76552,6 +76552,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29982">
@@ -76568,6 +76573,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29983">
@@ -76584,6 +76594,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29984">
@@ -76600,6 +76615,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29985">
@@ -76616,6 +76636,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29986">
@@ -76632,6 +76657,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29987">
@@ -76648,6 +76678,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29988">
@@ -76664,6 +76699,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29989">
@@ -76680,6 +76720,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
   <imgdir name="29990">
@@ -76696,6 +76741,11 @@
   <imgdir name="1">
     <int name="npc" value="2006"/>
     <string name="endscript" value="monsterCardRing"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
   </imgdir>
 </imgdir>
     <imgdir name="5100">

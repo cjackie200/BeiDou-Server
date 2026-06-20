@@ -123,7 +123,7 @@ function claimBaseRing() {
         return;
     }
 
-    MonsterCardRingQuest.syncQuestState(qm.getPlayer());
+    MonsterCardRingQuest.onBaseRingClaimed(qm.getPlayer());
     qm.sendOk("拿着这个 #b#i" + BASE_RING + "##t" + BASE_RING + "##k。\r\n"
         + "以后直接来找我，我会告诉你怪物卡和材料进度。\r\n\r\n"
         + getProgressText(MonsterCardRingQuest.validateUpgrade(qm.getPlayer())));

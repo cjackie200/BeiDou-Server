@@ -22563,6 +22563,8 @@
       <string name="0" value="特安可正在发放怪物卡戒指N。去找#b#p0002006##k领取戒指。"/>
       <string name="1" value="领取怪物卡戒指N。"/>
       <string name="2" value="已经领取了怪物卡戒指N。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="1"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29981">
@@ -22570,6 +22572,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv1。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv1。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="2"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29982">
@@ -22577,6 +22581,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv2。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv2。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="3"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29983">
@@ -22584,6 +22590,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv3。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv3。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="4"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29984">
@@ -22591,6 +22599,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv4。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv4。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="5"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29985">
@@ -22598,6 +22608,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv5。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv5。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="6"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29986">
@@ -22605,6 +22617,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv6。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv6。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="7"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29987">
@@ -22612,6 +22626,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv7。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv7。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="8"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29988">
@@ -22619,6 +22635,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv8。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv8。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="9"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29989">
@@ -22626,6 +22644,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv9。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv9。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="10"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="29990">
@@ -22633,6 +22653,8 @@
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
       <string name="1" value="把怪物卡戒指升级到 Lv10。"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv10。"/>
+      <string name="parent" value="怪物卡戒指"/>
+      <int name="order" value="11"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5100">
