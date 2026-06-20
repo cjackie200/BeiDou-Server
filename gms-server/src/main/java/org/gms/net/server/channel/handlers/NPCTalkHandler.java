@@ -29,6 +29,7 @@ import org.gms.constants.id.NpcId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.hook.InteractionHookManager;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
@@ -41,6 +42,12 @@ import org.gms.util.PacketCreator;
 
 public final class NPCTalkHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(NPCTalkHandler.class);
+
+    private static boolean shouldLogInteraction(Client c, int npcId) {
+        return c.getPlayer() != null
+                && (LifeProofQuest.resolveNpcHook(c.getPlayer(), npcId).isPresent()
+                || MonsterCardRingQuest.resolveNpcHook(c.getPlayer(), npcId).isPresent());
+    }
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -73,11 +80,14 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                if (InteractionHookManager.handleNativeNpcClick(c, oid, npc.getId())) {
+                boolean hookHandled = InteractionHookManager.handleNativeNpcClick(c, oid, npc.getId());
+                if (shouldLogInteraction(c, npc.getId())) {
+                    log.info("Native NPC_TALK player={} objectId={} npcId={} hookHandled={}",
+                            c.getPlayer().getName(), oid, npc.getId(), hookHandled);
+                }
+                if (hookHandled) {
                     return;
                 }
-
-                LifeProofQuest.onNpcTalk(c.getPlayer(), npc.getId());
 
                 // Custom handling to reduce the amount of scripts needed.
                 if (npc.getId() >= NpcId.GACHAPON_MIN && npc.getId() <= NpcId.GACHAPON_MAX) {

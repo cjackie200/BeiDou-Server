@@ -5,29 +5,39 @@ import org.gms.server.quest.MonsterCardRingQuest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 final class MonsterCardRingInteractionHookProvider implements InteractionHookProvider {
-    static final int MENU_SELECTION_ID = 520000;
-
     @Override
     public boolean supports(int questId, InteractionHookAction action) {
         return InteractionHookRegistry.isMonsterCardRingQuest(questId);
     }
 
     @Override
-    public List<InteractionHookRule> rules(Character chr) {
+    public List<InteractionHookRule> characterRules(Character chr) {
         List<InteractionHookRule> rules = new ArrayList<>();
-        for (int questId : MonsterCardRingQuest.getAllQuestIds()) {
+        for (int questId : MonsterCardRingQuest.getHookQuestIds(chr)) {
             int stateMask = InteractionHookPackets.questStateMask(chr, questId);
             rules.add(InteractionHookRegistry.questRule(questId, stateMask));
         }
+        return rules;
+    }
+
+    @Override
+    public List<InteractionHookRule> mapNpcRules(Character chr, Set<Integer> mapNpcIds) {
+        if (mapNpcIds == null || mapNpcIds.isEmpty()) {
+            return List.of();
+        }
+        List<InteractionHookRule> rules = new ArrayList<>();
         for (int npcId : MonsterCardRingQuest.getHookNpcIds(chr)) {
+            if (!mapNpcIds.contains(npcId)) {
+                continue;
+            }
             int questId = MonsterCardRingQuest.resolveCurrentQuestId(chr).orElse(0);
             int stateMask = questId > 0
                 ? InteractionHookPackets.questStateMask(chr, questId)
                 : InteractionHookProtocol.QUEST_STATE_MASK_ANY;
             rules.add(InteractionHookRegistry.npcRule(npcId, questId, stateMask));
-            rules.add(InteractionHookRegistry.selectionRule(MENU_SELECTION_ID, questId, stateMask));
         }
         return rules;
     }
@@ -41,12 +51,7 @@ final class MonsterCardRingInteractionHookProvider implements InteractionHookPro
 
     @Override
     public InteractionHookTarget resolveSelectionHook(Character chr, int npcId, int selection) {
-        if (selection != MENU_SELECTION_ID) {
-            return null;
-        }
-        return MonsterCardRingQuest.resolveCurrentQuestId(chr)
-            .map(questId -> new InteractionHookTarget(questId, npcId, MonsterCardRingQuest.resolveCurrentAction(chr, questId)))
-            .orElse(null);
+        return null;
     }
 
     @Override

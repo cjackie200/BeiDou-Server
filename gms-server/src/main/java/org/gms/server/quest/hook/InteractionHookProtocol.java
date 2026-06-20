@@ -1,8 +1,18 @@
 package org.gms.server.quest.hook;
 
 public final class InteractionHookProtocol {
-    public static final int VERSION = 3;
+    public static final int LEGACY_RULES_VERSION = 3;
+    public static final int VERSION = 4;
     public static final int ANY_ID = -1;
+    public static final int MAX_RULES_PER_PACKET = 100;
+
+    public static final int SCOPE_ALL_RULES = 0;
+    public static final int SCOPE_CHARACTER_QUEST_RULES = 1;
+    public static final int SCOPE_MAP_NPC_RULES = 2;
+    public static final int SCOPE_DIALOG_TEMP_RULES = 3;
+
+    public static final int REPLACE_SCOPE = 1;
+    public static final int CLEAR_SCOPE = 2;
 
     public static final int EVENT_NPC_CLICK = 1;
     public static final int EVENT_NPC_DIALOG_SELECTION = 2;

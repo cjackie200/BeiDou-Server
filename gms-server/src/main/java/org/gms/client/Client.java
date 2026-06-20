@@ -95,6 +95,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -149,6 +150,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     private int visibleWorlds;
     private long lastNpcClick;
     private boolean skipNextNativeInteractionHook;
+    private final AtomicInteger interactionHookRuleBatchId = new AtomicInteger();
     private long lastPacket = System.currentTimeMillis();
     private int lang = FIXED_LANGUAGE;
     // 提供公共方法来获取 sysRescue
@@ -1599,6 +1601,10 @@ public class Client extends ChannelInboundHandlerAdapter {
         boolean skip = skipNextNativeInteractionHook;
         skipNextNativeInteractionHook = false;
         return skip;
+    }
+
+    public int nextInteractionHookRuleBatchId() {
+        return interactionHookRuleBatchId.incrementAndGet();
     }
 
     public int getVisibleWorlds() {

@@ -21,18 +21,51 @@
 */
 package org.gms.net.server.channel.handlers;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestScriptManager;
+import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.hook.InteractionHookManager;
 import org.gms.util.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Matze
  */
 public final class NPCMoreTalkHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(NPCMoreTalkHandler.class);
+    private static final int LIFE_PROOF_MENU_SELECTION_ID = 510000;
+    private static final int MONSTER_CARD_RING_MENU_SELECTION_ID = 520000;
+
+    private static boolean handleInteractionHook(Client c, byte action, byte lastMsg, int selection) {
+        boolean handled = InteractionHookManager.handleNativeDialogSelection(c, action, lastMsg, selection);
+        if (shouldLogInteraction(c, selection)) {
+            log.info("Native NPC_MORE player={} action={} lastMsg={} selection={} cmNpc={} qmNpc={} hookHandled={}",
+                    c.getPlayer() == null ? "?" : c.getPlayer().getName(),
+                    action,
+                    lastMsg,
+                    selection,
+                    c.getCM() == null ? 0 : c.getCM().getNpc(),
+                    c.getQM() == null ? 0 : c.getQM().getNpc(),
+                    handled);
+        }
+        return handled;
+    }
+
+    private static boolean shouldLogInteraction(Client c, int selection) {
+        Character player = c.getPlayer();
+        return player != null
+                && (selection == LIFE_PROOF_MENU_SELECTION_ID
+                || selection == MONSTER_CARD_RING_MENU_SELECTION_ID
+                || LifeProofQuest.resolveCurrentQuestId(player).isPresent()
+                || MonsterCardRingQuest.resolveCurrentQuestId(player).isPresent());
+    }
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte lastMsg = p.readByte(); // 00 (last msg type I think)
@@ -41,7 +74,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
         if (lastMsg == 2) {
             if (action != 0) {
                 String returnText = p.readString();
-                if (InteractionHookManager.handleNativeDialogSelection(c, action, lastMsg, -1)) {
+                if (handleInteractionHook(c, action, lastMsg, -1)) {
                     return;
                 }
                 if (c.getQM() != null) {
@@ -73,7 +106,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
             } else if (p.available() > 0) {
                 selection = p.readUnsignedByte();
             }
-            if (InteractionHookManager.handleNativeDialogSelection(c, action, lastMsg, selection)) {
+            if (handleInteractionHook(c, action, lastMsg, selection)) {
                 return;
             }
             if (c.getQM() != null) {

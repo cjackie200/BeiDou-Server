@@ -22638,35 +22638,35 @@
     <imgdir name="5100">
         <string name="name" value="生命之证 I：拜访赫丽娜"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5101">
         <string name="name" value="生命之证 I：拜访汉斯"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5102">
         <string name="name" value="生命之证 I：拜访达克鲁"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5103">
         <string name="name" value="生命之证 I：拜访凯琳"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5104">
         <string name="name" value="生命之证 I：拜访武术教练"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。"/>
       <int name="area" value="31"/>
     </imgdir>
@@ -22806,35 +22806,35 @@
     <imgdir name="5125">
         <string name="name" value="生命之证 I：拜访赫丽娜"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5126">
         <string name="name" value="生命之证 I：拜访武术教练"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5127">
         <string name="name" value="生命之证 I：拜访达克鲁"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5128">
         <string name="name" value="生命之证 I：拜访凯琳"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5129">
         <string name="name" value="生命之证 I：拜访汉斯"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。"/>
       <int name="area" value="31"/>
     </imgdir>
@@ -22974,35 +22974,35 @@
     <imgdir name="5150">
         <string name="name" value="生命之证 I：拜访汉斯"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5151">
         <string name="name" value="生命之证 I：拜访武术教练"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5152">
         <string name="name" value="生命之证 I：拜访达克鲁"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5153">
         <string name="name" value="生命之证 I：拜访凯琳"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5154">
         <string name="name" value="生命之证 I：拜访赫丽娜"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。"/>
       <int name="area" value="31"/>
     </imgdir>
@@ -23142,35 +23142,35 @@
     <imgdir name="5175">
         <string name="name" value="生命之证 I：拜访赫丽娜"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5176">
         <string name="name" value="生命之证 I：拜访汉斯"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5177">
         <string name="name" value="生命之证 I：拜访武术教练"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5178">
         <string name="name" value="生命之证 I：拜访凯琳"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5179">
         <string name="name" value="生命之证 I：拜访达克鲁"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。"/>
       <int name="area" value="31"/>
     </imgdir>
@@ -23310,35 +23310,35 @@
     <imgdir name="5200">
         <string name="name" value="生命之证 I：拜访赫丽娜"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5201">
         <string name="name" value="生命之证 I：拜访汉斯"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5202">
         <string name="name" value="生命之证 I：拜访武术教练"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5203">
         <string name="name" value="生命之证 I：拜访达克鲁"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。"/>
       <int name="area" value="31"/>
     </imgdir>
     <imgdir name="5204">
         <string name="name" value="生命之证 I：拜访凯琳"/>
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。"/>
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳"/>
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。"/>
       <int name="area" value="31"/>
     </imgdir>

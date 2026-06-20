@@ -14,15 +14,29 @@ public final class InteractionHookContext {
     private final int sourceNpcId;
     private final int displayNpcId;
     private final InteractionHookAction action;
+    private final int eventType;
+    private final int sourceDialogContext;
+    private final int sourceDialogState;
+    private final int rawAction;
     private int dialogState = InteractionHookProtocol.DIALOG_STATE_NONE;
+    private boolean visibleDialogSent;
 
     InteractionHookContext(Client client, int requestId, int questId, int sourceNpcId, InteractionHookAction action) {
+        this(client, requestId, questId, sourceNpcId, action, null);
+    }
+
+    InteractionHookContext(Client client, int requestId, int questId, int sourceNpcId, InteractionHookAction action,
+                           InteractionHookEvent event) {
         this.client = client;
         this.requestId = requestId;
         this.questId = questId;
         this.sourceNpcId = sourceNpcId;
         this.displayNpcId = sourceNpcId > 0 ? sourceNpcId : NpcId.MAPLE_ADMINISTRATOR;
         this.action = action;
+        this.eventType = event == null ? 0 : event.eventType();
+        this.sourceDialogContext = event == null ? InteractionHookProtocol.DIALOG_CONTEXT_NONE : event.dialogContext();
+        this.sourceDialogState = event == null ? InteractionHookProtocol.DIALOG_STATE_NONE : event.dialogState();
+        this.rawAction = event == null ? 0 : event.rawAction();
     }
 
     public Client client() {
@@ -45,27 +59,58 @@ public final class InteractionHookContext {
         return sourceNpcId;
     }
 
+    public int displayNpcId() {
+        return displayNpcId;
+    }
+
     public InteractionHookAction action() {
         return action;
+    }
+
+    public int eventType() {
+        return eventType;
+    }
+
+    public int sourceDialogContext() {
+        return sourceDialogContext;
+    }
+
+    public int sourceDialogState() {
+        return sourceDialogState;
+    }
+
+    public int rawAction() {
+        return rawAction;
     }
 
     public int dialogState() {
         return dialogState;
     }
 
+    public boolean hasVisibleDialogSent() {
+        return visibleDialogSent;
+    }
+
+    public void resetVisibleDialogSent() {
+        visibleDialogSent = false;
+    }
+
     public void sendOk(String text) {
         dialogState = InteractionHookProtocol.DIALOG_STATE_OPEN;
+        visibleDialogSent = true;
         client.sendPacket(PacketCreator.getNPCTalk(displayNpcId, (byte) 0, text, "00 00", (byte) 0));
     }
 
     public void sendYesNo(String text) {
         dialogState = InteractionHookProtocol.DIALOG_STATE_WAIT_CONFIRM;
-        client.sendPacket(PacketCreator.getNPCTalk(displayNpcId, (byte) 1, text, "00 00", (byte) 0));
+        visibleDialogSent = true;
+        client.sendPacket(PacketCreator.getNPCTalk(displayNpcId, (byte) 1, text, "", (byte) 0));
     }
 
     public void sendSimple(String text) {
         dialogState = InteractionHookProtocol.DIALOG_STATE_WAIT_SELECTION;
-        client.sendPacket(PacketCreator.getNPCTalk(displayNpcId, (byte) 4, text, "00 00", (byte) 0));
+        visibleDialogSent = true;
+        client.sendPacket(PacketCreator.getNPCTalk(displayNpcId, (byte) 4, text, "", (byte) 0));
     }
 
     public void close() {

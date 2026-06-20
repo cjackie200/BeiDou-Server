@@ -7,7 +7,8 @@
 - [挑战洗血设计](hp-challenge-design.md)
 - [洗血资料整理](hpwashing.md)
 - [生命之证任务链实现说明](life-proof-quest-chain.md)
-- [InteractionHook v3 通用交互 Hook 方案](interaction-hook-v3.md)
+- [InteractionHook 通用交互 Hook 方案](interaction-hook-v3.md)
+- [InteractionHook v4 分组与分批规则下发方案](interaction-hook-v4-rule-batching.md)
 
 ## 规约
 
