@@ -70,6 +70,10 @@ public final class InteractionHookManager {
         }
 
         InteractionHookAction action = InteractionHookAction.fromQuestRawAction(rawAction);
+        if (LifeProofQuest.isVisibleQuestId(questId)
+                && !isValidNativeLifeProofQuestAction(client.getPlayer(), questId, npcId, action)) {
+            return false;
+        }
         if (questId <= 0 || action == null || !InteractionHookRegistry.hasQuestHook(client.getPlayer(), questId, action)) {
             return false;
         }
@@ -114,6 +118,7 @@ public final class InteractionHookManager {
         }
         CONTEXTS.remove(client);
         InteractionHookPackets.sendCharacterQuestRules(client);
+        InteractionHookPackets.sendLifeProofProgress(client);
         InteractionHookPackets.clearDialogTempRules(client);
     }
 
@@ -233,6 +238,17 @@ public final class InteractionHookManager {
                 && event.dialogContext() == InteractionHookProtocol.DIALOG_CONTEXT_QUEST;
     }
 
+    static boolean isValidNativeLifeProofQuestAction(Character chr, int questId, int npcId,
+                                                     InteractionHookAction action) {
+        if (chr == null || questId <= 0 || action == null) {
+            return false;
+        }
+        if (!LifeProofQuest.resolveCurrentQuestId(chr).filter(current -> current == questId).isPresent()) {
+            return false;
+        }
+        return LifeProofQuest.canOpenProgressAtNpc(questId, npcId);
+    }
+
     private static boolean open(Client client, InteractionHookEvent event, int questId, int npcId,
                                 InteractionHookAction action, boolean sendResult) {
         InteractionHookProvider provider = InteractionHookRegistry.provider(questId);
@@ -309,6 +325,9 @@ public final class InteractionHookManager {
 
     static boolean canUseNpcTalkAck(InteractionHookEvent event, InteractionHookContext context) {
         if (event == null || context == null || event.requestId() <= 0) {
+            return false;
+        }
+        if (LifeProofQuest.isVisibleQuestId(context.questId())) {
             return false;
         }
         int expectedNpcId = expectedDialogNpcId(event);

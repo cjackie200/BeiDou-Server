@@ -62,6 +62,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.life.MobSkill;
+import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.hook.InteractionHookPackets;
 import org.gms.service.NoteService;
@@ -251,6 +252,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             MonsterCardRingQuest.syncQuestStateSilently(player);
+            LifeProofQuest.normalizeForLogin(player);
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
             if (player.isHidden()) {
                 if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {

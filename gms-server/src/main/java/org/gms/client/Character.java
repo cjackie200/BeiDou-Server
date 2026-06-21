@@ -79,6 +79,7 @@ import org.gms.server.maps.*;
 import org.gms.server.maps.MiniGame.MiniGameResult;
 import org.gms.server.minigame.RockPaperScissor;
 import org.gms.server.hpchallenge.HpChallengeService;
+import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.partyquest.AriantColiseum;
 import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
@@ -2067,6 +2068,7 @@ public class Character extends AbstractCharacterObject {
                             return;
                         }
                         enableActions();
+                        LifeProofQuest.syncActiveObjectiveProgress(this);
                         return;
                     }
 
@@ -2129,6 +2131,7 @@ public class Character extends AbstractCharacterObject {
                 ItemScriptManager ism = ItemScriptManager.getInstance();
                 ism.runItemScript(client, itemScript);
             }
+            LifeProofQuest.syncActiveObjectiveProgress(this);
         }
         enableActions();
     }
@@ -3091,6 +3094,7 @@ public class Character extends AbstractCharacterObject {
             if (show) {
                 sendPacket(PacketCreator.getShowMesoGain(gain, inChat));
             }
+            LifeProofQuest.syncActiveMesoProgress(this);
         } else {
             enableActions();
         }
@@ -6712,6 +6716,9 @@ public class Character extends AbstractCharacterObject {
                 for (QuestStatus qs : getQuestValues()) {
                     lastQuestProcessed = qs.getQuest().getId();
                     if (qs.getStatus() == QuestStatus.Status.COMPLETED || qs.getQuest().canComplete(this, null)) {
+                        continue;
+                    }
+                    if (LifeProofQuest.shouldSkipGenericMobProgress(this, qs, id)) {
                         continue;
                     }
 

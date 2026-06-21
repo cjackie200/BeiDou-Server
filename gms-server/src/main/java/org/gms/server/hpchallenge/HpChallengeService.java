@@ -102,6 +102,10 @@ public final class HpChallengeService {
     record RewardTarget(int targetHp, int targetMp) {
     }
 
+    record LifeProofOptionalProgress(Task task, int currentCount, int requiredCount, boolean active,
+                                     boolean completed, int taskOrder) {
+    }
+
     private record ActiveTask(Task task, ProgressRow row) {
     }
 
@@ -665,6 +669,7 @@ public final class HpChallengeService {
         try (Connection con = DatabaseConnection.getConnection()) {
             State state = loadState(con, chr.getId());
             if (state != null) {
+                ensureProgressRows(con, chr, Math.max(1, Math.min(7, state.currentStage())));
                 return true;
             }
             try (PreparedStatement ps = con.prepareStatement("""
@@ -674,6 +679,7 @@ public final class HpChallengeService {
                 ps.setInt(1, chr.getId());
                 ps.executeUpdate();
             }
+            ensureProgressRows(con, chr, 1);
             return true;
         } catch (SQLException e) {
             log.warn("ensure life proof state failed", e);
@@ -932,6 +938,16 @@ public final class HpChallengeService {
             throw new IllegalArgumentException("Unknown hp challenge stage: " + stage);
         }
         return config;
+    }
+
+    static Task optionalTask(int stage, int optionNo) {
+        if (optionNo <= 0) {
+            return null;
+        }
+        return stage(stage).optionalTasks().stream()
+                .filter(task -> task.optionNo() == optionNo)
+                .findFirst()
+                .orElse(null);
     }
 
     private static Task t(String key, TaskGroup group, TargetType type, int required, String description, int... ids) {
@@ -1229,6 +1245,38 @@ public final class HpChallengeService {
         }
     }
 
+    private static LifeProofOptionalProgress selectedOptionalForOrder(Connection con, Character chr, int stageNo,
+                                                                      int taskOrder) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("""
+                SELECT task_key, current_count, required_count, active, completed, task_order
+                FROM hp_challenge_progress
+                WHERE character_id = ? AND stage = ? AND task_group = 'optional'
+                    AND selected = 1 AND task_order = ?
+                ORDER BY id
+                LIMIT 1
+                """)) {
+            ps.setInt(1, chr.getId());
+            ps.setInt(2, stageNo);
+            ps.setInt(3, taskOrder);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+                String taskKey = rs.getString("task_key");
+                Task task = stage(stageNo).optionalTasks().stream()
+                        .filter(candidate -> candidate.key().equals(taskKey))
+                        .findFirst()
+                        .orElse(null);
+                if (task == null) {
+                    return null;
+                }
+                return new LifeProofOptionalProgress(task, rs.getInt("current_count"),
+                        rs.getInt("required_count"), rs.getBoolean("active"), rs.getBoolean("completed"),
+                        rs.getInt("task_order"));
+            }
+        }
+    }
+
     private static String nextStepText(Connection con, Character chr, int stageNo) throws SQLException {
         ActiveTask activeTask = loadActiveTask(con, chr, stageNo);
         if (activeTask != null) {
@@ -1301,6 +1349,252 @@ public final class HpChallengeService {
                 SELECT COUNT(*) FROM hp_challenge_progress
                 WHERE character_id = ? AND stage = ? AND task_group = 'optional' AND selected = 1
                 """, characterId, stage);
+    }
+
+    static int selectedLifeProofOptionalCount(Character chr, int stage) {
+        if (chr == null) {
+            return 0;
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            return selectedOptionalCount(con, chr.getId(), stage);
+        } catch (SQLException e) {
+            log.warn("count life proof selected optional failed", e);
+            return 0;
+        }
+    }
+
+    static boolean isLifeProofOptionalSelected(Character chr, int stage, int optionNo) {
+        if (chr == null || optionNo <= 0) {
+            return false;
+        }
+        Task task = optionalTask(stage, optionNo);
+        if (task == null) {
+            return false;
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            return isTaskSelected(con, chr.getId(), stage, task.key());
+        } catch (SQLException e) {
+            log.warn("check life proof optional selected failed", e);
+            return false;
+        }
+    }
+
+    static Task selectLifeProofOptional(Character chr, int stage, int optionNo, int taskOrder) {
+        if (chr == null || taskOrder <= 0 || taskOrder > OPTIONAL_REQUIRED_COUNT) {
+            return null;
+        }
+        Task task = optionalTask(stage, optionNo);
+        if (task == null) {
+            return null;
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            con.setAutoCommit(false);
+            try {
+                ensureProgressRows(con, chr, stage);
+                lockStageProgress(con, chr.getId(), stage);
+                if (selectedOptionalCount(con, chr.getId(), stage) >= OPTIONAL_REQUIRED_COUNT
+                        || isTaskSelected(con, chr.getId(), stage, task.key())
+                        || selectedOptionalForOrder(con, chr, stage, taskOrder) != null) {
+                    con.rollback();
+                    return null;
+                }
+                try (PreparedStatement ps = con.prepareStatement("""
+                        UPDATE hp_challenge_progress
+                        SET selected = 1, active = 1, completed = 0, task_order = ?,
+                            current_count = 0, required_count = ?, accepted_at = CURRENT_TIMESTAMP,
+                            completed_at = NULL
+                        WHERE character_id = ? AND stage = ? AND task_group = 'optional' AND task_key = ?
+                        """)) {
+                    ps.setInt(1, taskOrder);
+                    ps.setInt(2, task.requiredCount());
+                    ps.setInt(3, chr.getId());
+                    ps.setInt(4, stage);
+                    ps.setString(5, task.key());
+                    if (ps.executeUpdate() <= 0) {
+                        con.rollback();
+                        return null;
+                    }
+                }
+                con.commit();
+                return task;
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            log.warn("select life proof optional failed", e);
+            return null;
+        }
+    }
+
+    static LifeProofOptionalProgress selectedLifeProofOptional(Character chr, int stage, int taskOrder) {
+        if (chr == null || taskOrder <= 0) {
+            return null;
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            return selectedOptionalForOrder(con, chr, stage, taskOrder);
+        } catch (SQLException e) {
+            log.warn("load life proof selected optional failed", e);
+            return null;
+        }
+    }
+
+    static boolean setLifeProofOptionalProgress(Character chr, int stage, int taskOrder, int currentCount) {
+        if (chr == null || taskOrder <= 0) {
+            return false;
+        }
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("""
+                     UPDATE hp_challenge_progress
+                     SET current_count = LEAST(required_count, GREATEST(0, ?))
+                     WHERE character_id = ? AND stage = ? AND task_group = 'optional'
+                         AND selected = 1 AND task_order = ? AND completed = 0
+                     """)) {
+            ps.setInt(1, currentCount);
+            ps.setInt(2, chr.getId());
+            ps.setInt(3, stage);
+            ps.setInt(4, taskOrder);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            log.warn("set life proof optional progress failed", e);
+            return false;
+        }
+    }
+
+    static boolean incrementLifeProofOptionalProgress(Character chr, int stage, int taskOrder,
+                                                      TargetType eventType, int eventId, String eventName) {
+        if (chr == null || taskOrder <= 0) {
+            return false;
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            con.setAutoCommit(false);
+            try {
+                lockStageProgress(con, chr.getId(), stage);
+                LifeProofOptionalProgress selected = selectedOptionalForOrder(con, chr, stage, taskOrder);
+                if (selected == null || selected.completed() || !selected.active()
+                        || !matches(selected.task(), eventType, eventId, eventName)) {
+                    con.rollback();
+                    return false;
+                }
+                try (PreparedStatement ps = con.prepareStatement("""
+                        UPDATE hp_challenge_progress
+                        SET current_count = LEAST(required_count, current_count + 1)
+                        WHERE character_id = ? AND stage = ? AND task_group = 'optional'
+                            AND selected = 1 AND task_order = ? AND active = 1 AND completed = 0
+                        """)) {
+                    ps.setInt(1, chr.getId());
+                    ps.setInt(2, stage);
+                    ps.setInt(3, taskOrder);
+                    if (ps.executeUpdate() <= 0) {
+                        con.rollback();
+                        return false;
+                    }
+                }
+                con.commit();
+                return true;
+            } catch (SQLException e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (SQLException e) {
+            log.warn("increment life proof optional progress failed", e);
+            return false;
+        }
+    }
+
+    static boolean completeLifeProofOptional(Character chr, int stage, int taskOrder) {
+        if (chr == null || taskOrder <= 0) {
+            return false;
+        }
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("""
+                     UPDATE hp_challenge_progress
+                     SET current_count = required_count, completed = 1, active = 0,
+                         completed_at = COALESCE(completed_at, CURRENT_TIMESTAMP)
+                     WHERE character_id = ? AND stage = ? AND task_group = 'optional'
+                         AND selected = 1 AND task_order = ?
+                     """)) {
+            ps.setInt(1, chr.getId());
+            ps.setInt(2, stage);
+            ps.setInt(3, taskOrder);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            log.warn("complete life proof optional failed", e);
+            return false;
+        }
+    }
+
+    static void clearLifeProofOptionalSelection(Character chr, int stage, int optionNo) {
+        if (chr == null || optionNo <= 0) {
+            return;
+        }
+        Task task = optionalTask(stage, optionNo);
+        if (task == null) {
+            return;
+        }
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("""
+                     UPDATE hp_challenge_progress
+                     SET selected = 0, active = 0, completed = 0, task_order = 0,
+                         current_count = 0, completed_at = NULL
+                     WHERE character_id = ? AND stage = ? AND task_group = 'optional' AND task_key = ?
+                     """)) {
+            ps.setInt(1, chr.getId());
+            ps.setInt(2, stage);
+            ps.setString(3, task.key());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            log.warn("clear life proof optional selection failed", e);
+        }
+    }
+
+    static Set<Integer> activeLifeProofRewardStages(Character chr) {
+        if (chr == null) {
+            return Set.of();
+        }
+        Set<Integer> stages = new java.util.HashSet<>();
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("""
+                     SELECT stage FROM hp_challenge_reward_log
+                     WHERE character_id = ? AND reverted = 0
+                     """)) {
+            ps.setInt(1, chr.getId());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    stages.add(rs.getInt("stage"));
+                }
+            }
+        } catch (SQLException e) {
+            log.warn("load life proof reward stages failed", e);
+            return Set.of();
+        }
+        return stages;
+    }
+
+    static Set<Integer> lifeProofStateCompletedStages(Character chr) {
+        if (chr == null) {
+            return Set.of();
+        }
+        State state = loadState(chr.getId());
+        return lifeProofStateCompletedStages(state == null ? 0 : state.currentStage(),
+                state == null ? 0 : state.highestRewardedStage());
+    }
+
+    static Set<Integer> lifeProofStateCompletedStages(int currentStage, int highestRewardedStage) {
+        Set<Integer> stages = new java.util.HashSet<>();
+        int highestFromReward = Math.max(0, Math.min(7, highestRewardedStage));
+        for (int stage = 1; stage <= highestFromReward; stage++) {
+            stages.add(stage);
+        }
+        int highestBeforeCurrent = Math.max(0, Math.min(7, currentStage - 1));
+        for (int stage = 1; stage <= highestBeforeCurrent; stage++) {
+            stages.add(stage);
+        }
+        return stages;
     }
 
     private static int activeCount(Connection con, int characterId, int stage) throws SQLException {

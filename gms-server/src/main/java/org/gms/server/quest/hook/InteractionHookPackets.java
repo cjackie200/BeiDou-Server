@@ -5,6 +5,7 @@ import org.gms.client.QuestStatus;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.OutPacket;
 import org.gms.net.packet.Packet;
+import org.gms.server.hpchallenge.LifeProofQuest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,7 @@ public final class InteractionHookPackets {
         clearAllRules(client);
         sendCharacterQuestRules(client);
         sendMapNpcRules(client);
+        sendLifeProofProgress(client);
     }
 
     public static void sendCharacterQuestRules(Client client) {
@@ -58,6 +60,17 @@ public final class InteractionHookPackets {
             return;
         }
         sendClearScope(client, InteractionHookProtocol.SCOPE_ALL_RULES);
+    }
+
+    public static void sendLifeProofProgress(Client client) {
+        if (!canSendRules(client)) {
+            return;
+        }
+        Packet packet = buildProgressPacket(LifeProofQuest.progressEntries(client.getPlayer()));
+        client.sendPacket(packet);
+        log.info("InteractionHook progress sent player={} payloadBytes={}",
+                client.getPlayer().getName(),
+                Math.max(0, packet.getBytes().length - 2));
     }
 
     public static void sendResult(Client client, int requestId, InteractionHookResultCode resultCode) {
@@ -103,6 +116,21 @@ public final class InteractionHookPackets {
         packet.writeInt(safeRules.size());
         for (InteractionHookRule rule : safeRules) {
             rule.writeTo(packet);
+        }
+        return packet;
+    }
+
+    static Packet buildProgressPacket(List<InteractionHookProgressEntry> entries) {
+        List<InteractionHookProgressEntry> safeEntries = entries == null ? List.of() : entries;
+        OutPacket packet = OutPacket.create(SendOpcode.INTERACTION_HOOK_PROGRESS);
+        packet.writeInt(InteractionHookProtocol.VERSION);
+        packet.writeInt(safeEntries.size());
+        for (InteractionHookProgressEntry entry : safeEntries) {
+            packet.writeInt(entry.questId());
+            packet.writeInt(entry.state());
+            packet.writeInt(entry.current());
+            packet.writeInt(entry.required());
+            packet.writeString(entry.text() == null ? "" : entry.text());
         }
         return packet;
     }

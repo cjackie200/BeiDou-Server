@@ -96,9 +96,9 @@ function startSelector(questId, selection) {
         }
         qm.forceStartQuest(questId);
         qm.forceCompleteQuest(questId);
-        qm.forceStartQuest(selectedQuest);
-        LifeProofQuest.onStarted(qm.getPlayer(), selectedQuest);
-        qm.sendOk(selectedMessage(result));
+        LifeProofQuest.startOptionSlot(qm.getPlayer(), selectedQuest, qm.getNpc());
+        qm.getPlayer().yellowMessage('生命之证：' + selectedMessage(result));
+        qm.dispose();
         return;
     }
     qm.dispose();

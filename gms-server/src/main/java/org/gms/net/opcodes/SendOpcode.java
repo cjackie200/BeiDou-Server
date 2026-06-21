@@ -359,6 +359,7 @@ public enum SendOpcode implements Opcode {
     UPDATE_HPMPAALERT(0x1000), // 更新HP/MP/EXP警报
     INTERACTION_HOOK_RULES(0x1001), // 通用交互 Hook 规则表
     INTERACTION_HOOK_RESULT(0x1002), // 通用交互 Hook 处理结果
+    INTERACTION_HOOK_PROGRESS(0x1004), // 通用交互 Hook 进度文本
     ;
     private int code = -2;
 

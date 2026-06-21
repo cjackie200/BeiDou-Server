@@ -45,7 +45,6 @@ import java.awt.*;
  */
 public final class QuestActionHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(QuestActionHandler.class);
-    private static final String LIFE_PROOF_NATIVE_ENTRY_MESSAGE = "请通过生命之证任务入口继续。";
 
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, Character player, Quest quest, int npcId) {
@@ -84,40 +83,26 @@ public final class QuestActionHandler extends AbstractPacketHandler {
     }
 
     private static boolean handleInteractionHook(Client c, short questId, int npcId, byte action) {
-        if (shouldConsumeNativeLifeProofQuestAction(questId, action)) {
-            consumeNativeLifeProofQuestAction(c, questId, npcId, action);
-            return true;
-        }
-
         boolean handled = InteractionHookManager.handleNativeQuestAction(c, questId, npcId, action);
         Character player = c.getPlayer();
-        if (player != null && (LifeProofQuest.isVisibleQuestId(questId)
-                || MonsterCardRingQuest.isMonsterCardRingQuest(questId))) {
+        boolean lifeProofQuest = LifeProofQuest.isVisibleQuestId(questId);
+        if (player != null && (lifeProofQuest || MonsterCardRingQuest.isMonsterCardRingQuest(questId))) {
             log.info("Native QUEST_ACTION player={} action={} questId={} npcId={} hookHandled={}",
                     player.getName(), action, questId, npcId, handled);
+        }
+        if (!handled && lifeProofQuest && isHookQuestAction(action)) {
+            if (player != null) {
+                log.info("Native QUEST_ACTION player={} action={} questId={} npcId={} hookHandled=lifeProofRejected",
+                        player.getName(), action, questId, npcId);
+            }
+            c.sendPacket(PacketCreator.enableActions());
+            return true;
         }
         return handled;
     }
 
-    static boolean shouldConsumeNativeLifeProofQuestAction(short questId, byte action) {
-        return LifeProofQuest.isVisibleQuestId(questId) && isHookQuestAction(action);
-    }
-
-    private static boolean isHookQuestAction(byte action) {
+    static boolean isHookQuestAction(byte action) {
         return action == 1 || action == 2 || action == 4 || action == 5;
-    }
-
-    private static void consumeNativeLifeProofQuestAction(Client c, short questId, int npcId, byte action) {
-        if (c == null) {
-            return;
-        }
-        Character player = c.getPlayer();
-        if (player != null) {
-            log.info("Native QUEST_ACTION player={} action={} questId={} npcId={} hookHandled=lifeProofConsumed",
-                    player.getName(), action, questId, npcId);
-            player.dropMessage(5, LIFE_PROOF_NATIVE_ENTRY_MESSAGE);
-        }
-        c.sendPacket(PacketCreator.enableActions());
     }
 
     @Override

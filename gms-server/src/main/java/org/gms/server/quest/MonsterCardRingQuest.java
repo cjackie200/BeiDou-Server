@@ -11,6 +11,7 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.server.quest.hook.InteractionHookAction;
 import org.gms.server.quest.hook.InteractionHookContext;
+import org.gms.server.quest.hook.InteractionHookPackets;
 import org.gms.util.PacketCreator;
 
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public final class MonsterCardRingQuest {
     public static final int MATERIAL_QTY = 10;
     public static final short CLAIM_QUEST_ID = 29980;
     public static final short LAST_QUEST_ID = (short) (CLAIM_QUEST_ID + MAX_LEVEL);
+    private static final int VIRTUAL_PROGRESS_KEY = 0;
+    private static final String PROGRESS_NOT_READY = "000";
+    private static final String PROGRESS_READY = "001";
 
     private static final int[] MATERIALS = {
             4021000, 4021001, 4021002, 4021003, 4021004,
@@ -233,7 +237,7 @@ public final class MonsterCardRingQuest {
     }
 
     private static void syncQuestState(Character chr, boolean announce) {
-        if (chr == null || chr.getMonsterBook() == null) {
+        if (chr == null) {
             return;
         }
 
@@ -241,7 +245,7 @@ public final class MonsterCardRingQuest {
         if (ringState.getTotal() == 0) {
             setQuestStatus(chr, CLAIM_QUEST_ID, QuestStatus.Status.NOT_STARTED, announce);
             resetUpgradeQuests(chr, announce);
-            syncNpcScriptable(chr, announce);
+            syncClientQuestEntrypoints(chr, announce);
             return;
         }
 
@@ -249,51 +253,62 @@ public final class MonsterCardRingQuest {
 
         RingInfo current = ringState.getCurrent();
         int currentLevel = current == null ? 0 : current.getLevel();
-        int nextTargetLevel = current != null && currentLevel < MAX_LEVEL ? currentLevel + 1 : 0;
-        int readyTargetLevel = 0;
-        if (ringState.getTotal() == 1 && nextTargetLevel > 0 && canShowUpgradeNotice(chr, current, nextTargetLevel)) {
-            readyTargetLevel = nextTargetLevel;
-        }
+        int nextTargetLevel = currentLevel < MAX_LEVEL ? currentLevel + 1 : 0;
+        String nextProgress = validateUpgrade(chr, ringState).isOk() ? PROGRESS_READY : PROGRESS_NOT_READY;
 
         for (int level = 1; level <= MAX_LEVEL; level++) {
             QuestStatus.Status status;
             if (level <= currentLevel) {
                 status = QuestStatus.Status.COMPLETED;
-            } else if (level == readyTargetLevel) {
+            } else if (level == nextTargetLevel) {
                 status = QuestStatus.Status.STARTED;
             } else {
                 status = QuestStatus.Status.NOT_STARTED;
             }
-            setQuestStatus(chr, getUpgradeQuestId(level), status, announce);
+            String progress = status == QuestStatus.Status.STARTED ? nextProgress : null;
+            setQuestStatus(chr, getUpgradeQuestId(level), status, announce, progress, true);
         }
-        syncNpcScriptable(chr, announce);
+        syncClientQuestEntrypoints(chr, announce);
     }
 
-    private static void syncNpcScriptable(Character chr, boolean announce) {
+    private static void syncClientQuestEntrypoints(Character chr, boolean announce) {
         if (announce) {
             syncNpcScriptable(chr);
+            if (chr.getClient() != null) {
+                InteractionHookPackets.sendCharacterQuestRules(chr.getClient());
+            }
         }
     }
 
     private static void resetUpgradeQuests(Character chr, boolean announce) {
         for (int level = 1; level <= MAX_LEVEL; level++) {
-            setQuestStatus(chr, getUpgradeQuestId(level), QuestStatus.Status.NOT_STARTED, announce);
+            setQuestStatus(chr, getUpgradeQuestId(level), QuestStatus.Status.NOT_STARTED, announce, null, false);
         }
     }
 
     private static void setQuestStatus(Character chr, short questId, QuestStatus.Status status, boolean announce) {
+        setQuestStatus(chr, questId, status, announce, null, true);
+    }
+
+    private static void setQuestStatus(Character chr, short questId, QuestStatus.Status status, boolean announce,
+                                       String virtualProgress, boolean preserveCompletedData) {
         Quest quest = Quest.getInstance(questId);
         QuestStatus oldStatus = chr.getQuestNoAdd(quest);
         if (oldStatus == null && status == QuestStatus.Status.NOT_STARTED) {
             return;
         }
         if (oldStatus != null && oldStatus.getStatus() == status
-                && (status != QuestStatus.Status.STARTED || oldStatus.getNpc() == NPC_ID)) {
+                && (status != QuestStatus.Status.STARTED || oldStatus.getNpc() == NPC_ID
+                && oldStatus.getProgress(VIRTUAL_PROGRESS_KEY).equals(safeProgress(virtualProgress)))) {
             return;
         }
 
         QuestStatus newStatus = new QuestStatus(quest, status, NPC_ID);
-        if (oldStatus != null) {
+        if (status == QuestStatus.Status.STARTED) {
+            newStatus.setProgress(VIRTUAL_PROGRESS_KEY, safeProgress(virtualProgress));
+        }
+        if (oldStatus != null && preserveCompletedData && status == QuestStatus.Status.COMPLETED
+                && oldStatus.getStatus() == QuestStatus.Status.COMPLETED) {
             copyQuestData(oldStatus, newStatus);
         }
 
@@ -305,6 +320,10 @@ public final class MonsterCardRingQuest {
         synchronized (chr.getQuests()) {
             chr.getQuests().put(questId, newStatus);
         }
+    }
+
+    private static String safeProgress(String progress) {
+        return progress == null || progress.isBlank() ? PROGRESS_NOT_READY : progress;
     }
 
     private static void copyQuestData(QuestStatus oldStatus, QuestStatus newStatus) {
@@ -338,10 +357,20 @@ public final class MonsterCardRingQuest {
             syncQuestState(chr);
             return "请先在装备栏背包空出 1 格。";
         }
-        syncQuestState(chr);
+        onBaseRingClaimed(chr);
         return "拿着这个 #b#i" + BASE_RING + "##t" + BASE_RING + "##k。\r\n"
                 + "以后直接来找我，我会告诉你怪物卡和材料进度。\r\n\r\n"
                 + progressText(chr, validateUpgrade(chr));
+    }
+
+    public static void onBaseRingClaimed(Character chr) {
+        if (chr == null) {
+            return;
+        }
+        resetUpgradeQuests(chr, true);
+        setQuestStatus(chr, CLAIM_QUEST_ID, QuestStatus.Status.COMPLETED, true, null, false);
+        setQuestStatus(chr, getUpgradeQuestId(1), QuestStatus.Status.STARTED, true, PROGRESS_NOT_READY, false);
+        syncClientQuestEntrypoints(chr, true);
     }
 
     public static String progressText(Character chr) {
@@ -505,18 +534,6 @@ public final class MonsterCardRingQuest {
 
         return TestPreparation.success(targetLevel, requiredSets, beforeSets, afterSets, addedCards,
                 getMaterialForLevel(targetLevel));
-    }
-
-    private static boolean canShowUpgradeNotice(Character chr, RingInfo current, int targetLevel) {
-        int requiredSets = targetLevel * SETS_PER_LEVEL;
-        int completedSets = countCompletedCardSets(chr);
-        if (completedSets < requiredSets) {
-            return false;
-        }
-
-        int material = getMaterialForLevel(targetLevel);
-        return material > 0 && chr.getItemQuantity(material, false) >= MATERIAL_QTY
-                && current.getLevel() == targetLevel - 1;
     }
 
     private static UpgradeValidation validateUpgrade(Character chr, RingState ringState) {

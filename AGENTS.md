@@ -84,6 +84,32 @@ MySQL 的变更需要按 MySQL 8 验证，因为项目不支持更低版本。
 重启服务端、完全退出并重开客户端、重新登录角色；同时确认数据库 `game_config.npcs_scriptable`
 没有残留测试 NPC。提交客户端补丁时排除 `config.ini`、`.wzpatch-backup` 和临时备份目录。
 
+## 客户端 DLL / ijl15 编译与诊断环境
+
+`/mnt/d/Game/BeiDou/BeiDou-ijl15` 是 Windows MSVC C++ 工程，不是 WSL g++ / clang 工程。
+WSL 只负责调用 Windows 构建工具；不要因为 `where msbuild` 或 `dotnet msbuild` 失败就判断
+本机不能编译。当前可用 BuildTools 路径是：
+
+```bash
+powershell.exe -NoProfile -Command '& "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe" "D:\Game\BeiDou\BeiDou-ijl15\ezorsia.sln" /p:Configuration=Release /p:Platform=x86 /m:1'
+```
+
+solution 的 `Release|x86` 映射到项目 `Release|Win32`。产物输出到
+`/mnt/d/Game/BeiDou/BeiDou-ijl15/out/Release/ijl15.dll` 和 `ijl15.pdb`。覆盖客户端前必须确认
+`BeiDou.exe` 没有运行；客户端加载文件是 `/mnt/d/Game/BeiDou/BeiDou-Client/ijl15.dll`。
+调试版覆盖时先备份旧 DLL，再复制新 DLL 和 PDB，例如：
+
+```bash
+cp /mnt/d/Game/BeiDou/BeiDou-Client/ijl15.dll /mnt/d/Game/BeiDou/BeiDou-Client/ijl15.dll.codex-backup-$(date +%Y%m%d-%H%M%S)
+cp /mnt/d/Game/BeiDou/BeiDou-ijl15/out/Release/ijl15.dll /mnt/d/Game/BeiDou/BeiDou-Client/ijl15.dll
+cp /mnt/d/Game/BeiDou/BeiDou-ijl15/out/Release/ijl15.pdb /mnt/d/Game/BeiDou/BeiDou-Client/ijl15.pdb
+```
+
+当前已知 MSBuild warning 如 `dllmain.cpp C4244` 和 `detours.pdb LNK4099` 不阻塞产物生成。排查
+客户端崩溃时优先用诊断版 `ijl15.dll` 记录 `interaction-hook.log`，必要时开启 Windows WER
+LocalDumps 到 `D:\Game\BeiDou\BeiDou-Client\crash-dumps`；客户端补丁提交时不要混入 PDB、
+备份 DLL、dump、`q-crash-watch.log` 或 `interaction-hook.log`。
+
 ## 客户端补丁打包规范
 
 客户端补丁以 `v旧版本 -> v新版本` 为边界，例如 `v1.0.0 -> v1.1.1`。打包前必须确认
