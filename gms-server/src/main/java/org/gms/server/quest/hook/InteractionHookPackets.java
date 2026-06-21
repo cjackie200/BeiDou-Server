@@ -75,9 +75,11 @@ public final class InteractionHookPackets {
                 entries.size(),
                 Math.max(0, packet.getBytes().length - 2));
         for (InteractionHookProgressEntry entry : entries) {
-            log.info("  progress entry questId={} state={} current={} required={} text=[{}]",
-                    entry.questId(), entry.state(), entry.current(), entry.required(),
-                    entry.text() == null ? "<null>" : entry.text().replace("\r", "\\r").replace("\n", "\\n"));
+            for (InteractionHookProgressEntry.Condition cond : entry.conditions()) {
+                log.info("  progress entry questId={} state={} current={} required={} text=[{}]",
+                        entry.questId(), entry.state(), cond.current(), cond.required(),
+                        cond.text() == null ? "<null>" : cond.text().replace("\r", "\\r").replace("\n", "\\n"));
+            }
         }
     }
 
@@ -136,9 +138,13 @@ public final class InteractionHookPackets {
         for (InteractionHookProgressEntry entry : safeEntries) {
             packet.writeInt(entry.questId());
             packet.writeInt(entry.state());
-            packet.writeInt(entry.current());
-            packet.writeInt(entry.required());
-            packet.writeString(entry.text() == null ? "" : entry.text());
+            List<InteractionHookProgressEntry.Condition> conditions = entry.conditions();
+            packet.writeInt(conditions.size());
+            for (InteractionHookProgressEntry.Condition cond : conditions) {
+                packet.writeInt(cond.current());
+                packet.writeInt(cond.required());
+                packet.writeString(cond.text() == null ? "" : cond.text());
+            }
         }
         return packet;
     }

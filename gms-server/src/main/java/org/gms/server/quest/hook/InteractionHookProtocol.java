@@ -2,7 +2,7 @@ package org.gms.server.quest.hook;
 
 public final class InteractionHookProtocol {
     public static final int LEGACY_RULES_VERSION = 3;
-    public static final int VERSION = 4;
+    public static final int VERSION = 5; // multi-condition progress (Condition entries per quest)
     public static final int ANY_ID = -1;
     public static final int MAX_RULES_PER_PACKET = 100;
 

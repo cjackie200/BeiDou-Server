@@ -450,7 +450,7 @@ class LifeProofQuestTest {
                 assertEquals(1, countOccurrences(detail, marker),
                         "monster card ring upgrade detail must contain exactly one hook progress marker for quest "
                                 + questId);
-                assertTrue(detail.contains("升级进度："),
+                assertTrue(detail.contains("任务进度"),
                         "monster card ring upgrade detail must include progress label for quest " + questId);
                 assertFalse(detail.contains("怪物卡戒指升级目标："),
                         "monster card ring detail must not use old technical template: " + questId);

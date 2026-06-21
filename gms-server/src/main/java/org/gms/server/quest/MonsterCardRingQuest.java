@@ -175,13 +175,22 @@ public final class MonsterCardRingQuest {
         int targetLevel = getTargetLevelByQuestId(questId);
         int requiredSets = targetLevel * SETS_PER_LEVEL;
         int completedSets = countCompletedCardSets(chr);
-        UpgradeValidation validation = validateUpgrade(chr, ringState);
+        int material = getMaterialForLevel(targetLevel);
+        int materialCount = material > 0 ? chr.getItemQuantity(material, false) : 0;
+
+        List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
+        conditions.add(new InteractionHookProgressEntry.Condition(
+                completedSets, requiredSets,
+                "怪物卡收集进度：" + "#b" + completedSets + "#k/" + requiredSets + " 套"));
+        conditions.add(new InteractionHookProgressEntry.Condition(
+                materialCount, MATERIAL_QTY,
+                "材料收集进度：" + "#i" + material + "# #t" + material + "# "
+                        + "#b" + materialCount + "#k/" + MATERIAL_QTY));
+
         return new InteractionHookProgressEntry(
                 questId,
                 chr.getQuestStatus(questId),
-                completedSets,
-                requiredSets,
-                progressEntryText(chr, ringState, current, targetLevel, completedSets, requiredSets, validation)
+                conditions
         );
     }
 
@@ -239,7 +248,11 @@ public final class MonsterCardRingQuest {
         }
         if (isUpgradeQuest(questId)) {
             UpgradeResult result = upgradeRing(chr);
-            context.sendOk(result.message());
+            if (result.success()) {
+                context.sendOk(upgradeSuccessMessage(result));
+            } else {
+                context.sendOk("#r升级失败#k\r\n" + result.message());
+            }
             return;
         }
         context.sendOk("这个怪物卡戒指任务暂时无法处理。");
@@ -466,61 +479,13 @@ public final class MonsterCardRingQuest {
         }
 
         if (validation != null && !validation.isOk()) {
-            text.append("\r\n#r当前不能升级：#k").append(validation.getMessage());
+            if (!validation.hideReason()) {
+                text.append("\r\n#r当前不能升级：#k").append(validation.getMessage());
+            }
         } else {
             text.append("\r\n#b条件已经满足。点击完成书本可升级到 Lv").append(targetLevel).append("。#k");
         }
         return text.toString();
-    }
-
-    // The ijl15 ZXString::Assign hook (0x00414617) handles marker replacement with proper
-    // buffer allocation, so there is no longer a byte limit on the replacement text.
-    // Uses MapleStory WZ macros for old-style formatting: #b (blue), #k (reset), #r (red),
-    // #i{itemId}# (icon), #t{itemId}# (name).
-    private static String progressEntryText(Character chr, RingState ringState, RingInfo current, int targetLevel,
-                                            int completedSets, int requiredSets, UpgradeValidation validation) {
-        int material = getMaterialForLevel(targetLevel);
-        int materialCount = material > 0 ? chr.getItemQuantity(material, false) : 0;
-        StringBuilder text = new StringBuilder();
-        text.append("怪物卡收集进度：").append("#b").append(completedSets).append("#k/").append(requiredSets).append(" 套");
-        text.append("\r\n材料收集进度：").append("#i").append(material).append("# #t").append(material).append("# ")
-                .append("#b").append(materialCount).append("#k/").append(MATERIAL_QTY);
-        String result = text.toString();
-        log.info("MonsterCardRing progressEntryText questTarget=Lv{} text=[{}]",
-                targetLevel, result.replace("\r", "\\r").replace("\n", "\\n"));
-        return result;
-    }
-
-    private static String progressEntryReason(RingState ringState, RingInfo current, int completedSets,
-                                              int requiredSets, int material, int materialCount) {
-        if (ringState == null || ringState.getTotal() == 0) {
-            return "请先领取" + itemName(BASE_RING);
-        }
-        if (ringState.getTotal() > 1) {
-            return "身上存在多个怪物卡戒指，请联系管理员处理后再升级";
-        }
-        if (current == null) {
-            return "没有找到可升级的怪物卡戒指";
-        }
-        if (current.getLevel() >= MAX_LEVEL) {
-            return "怪物卡戒指已经达到最高等级";
-        }
-        if (current.getEquipped() > 0) {
-            return "请先卸下" + ringName(current) + "，并放入装备栏背包";
-        }
-        if (current.getInBag() <= 0) {
-            return "请把" + ringName(current) + "放入装备栏背包";
-        }
-        if (completedSets < requiredSets) {
-            return "满套怪物卡数量不足，当前 " + completedSets + " 套，需要 " + requiredSets + " 套";
-        }
-        if (material <= 0) {
-            return "升级材料配置缺失";
-        }
-        if (materialCount < MATERIAL_QTY) {
-            return itemName(material) + "不足，当前 " + materialCount + " 个，需要 " + MATERIAL_QTY + " 个";
-        }
-        return "当前不能升级";
     }
 
     private static String ringName(RingInfo ring) {
@@ -597,8 +562,10 @@ public final class MonsterCardRingQuest {
         InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(material), material,
                 MATERIAL_QTY, true, false);
         chr.sendPacket(PacketCreator.getShowItemGain(material, (short) -MATERIAL_QTY, true));
+        int nextMaterial = targetLevel < MAX_LEVEL ? getMaterialForLevel(targetLevel + 1) : 0;
         syncQuestState(chr);
-        return UpgradeResult.success("升级完成。\r\n你获得了 #b#i" + newRing + "##t" + newRing + "##k。");
+        return UpgradeResult.success("升级完成。\r\n你获得了 #b#i" + newRing + "##t" + newRing + "##k。",
+                newRing, nextMaterial);
     }
 
     private static Item gainRawEquip(Character chr, int itemId) {
@@ -700,12 +667,12 @@ public final class MonsterCardRingQuest {
         int requiredSets = targetLevel * SETS_PER_LEVEL;
         int completedSets = countCompletedCardSets(chr);
         if (completedSets < requiredSets) {
-            return UpgradeValidation.fail("满套怪物卡数量不足。\r\n当前：#b" + completedSets + "#k 套\r\n需要：#r" + requiredSets + "#k 套");
+            return UpgradeValidation.failHiddenReason("满套怪物卡数量不足。\r\n当前：#b" + completedSets + "#k 套\r\n需要：#r" + requiredSets + "#k 套");
         }
 
         int material = getMaterialForLevel(targetLevel);
         if (material <= 0 || chr.getItemQuantity(material, false) < MATERIAL_QTY) {
-            return UpgradeValidation.fail("材料不足。\r\n需要：#b#i" + material + "##t" + material + "# x" + MATERIAL_QTY + "#k");
+            return UpgradeValidation.failHiddenReason("材料不足。\r\n需要：#b#i" + material + "##t" + material + "# x" + MATERIAL_QTY + "#k");
         }
 
         return UpgradeValidation.success(current, targetLevel, requiredSets, completedSets, material);
@@ -801,16 +768,18 @@ public final class MonsterCardRingQuest {
     public static final class UpgradeValidation {
         private final boolean ok;
         private final String message;
+        private final boolean hideReason; // true when progress numbers already explain the failure
         private final RingInfo current;
         private final int targetLevel;
         private final int requiredSets;
         private final int completedSets;
         private final int material;
 
-        private UpgradeValidation(boolean ok, String message, RingInfo current, int targetLevel,
+        private UpgradeValidation(boolean ok, String message, boolean hideReason, RingInfo current, int targetLevel,
                                   int requiredSets, int completedSets, int material) {
             this.ok = ok;
             this.message = message;
+            this.hideReason = hideReason;
             this.current = current;
             this.targetLevel = targetLevel;
             this.requiredSets = requiredSets;
@@ -819,12 +788,16 @@ public final class MonsterCardRingQuest {
         }
 
         private static UpgradeValidation fail(String message) {
-            return new UpgradeValidation(false, message, null, 0, 0, 0, 0);
+            return new UpgradeValidation(false, message, false, null, 0, 0, 0, 0);
+        }
+
+        private static UpgradeValidation failHiddenReason(String message) {
+            return new UpgradeValidation(false, message, true, null, 0, 0, 0, 0);
         }
 
         private static UpgradeValidation success(RingInfo current, int targetLevel, int requiredSets,
                                                  int completedSets, int material) {
-            return new UpgradeValidation(true, "", current, targetLevel, requiredSets, completedSets, material);
+            return new UpgradeValidation(true, "", false, current, targetLevel, requiredSets, completedSets, material);
         }
 
         public boolean isOk() {
@@ -833,6 +806,10 @@ public final class MonsterCardRingQuest {
 
         public String getMessage() {
             return message;
+        }
+
+        public boolean hideReason() {
+            return hideReason;
         }
 
         public RingInfo getCurrent() {
@@ -856,14 +833,27 @@ public final class MonsterCardRingQuest {
         }
     }
 
-    public record UpgradeResult(boolean success, String message) {
-        private static UpgradeResult success(String message) {
-            return new UpgradeResult(true, message);
+    public record UpgradeResult(boolean success, String message, int newRingId, int nextMaterialId) {
+        private static UpgradeResult success(String message, int newRingId, int nextMaterialId) {
+            return new UpgradeResult(true, message, newRingId, nextMaterialId);
         }
 
         private static UpgradeResult fail(String message) {
-            return new UpgradeResult(false, message);
+            return new UpgradeResult(false, message, 0, 0);
         }
+    }
+
+    private static String upgradeSuccessMessage(UpgradeResult result) {
+        StringBuilder sb = new StringBuilder("#e戒指升级成功！#n\r\n\r\n");
+        sb.append("你获得了 #b#i").append(result.newRingId()).append("##t").append(result.newRingId()).append("##k。\r\n");
+        if (result.nextMaterialId() > 0) {
+            sb.append("\r\n下一步需要 #b#i").append(result.nextMaterialId()).append("##t").append(result.nextMaterialId())
+                    .append("# x").append(MATERIAL_QTY).append("#k 和更多满套怪物卡。\r\n");
+            sb.append("准备好材料后再来找我升级！");
+        } else {
+            sb.append("\r\n你的怪物卡戒指已经达到#r最高等级 Lv").append(MAX_LEVEL).append("#k！");
+        }
+        return sb.toString();
     }
 
     public static final class TestPreparation {

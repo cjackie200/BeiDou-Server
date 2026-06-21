@@ -150,7 +150,8 @@ class InteractionHookRegistryTest {
     @Test
     void progressPacketsUseStableLayout() {
         Packet packet = InteractionHookPackets.buildProgressPacket(List.of(
-                new InteractionHookProgressEntry(5100, 1, 3, 16, "3/16")));
+                new InteractionHookProgressEntry(5100, 1, List.of(
+                        new InteractionHookProgressEntry.Condition(3, 16, "3/16")))));
         byte[] bytes = packet.getBytes();
 
         assertEquals(0x1004, readU16(bytes, 0));
@@ -158,14 +159,15 @@ class InteractionHookRegistryTest {
         assertEquals(1, readI32(bytes, 6));
         assertEquals(5100, readI32(bytes, 10));
         assertEquals(1, readI32(bytes, 14));
-        assertEquals(3, readI32(bytes, 18));
-        assertEquals(16, readI32(bytes, 22));
-        assertEquals(4, readU16(bytes, 26));
-        assertEquals('3', bytes[28]);
-        assertEquals('/', bytes[29]);
-        assertEquals('1', bytes[30]);
-        assertEquals('6', bytes[31]);
-        assertEquals(32, bytes.length);
+        assertEquals(1, readI32(bytes, 18)); // conditionCount
+        assertEquals(3, readI32(bytes, 22));
+        assertEquals(16, readI32(bytes, 26));
+        assertEquals(4, readU16(bytes, 30));
+        assertEquals('3', bytes[32]);
+        assertEquals('/', bytes[33]);
+        assertEquals('1', bytes[34]);
+        assertEquals('6', bytes[35]);
+        assertEquals(36, bytes.length);
     }
 
     @Test
@@ -182,9 +184,10 @@ class InteractionHookRegistryTest {
 
         assertEquals(95, entries.size());
         assertTrue(entries.stream().anyMatch(entry -> entry.questId() == LifeProofQuest.FIRST_QUEST_ID));
-        assertTrue(ringEntry.text().contains("怪物卡收集进度：30/30 套"));
-        assertTrue(ringEntry.text().contains("材料收集进度：石榴石 10/10"));
-        assertFalse(ringEntry.text().contains("#"), ringEntry.text());
+        assertEquals(2, ringEntry.conditions().size());
+        assertTrue(ringEntry.conditions().get(0).text().contains("怪物卡收集进度："));
+        assertTrue(ringEntry.conditions().get(1).text().contains("材料收集进度："));
+        assertFalse(ringEntry.conditions().get(0).text().contains("@@"), ringEntry.conditions().get(0).text());
     }
 
     @Test

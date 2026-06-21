@@ -442,12 +442,33 @@ public final class LifeProofQuest {
             entries.add(new InteractionHookProgressEntry(
                     meta.questId(),
                     chr.getQuestStatus(meta.questId()),
-                    progress.current(),
-                    progress.required(),
-                    progress.current() + "/" + progress.required()
+                    List.of(conditionForObjective(chr, meta, progress))
             ));
         }
         return entries;
+    }
+
+    private static InteractionHookProgressEntry.Condition conditionForObjective(
+            Character chr, QuestMeta meta, ProgressValue progress) {
+        Objective objective = meta.objective();
+        String text = switch (objective.type()) {
+            case KILL, BOSS -> "击杀进度：#b" + progress.current() + "#k/" + progress.required();
+            case ITEM -> "#i" + objective.itemId() + "# #t" + objective.itemId()
+                    + "# #b" + progress.current() + "#k/" + progress.required();
+            case MESO -> "金币进度：#b" + progress.current() + "#k/" + progress.required();
+            case NPC_TALK -> {
+                int npcId = objective.targetIds().isEmpty() ? 0 : objective.targetIds().getFirst();
+                yield "拜访 #p" + npcId + "#：#b" + progress.current() + "#k/1";
+            }
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE ->
+                    "组队任务：#b" + progress.current() + "#k/" + progress.required() + " 次";
+            case SCROLL_100 -> "卷轴强化：#b" + progress.current() + "#k/" + progress.required() + " 次";
+            case JUMP_MANUAL -> "跳跃试炼：#b" + progress.current() + "#k/" + progress.required() + " 次";
+            case SELECT_OPTION -> "选择 1 项附加试炼";
+            case OPTION_SLOT -> "附加试炼进行中";
+            case REWARD -> "领取阶段奖励";
+        };
+        return new InteractionHookProgressEntry.Condition(progress.current(), progress.required(), text);
     }
 
     public static void normalizeForLogin(Character chr) {

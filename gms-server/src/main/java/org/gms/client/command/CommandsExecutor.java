@@ -268,6 +268,7 @@ public class CommandsExecutor {
         addCommand(new String[]{"warpto", "reach", "follow"}, 2, ReachCommand.class);
         addCommand("gmshop", 2, GmShopCommand.class);
         addCommand("heal", 2, HealCommand.class);
+        addCommand("cardfill", 2, MonsterBookFillCommand.class);
         addCommand("item", 2, ItemCommand.class);
         addCommand("drop", 2, ItemDropCommand.class);
         addCommand("level", 2, LevelCommand.class);

@@ -22660,7 +22660,7 @@
     <imgdir name="5100">
         <string name="name" value="生命之证 I：拜访赫丽娜" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n当前进度：目标 NPC：#p1012100#，@@BD_LP_PROGRESS:5100@@\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5100@@"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="1" />
@@ -22670,7 +22670,7 @@
     <imgdir name="5101">
         <string name="name" value="生命之证 I：拜访汉斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n当前进度：目标 NPC：#p1032001#，@@BD_LP_PROGRESS:5101@@\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5101@@"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="2" />
@@ -22680,7 +22680,7 @@
     <imgdir name="5102">
         <string name="name" value="生命之证 I：拜访达克鲁" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n当前进度：目标 NPC：#p1052001#，@@BD_LP_PROGRESS:5102@@\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5102@@"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="3" />
@@ -22690,7 +22690,7 @@
     <imgdir name="5103">
         <string name="name" value="生命之证 I：拜访凯琳" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n当前进度：目标 NPC：#p1090000#，@@BD_LP_PROGRESS:5103@@\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5103@@"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="4" />
@@ -22700,7 +22700,7 @@
     <imgdir name="5104">
         <string name="name" value="生命之证 I：拜访武术教练" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n当前进度：目标 NPC：#p1022000#，@@BD_LP_PROGRESS:5104@@\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5104@@"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="5" />
@@ -22750,7 +22750,7 @@
     <imgdir name="5109">
         <string name="name" value="生命之证 I：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5109@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5109@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 1。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="10" />
@@ -22760,7 +22760,7 @@
     <imgdir name="5110">
         <string name="name" value="生命之证 I：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5110@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5110@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 2。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="11" />
@@ -22770,7 +22770,7 @@
     <imgdir name="5111">
         <string name="name" value="生命之证 I：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5111@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5111@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 3。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="12" />
@@ -22780,7 +22780,7 @@
     <imgdir name="5112">
         <string name="name" value="生命之证 I：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5112@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5112@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 1。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="13" />
@@ -22790,7 +22790,7 @@
     <imgdir name="5113">
         <string name="name" value="生命之证 I：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5113@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5113@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 2。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="14" />
@@ -22800,7 +22800,7 @@
     <imgdir name="5114">
         <string name="name" value="生命之证 I：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5114@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5114@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 3。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="15" />
@@ -22820,7 +22820,7 @@
     <imgdir name="5120">
         <string name="name" value="生命之证 I：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5120@@\r\n完成方式：回到#p1022000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5120@@"/>
         <string name="2" value="已完成：生命之证 I：生命之证。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="16" />
@@ -22836,7 +22836,7 @@
     <imgdir name="5125">
         <string name="name" value="生命之证 I：拜访赫丽娜" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n当前进度：目标 NPC：#p1012100#，@@BD_LP_PROGRESS:5125@@\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5125@@"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="1" />
@@ -22846,7 +22846,7 @@
     <imgdir name="5126">
         <string name="name" value="生命之证 I：拜访武术教练" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n当前进度：目标 NPC：#p1022000#，@@BD_LP_PROGRESS:5126@@\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5126@@"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="2" />
@@ -22856,7 +22856,7 @@
     <imgdir name="5127">
         <string name="name" value="生命之证 I：拜访达克鲁" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n当前进度：目标 NPC：#p1052001#，@@BD_LP_PROGRESS:5127@@\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5127@@"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="3" />
@@ -22866,7 +22866,7 @@
     <imgdir name="5128">
         <string name="name" value="生命之证 I：拜访凯琳" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n当前进度：目标 NPC：#p1090000#，@@BD_LP_PROGRESS:5128@@\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5128@@"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="4" />
@@ -22876,7 +22876,7 @@
     <imgdir name="5129">
         <string name="name" value="生命之证 I：拜访汉斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n当前进度：目标 NPC：#p1032001#，@@BD_LP_PROGRESS:5129@@\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5129@@"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="5" />
@@ -22926,7 +22926,7 @@
     <imgdir name="5134">
         <string name="name" value="生命之证 I：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5134@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5134@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 1。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="10" />
@@ -22936,7 +22936,7 @@
     <imgdir name="5135">
         <string name="name" value="生命之证 I：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5135@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5135@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 2。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="11" />
@@ -22946,7 +22946,7 @@
     <imgdir name="5136">
         <string name="name" value="生命之证 I：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5136@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5136@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 3。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="12" />
@@ -22956,7 +22956,7 @@
     <imgdir name="5137">
         <string name="name" value="生命之证 I：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5137@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5137@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 1。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="13" />
@@ -22966,7 +22966,7 @@
     <imgdir name="5138">
         <string name="name" value="生命之证 I：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5138@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5138@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 2。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="14" />
@@ -22976,7 +22976,7 @@
     <imgdir name="5139">
         <string name="name" value="生命之证 I：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5139@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5139@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 3。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="15" />
@@ -22996,7 +22996,7 @@
     <imgdir name="5145">
         <string name="name" value="生命之证 I：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5145@@\r\n完成方式：回到#p1032001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5145@@"/>
         <string name="2" value="已完成：生命之证 I：生命之证。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="16" />
@@ -23012,7 +23012,7 @@
     <imgdir name="5150">
         <string name="name" value="生命之证 I：拜访汉斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n当前进度：目标 NPC：#p1032001#，@@BD_LP_PROGRESS:5150@@\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5150@@"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="1" />
@@ -23022,7 +23022,7 @@
     <imgdir name="5151">
         <string name="name" value="生命之证 I：拜访武术教练" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n当前进度：目标 NPC：#p1022000#，@@BD_LP_PROGRESS:5151@@\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5151@@"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="2" />
@@ -23032,7 +23032,7 @@
     <imgdir name="5152">
         <string name="name" value="生命之证 I：拜访达克鲁" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n当前进度：目标 NPC：#p1052001#，@@BD_LP_PROGRESS:5152@@\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5152@@"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="3" />
@@ -23042,7 +23042,7 @@
     <imgdir name="5153">
         <string name="name" value="生命之证 I：拜访凯琳" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n当前进度：目标 NPC：#p1090000#，@@BD_LP_PROGRESS:5153@@\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5153@@"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="4" />
@@ -23052,7 +23052,7 @@
     <imgdir name="5154">
         <string name="name" value="生命之证 I：拜访赫丽娜" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n当前进度：目标 NPC：#p1012100#，@@BD_LP_PROGRESS:5154@@\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5154@@"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="5" />
@@ -23102,7 +23102,7 @@
     <imgdir name="5159">
         <string name="name" value="生命之证 I：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5159@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5159@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 1。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="10" />
@@ -23112,7 +23112,7 @@
     <imgdir name="5160">
         <string name="name" value="生命之证 I：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5160@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5160@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 2。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="11" />
@@ -23122,7 +23122,7 @@
     <imgdir name="5161">
         <string name="name" value="生命之证 I：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5161@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5161@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 3。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="12" />
@@ -23132,7 +23132,7 @@
     <imgdir name="5162">
         <string name="name" value="生命之证 I：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5162@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5162@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 1。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="13" />
@@ -23142,7 +23142,7 @@
     <imgdir name="5163">
         <string name="name" value="生命之证 I：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5163@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5163@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 2。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="14" />
@@ -23152,7 +23152,7 @@
     <imgdir name="5164">
         <string name="name" value="生命之证 I：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5164@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5164@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 3。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="15" />
@@ -23172,7 +23172,7 @@
     <imgdir name="5170">
         <string name="name" value="生命之证 I：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5170@@\r\n完成方式：回到#p1012100#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5170@@"/>
         <string name="2" value="已完成：生命之证 I：生命之证。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="16" />
@@ -23188,7 +23188,7 @@
     <imgdir name="5175">
         <string name="name" value="生命之证 I：拜访赫丽娜" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n当前进度：目标 NPC：#p1012100#，@@BD_LP_PROGRESS:5175@@\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5175@@"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="1" />
@@ -23198,7 +23198,7 @@
     <imgdir name="5176">
         <string name="name" value="生命之证 I：拜访汉斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n当前进度：目标 NPC：#p1032001#，@@BD_LP_PROGRESS:5176@@\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5176@@"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="2" />
@@ -23208,7 +23208,7 @@
     <imgdir name="5177">
         <string name="name" value="生命之证 I：拜访武术教练" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n当前进度：目标 NPC：#p1022000#，@@BD_LP_PROGRESS:5177@@\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5177@@"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="3" />
@@ -23218,7 +23218,7 @@
     <imgdir name="5178">
         <string name="name" value="生命之证 I：拜访凯琳" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n当前进度：目标 NPC：#p1090000#，@@BD_LP_PROGRESS:5178@@\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5178@@"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="4" />
@@ -23228,7 +23228,7 @@
     <imgdir name="5179">
         <string name="name" value="生命之证 I：拜访达克鲁" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n当前进度：目标 NPC：#p1052001#，@@BD_LP_PROGRESS:5179@@\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5179@@"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="5" />
@@ -23278,7 +23278,7 @@
     <imgdir name="5184">
         <string name="name" value="生命之证 I：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5184@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5184@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 1。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="10" />
@@ -23288,7 +23288,7 @@
     <imgdir name="5185">
         <string name="name" value="生命之证 I：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5185@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5185@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 2。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="11" />
@@ -23298,7 +23298,7 @@
     <imgdir name="5186">
         <string name="name" value="生命之证 I：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5186@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5186@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 3。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="12" />
@@ -23308,7 +23308,7 @@
     <imgdir name="5187">
         <string name="name" value="生命之证 I：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5187@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5187@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 1。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="13" />
@@ -23318,7 +23318,7 @@
     <imgdir name="5188">
         <string name="name" value="生命之证 I：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5188@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5188@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 2。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="14" />
@@ -23328,7 +23328,7 @@
     <imgdir name="5189">
         <string name="name" value="生命之证 I：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5189@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5189@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 3。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="15" />
@@ -23348,7 +23348,7 @@
     <imgdir name="5195">
         <string name="name" value="生命之证 I：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5195@@\r\n完成方式：回到#p1052001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5195@@"/>
         <string name="2" value="已完成：生命之证 I：生命之证。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="16" />
@@ -23364,7 +23364,7 @@
     <imgdir name="5200">
         <string name="name" value="生命之证 I：拜访赫丽娜" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访赫丽娜\r\n当前进度：目标 NPC：#p1012100#，@@BD_LP_PROGRESS:5200@@\r\n完成方式：前往#p1012100#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5200@@"/>
         <string name="2" value="已完成：生命之证 I：拜访赫丽娜。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="1" />
@@ -23374,7 +23374,7 @@
     <imgdir name="5201">
         <string name="name" value="生命之证 I：拜访汉斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访汉斯\r\n当前进度：目标 NPC：#p1032001#，@@BD_LP_PROGRESS:5201@@\r\n完成方式：前往#p1032001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5201@@"/>
         <string name="2" value="已完成：生命之证 I：拜访汉斯。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="2" />
@@ -23384,7 +23384,7 @@
     <imgdir name="5202">
         <string name="name" value="生命之证 I：拜访武术教练" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访武术教练\r\n当前进度：目标 NPC：#p1022000#，@@BD_LP_PROGRESS:5202@@\r\n完成方式：前往#p1022000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5202@@"/>
         <string name="2" value="已完成：生命之证 I：拜访武术教练。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="3" />
@@ -23394,7 +23394,7 @@
     <imgdir name="5203">
         <string name="name" value="生命之证 I：拜访达克鲁" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访达克鲁\r\n当前进度：目标 NPC：#p1052001#，@@BD_LP_PROGRESS:5203@@\r\n完成方式：前往#p1052001#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5203@@"/>
         <string name="2" value="已完成：生命之证 I：拜访达克鲁。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="4" />
@@ -23404,7 +23404,7 @@
     <imgdir name="5204">
         <string name="name" value="生命之证 I：拜访凯琳" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：拜访凯琳\r\n当前进度：目标 NPC：#p1090000#，@@BD_LP_PROGRESS:5204@@\r\n完成方式：前往#p1090000#，点击任务完成图标，由对方确认这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5204@@"/>
         <string name="2" value="已完成：生命之证 I：拜访凯琳。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="5" />
@@ -23454,7 +23454,7 @@
     <imgdir name="5209">
         <string name="name" value="生命之证 I：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5209@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5209@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 1。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="10" />
@@ -23464,7 +23464,7 @@
     <imgdir name="5210">
         <string name="name" value="生命之证 I：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5210@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5210@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 2。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="11" />
@@ -23474,7 +23474,7 @@
     <imgdir name="5211">
         <string name="name" value="生命之证 I：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5211@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5211@@"/>
         <string name="2" value="已完成：生命之证 I：选择试炼 3。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="12" />
@@ -23484,7 +23484,7 @@
     <imgdir name="5212">
         <string name="name" value="生命之证 I：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5212@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5212@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 1。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="13" />
@@ -23494,7 +23494,7 @@
     <imgdir name="5213">
         <string name="name" value="生命之证 I：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5213@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5213@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 2。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="14" />
@@ -23504,7 +23504,7 @@
     <imgdir name="5214">
         <string name="name" value="生命之证 I：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5214@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5214@@"/>
         <string name="2" value="已完成：生命之证 I：附加试炼 3。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="15" />
@@ -23524,7 +23524,7 @@
     <imgdir name="5220">
         <string name="name" value="生命之证 I：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5220@@\r\n完成方式：回到#p1090000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5220@@"/>
         <string name="2" value="已完成：生命之证 I：生命之证。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="16" />
@@ -23540,7 +23540,7 @@
     <imgdir name="5225">
         <string name="name" value="生命之证 II：访问神木村和龙林入口相关区域" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：收集#t4033001#\r\n当前进度：#i4033001# #t4033001# @@BD_LP_PROGRESS:5225@@\r\n完成方式：收集足够#t4033001#后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5225@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="1" />
@@ -23600,7 +23600,7 @@
     <imgdir name="5234">
         <string name="name" value="生命之证 II：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5234@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5234@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 1。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="7" />
@@ -23610,7 +23610,7 @@
     <imgdir name="5235">
         <string name="name" value="生命之证 II：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5235@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5235@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 2。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="8" />
@@ -23620,7 +23620,7 @@
     <imgdir name="5236">
         <string name="name" value="生命之证 II：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5236@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5236@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 3。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="9" />
@@ -23630,7 +23630,7 @@
     <imgdir name="5237">
         <string name="name" value="生命之证 II：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5237@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5237@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 1。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="10" />
@@ -23640,7 +23640,7 @@
     <imgdir name="5238">
         <string name="name" value="生命之证 II：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5238@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5238@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 2。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="11" />
@@ -23650,7 +23650,7 @@
     <imgdir name="5239">
         <string name="name" value="生命之证 II：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5239@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5239@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 3。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="12" />
@@ -23670,7 +23670,7 @@
     <imgdir name="5245">
         <string name="name" value="生命之证 II：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5245@@\r\n完成方式：回到#p1022000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5245@@"/>
         <string name="2" value="已完成：生命之证 II：生命之证。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="13" />
@@ -23686,7 +23686,7 @@
     <imgdir name="5250">
         <string name="name" value="生命之证 II：访问神木村和龙林入口相关区域" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：收集#t4033001#\r\n当前进度：#i4033001# #t4033001# @@BD_LP_PROGRESS:5250@@\r\n完成方式：收集足够#t4033001#后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5250@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="1" />
@@ -23746,7 +23746,7 @@
     <imgdir name="5259">
         <string name="name" value="生命之证 II：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5259@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5259@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 1。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="7" />
@@ -23756,7 +23756,7 @@
     <imgdir name="5260">
         <string name="name" value="生命之证 II：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5260@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5260@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 2。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="8" />
@@ -23766,7 +23766,7 @@
     <imgdir name="5261">
         <string name="name" value="生命之证 II：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5261@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5261@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 3。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="9" />
@@ -23776,7 +23776,7 @@
     <imgdir name="5262">
         <string name="name" value="生命之证 II：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5262@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5262@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 1。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="10" />
@@ -23786,7 +23786,7 @@
     <imgdir name="5263">
         <string name="name" value="生命之证 II：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5263@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5263@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 2。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="11" />
@@ -23796,7 +23796,7 @@
     <imgdir name="5264">
         <string name="name" value="生命之证 II：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5264@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5264@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 3。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="12" />
@@ -23816,7 +23816,7 @@
     <imgdir name="5270">
         <string name="name" value="生命之证 II：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5270@@\r\n完成方式：回到#p1032001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5270@@"/>
         <string name="2" value="已完成：生命之证 II：生命之证。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="13" />
@@ -23832,7 +23832,7 @@
     <imgdir name="5275">
         <string name="name" value="生命之证 II：访问神木村和龙林入口相关区域" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：收集#t4033001#\r\n当前进度：#i4033001# #t4033001# @@BD_LP_PROGRESS:5275@@\r\n完成方式：收集足够#t4033001#后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5275@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="1" />
@@ -23892,7 +23892,7 @@
     <imgdir name="5284">
         <string name="name" value="生命之证 II：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5284@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5284@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 1。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="7" />
@@ -23902,7 +23902,7 @@
     <imgdir name="5285">
         <string name="name" value="生命之证 II：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5285@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5285@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 2。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="8" />
@@ -23912,7 +23912,7 @@
     <imgdir name="5286">
         <string name="name" value="生命之证 II：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5286@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5286@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 3。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="9" />
@@ -23922,7 +23922,7 @@
     <imgdir name="5287">
         <string name="name" value="生命之证 II：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5287@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5287@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 1。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="10" />
@@ -23932,7 +23932,7 @@
     <imgdir name="5288">
         <string name="name" value="生命之证 II：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5288@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5288@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 2。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="11" />
@@ -23942,7 +23942,7 @@
     <imgdir name="5289">
         <string name="name" value="生命之证 II：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5289@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5289@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 3。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="12" />
@@ -23962,7 +23962,7 @@
     <imgdir name="5295">
         <string name="name" value="生命之证 II：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5295@@\r\n完成方式：回到#p1012100#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5295@@"/>
         <string name="2" value="已完成：生命之证 II：生命之证。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="13" />
@@ -23978,7 +23978,7 @@
     <imgdir name="5300">
         <string name="name" value="生命之证 II：访问神木村和龙林入口相关区域" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：收集#t4033001#\r\n当前进度：#i4033001# #t4033001# @@BD_LP_PROGRESS:5300@@\r\n完成方式：收集足够#t4033001#后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5300@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="1" />
@@ -24038,7 +24038,7 @@
     <imgdir name="5309">
         <string name="name" value="生命之证 II：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5309@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5309@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 1。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="7" />
@@ -24048,7 +24048,7 @@
     <imgdir name="5310">
         <string name="name" value="生命之证 II：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5310@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5310@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 2。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="8" />
@@ -24058,7 +24058,7 @@
     <imgdir name="5311">
         <string name="name" value="生命之证 II：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5311@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5311@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 3。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="9" />
@@ -24068,7 +24068,7 @@
     <imgdir name="5312">
         <string name="name" value="生命之证 II：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5312@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5312@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 1。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="10" />
@@ -24078,7 +24078,7 @@
     <imgdir name="5313">
         <string name="name" value="生命之证 II：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5313@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5313@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 2。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="11" />
@@ -24088,7 +24088,7 @@
     <imgdir name="5314">
         <string name="name" value="生命之证 II：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5314@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5314@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 3。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="12" />
@@ -24108,7 +24108,7 @@
     <imgdir name="5320">
         <string name="name" value="生命之证 II：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5320@@\r\n完成方式：回到#p1052001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5320@@"/>
         <string name="2" value="已完成：生命之证 II：生命之证。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="13" />
@@ -24124,7 +24124,7 @@
     <imgdir name="5325">
         <string name="name" value="生命之证 II：访问神木村和龙林入口相关区域" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：收集#t4033001#\r\n当前进度：#i4033001# #t4033001# @@BD_LP_PROGRESS:5325@@\r\n完成方式：收集足够#t4033001#后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5325@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="1" />
@@ -24184,7 +24184,7 @@
     <imgdir name="5334">
         <string name="name" value="生命之证 II：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5334@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5334@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 1。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="7" />
@@ -24194,7 +24194,7 @@
     <imgdir name="5335">
         <string name="name" value="生命之证 II：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5335@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5335@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 2。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="8" />
@@ -24204,7 +24204,7 @@
     <imgdir name="5336">
         <string name="name" value="生命之证 II：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5336@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5336@@"/>
         <string name="2" value="已完成：生命之证 II：选择试炼 3。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="9" />
@@ -24214,7 +24214,7 @@
     <imgdir name="5337">
         <string name="name" value="生命之证 II：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5337@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5337@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 1。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="10" />
@@ -24224,7 +24224,7 @@
     <imgdir name="5338">
         <string name="name" value="生命之证 II：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5338@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5338@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 2。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="11" />
@@ -24234,7 +24234,7 @@
     <imgdir name="5339">
         <string name="name" value="生命之证 II：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5339@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5339@@"/>
         <string name="2" value="已完成：生命之证 II：附加试炼 3。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="12" />
@@ -24254,7 +24254,7 @@
     <imgdir name="5345">
         <string name="name" value="生命之证 II：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5345@@\r\n完成方式：回到#p1090000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5345@@"/>
         <string name="2" value="已完成：生命之证 II：生命之证。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="13" />
@@ -24270,7 +24270,7 @@
     <imgdir name="5350">
         <string name="name" value="生命之证 III：访问玩具城和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：收集#t4033003#\r\n当前进度：#i4033003# #t4033003# @@BD_LP_PROGRESS:5350@@\r\n完成方式：收集足够#t4033003#后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5350@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="1" />
@@ -24330,7 +24330,7 @@
     <imgdir name="5359">
         <string name="name" value="生命之证 III：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5359@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5359@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 1。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="7" />
@@ -24340,7 +24340,7 @@
     <imgdir name="5360">
         <string name="name" value="生命之证 III：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5360@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5360@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 2。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="8" />
@@ -24350,7 +24350,7 @@
     <imgdir name="5361">
         <string name="name" value="生命之证 III：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5361@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5361@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 3。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="9" />
@@ -24360,7 +24360,7 @@
     <imgdir name="5362">
         <string name="name" value="生命之证 III：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5362@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5362@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 1。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="10" />
@@ -24370,7 +24370,7 @@
     <imgdir name="5363">
         <string name="name" value="生命之证 III：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5363@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5363@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 2。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="11" />
@@ -24380,7 +24380,7 @@
     <imgdir name="5364">
         <string name="name" value="生命之证 III：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5364@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5364@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 3。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="12" />
@@ -24400,7 +24400,7 @@
     <imgdir name="5370">
         <string name="name" value="生命之证 III：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5370@@\r\n完成方式：回到#p1022000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5370@@"/>
         <string name="2" value="已完成：生命之证 III：生命之证。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="13" />
@@ -24416,7 +24416,7 @@
     <imgdir name="5375">
         <string name="name" value="生命之证 III：访问玩具城和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：收集#t4033003#\r\n当前进度：#i4033003# #t4033003# @@BD_LP_PROGRESS:5375@@\r\n完成方式：收集足够#t4033003#后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5375@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="1" />
@@ -24476,7 +24476,7 @@
     <imgdir name="5384">
         <string name="name" value="生命之证 III：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5384@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5384@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 1。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="7" />
@@ -24486,7 +24486,7 @@
     <imgdir name="5385">
         <string name="name" value="生命之证 III：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5385@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5385@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 2。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="8" />
@@ -24496,7 +24496,7 @@
     <imgdir name="5386">
         <string name="name" value="生命之证 III：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5386@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5386@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 3。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="9" />
@@ -24506,7 +24506,7 @@
     <imgdir name="5387">
         <string name="name" value="生命之证 III：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5387@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5387@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 1。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="10" />
@@ -24516,7 +24516,7 @@
     <imgdir name="5388">
         <string name="name" value="生命之证 III：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5388@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5388@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 2。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="11" />
@@ -24526,7 +24526,7 @@
     <imgdir name="5389">
         <string name="name" value="生命之证 III：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5389@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5389@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 3。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="12" />
@@ -24546,7 +24546,7 @@
     <imgdir name="5395">
         <string name="name" value="生命之证 III：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5395@@\r\n完成方式：回到#p1032001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5395@@"/>
         <string name="2" value="已完成：生命之证 III：生命之证。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="13" />
@@ -24562,7 +24562,7 @@
     <imgdir name="5400">
         <string name="name" value="生命之证 III：访问玩具城和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：收集#t4033003#\r\n当前进度：#i4033003# #t4033003# @@BD_LP_PROGRESS:5400@@\r\n完成方式：收集足够#t4033003#后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5400@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="1" />
@@ -24622,7 +24622,7 @@
     <imgdir name="5409">
         <string name="name" value="生命之证 III：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5409@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5409@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 1。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="7" />
@@ -24632,7 +24632,7 @@
     <imgdir name="5410">
         <string name="name" value="生命之证 III：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5410@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5410@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 2。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="8" />
@@ -24642,7 +24642,7 @@
     <imgdir name="5411">
         <string name="name" value="生命之证 III：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5411@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5411@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 3。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="9" />
@@ -24652,7 +24652,7 @@
     <imgdir name="5412">
         <string name="name" value="生命之证 III：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5412@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5412@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 1。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="10" />
@@ -24662,7 +24662,7 @@
     <imgdir name="5413">
         <string name="name" value="生命之证 III：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5413@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5413@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 2。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="11" />
@@ -24672,7 +24672,7 @@
     <imgdir name="5414">
         <string name="name" value="生命之证 III：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5414@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5414@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 3。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="12" />
@@ -24692,7 +24692,7 @@
     <imgdir name="5420">
         <string name="name" value="生命之证 III：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5420@@\r\n完成方式：回到#p1012100#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5420@@"/>
         <string name="2" value="已完成：生命之证 III：生命之证。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="13" />
@@ -24708,7 +24708,7 @@
     <imgdir name="5425">
         <string name="name" value="生命之证 III：访问玩具城和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：收集#t4033003#\r\n当前进度：#i4033003# #t4033003# @@BD_LP_PROGRESS:5425@@\r\n完成方式：收集足够#t4033003#后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5425@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="1" />
@@ -24768,7 +24768,7 @@
     <imgdir name="5434">
         <string name="name" value="生命之证 III：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5434@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5434@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 1。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="7" />
@@ -24778,7 +24778,7 @@
     <imgdir name="5435">
         <string name="name" value="生命之证 III：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5435@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5435@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 2。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="8" />
@@ -24788,7 +24788,7 @@
     <imgdir name="5436">
         <string name="name" value="生命之证 III：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5436@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5436@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 3。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="9" />
@@ -24798,7 +24798,7 @@
     <imgdir name="5437">
         <string name="name" value="生命之证 III：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5437@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5437@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 1。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="10" />
@@ -24808,7 +24808,7 @@
     <imgdir name="5438">
         <string name="name" value="生命之证 III：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5438@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5438@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 2。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="11" />
@@ -24818,7 +24818,7 @@
     <imgdir name="5439">
         <string name="name" value="生命之证 III：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5439@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5439@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 3。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="12" />
@@ -24838,7 +24838,7 @@
     <imgdir name="5445">
         <string name="name" value="生命之证 III：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5445@@\r\n完成方式：回到#p1052001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5445@@"/>
         <string name="2" value="已完成：生命之证 III：生命之证。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="13" />
@@ -24854,7 +24854,7 @@
     <imgdir name="5450">
         <string name="name" value="生命之证 III：访问玩具城和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：收集#t4033003#\r\n当前进度：#i4033003# #t4033003# @@BD_LP_PROGRESS:5450@@\r\n完成方式：收集足够#t4033003#后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5450@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="1" />
@@ -24904,7 +24904,7 @@
     <imgdir name="5455">
         <string name="name" value="生命之证 III：完成海盗或玩具城相关组队任务" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成海盗或玩具城相关组队任务\r\n当前进度：@@BD_LP_PROGRESS:5455@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5455@@"/>
         <string name="2" value="已完成：生命之证 III：完成海盗或玩具城相关组队任务。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="6" />
@@ -24914,7 +24914,7 @@
     <imgdir name="5459">
         <string name="name" value="生命之证 III：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5459@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5459@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 1。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="7" />
@@ -24924,7 +24924,7 @@
     <imgdir name="5460">
         <string name="name" value="生命之证 III：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5460@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5460@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 2。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="8" />
@@ -24934,7 +24934,7 @@
     <imgdir name="5461">
         <string name="name" value="生命之证 III：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5461@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5461@@"/>
         <string name="2" value="已完成：生命之证 III：选择试炼 3。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="9" />
@@ -24944,7 +24944,7 @@
     <imgdir name="5462">
         <string name="name" value="生命之证 III：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5462@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5462@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 1。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="10" />
@@ -24954,7 +24954,7 @@
     <imgdir name="5463">
         <string name="name" value="生命之证 III：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5463@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5463@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 2。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="11" />
@@ -24964,7 +24964,7 @@
     <imgdir name="5464">
         <string name="name" value="生命之证 III：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5464@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5464@@"/>
         <string name="2" value="已完成：生命之证 III：附加试炼 3。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="12" />
@@ -24984,7 +24984,7 @@
     <imgdir name="5470">
         <string name="name" value="生命之证 III：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5470@@\r\n完成方式：回到#p1090000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5470@@"/>
         <string name="2" value="已完成：生命之证 III：生命之证。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="13" />
@@ -25000,7 +25000,7 @@
     <imgdir name="5475">
         <string name="name" value="生命之证 IV：访问扎昆入口和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：收集#t4033005#\r\n当前进度：#i4033005# #t4033005# @@BD_LP_PROGRESS:5475@@\r\n完成方式：收集足够#t4033005#后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5475@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="1" />
@@ -25060,7 +25060,7 @@
     <imgdir name="5484">
         <string name="name" value="生命之证 IV：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5484@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5484@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 1。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="7" />
@@ -25070,7 +25070,7 @@
     <imgdir name="5485">
         <string name="name" value="生命之证 IV：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5485@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5485@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 2。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="8" />
@@ -25080,7 +25080,7 @@
     <imgdir name="5486">
         <string name="name" value="生命之证 IV：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5486@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5486@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 3。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="9" />
@@ -25090,7 +25090,7 @@
     <imgdir name="5487">
         <string name="name" value="生命之证 IV：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5487@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5487@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 1。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="10" />
@@ -25100,7 +25100,7 @@
     <imgdir name="5488">
         <string name="name" value="生命之证 IV：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5488@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5488@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 2。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="11" />
@@ -25110,7 +25110,7 @@
     <imgdir name="5489">
         <string name="name" value="生命之证 IV：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5489@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5489@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 3。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="12" />
@@ -25130,7 +25130,7 @@
     <imgdir name="5495">
         <string name="name" value="生命之证 IV：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5495@@\r\n完成方式：回到#p1022000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5495@@"/>
         <string name="2" value="已完成：生命之证 IV：生命之证。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="13" />
@@ -25146,7 +25146,7 @@
     <imgdir name="5500">
         <string name="name" value="生命之证 IV：访问扎昆入口和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：收集#t4033005#\r\n当前进度：#i4033005# #t4033005# @@BD_LP_PROGRESS:5500@@\r\n完成方式：收集足够#t4033005#后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5500@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="1" />
@@ -25206,7 +25206,7 @@
     <imgdir name="5509">
         <string name="name" value="生命之证 IV：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5509@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5509@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 1。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="7" />
@@ -25216,7 +25216,7 @@
     <imgdir name="5510">
         <string name="name" value="生命之证 IV：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5510@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5510@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 2。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="8" />
@@ -25226,7 +25226,7 @@
     <imgdir name="5511">
         <string name="name" value="生命之证 IV：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5511@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5511@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 3。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="9" />
@@ -25236,7 +25236,7 @@
     <imgdir name="5512">
         <string name="name" value="生命之证 IV：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5512@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5512@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 1。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="10" />
@@ -25246,7 +25246,7 @@
     <imgdir name="5513">
         <string name="name" value="生命之证 IV：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5513@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5513@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 2。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="11" />
@@ -25256,7 +25256,7 @@
     <imgdir name="5514">
         <string name="name" value="生命之证 IV：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5514@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5514@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 3。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="12" />
@@ -25276,7 +25276,7 @@
     <imgdir name="5520">
         <string name="name" value="生命之证 IV：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5520@@\r\n完成方式：回到#p1032001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5520@@"/>
         <string name="2" value="已完成：生命之证 IV：生命之证。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="13" />
@@ -25292,7 +25292,7 @@
     <imgdir name="5525">
         <string name="name" value="生命之证 IV：访问扎昆入口和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：收集#t4033005#\r\n当前进度：#i4033005# #t4033005# @@BD_LP_PROGRESS:5525@@\r\n完成方式：收集足够#t4033005#后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5525@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="1" />
@@ -25352,7 +25352,7 @@
     <imgdir name="5534">
         <string name="name" value="生命之证 IV：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5534@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5534@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 1。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="7" />
@@ -25362,7 +25362,7 @@
     <imgdir name="5535">
         <string name="name" value="生命之证 IV：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5535@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5535@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 2。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="8" />
@@ -25372,7 +25372,7 @@
     <imgdir name="5536">
         <string name="name" value="生命之证 IV：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5536@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5536@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 3。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="9" />
@@ -25382,7 +25382,7 @@
     <imgdir name="5537">
         <string name="name" value="生命之证 IV：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5537@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5537@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 1。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="10" />
@@ -25392,7 +25392,7 @@
     <imgdir name="5538">
         <string name="name" value="生命之证 IV：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5538@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5538@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 2。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="11" />
@@ -25402,7 +25402,7 @@
     <imgdir name="5539">
         <string name="name" value="生命之证 IV：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5539@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5539@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 3。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="12" />
@@ -25422,7 +25422,7 @@
     <imgdir name="5545">
         <string name="name" value="生命之证 IV：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5545@@\r\n完成方式：回到#p1012100#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5545@@"/>
         <string name="2" value="已完成：生命之证 IV：生命之证。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="13" />
@@ -25438,7 +25438,7 @@
     <imgdir name="5550">
         <string name="name" value="生命之证 IV：访问扎昆入口和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：收集#t4033005#\r\n当前进度：#i4033005# #t4033005# @@BD_LP_PROGRESS:5550@@\r\n完成方式：收集足够#t4033005#后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5550@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="1" />
@@ -25498,7 +25498,7 @@
     <imgdir name="5559">
         <string name="name" value="生命之证 IV：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5559@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5559@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 1。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="7" />
@@ -25508,7 +25508,7 @@
     <imgdir name="5560">
         <string name="name" value="生命之证 IV：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5560@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5560@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 2。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="8" />
@@ -25518,7 +25518,7 @@
     <imgdir name="5561">
         <string name="name" value="生命之证 IV：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5561@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5561@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 3。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="9" />
@@ -25528,7 +25528,7 @@
     <imgdir name="5562">
         <string name="name" value="生命之证 IV：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5562@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5562@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 1。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="10" />
@@ -25538,7 +25538,7 @@
     <imgdir name="5563">
         <string name="name" value="生命之证 IV：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5563@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5563@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 2。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="11" />
@@ -25548,7 +25548,7 @@
     <imgdir name="5564">
         <string name="name" value="生命之证 IV：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5564@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5564@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 3。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="12" />
@@ -25568,7 +25568,7 @@
     <imgdir name="5570">
         <string name="name" value="生命之证 IV：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5570@@\r\n完成方式：回到#p1052001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5570@@"/>
         <string name="2" value="已完成：生命之证 IV：生命之证。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="13" />
@@ -25584,7 +25584,7 @@
     <imgdir name="5575">
         <string name="name" value="生命之证 IV：访问扎昆入口和时间控制室" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：收集#t4033005#\r\n当前进度：#i4033005# #t4033005# @@BD_LP_PROGRESS:5575@@\r\n完成方式：收集足够#t4033005#后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5575@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="1" />
@@ -25644,7 +25644,7 @@
     <imgdir name="5584">
         <string name="name" value="生命之证 IV：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5584@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5584@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 1。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="7" />
@@ -25654,7 +25654,7 @@
     <imgdir name="5585">
         <string name="name" value="生命之证 IV：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5585@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5585@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 2。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="8" />
@@ -25664,7 +25664,7 @@
     <imgdir name="5586">
         <string name="name" value="生命之证 IV：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5586@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5586@@"/>
         <string name="2" value="已完成：生命之证 IV：选择试炼 3。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="9" />
@@ -25674,7 +25674,7 @@
     <imgdir name="5587">
         <string name="name" value="生命之证 IV：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5587@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5587@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 1。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="10" />
@@ -25684,7 +25684,7 @@
     <imgdir name="5588">
         <string name="name" value="生命之证 IV：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5588@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5588@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 2。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="11" />
@@ -25694,7 +25694,7 @@
     <imgdir name="5589">
         <string name="name" value="生命之证 IV：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5589@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5589@@"/>
         <string name="2" value="已完成：生命之证 IV：附加试炼 3。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="12" />
@@ -25714,7 +25714,7 @@
     <imgdir name="5595">
         <string name="name" value="生命之证 IV：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5595@@\r\n完成方式：回到#p1090000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5595@@"/>
         <string name="2" value="已完成：生命之证 IV：生命之证。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="13" />
@@ -25730,7 +25730,7 @@
     <imgdir name="5600">
         <string name="name" value="生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：收集#t4033006#\r\n当前进度：#i4033006# #t4033006# @@BD_LP_PROGRESS:5600@@\r\n完成方式：收集足够#t4033006#后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5600@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="1" />
@@ -25790,7 +25790,7 @@
     <imgdir name="5609">
         <string name="name" value="生命之证 V：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5609@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5609@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 1。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="7" />
@@ -25800,7 +25800,7 @@
     <imgdir name="5610">
         <string name="name" value="生命之证 V：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5610@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5610@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 2。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="8" />
@@ -25810,7 +25810,7 @@
     <imgdir name="5611">
         <string name="name" value="生命之证 V：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5611@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5611@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 3。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="9" />
@@ -25820,7 +25820,7 @@
     <imgdir name="5612">
         <string name="name" value="生命之证 V：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5612@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5612@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 1。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="10" />
@@ -25830,7 +25830,7 @@
     <imgdir name="5613">
         <string name="name" value="生命之证 V：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5613@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5613@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 2。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="11" />
@@ -25840,7 +25840,7 @@
     <imgdir name="5614">
         <string name="name" value="生命之证 V：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5614@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5614@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 3。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="12" />
@@ -25860,7 +25860,7 @@
     <imgdir name="5620">
         <string name="name" value="生命之证 V：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5620@@\r\n完成方式：回到#p1022000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5620@@"/>
         <string name="2" value="已完成：生命之证 V：生命之证。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="13" />
@@ -25876,7 +25876,7 @@
     <imgdir name="5625">
         <string name="name" value="生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：收集#t4033006#\r\n当前进度：#i4033006# #t4033006# @@BD_LP_PROGRESS:5625@@\r\n完成方式：收集足够#t4033006#后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5625@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="1" />
@@ -25936,7 +25936,7 @@
     <imgdir name="5634">
         <string name="name" value="生命之证 V：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5634@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5634@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 1。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="7" />
@@ -25946,7 +25946,7 @@
     <imgdir name="5635">
         <string name="name" value="生命之证 V：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5635@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5635@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 2。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="8" />
@@ -25956,7 +25956,7 @@
     <imgdir name="5636">
         <string name="name" value="生命之证 V：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5636@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5636@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 3。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="9" />
@@ -25966,7 +25966,7 @@
     <imgdir name="5637">
         <string name="name" value="生命之证 V：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5637@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5637@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 1。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="10" />
@@ -25976,7 +25976,7 @@
     <imgdir name="5638">
         <string name="name" value="生命之证 V：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5638@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5638@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 2。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="11" />
@@ -25986,7 +25986,7 @@
     <imgdir name="5639">
         <string name="name" value="生命之证 V：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5639@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5639@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 3。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="12" />
@@ -26006,7 +26006,7 @@
     <imgdir name="5645">
         <string name="name" value="生命之证 V：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5645@@\r\n完成方式：回到#p1032001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5645@@"/>
         <string name="2" value="已完成：生命之证 V：生命之证。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="13" />
@@ -26022,7 +26022,7 @@
     <imgdir name="5650">
         <string name="name" value="生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：收集#t4033006#\r\n当前进度：#i4033006# #t4033006# @@BD_LP_PROGRESS:5650@@\r\n完成方式：收集足够#t4033006#后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5650@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="1" />
@@ -26082,7 +26082,7 @@
     <imgdir name="5659">
         <string name="name" value="生命之证 V：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5659@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5659@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 1。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="7" />
@@ -26092,7 +26092,7 @@
     <imgdir name="5660">
         <string name="name" value="生命之证 V：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5660@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5660@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 2。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="8" />
@@ -26102,7 +26102,7 @@
     <imgdir name="5661">
         <string name="name" value="生命之证 V：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5661@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5661@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 3。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="9" />
@@ -26112,7 +26112,7 @@
     <imgdir name="5662">
         <string name="name" value="生命之证 V：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5662@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5662@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 1。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="10" />
@@ -26122,7 +26122,7 @@
     <imgdir name="5663">
         <string name="name" value="生命之证 V：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5663@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5663@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 2。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="11" />
@@ -26132,7 +26132,7 @@
     <imgdir name="5664">
         <string name="name" value="生命之证 V：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5664@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5664@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 3。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="12" />
@@ -26152,7 +26152,7 @@
     <imgdir name="5670">
         <string name="name" value="生命之证 V：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5670@@\r\n完成方式：回到#p1012100#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5670@@"/>
         <string name="2" value="已完成：生命之证 V：生命之证。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="13" />
@@ -26168,7 +26168,7 @@
     <imgdir name="5675">
         <string name="name" value="生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：收集#t4033006#\r\n当前进度：#i4033006# #t4033006# @@BD_LP_PROGRESS:5675@@\r\n完成方式：收集足够#t4033006#后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5675@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="1" />
@@ -26228,7 +26228,7 @@
     <imgdir name="5684">
         <string name="name" value="生命之证 V：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5684@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5684@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 1。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="7" />
@@ -26238,7 +26238,7 @@
     <imgdir name="5685">
         <string name="name" value="生命之证 V：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5685@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5685@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 2。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="8" />
@@ -26248,7 +26248,7 @@
     <imgdir name="5686">
         <string name="name" value="生命之证 V：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5686@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5686@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 3。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="9" />
@@ -26258,7 +26258,7 @@
     <imgdir name="5687">
         <string name="name" value="生命之证 V：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5687@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5687@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 1。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="10" />
@@ -26268,7 +26268,7 @@
     <imgdir name="5688">
         <string name="name" value="生命之证 V：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5688@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5688@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 2。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="11" />
@@ -26278,7 +26278,7 @@
     <imgdir name="5689">
         <string name="name" value="生命之证 V：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5689@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5689@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 3。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="12" />
@@ -26298,7 +26298,7 @@
     <imgdir name="5695">
         <string name="name" value="生命之证 V：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5695@@\r\n完成方式：回到#p1052001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5695@@"/>
         <string name="2" value="已完成：生命之证 V：生命之证。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="13" />
@@ -26314,7 +26314,7 @@
     <imgdir name="5700">
         <string name="name" value="生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：收集#t4033006#\r\n当前进度：#i4033006# #t4033006# @@BD_LP_PROGRESS:5700@@\r\n完成方式：收集足够#t4033006#后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5700@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="1" />
@@ -26374,7 +26374,7 @@
     <imgdir name="5709">
         <string name="name" value="生命之证 V：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5709@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5709@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 1。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="7" />
@@ -26384,7 +26384,7 @@
     <imgdir name="5710">
         <string name="name" value="生命之证 V：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5710@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5710@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 2。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="8" />
@@ -26394,7 +26394,7 @@
     <imgdir name="5711">
         <string name="name" value="生命之证 V：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5711@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5711@@"/>
         <string name="2" value="已完成：生命之证 V：选择试炼 3。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="9" />
@@ -26404,7 +26404,7 @@
     <imgdir name="5712">
         <string name="name" value="生命之证 V：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5712@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5712@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 1。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="10" />
@@ -26414,7 +26414,7 @@
     <imgdir name="5713">
         <string name="name" value="生命之证 V：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5713@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5713@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 2。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="11" />
@@ -26424,7 +26424,7 @@
     <imgdir name="5714">
         <string name="name" value="生命之证 V：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5714@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5714@@"/>
         <string name="2" value="已完成：生命之证 V：附加试炼 3。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="12" />
@@ -26444,7 +26444,7 @@
     <imgdir name="5720">
         <string name="name" value="生命之证 V：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5720@@\r\n完成方式：回到#p1090000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5720@@"/>
         <string name="2" value="已完成：生命之证 V：生命之证。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="13" />
@@ -26460,7 +26460,7 @@
     <imgdir name="5725">
         <string name="name" value="生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：收集#t4033008#\r\n当前进度：#i4033008# #t4033008# @@BD_LP_PROGRESS:5725@@\r\n完成方式：收集足够#t4033008#后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5725@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="1" />
@@ -26520,7 +26520,7 @@
     <imgdir name="5734">
         <string name="name" value="生命之证 VI：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5734@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5734@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 1。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="7" />
@@ -26530,7 +26530,7 @@
     <imgdir name="5735">
         <string name="name" value="生命之证 VI：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5735@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5735@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 2。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="8" />
@@ -26540,7 +26540,7 @@
     <imgdir name="5736">
         <string name="name" value="生命之证 VI：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5736@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5736@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 3。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="9" />
@@ -26550,7 +26550,7 @@
     <imgdir name="5737">
         <string name="name" value="生命之证 VI：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5737@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5737@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 1。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="10" />
@@ -26560,7 +26560,7 @@
     <imgdir name="5738">
         <string name="name" value="生命之证 VI：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5738@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5738@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 2。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="11" />
@@ -26570,7 +26570,7 @@
     <imgdir name="5739">
         <string name="name" value="生命之证 VI：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5739@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5739@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 3。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="12" />
@@ -26590,7 +26590,7 @@
     <imgdir name="5745">
         <string name="name" value="生命之证 VI：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5745@@\r\n完成方式：回到#p1022000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5745@@"/>
         <string name="2" value="已完成：生命之证 VI：生命之证。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="13" />
@@ -26606,7 +26606,7 @@
     <imgdir name="5750">
         <string name="name" value="生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：收集#t4033008#\r\n当前进度：#i4033008# #t4033008# @@BD_LP_PROGRESS:5750@@\r\n完成方式：收集足够#t4033008#后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5750@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="1" />
@@ -26666,7 +26666,7 @@
     <imgdir name="5759">
         <string name="name" value="生命之证 VI：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5759@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5759@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 1。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="7" />
@@ -26676,7 +26676,7 @@
     <imgdir name="5760">
         <string name="name" value="生命之证 VI：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5760@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5760@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 2。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="8" />
@@ -26686,7 +26686,7 @@
     <imgdir name="5761">
         <string name="name" value="生命之证 VI：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5761@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5761@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 3。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="9" />
@@ -26696,7 +26696,7 @@
     <imgdir name="5762">
         <string name="name" value="生命之证 VI：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5762@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5762@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 1。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="10" />
@@ -26706,7 +26706,7 @@
     <imgdir name="5763">
         <string name="name" value="生命之证 VI：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5763@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5763@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 2。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="11" />
@@ -26716,7 +26716,7 @@
     <imgdir name="5764">
         <string name="name" value="生命之证 VI：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5764@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5764@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 3。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="12" />
@@ -26736,7 +26736,7 @@
     <imgdir name="5770">
         <string name="name" value="生命之证 VI：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5770@@\r\n完成方式：回到#p1032001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5770@@"/>
         <string name="2" value="已完成：生命之证 VI：生命之证。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="13" />
@@ -26752,7 +26752,7 @@
     <imgdir name="5775">
         <string name="name" value="生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：收集#t4033008#\r\n当前进度：#i4033008# #t4033008# @@BD_LP_PROGRESS:5775@@\r\n完成方式：收集足够#t4033008#后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5775@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="1" />
@@ -26812,7 +26812,7 @@
     <imgdir name="5784">
         <string name="name" value="生命之证 VI：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5784@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5784@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 1。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="7" />
@@ -26822,7 +26822,7 @@
     <imgdir name="5785">
         <string name="name" value="生命之证 VI：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5785@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5785@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 2。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="8" />
@@ -26832,7 +26832,7 @@
     <imgdir name="5786">
         <string name="name" value="生命之证 VI：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5786@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5786@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 3。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="9" />
@@ -26842,7 +26842,7 @@
     <imgdir name="5787">
         <string name="name" value="生命之证 VI：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5787@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5787@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 1。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="10" />
@@ -26852,7 +26852,7 @@
     <imgdir name="5788">
         <string name="name" value="生命之证 VI：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5788@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5788@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 2。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="11" />
@@ -26862,7 +26862,7 @@
     <imgdir name="5789">
         <string name="name" value="生命之证 VI：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5789@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5789@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 3。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="12" />
@@ -26882,7 +26882,7 @@
     <imgdir name="5795">
         <string name="name" value="生命之证 VI：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5795@@\r\n完成方式：回到#p1012100#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5795@@"/>
         <string name="2" value="已完成：生命之证 VI：生命之证。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="13" />
@@ -26898,7 +26898,7 @@
     <imgdir name="5800">
         <string name="name" value="生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：收集#t4033008#\r\n当前进度：#i4033008# #t4033008# @@BD_LP_PROGRESS:5800@@\r\n完成方式：收集足够#t4033008#后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5800@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="1" />
@@ -26958,7 +26958,7 @@
     <imgdir name="5809">
         <string name="name" value="生命之证 VI：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5809@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5809@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 1。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="7" />
@@ -26968,7 +26968,7 @@
     <imgdir name="5810">
         <string name="name" value="生命之证 VI：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5810@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5810@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 2。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="8" />
@@ -26978,7 +26978,7 @@
     <imgdir name="5811">
         <string name="name" value="生命之证 VI：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5811@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5811@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 3。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="9" />
@@ -26988,7 +26988,7 @@
     <imgdir name="5812">
         <string name="name" value="生命之证 VI：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5812@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5812@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 1。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="10" />
@@ -26998,7 +26998,7 @@
     <imgdir name="5813">
         <string name="name" value="生命之证 VI：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5813@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5813@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 2。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="11" />
@@ -27008,7 +27008,7 @@
     <imgdir name="5814">
         <string name="name" value="生命之证 VI：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5814@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5814@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 3。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="12" />
@@ -27028,7 +27028,7 @@
     <imgdir name="5820">
         <string name="name" value="生命之证 VI：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5820@@\r\n完成方式：回到#p1052001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5820@@"/>
         <string name="2" value="已完成：生命之证 VI：生命之证。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="13" />
@@ -27044,7 +27044,7 @@
     <imgdir name="5825">
         <string name="name" value="生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：收集#t4033008#\r\n当前进度：#i4033008# #t4033008# @@BD_LP_PROGRESS:5825@@\r\n完成方式：收集足够#t4033008#后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5825@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="1" />
@@ -27104,7 +27104,7 @@
     <imgdir name="5834">
         <string name="name" value="生命之证 VI：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5834@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5834@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 1。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="7" />
@@ -27114,7 +27114,7 @@
     <imgdir name="5835">
         <string name="name" value="生命之证 VI：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5835@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5835@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 2。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="8" />
@@ -27124,7 +27124,7 @@
     <imgdir name="5836">
         <string name="name" value="生命之证 VI：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5836@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5836@@"/>
         <string name="2" value="已完成：生命之证 VI：选择试炼 3。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="9" />
@@ -27134,7 +27134,7 @@
     <imgdir name="5837">
         <string name="name" value="生命之证 VI：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5837@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5837@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 1。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="10" />
@@ -27144,7 +27144,7 @@
     <imgdir name="5838">
         <string name="name" value="生命之证 VI：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5838@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5838@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 2。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="11" />
@@ -27154,7 +27154,7 @@
     <imgdir name="5839">
         <string name="name" value="生命之证 VI：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5839@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5839@@"/>
         <string name="2" value="已完成：生命之证 VI：附加试炼 3。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="12" />
@@ -27174,7 +27174,7 @@
     <imgdir name="5845">
         <string name="name" value="生命之证 VI：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5845@@\r\n完成方式：回到#p1090000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5845@@"/>
         <string name="2" value="已完成：生命之证 VI：生命之证。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="13" />
@@ -27190,7 +27190,7 @@
     <imgdir name="5850">
         <string name="name" value="生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：收集#t4033010#\r\n当前进度：#i4033010# #t4033010# @@BD_LP_PROGRESS:5850@@\r\n完成方式：收集足够#t4033010#后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5850@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="1" />
@@ -27250,7 +27250,7 @@
     <imgdir name="5859">
         <string name="name" value="生命之证 VII：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5859@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5859@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 1。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="7" />
@@ -27260,7 +27260,7 @@
     <imgdir name="5860">
         <string name="name" value="生命之证 VII：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5860@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5860@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 2。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="8" />
@@ -27270,7 +27270,7 @@
     <imgdir name="5861">
         <string name="name" value="生命之证 VII：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5861@@\r\n完成方式：回到#p1022000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5861@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 3。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="9" />
@@ -27280,7 +27280,7 @@
     <imgdir name="5862">
         <string name="name" value="生命之证 VII：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5862@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5862@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 1。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="10" />
@@ -27290,7 +27290,7 @@
     <imgdir name="5863">
         <string name="name" value="生命之证 VII：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5863@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5863@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 2。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="11" />
@@ -27300,7 +27300,7 @@
     <imgdir name="5864">
         <string name="name" value="生命之证 VII：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5864@@\r\n完成方式：完成当前试炼进度后，回到#p1022000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5864@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 3。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="12" />
@@ -27320,7 +27320,7 @@
     <imgdir name="5870">
         <string name="name" value="生命之证 VII：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5870@@\r\n完成方式：回到#p1022000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5870@@"/>
         <string name="2" value="已完成：生命之证 VII：生命之证。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="13" />
@@ -27336,7 +27336,7 @@
     <imgdir name="5875">
         <string name="name" value="生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：收集#t4033010#\r\n当前进度：#i4033010# #t4033010# @@BD_LP_PROGRESS:5875@@\r\n完成方式：收集足够#t4033010#后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5875@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="1" />
@@ -27396,7 +27396,7 @@
     <imgdir name="5884">
         <string name="name" value="生命之证 VII：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5884@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5884@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 1。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="7" />
@@ -27406,7 +27406,7 @@
     <imgdir name="5885">
         <string name="name" value="生命之证 VII：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5885@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5885@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 2。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="8" />
@@ -27416,7 +27416,7 @@
     <imgdir name="5886">
         <string name="name" value="生命之证 VII：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5886@@\r\n完成方式：回到#p1032001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5886@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 3。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="9" />
@@ -27426,7 +27426,7 @@
     <imgdir name="5887">
         <string name="name" value="生命之证 VII：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5887@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5887@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 1。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="10" />
@@ -27436,7 +27436,7 @@
     <imgdir name="5888">
         <string name="name" value="生命之证 VII：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5888@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5888@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 2。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="11" />
@@ -27446,7 +27446,7 @@
     <imgdir name="5889">
         <string name="name" value="生命之证 VII：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5889@@\r\n完成方式：完成当前试炼进度后，回到#p1032001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5889@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 3。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="12" />
@@ -27466,7 +27466,7 @@
     <imgdir name="5895">
         <string name="name" value="生命之证 VII：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5895@@\r\n完成方式：回到#p1032001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5895@@"/>
         <string name="2" value="已完成：生命之证 VII：生命之证。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="13" />
@@ -27482,7 +27482,7 @@
     <imgdir name="5900">
         <string name="name" value="生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：收集#t4033010#\r\n当前进度：#i4033010# #t4033010# @@BD_LP_PROGRESS:5900@@\r\n完成方式：收集足够#t4033010#后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5900@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="1" />
@@ -27542,7 +27542,7 @@
     <imgdir name="5909">
         <string name="name" value="生命之证 VII：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5909@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5909@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 1。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="7" />
@@ -27552,7 +27552,7 @@
     <imgdir name="5910">
         <string name="name" value="生命之证 VII：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5910@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5910@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 2。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="8" />
@@ -27562,7 +27562,7 @@
     <imgdir name="5911">
         <string name="name" value="生命之证 VII：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5911@@\r\n完成方式：回到#p1012100#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5911@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 3。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="9" />
@@ -27572,7 +27572,7 @@
     <imgdir name="5912">
         <string name="name" value="生命之证 VII：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5912@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5912@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 1。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="10" />
@@ -27582,7 +27582,7 @@
     <imgdir name="5913">
         <string name="name" value="生命之证 VII：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5913@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5913@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 2。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="11" />
@@ -27592,7 +27592,7 @@
     <imgdir name="5914">
         <string name="name" value="生命之证 VII：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5914@@\r\n完成方式：完成当前试炼进度后，回到#p1012100#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5914@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 3。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="12" />
@@ -27612,7 +27612,7 @@
     <imgdir name="5920">
         <string name="name" value="生命之证 VII：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5920@@\r\n完成方式：回到#p1012100#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5920@@"/>
         <string name="2" value="已完成：生命之证 VII：生命之证。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="13" />
@@ -27628,7 +27628,7 @@
     <imgdir name="5925">
         <string name="name" value="生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：收集#t4033010#\r\n当前进度：#i4033010# #t4033010# @@BD_LP_PROGRESS:5925@@\r\n完成方式：收集足够#t4033010#后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5925@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="1" />
@@ -27688,7 +27688,7 @@
     <imgdir name="5934">
         <string name="name" value="生命之证 VII：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5934@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5934@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 1。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="7" />
@@ -27698,7 +27698,7 @@
     <imgdir name="5935">
         <string name="name" value="生命之证 VII：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5935@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5935@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 2。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="8" />
@@ -27708,7 +27708,7 @@
     <imgdir name="5936">
         <string name="name" value="生命之证 VII：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5936@@\r\n完成方式：回到#p1052001#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5936@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 3。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="9" />
@@ -27718,7 +27718,7 @@
     <imgdir name="5937">
         <string name="name" value="生命之证 VII：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5937@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5937@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 1。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="10" />
@@ -27728,7 +27728,7 @@
     <imgdir name="5938">
         <string name="name" value="生命之证 VII：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5938@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5938@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 2。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="11" />
@@ -27738,7 +27738,7 @@
     <imgdir name="5939">
         <string name="name" value="生命之证 VII：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5939@@\r\n完成方式：完成当前试炼进度后，回到#p1052001#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5939@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 3。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="12" />
@@ -27758,7 +27758,7 @@
     <imgdir name="5945">
         <string name="name" value="生命之证 VII：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5945@@\r\n完成方式：回到#p1052001#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5945@@"/>
         <string name="2" value="已完成：生命之证 VII：生命之证。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="13" />
@@ -27774,7 +27774,7 @@
     <imgdir name="5950">
         <string name="name" value="生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：收集#t4033010#\r\n当前进度：#i4033010# #t4033010# @@BD_LP_PROGRESS:5950@@\r\n完成方式：收集足够#t4033010#后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5950@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="1" />
@@ -27834,7 +27834,7 @@
     <imgdir name="5959">
         <string name="name" value="生命之证 VII：选择试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 1 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5959@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5959@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 1。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="7" />
@@ -27844,7 +27844,7 @@
     <imgdir name="5960">
         <string name="name" value="生命之证 VII：选择试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 2 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5960@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5960@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 2。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="8" />
@@ -27854,7 +27854,7 @@
     <imgdir name="5961">
         <string name="name" value="生命之证 VII：选择试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：选择第 3 项附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5961@@\r\n完成方式：回到#p1090000#选择本轮附加试炼，选定后会开启对应附加试炼。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5961@@"/>
         <string name="2" value="已完成：生命之证 VII：选择试炼 3。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="9" />
@@ -27864,7 +27864,7 @@
     <imgdir name="5962">
         <string name="name" value="生命之证 VII：附加试炼 1" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 1 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5962@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5962@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 1。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="10" />
@@ -27874,7 +27874,7 @@
     <imgdir name="5963">
         <string name="name" value="生命之证 VII：附加试炼 2" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 2 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5963@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5963@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 2。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="11" />
@@ -27884,7 +27884,7 @@
     <imgdir name="5964">
         <string name="name" value="生命之证 VII：附加试炼 3" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：完成第 3 项已选择附加试炼\r\n当前进度：@@BD_LP_PROGRESS:5964@@\r\n完成方式：完成当前试炼进度后，回到#p1090000#提交这一步生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5964@@"/>
         <string name="2" value="已完成：生命之证 VII：附加试炼 3。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="12" />
@@ -27904,7 +27904,7 @@
     <imgdir name="5970">
         <string name="name" value="生命之证 VII：生命之证" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n\r\n目标：领取本阶段生命之证奖励\r\n当前进度：@@BD_LP_PROGRESS:5970@@\r\n完成方式：回到#p1090000#领取本阶段生命之证。" />
+        <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5970@@"/>
         <string name="2" value="已完成：生命之证 VII：生命之证。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="13" />

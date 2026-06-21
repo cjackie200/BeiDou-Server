@@ -165,10 +165,11 @@ class MonsterCardRingQuestTest {
         Character chr = newCharacter(30);
         addRing(chr, 0);
 
-        String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
-
-        assertTrue(text.contains("#b30#k/30 套"));
-        assertTrue(text.contains("#i4021000# #t4021000# #b0#k/10"));
+        var conditions = MonsterCardRingQuest.progressEntry(chr).orElseThrow().conditions();
+        assertEquals(2, conditions.size());
+        assertTrue(conditions.get(0).text().contains("#b30#k/30 套"));
+        assertTrue(conditions.get(1).text().contains("#i4021000# #t4021000# #b0#k/10"));
+        assertQProgressTextSafe(conditions.get(0).text());
     }
 
     @Test
@@ -183,11 +184,13 @@ class MonsterCardRingQuestTest {
         InteractionHookProgressEntry entry = entries.getFirst();
         assertEquals(29982, entry.questId());
         assertEquals(QuestStatus.Status.STARTED.getId(), entry.state());
-        assertEquals(60, entry.current());
-        assertEquals(60, entry.required());
-        assertTrue(entry.text().contains("#b60#k/60 套"));
-        assertTrue(entry.text().contains("#i4021001# #t4021001# #b10#k/10"));
-        assertQProgressTextSafe(entry.text());
+        assertEquals(2, entry.conditions().size());
+        assertEquals(60, entry.conditions().get(0).current());
+        assertEquals(60, entry.conditions().get(0).required());
+        assertEquals(10, entry.conditions().get(1).current());
+        assertEquals(10, entry.conditions().get(1).required());
+        assertTrue(entry.conditions().get(0).text().contains("#b60#k/60 套"));
+        assertTrue(entry.conditions().get(1).text().contains("#i4021001# #t4021001# #b10#k/10"));
     }
 
     @Test
@@ -204,8 +207,8 @@ class MonsterCardRingQuestTest {
         assertStartedProgress(chr, 29982, "001");
         assertEquals(1, entries.size());
         assertEquals(29982, entries.getFirst().questId());
-        assertTrue(entries.getFirst().text().contains("#t4021001#"));
-        assertQProgressTextSafe(entries.getFirst().text());
+        assertEquals(2, entries.getFirst().conditions().size());
+        assertTrue(entries.getFirst().conditions().get(1).text().contains("#t4021001#"));
     }
 
     @Test
@@ -214,10 +217,10 @@ class MonsterCardRingQuestTest {
         addRing(chr, 0);
         addItem(chr, MonsterCardRingQuest.getMaterialForLevel(1), MonsterCardRingQuest.getMaterialQty());
 
-        String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
-
-        assertTrue(text.contains("#b29#k/30 套"));
-        assertTrue(text.contains("#i4021000# #t4021000# #b10#k/10"));
+        var conditions = MonsterCardRingQuest.progressEntry(chr).orElseThrow().conditions();
+        assertEquals(2, conditions.size());
+        assertTrue(conditions.get(0).text().contains("#b29#k/30 套"));
+        assertTrue(conditions.get(1).text().contains("#i4021000# #t4021000# #b10#k/10"));
     }
 
     @Test
@@ -226,10 +229,10 @@ class MonsterCardRingQuestTest {
         equipRing(chr, 1);
         addItem(chr, MonsterCardRingQuest.getMaterialForLevel(2), MonsterCardRingQuest.getMaterialQty());
 
-        String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
-
-        assertTrue(text.contains("#b30#k/60 套"));
-        assertTrue(text.contains("#i4021001# #t4021001# #b10#k/10"));
+        var conditions = MonsterCardRingQuest.progressEntry(chr).orElseThrow().conditions();
+        assertEquals(2, conditions.size());
+        assertTrue(conditions.get(0).text().contains("#b30#k/60 套"));
+        assertTrue(conditions.get(1).text().contains("#i4021001# #t4021001# #b10#k/10"));
     }
 
     @Test
@@ -238,10 +241,10 @@ class MonsterCardRingQuestTest {
         addRing(chr, 0);
         addItem(chr, MonsterCardRingQuest.getMaterialForLevel(1), MonsterCardRingQuest.getMaterialQty());
 
-        String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
-
-        assertTrue(text.contains("#b30#k/30 套"));
-        assertTrue(text.contains("#i4021000# #t4021000# #b10#k/10"));
+        var conditions = MonsterCardRingQuest.progressEntry(chr).orElseThrow().conditions();
+        assertEquals(2, conditions.size());
+        assertTrue(conditions.get(0).text().contains("#b30#k/30 套"));
+        assertTrue(conditions.get(1).text().contains("#i4021000# #t4021000# #b10#k/10"));
     }
 
     @Test
