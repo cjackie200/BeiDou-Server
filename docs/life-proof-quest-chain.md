@@ -305,8 +305,11 @@ Q 任务详情 `QuestInfo.1` 必须包含阶段背景、明确目标、当前进
   `#a`。客户端原生 `#a` 只按 WZ `mob` 条件安全渲染进度；`infoex`、`money` 或空完成条件
   配 `#a` 会导致旧客户端在按 `Q` 展开任务列表时访问空进度列表。非 `mob` 任务详情写
   `@@BD_LP_PROGRESS:{questId}@@` 占位符，由 `ijl15` 根据服务端
-  `INTERACTION_HOOK_PROGRESS(0x1004)` 推送的当前角色进度替换成 `current/required`。
-  缓存缺失时客户端临时显示 `...` 并在 `interaction-hook.log` 记录 `hit=0`。
+  `INTERACTION_HOOK_PROGRESS(0x1004)` 推送的通用 Hook 进度缓存替换成 `current/required`。生命之证
+  资源保留 `BD_LP` marker 作为兼容格式；新业务优先使用通用 `@@BD_IH_PROGRESS:{questId}@@`。
+  服务端每次发送 `0x1004` 都是完整进度集合，包含当前角色生命之证 entries 和其他已接入业务 entries。
+  缓存缺失时客户端替换为空，并在 `interaction-hook.log` 记录 `hit=0`，不显示同步提示、`...` 或
+  marker 原文。
 - `QuestStatus.progressData` 按 progress 插入顺序拼接三位数；服务端读取 WZ `mob` 时必须保留
   子节点顺序，生命之证写入虚拟 progress 时固定使用 key `0`。
 

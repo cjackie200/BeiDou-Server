@@ -6,6 +6,7 @@ import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.OutPacket;
 import org.gms.net.packet.Packet;
 import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.MonsterCardRingQuest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,7 @@ public final class InteractionHookPackets {
         clearAllRules(client);
         sendCharacterQuestRules(client);
         sendMapNpcRules(client);
-        sendLifeProofProgress(client);
+        sendProgress(client);
     }
 
     public static void sendCharacterQuestRules(Client client) {
@@ -62,15 +63,22 @@ public final class InteractionHookPackets {
         sendClearScope(client, InteractionHookProtocol.SCOPE_ALL_RULES);
     }
 
-    public static void sendLifeProofProgress(Client client) {
+    public static void sendProgress(Client client) {
         if (!canSendRules(client)) {
             return;
         }
-        Packet packet = buildProgressPacket(LifeProofQuest.progressEntries(client.getPlayer()));
+        List<InteractionHookProgressEntry> entries = progressEntries(client.getPlayer());
+        Packet packet = buildProgressPacket(entries);
         client.sendPacket(packet);
-        log.info("InteractionHook progress sent player={} payloadBytes={}",
+        log.info("InteractionHook progress sent player={} count={} payloadBytes={}",
                 client.getPlayer().getName(),
+                entries.size(),
                 Math.max(0, packet.getBytes().length - 2));
+        for (InteractionHookProgressEntry entry : entries) {
+            log.info("  progress entry questId={} state={} current={} required={} text=[{}]",
+                    entry.questId(), entry.state(), entry.current(), entry.required(),
+                    entry.text() == null ? "<null>" : entry.text().replace("\r", "\\r").replace("\n", "\\n"));
+        }
     }
 
     public static void sendResult(Client client, int requestId, InteractionHookResultCode resultCode) {
@@ -133,6 +141,16 @@ public final class InteractionHookPackets {
             packet.writeString(entry.text() == null ? "" : entry.text());
         }
         return packet;
+    }
+
+    static List<InteractionHookProgressEntry> progressEntries(org.gms.client.Character chr) {
+        if (chr == null) {
+            return List.of();
+        }
+        List<InteractionHookProgressEntry> entries = new ArrayList<>();
+        entries.addAll(LifeProofQuest.progressEntries(chr));
+        entries.addAll(MonsterCardRingQuest.progressEntries(chr));
+        return entries;
     }
 
     static int questStateMask(org.gms.client.Character chr, int questId) {

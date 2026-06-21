@@ -118,7 +118,7 @@ public final class InteractionHookManager {
         }
         CONTEXTS.remove(client);
         InteractionHookPackets.sendCharacterQuestRules(client);
-        InteractionHookPackets.sendLifeProofProgress(client);
+        InteractionHookPackets.sendProgress(client);
         InteractionHookPackets.clearDialogTempRules(client);
     }
 

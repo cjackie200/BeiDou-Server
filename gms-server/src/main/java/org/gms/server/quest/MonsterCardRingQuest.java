@@ -12,7 +12,10 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.server.quest.hook.InteractionHookAction;
 import org.gms.server.quest.hook.InteractionHookContext;
 import org.gms.server.quest.hook.InteractionHookPackets;
+import org.gms.server.quest.hook.InteractionHookProgressEntry;
 import org.gms.util.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public final class MonsterCardRingQuest {
+    private static final Logger log = LoggerFactory.getLogger(MonsterCardRingQuest.class);
     public static final int NPC_ID = 2006;
     public static final int BASE_RING = 1112415;
     public static final int MAX_LEVEL = 10;
@@ -135,6 +139,50 @@ public final class MonsterCardRingQuest {
             return Optional.empty();
         }
         return resolveCurrentQuestId(chr);
+    }
+
+    public static Optional<InteractionHookProgressEntry> progressEntry(Character chr) {
+        return progressEntries(chr).stream().findFirst();
+    }
+
+    public static List<InteractionHookProgressEntry> progressEntries(Character chr) {
+        if (chr == null) {
+            return List.of();
+        }
+        syncQuestStateSilently(chr);
+        RingState ringState = getRingState(chr);
+        RingInfo current = ringState.getCurrent();
+        if (current == null || current.getLevel() >= MAX_LEVEL) {
+            return List.of();
+        }
+
+        List<InteractionHookProgressEntry> entries = new ArrayList<>();
+        for (int questId = CLAIM_QUEST_ID + 1; questId <= LAST_QUEST_ID; questId++) {
+            if (chr.getQuestStatus(questId) == QuestStatus.Status.STARTED.getId()) {
+                entries.add(progressEntryForQuest(chr, ringState, current, questId));
+            }
+        }
+
+        int currentQuestId = getUpgradeQuestId(current.getLevel() + 1);
+        if (isUpgradeQuest(currentQuestId) && entries.stream().noneMatch(entry -> entry.questId() == currentQuestId)) {
+            entries.add(progressEntryForQuest(chr, ringState, current, currentQuestId));
+        }
+        return entries;
+    }
+
+    private static InteractionHookProgressEntry progressEntryForQuest(Character chr, RingState ringState,
+                                                                      RingInfo current, int questId) {
+        int targetLevel = getTargetLevelByQuestId(questId);
+        int requiredSets = targetLevel * SETS_PER_LEVEL;
+        int completedSets = countCompletedCardSets(chr);
+        UpgradeValidation validation = validateUpgrade(chr, ringState);
+        return new InteractionHookProgressEntry(
+                questId,
+                chr.getQuestStatus(questId),
+                completedSets,
+                requiredSets,
+                progressEntryText(chr, ringState, current, targetLevel, completedSets, requiredSets, validation)
+        );
     }
 
     public static InteractionHookAction resolveCurrentAction(Character chr, int questId) {
@@ -276,6 +324,7 @@ public final class MonsterCardRingQuest {
             syncNpcScriptable(chr);
             if (chr.getClient() != null) {
                 InteractionHookPackets.sendCharacterQuestRules(chr.getClient());
+                InteractionHookPackets.sendProgress(chr.getClient());
             }
         }
     }
@@ -422,6 +471,93 @@ public final class MonsterCardRingQuest {
             text.append("\r\n#b条件已经满足。点击完成书本可升级到 Lv").append(targetLevel).append("。#k");
         }
         return text.toString();
+    }
+
+    // The ijl15 ZXString::Assign hook (0x00414617) handles marker replacement with proper
+    // buffer allocation, so there is no longer a byte limit on the replacement text.
+    private static String progressEntryText(Character chr, RingState ringState, RingInfo current, int targetLevel,
+                                            int completedSets, int requiredSets, UpgradeValidation validation) {
+        int material = getMaterialForLevel(targetLevel);
+        int materialCount = material > 0 ? chr.getItemQuantity(material, false) : 0;
+        StringBuilder text = new StringBuilder();
+        text.append("怪物卡收集进度：").append(completedSets).append("/").append(requiredSets).append(" 套");
+        text.append("\r\n材料收集进度：").append(itemName(material)).append(" ")
+                .append(materialCount).append("/").append(MATERIAL_QTY);
+        if (validation != null && !validation.isOk()) {
+            text.append("\r\n").append(progressEntryReason(
+                    ringState, current, completedSets, requiredSets, material, materialCount));
+        }
+        String result = text.toString();
+        log.info("MonsterCardRing progressEntryText questTarget=Lv{} text=[{}]",
+                targetLevel, result.replace("\r", "\\r").replace("\n", "\\n"));
+        return result;
+    }
+
+    private static String progressEntryReason(RingState ringState, RingInfo current, int completedSets,
+                                              int requiredSets, int material, int materialCount) {
+        if (ringState == null || ringState.getTotal() == 0) {
+            return "请先领取" + itemName(BASE_RING);
+        }
+        if (ringState.getTotal() > 1) {
+            return "身上存在多个怪物卡戒指，请联系管理员处理后再升级";
+        }
+        if (current == null) {
+            return "没有找到可升级的怪物卡戒指";
+        }
+        if (current.getLevel() >= MAX_LEVEL) {
+            return "怪物卡戒指已经达到最高等级";
+        }
+        if (current.getEquipped() > 0) {
+            return "请先卸下" + ringName(current) + "，并放入装备栏背包";
+        }
+        if (current.getInBag() <= 0) {
+            return "请把" + ringName(current) + "放入装备栏背包";
+        }
+        if (completedSets < requiredSets) {
+            return "满套怪物卡数量不足，当前 " + completedSets + " 套，需要 " + requiredSets + " 套";
+        }
+        if (material <= 0) {
+            return "升级材料配置缺失";
+        }
+        if (materialCount < MATERIAL_QTY) {
+            return itemName(material) + "不足，当前 " + materialCount + " 个，需要 " + MATERIAL_QTY + " 个";
+        }
+        return "当前不能升级";
+    }
+
+    private static String ringName(RingInfo ring) {
+        if (ring == null) {
+            return itemName(BASE_RING);
+        }
+        return itemName(ring.getId()) + " Lv" + ring.getLevel();
+    }
+
+    private static String itemName(int itemId) {
+        if (itemId <= 0) {
+            return "道具 " + itemId;
+        }
+        try {
+            String name = ItemInformationProvider.getInstance().getName(itemId);
+            if (name != null && !name.isBlank()) {
+                return name;
+            }
+        } catch (RuntimeException ignored) {
+            // Q detail text must stay readable even when WZ string data is unavailable.
+        }
+        return "道具 " + itemId;
+    }
+
+    private static String ringLocationText(RingInfo current) {
+        if (current == null) {
+            return "未在装备栏背包";
+        }
+        if (current.getInBag() > 0) {
+            return "已在装备栏背包";
+        }
+        if (current.getEquipped() > 0) {
+            return "当前穿戴中";
+        }
+        return "未在装备栏背包";
     }
 
     public static String upgradePrompt(UpgradeValidation validation) {

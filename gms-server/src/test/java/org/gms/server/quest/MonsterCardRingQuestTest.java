@@ -8,6 +8,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
+import org.gms.server.quest.hook.InteractionHookProgressEntry;
 import org.gms.service.ConfigService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -143,6 +145,125 @@ class MonsterCardRingQuestTest {
         assertStartedProgress(chr, 29981, "001");
     }
 
+    @Test
+    void syncQuestStateRefreshesProgressPacketEvenWhenNotReadyValueDoesNotChange() {
+        Character chr = newCharacter(0);
+        CapturingClient client = (CapturingClient) chr.getClient();
+        addRing(chr, 0);
+        MonsterCardRingQuest.syncQuestState(chr);
+        int before = client.progressPackets;
+
+        addItem(chr, MonsterCardRingQuest.getMaterialForLevel(1), 1);
+        MonsterCardRingQuest.syncQuestState(chr);
+
+        assertStartedProgress(chr, 29981, "000");
+        assertTrue(client.progressPackets > before);
+    }
+
+    @Test
+    void progressEntryExplainsMissingMaterial() {
+        Character chr = newCharacter(30);
+        addRing(chr, 0);
+
+        String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
+
+        assertTrue(text.contains("怪物卡收集进度：30/30 套"));
+        assertTrue(text.contains("材料收集进度：石榴石 0/10"));
+        assertTrue(text.contains("石榴石不足，当前 0 个，需要 10 个"));
+        assertNoWzMacro(text);
+    }
+
+    @Test
+    void progressEntriesIncludeCurrentStartedQuestFromRingLevel() {
+        Character chr = newCharacter(60);
+        addRing(chr, 1);
+        addItem(chr, MonsterCardRingQuest.getMaterialForLevel(2), MonsterCardRingQuest.getMaterialQty());
+
+        List<InteractionHookProgressEntry> entries = MonsterCardRingQuest.progressEntries(chr);
+
+        assertEquals(1, entries.size());
+        InteractionHookProgressEntry entry = entries.getFirst();
+        assertEquals(29982, entry.questId());
+        assertEquals(QuestStatus.Status.STARTED.getId(), entry.state());
+        assertEquals(60, entry.current());
+        assertEquals(60, entry.required());
+        assertTrue(entry.text().contains("怪物卡收集进度：60/60 套"));
+        assertTrue(entry.text().contains("材料收集进度：紫水晶 10/10"));
+        assertQProgressTextSafe(entry.text());
+    }
+
+    @Test
+    void progressEntriesNormalizeStaleQuestStateBeforeBuildingEntries() {
+        Character chr = newCharacter(60);
+        addRing(chr, 1);
+        addItem(chr, MonsterCardRingQuest.getMaterialForLevel(2), MonsterCardRingQuest.getMaterialQty());
+        putQuest(chr, 29981, QuestStatus.Status.STARTED, "001");
+        putQuest(chr, 29982, QuestStatus.Status.NOT_STARTED, null);
+
+        List<InteractionHookProgressEntry> entries = MonsterCardRingQuest.progressEntries(chr);
+
+        assertQuest(chr, 29981, QuestStatus.Status.COMPLETED);
+        assertStartedProgress(chr, 29982, "001");
+        assertEquals(1, entries.size());
+        assertEquals(29982, entries.getFirst().questId());
+        assertTrue(entries.getFirst().text().contains("紫水晶"));
+        assertQProgressTextSafe(entries.getFirst().text());
+    }
+
+    @Test
+    void progressEntryExplainsMissingCardSets() {
+        Character chr = newCharacter(29);
+        addRing(chr, 0);
+        addItem(chr, MonsterCardRingQuest.getMaterialForLevel(1), MonsterCardRingQuest.getMaterialQty());
+
+        String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
+
+        assertTrue(text.contains("怪物卡收集进度：29/30 套"));
+        assertTrue(text.contains("材料收集进度：石榴石 10/10"));
+        assertTrue(text.contains("满套怪物卡数量不足，当前 29 套，需要 30 套"));
+        assertNoWzMacro(text);
+    }
+
+    @Test
+    void progressEntryExplainsEquippedRing() {
+        Character chr = newCharacter(30);
+        equipRing(chr, 1);
+        addItem(chr, MonsterCardRingQuest.getMaterialForLevel(2), MonsterCardRingQuest.getMaterialQty());
+
+        String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
+
+        assertTrue(text.contains("怪物卡收集进度：30/60 套"));
+        assertTrue(text.contains("材料收集进度：紫水晶 10/10"));
+        assertTrue(text.contains("请先卸下怪物卡戒指I Lv1，并放入装备栏背包"));
+        assertNoWzMacro(text);
+    }
+
+    @Test
+    void progressEntryShowsReadyState() {
+        Character chr = newCharacter(30);
+        addRing(chr, 0);
+        addItem(chr, MonsterCardRingQuest.getMaterialForLevel(1), MonsterCardRingQuest.getMaterialQty());
+
+        String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
+
+        assertTrue(text.contains("怪物卡收集进度：30/30 套"));
+        assertTrue(text.contains("材料收集进度：石榴石 10/10"));
+        assertNoWzMacro(text);
+    }
+
+    @Test
+    void npcProgressTextKeepsWzMacrosForDialog() {
+        Character chr = newCharacter(30);
+        addRing(chr, 0);
+
+        String text = MonsterCardRingQuest.progressText(chr);
+
+        assertTrue(text.contains("#i4021000#"));
+        assertTrue(text.contains("#t4021000#"));
+        assertTrue(text.contains("#b"));
+        assertTrue(text.contains("#k"));
+    }
+
     private static Object bean(Map<Class<?>, Object> beans, Class<?> type) {
         return beans.computeIfAbsent(type, key -> mock(key, RETURNS_DEEP_STUBS));
     }
@@ -169,9 +290,32 @@ class MonsterCardRingQuestTest {
         return addItem(chr, MonsterCardRingQuest.BASE_RING + level, 1);
     }
 
+    private static short equipRing(Character chr, int level) {
+        return addItem(chr, InventoryType.EQUIPPED, MonsterCardRingQuest.BASE_RING + level, 1);
+    }
+
     private static short addItem(Character chr, int itemId, int quantity) {
         InventoryType type = org.gms.constants.inventory.ItemConstants.getInventoryType(itemId);
+        return addItem(chr, type, itemId, quantity);
+    }
+
+    private static short addItem(Character chr, InventoryType type, int itemId, int quantity) {
         return chr.getInventory(type).addItem(new Item(itemId, (short) 0, (short) quantity));
+    }
+
+    private static void assertNoWzMacro(String text) {
+        assertFalse(text.contains("#"), text);
+    }
+
+    private static void assertQProgressTextSafe(String text) {
+        assertNoWzMacro(text);
+        assertFalse(text.contains("@@"), text);
+        assertFalse(text.contains("..."), text);
+        assertFalse(text.contains("进度正在同步"), text);
+    }
+
+    private static int readU16(byte[] bytes, int offset) {
+        return Byte.toUnsignedInt(bytes[offset]) | Byte.toUnsignedInt(bytes[offset + 1]) << 8;
     }
 
     private static void putQuest(Character chr, int questId, QuestStatus.Status status, String progress) {
@@ -192,12 +336,20 @@ class MonsterCardRingQuestTest {
     }
 
     private static final class CapturingClient extends Client {
+        private int progressPackets;
+
         private CapturingClient() {
             super(null, -1, null, null, -123, -123);
         }
 
         @Override
         public void sendPacket(Packet packet) {
+            if (packet == null || packet.getBytes().length < 2) {
+                return;
+            }
+            if (readU16(packet.getBytes(), 0) == 0x1004) {
+                progressPackets++;
+            }
         }
     }
 }

@@ -2,13 +2,28 @@ package org.gms.server.quest.hook;
 
 import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
+import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.Job;
+import org.gms.client.MonsterBook;
+import org.gms.client.inventory.InventoryType;
+import org.gms.client.inventory.Item;
 import org.gms.constants.id.NpcId;
 import org.gms.net.packet.Packet;
+import org.gms.property.ServiceProperty;
+import org.gms.service.ConfigService;
 import org.gms.util.PacketCreator;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,8 +32,41 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class InteractionHookRegistryTest {
+
+    @BeforeAll
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    static void setUpApplicationContext() throws Exception {
+        ApplicationContext context = mock(ApplicationContext.class);
+        ServiceProperty serviceProperty = new ServiceProperty();
+        MessageSource messageSource = mock(MessageSource.class);
+        ConfigService configService = mock(ConfigService.class);
+        Map<Class<?>, Object> beans = new HashMap<>();
+
+        when(configService.loadGameConfigs()).thenReturn(List.of());
+        when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        beans.put(ServiceProperty.class, serviceProperty);
+        beans.put(MessageSource.class, messageSource);
+        beans.put(ConfigService.class, configService);
+
+        doAnswer(invocation -> bean(beans, invocation.getArgument(0)))
+                .when(context).getBean(any(Class.class));
+        doAnswer(invocation -> bean(beans, invocation.getArgument(1)))
+                .when(context).getBean(anyString(), any(Class.class));
+
+        Field field = org.gms.manager.ServerManager.class.getDeclaredField("applicationContext");
+        field.setAccessible(true);
+        field.set(null, context);
+    }
 
     @Test
     void rulesIncludeLifeProofAndMonsterCardRingQuestActions() {
@@ -118,6 +166,25 @@ class InteractionHookRegistryTest {
         assertEquals('1', bytes[30]);
         assertEquals('6', bytes[31]);
         assertEquals(32, bytes.length);
+    }
+
+    @Test
+    void progressEntriesMergeLifeProofAndMonsterCardRing() {
+        Character chr = newCharacter(Job.HERO, 30);
+        addRing(chr, 0);
+        addItem(chr, MonsterCardRingQuest.getMaterialForLevel(1), MonsterCardRingQuest.getMaterialQty());
+
+        List<InteractionHookProgressEntry> entries = InteractionHookPackets.progressEntries(chr);
+        InteractionHookProgressEntry ringEntry = entries.stream()
+                .filter(entry -> entry.questId() == 29981)
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(95, entries.size());
+        assertTrue(entries.stream().anyMatch(entry -> entry.questId() == LifeProofQuest.FIRST_QUEST_ID));
+        assertTrue(ringEntry.text().contains("怪物卡收集进度：30/30 套"));
+        assertTrue(ringEntry.text().contains("材料收集进度：石榴石 10/10"));
+        assertFalse(ringEntry.text().contains("#"), ringEntry.text());
     }
 
     @Test
@@ -260,6 +327,38 @@ class InteractionHookRegistryTest {
         return new InteractionHookEvent(requestId, eventType, targetType, targetId, objectId, npcId, questId,
                 InteractionHookProtocol.QUEST_STATE_NONE, rawAction, selection,
                 dialogContext, InteractionHookProtocol.DIALOG_STATE_NONE, 0);
+    }
+
+    private static Object bean(Map<Class<?>, Object> beans, Class<?> type) {
+        return beans.computeIfAbsent(type, key -> mock(key, RETURNS_DEEP_STUBS));
+    }
+
+    private static Character newCharacter(Job job, int completedSets) {
+        Client client = Client.createMock();
+        Character chr = Character.getDefault(client);
+        client.setPlayer(chr);
+        chr.setJob(job);
+        chr.setMonsterBook(monsterBookWithCompletedSets(completedSets));
+        return chr;
+    }
+
+    private static MonsterBook monsterBookWithCompletedSets(int completedSets) {
+        MonsterBook monsterBook = mock(MonsterBook.class);
+        Map<Integer, Integer> cards = new LinkedHashMap<>();
+        for (int i = 0; i < completedSets; i++) {
+            cards.put(100000 + i, 5);
+        }
+        when(monsterBook.getCardSet()).thenReturn(new LinkedHashSet<>(cards.entrySet()));
+        return monsterBook;
+    }
+
+    private static short addRing(Character chr, int level) {
+        return addItem(chr, MonsterCardRingQuest.BASE_RING + level, 1);
+    }
+
+    private static short addItem(Character chr, int itemId, int quantity) {
+        InventoryType type = org.gms.constants.inventory.ItemConstants.getInventoryType(itemId);
+        return chr.getInventory(type).addItem(new Item(itemId, (short) 0, (short) quantity));
     }
 
     private static final class CapturingClient extends Client {

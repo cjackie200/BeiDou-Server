@@ -102,8 +102,11 @@ required
 text
 ```
 
-`text` 使用客户端包内字符串格式：`uint16 length` 加字节内容。当前只用于生命之证 Q 任务详情
-`@@BD_LP_PROGRESS:{questId}@@` 占位符替换，服务端发送 `current/required` 这类短文本。
+`text` 使用客户端包内字符串格式：`uint16 length` 加字节内容。当前用于 Q 任务详情的 Hook 进度
+占位符替换。通用占位符是 `@@BD_IH_PROGRESS:{questId}@@`；客户端继续兼容生命之证既有
+`@@BD_LP_PROGRESS:{questId}@@` 和误写的 `@@DB_IH_PROGRESS:{questId}@@`。服务端每次下发完整缓存
+entries，避免单业务刷新清空另一业务进度。客户端替换时接受数字后一到多个 `@` 作为 marker 结束，
+用于兼容 Q 详情构造过程中的单 `@` 截断形态。
 
 ## 枚举
 
@@ -214,10 +217,12 @@ text
   scope。普通 scope 替换不清 pending；`CLEAR_SCOPE ALL_RULES` 才清全部 active rules、pending 和
   Hook 对话上下文。
 - `S2C_INTERACTION_HOOK_RESULT(0x1002)`：处理 pending 请求。
-- `S2C_INTERACTION_HOOK_PROGRESS(0x1004)`：替换本地生命之证进度缓存。Q 任务详情构造文本时，
-  `ijl15` 把 `@@BD_LP_PROGRESS:{questId}@@` 替换为缓存文本；缓存缺失时显示 `...` 并写
-  `interaction-hook.log`，不回退到客户端原生 `#a`。客户端按 `entryCount` 完整解析成功后即
-  替换缓存；`CInPacket::Size` 中保留的尾部容量只记录 warning，不拒绝已经解析成功的进度包。
+- `S2C_INTERACTION_HOOK_PROGRESS(0x1004)`：替换本地通用 Hook 进度缓存。Q 任务详情构造文本时，
+  `ijl15` 把 `@@BD_IH_PROGRESS:{questId}@@`、兼容的 `@@BD_LP_PROGRESS:{questId}@@` 或误写的
+  `@@DB_IH_PROGRESS:{questId}@@` 替换为缓存文本；缓存缺失或 marker 解析失败时替换为空，只写
+  `interaction-hook.log`，不显示同步提示、`...` 或 marker 原文，也不回退到客户端原生 `#a`。客户端按
+  `entryCount` 完整解析成功后即替换缓存；`CInPacket::Size` 中保留的尾部容量只记录 warning，
+  不拒绝已经解析成功的进度包。
 
 Hook 对话发包：
 
@@ -309,6 +314,11 @@ pending 行为：
 
 - 领取、查看进度、升级入口接入 Hook。
 - 任务主题归入 `传奇之路`。
+- Q 任务详情使用 `@@BD_IH_PROGRESS:{questId}@@`，为 `29981..29990` 中进行中的升级任务下发纯文本
+  progress entry，并保证按当前戒指等级推导出的升级任务一定有 entry；`29980` 领取任务不下发 entry。
+  该文本由服务端提前解析材料名和戒指名，不得包含 `#i/#t/#b/#k/#r/#n` 等 NPC/WZ 宏。
+- 服务端 `0x1004` 每次发送生命之证 entries 加当前怪物卡戒指 entry 的完整集合，不能单独发送怪物卡
+  entry，否则客户端完整替换缓存时会清掉生命之证 Q 详情进度。
 
 ## 验收
 

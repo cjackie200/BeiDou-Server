@@ -441,6 +441,30 @@ class LifeProofQuestTest {
                             + infoPath);
             assertEquals("31", childValue(quest, "int", "area"),
                     "monster card ring QuestInfo.area must stay in Legend Road for quest " + questId + " in " + infoPath);
+            String detail = childValue(quest, "string", "1");
+            if (questId == MonsterCardRingQuest.CLAIM_QUEST_ID) {
+                assertFalse(detail.contains("@@BD_IH_PROGRESS:"),
+                        "monster card ring claim quest must not contain hook progress marker: " + questId);
+            } else {
+                String marker = "@@BD_IH_PROGRESS:" + questId + "@@";
+                assertEquals(1, countOccurrences(detail, marker),
+                        "monster card ring upgrade detail must contain exactly one hook progress marker for quest "
+                                + questId);
+                assertTrue(detail.contains("升级进度："),
+                        "monster card ring upgrade detail must include progress label for quest " + questId);
+                assertFalse(detail.contains("怪物卡戒指升级目标："),
+                        "monster card ring detail must not use old technical template: " + questId);
+                assertFalse(detail.contains("当前进度："),
+                        "monster card ring detail must not use old current-progress label: " + questId);
+                assertFalse(detail.contains("完成方式："),
+                        "monster card ring detail must not use old completion-method label: " + questId);
+            }
+            assertFalse(detail.contains("@@DB_IH_PROGRESS:"),
+                    "monster card ring detail must not use typo interaction hook marker: " + questId);
+            assertFalse(detail.contains("@@BD_LP_PROGRESS:"),
+                    "monster card ring detail must not use life proof marker: " + questId);
+            assertFalse(detail.contains("#a"),
+                    "monster card ring detail must not use client #a macro: " + questId);
 
             if (questId > MonsterCardRingQuest.CLAIM_QUEST_ID) {
                 Element complete = childImgDir(topLevelImgDir(check, questId), "1");
@@ -466,6 +490,19 @@ class LifeProofQuestTest {
         assertEquals(11, infoIds.size(), "monster card ring QuestInfo count in " + infoPath);
         assertEquals(infoIds, checkIds, "Check.img must contain every monster card ring quest in " + questDir);
         assertEquals(infoIds, actIds, "Act.img must contain every monster card ring quest in " + questDir);
+    }
+
+    private static int countOccurrences(String text, String needle) {
+        if (text == null || text.isEmpty() || needle == null || needle.isEmpty()) {
+            return 0;
+        }
+        int count = 0;
+        int index = 0;
+        while ((index = text.indexOf(needle, index)) >= 0) {
+            count++;
+            index += needle.length();
+        }
+        return count;
     }
 
     private static void assertNoCustomQuestSeries(Path path) throws Exception {

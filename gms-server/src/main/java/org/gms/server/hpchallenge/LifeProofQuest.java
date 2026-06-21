@@ -1926,14 +1926,14 @@ public final class LifeProofQuest {
             return;
         }
         InteractionHookPackets.sendCharacterQuestRules(chr.getClient());
-        InteractionHookPackets.sendLifeProofProgress(chr.getClient());
+        InteractionHookPackets.sendProgress(chr.getClient());
     }
 
     private static void refreshQuestProgress(Character chr) {
         if (chr == null || chr.getClient() == null) {
             return;
         }
-        InteractionHookPackets.sendLifeProofProgress(chr.getClient());
+        InteractionHookPackets.sendProgress(chr.getClient());
     }
 
     static boolean isFirstStageVisitQuest(QuestMeta meta) {

@@ -30,8 +30,27 @@
 - 条件不足、材料不足、怪物卡不足、戒指穿戴中或多戒指异常：写 `0=000`，任务保持进行中。
 - `validateUpgrade` 通过：写 `0=001`，客户端显示完成图标，任务完成入口可提交升级。
 
-戒指、材料和怪物卡变化后，服务端同步任务状态并刷新 `CHARACTER_QUEST_RULES`，避免 Q 列表和
-任务 Hook 规则滞后。
+戒指、材料和怪物卡变化后，服务端同步任务状态并刷新 `CHARACTER_QUEST_RULES` 与
+`INTERACTION_HOOK_PROGRESS(0x1004)`，避免 Q 列表、任务 Hook 规则和 Q 详情进度缓存滞后。`0x1004`
+是通用 Hook 进度包，每次发送都包含生命之证 entries 加当前怪物卡戒指 entry 的完整集合；不能只发送
+怪物卡 entry，否则客户端完整替换缓存时会清掉生命之证 Q 详情进度。
+
+## Q 详情进度
+
+- `29980` 领取任务不使用动态进度 entry。
+- `29981..29990` 的 `QuestInfo.1` 必须包含且只包含一个 `@@BD_IH_PROGRESS:{questId}@@`，周围文案使用
+  自然说明和 `升级进度：` 标签，不得回退到 `怪物卡戒指升级目标 / 当前进度 / 完成方式` 旧模板。
+- 怪物卡戒指 Q 详情不使用 `#a2998x1#` 或其他 `#a` 宏；升级任务的完成门仍由服务端写入
+  `QuestStatus` 的 `0=000/001` 控制。
+- 服务端生成 progress entries 前先执行 `syncQuestStateSilently` 归一旧状态；随后为 `29981..29990`
+  中所有 `STARTED` 升级任务生成 entry，并保证按当前戒指等级推导出的升级任务一定有 entry。文本包含
+  满套怪物卡 `current/required` 套、升级材料 `材料名 count/10`、上一级戒指位置，以及当前状态或
+  未满足原因。
+- progress entry 必须是已经解析好的纯文本，不得包含 `#i`、`#t`、`#b`、`#k`、`#r`、`#n`
+  等 NPC/WZ 宏。材料名和戒指名由 `ItemInformationProvider.getName(itemId)` 获取；名称缺失时显示
+  `道具 {itemId}`，不得回退成 `#t{itemId}#`。
+- `syncQuestState(... announce=true)` 即使任务状态和 `0=000` 没变化，也会刷新通用 progress 包，确保
+  材料数量或怪物卡数量变化能进入 Q 详情缓存。
 
 ## 资源落点
 
@@ -47,6 +66,8 @@
 ## WZ 规则
 
 - `QuestInfo.img/29980..29990` 必须包含 `parent=怪物卡戒指`、`order=1..11`、`area=31`。
+- `QuestInfo.img/29981..29990` 的 `1` 文案必须包含一个 `@@BD_IH_PROGRESS:{questId}@@`，不得包含
+  `@@DB_IH_PROGRESS`、`@@BD_LP_PROGRESS`、`#a` 或旧模板字段。
 - `Check.img/29981..29990/1` 必须包含 `infoex/0/value=001`。
 - `Act.img/29980..29989/1` 必须包含 `nextQuest=下一步任务 ID`。
 - `Act.img/29990/1` 不写 `nextQuest`。
