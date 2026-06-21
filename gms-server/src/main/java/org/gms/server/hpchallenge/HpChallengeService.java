@@ -1552,6 +1552,51 @@ public final class HpChallengeService {
         }
     }
 
+    static Set<Integer> activeLifeProofRewardStages(Character chr) {
+        if (chr == null) {
+            return Set.of();
+        }
+        Set<Integer> stages = new java.util.HashSet<>();
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("""
+                     SELECT stage FROM hp_challenge_reward_log
+                     WHERE character_id = ? AND reverted = 0
+                     """)) {
+            ps.setInt(1, chr.getId());
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    stages.add(rs.getInt("stage"));
+                }
+            }
+        } catch (SQLException e) {
+            log.warn("load life proof reward stages failed", e);
+            return Set.of();
+        }
+        return stages;
+    }
+
+    static Set<Integer> lifeProofStateCompletedStages(Character chr) {
+        if (chr == null) {
+            return Set.of();
+        }
+        State state = loadState(chr.getId());
+        return lifeProofStateCompletedStages(state == null ? 0 : state.currentStage(),
+                state == null ? 0 : state.highestRewardedStage());
+    }
+
+    static Set<Integer> lifeProofStateCompletedStages(int currentStage, int highestRewardedStage) {
+        Set<Integer> stages = new java.util.HashSet<>();
+        int highestFromReward = Math.max(0, Math.min(7, highestRewardedStage));
+        for (int stage = 1; stage <= highestFromReward; stage++) {
+            stages.add(stage);
+        }
+        int highestBeforeCurrent = Math.max(0, Math.min(7, currentStage - 1));
+        for (int stage = 1; stage <= highestBeforeCurrent; stage++) {
+            stages.add(stage);
+        }
+        return stages;
+    }
+
     private static int activeCount(Connection con, int characterId, int stage) throws SQLException {
         return count(con, """
                 SELECT COUNT(*) FROM hp_challenge_progress

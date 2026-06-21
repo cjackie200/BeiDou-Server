@@ -50,6 +50,9 @@
 - `Check.img/29981..29990/1` 必须包含 `infoex/0/value=001`。
 - `Act.img/29980..29989/1` 必须包含 `nextQuest=下一步任务 ID`。
 - `Act.img/29990/1` 不写 `nextQuest`。
+- 客户端 `Data/Quest/QuestInfo.img`、`Check.img`、`Act.img` 的顶层节点顺序是兼容要求：
+  `29980..29990` 必须连续，且 `29990` 后一个顶层节点必须是 `5100`。`WzPatchTool ring-patch`
+  删除旧节点后必须按此顺序插入，找不到 `5100` 时不得尾部追加。
 
 ## 验证
 

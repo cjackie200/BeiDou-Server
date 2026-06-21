@@ -100,6 +100,27 @@ class InteractionHookRegistryTest {
     }
 
     @Test
+    void progressPacketsUseStableLayout() {
+        Packet packet = InteractionHookPackets.buildProgressPacket(List.of(
+                new InteractionHookProgressEntry(5100, 1, 3, 16, "3/16")));
+        byte[] bytes = packet.getBytes();
+
+        assertEquals(0x1004, readU16(bytes, 0));
+        assertEquals(InteractionHookProtocol.VERSION, readI32(bytes, 2));
+        assertEquals(1, readI32(bytes, 6));
+        assertEquals(5100, readI32(bytes, 10));
+        assertEquals(1, readI32(bytes, 14));
+        assertEquals(3, readI32(bytes, 18));
+        assertEquals(16, readI32(bytes, 22));
+        assertEquals(4, readU16(bytes, 26));
+        assertEquals('3', bytes[28]);
+        assertEquals('/', bytes[29]);
+        assertEquals('1', bytes[30]);
+        assertEquals('6', bytes[31]);
+        assertEquals(32, bytes.length);
+    }
+
+    @Test
     void v4RejectsAllRulesReplaceAndBatchIdIsMonotonic() {
         assertTrue(InteractionHookPackets.buildRulePackets(9,
                 InteractionHookProtocol.SCOPE_ALL_RULES,
@@ -146,19 +167,26 @@ class InteractionHookRegistryTest {
                 1032001, InteractionHookAction.QUERY_PROGRESS);
         InteractionHookContext fallbackContext = new InteractionHookContext(client, 1, LifeProofQuest.FIRST_QUEST_ID,
                 0, InteractionHookAction.QUERY_PROGRESS);
+        InteractionHookContext monsterCardContext = new InteractionHookContext(client, 1,
+                MonsterCardRingQuest.CLAIM_QUEST_ID, MonsterCardRingQuest.NPC_ID,
+                InteractionHookAction.QUERY_PROGRESS);
 
-        assertTrue(InteractionHookManager.canUseNpcTalkAck(
+        assertFalse(InteractionHookManager.canUseNpcTalkAck(
                 event(1, InteractionHookProtocol.EVENT_QUEST_ACTION, InteractionHookProtocol.TARGET_QUEST,
                         LifeProofQuest.FIRST_QUEST_ID, 0, 1032001, LifeProofQuest.FIRST_QUEST_ID, -1),
                 instructorContext));
-        assertTrue(InteractionHookManager.canUseNpcTalkAck(
+        assertFalse(InteractionHookManager.canUseNpcTalkAck(
                 event(2, InteractionHookProtocol.EVENT_QUEST_ACTION, InteractionHookProtocol.TARGET_QUEST,
                         LifeProofQuest.FIRST_QUEST_ID, 0, 0, LifeProofQuest.FIRST_QUEST_ID, -1),
                 fallbackContext));
-        assertTrue(InteractionHookManager.canUseNpcTalkAck(
+        assertFalse(InteractionHookManager.canUseNpcTalkAck(
                 event(3, InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION, InteractionHookProtocol.TARGET_DIALOG_SELECTION,
                         0, 0, 1032001, 0, 0),
                 instructorContext));
+        assertTrue(InteractionHookManager.canUseNpcTalkAck(
+                event(6, InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION, InteractionHookProtocol.TARGET_DIALOG_SELECTION,
+                        0, 0, MonsterCardRingQuest.NPC_ID, 0, 0),
+                monsterCardContext));
         assertFalse(InteractionHookManager.canUseNpcTalkAck(
                 event(4, InteractionHookProtocol.EVENT_NPC_CLICK, InteractionHookProtocol.TARGET_NPC,
                         0, 100, 0, 0, -1),

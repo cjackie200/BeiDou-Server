@@ -17,8 +17,9 @@
 - C2S 子命令：`C2S_INTERACTION_HOOK_EVENT = 0x1003`
 - S2C rules：`S2C_INTERACTION_HOOK_RULES = 0x1001`
 - S2C result：`S2C_INTERACTION_HOOK_RESULT = 0x1002`
-- 全部字段使用小端序 `int32`
-- 协议不传字符串
+- S2C progress：`S2C_INTERACTION_HOOK_PROGRESS = 0x1004`
+- 除字符串长度外，全部整数字段使用小端序 `int32`
+- rules/event/result 不传字符串；progress 包只传服务端生成的短进度文本
 
 `C2S 0x1003` 字段顺序：
 
@@ -82,6 +83,27 @@ resultCode
 ```
 
 客户端接收 result 时兼容 `version=3` 和 `version=4`。
+
+`S2C 0x1004 progress` 当前字段顺序：
+
+```text
+version = 4
+entryCount
+entries...
+```
+
+每条 progress entry 字段顺序：
+
+```text
+questId
+questState
+current
+required
+text
+```
+
+`text` 使用客户端包内字符串格式：`uint16 length` 加字节内容。当前只用于生命之证 Q 任务详情
+`@@BD_LP_PROGRESS:{questId}@@` 占位符替换，服务端发送 `current/required` 这类短文本。
 
 ## 枚举
 
@@ -192,6 +214,10 @@ resultCode
   scope。普通 scope 替换不清 pending；`CLEAR_SCOPE ALL_RULES` 才清全部 active rules、pending 和
   Hook 对话上下文。
 - `S2C_INTERACTION_HOOK_RESULT(0x1002)`：处理 pending 请求。
+- `S2C_INTERACTION_HOOK_PROGRESS(0x1004)`：替换本地生命之证进度缓存。Q 任务详情构造文本时，
+  `ijl15` 把 `@@BD_LP_PROGRESS:{questId}@@` 替换为缓存文本；缓存缺失时显示 `...` 并写
+  `interaction-hook.log`，不回退到客户端原生 `#a`。客户端按 `entryCount` 完整解析成功后即
+  替换缓存；`CInPacket::Size` 中保留的尾部容量只记录 warning，不拒绝已经解析成功的进度包。
 
 Hook 对话发包：
 
@@ -203,6 +229,8 @@ Hook 对话发包：
 - 不允许为了 Hook 对话额外补结尾字节，否则客户端窗口刷新行为会和普通 NPC 对话不一致，出现闪烁。
 - 服务端成功显示可见 Hook 对话时，不在 `NPC_TALK` 后追加 `HANDLED_DIALOG`。客户端以匹配的
   `NPC_TALK.npcId` 作为本次 Hook 请求的成功 ACK 并清理 pending。
+- 生命之证任务入口不使用 `NPC_TALK` 隐式 ACK。服务端必须发送明确 result，让客户端丢弃或重放
+  pending，避免接受任务后同一 NPC 的原生默认对话继续运行。
 - 客户端无法预测本次可见对话 NPC 时，服务端必须在业务对话发送前先返回 `HANDLED_UPDATE` 清理
   pending，再继续发送原生 `NPC_TALK`。
 - `QUEST_ACTION` 上报 `npcId <= 0` 时，客户端和服务端统一使用 `9010000` 作为 fallback 显示
@@ -220,6 +248,9 @@ pending 行为：
 - `FALLBACK_ORIGINAL` 时带重放标记重新发送原始包，或重放原始本地点击函数，避免客户端再次 Hook。
 - `HANDLED_DIALOG/HANDLED_UPDATE` 时丢弃 pending；正常可见 Hook 对话不应再依赖
   `HANDLED_DIALOG`。
+- `HANDLED_UPDATE` 后如果服务端继续发送匹配的 `NPC_TALK`，客户端必须把该对话标记为
+  `DIALOG_CONTEXT_INTERACTION_HOOK`；关闭该 Hook 对话后清回 `DIALOG_CONTEXT_NONE`，不能进入
+  `SUPPRESSED_AFTER_NATIVE_NPC`。
 - `REJECTED/ERROR` 或 5 秒超时时丢弃 pending，不自动 fallback，只恢复客户端操作状态。
 - 客户端接收包只按稳定的 opcode 偏移解析自定义 Hook 包；自定义包 payload 校验失败时不改运行态。
 
@@ -234,7 +265,7 @@ pending 行为：
 - 使用 `InteractionHookManager`、`InteractionHookPackets`、`InteractionHookRuleRegistry` 替代旧 `QuestHook*` 对外入口。
 - `CustomPacketHandler` 将 `0x1003` 分发给 `InteractionHookManager.handleEvent()`。
 - 登录和进频道后下发 `InteractionHook v4 rules`：先 `CLEAR_SCOPE ALL_RULES`，再下发
-  `CHARACTER_QUEST_RULES` 和 `MAP_NPC_RULES`。
+  `CHARACTER_QUEST_RULES`、`MAP_NPC_RULES` 和生命之证 progress。
 - rules 必须按当前角色和当前地图压缩下发，只包含当前角色已有状态的任务、当前可接或进行中的任务，
   以及当前地图真实存在的可 Hook NPC；不得把生命之证、怪物卡戒指等全系列所有任务一次性下发给客户端。
   每包最多 100 条，超出必须分批。客户端收齐完整 batch 后才替换 active rules。
@@ -263,9 +294,14 @@ pending 行为：
 - 普通一转教官 NPC 点击、其他入口和职业相关对话不接入生命之证 Hook，必须保持原逻辑。
 - 生命之证自定义事件必须来自 `DIALOG_CONTEXT_QUEST`；普通 NPC 对话、旧菜单选择和普通 NPC 对话
   关闭后的尾随 `QUEST_ACTION` 都不能推进生命之证。
-- 原生生命之证 `QUEST_ACTION` 包由 `QuestActionHandler` 消费并提示重新通过任务入口继续，不允许
-  落入原生 `quest.start`、`quest.complete` 或 `QuestScriptManager.end`。
+- 普通 NPC 对话关闭后的 `SUPPRESSED_AFTER_NATIVE_NPC` 只允许消费同一个
+  `questId/npcId/rawAction` 的重复原动作；遇到其他任务点击必须清掉抑制状态并放行原生逻辑。
+- 原生生命之证 `QUEST_ACTION` 必须先匹配当前任务和正确 NPC；非当前任务、旧残留任务或错误 NPC
+  静默拒绝并恢复客户端操作，不发送聊天提示，不允许落入原生 `quest.start`、`quest.complete` 或
+  `QuestScriptManager.end`。
 - 进行中对话显示当前阶段、目标、进度、下一步。
+- Q 任务详情进度由 `S2C_INTERACTION_HOOK_PROGRESS(0x1004)` 驱动；非 mob 目标不使用客户端原生
+  `#a`，避免旧客户端按 Q 展开任务列表时访问空进度列表。
 - 不允许落到职业导师默认文本。
 - 不再使用 `4033011` 作为任务完成绕路道具。
 
@@ -278,6 +314,8 @@ pending 行为：
 
 - 服务端测试覆盖 rules 下发、通配匹配、结果码、fallback、`skipNextNativeInteractionHook`、NPC `objectId` 校验、`QM/CM` 接管。
 - 生命之证测试覆盖进行中对话、领取、完成、奖励和 WZ 节点完整性。
+- 生命之证 Q 验收必须确认 progress marker 被替换为真实 `current/required`，且汉斯等一转教官
+  的“可以开始”列表不再出现非当前残留步骤。
 - 怪物卡戒指测试覆盖领取、进度、升级。
 - 客户端验证覆盖 `ijl15.dll` 编译、登录收到 v4 rules、换图重建 NPC 映射、普通职业导师 fallback、生命之证进行中对话。
 - 联调用 `scripts/start-wsl-server.sh` 启动服务端，完全退出并重开客户端后验收。

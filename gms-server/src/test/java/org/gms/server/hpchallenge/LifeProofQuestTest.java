@@ -1,17 +1,33 @@
 package org.gms.server.hpchallenge;
 
+import org.gms.client.Character;
+import org.gms.client.Client;
+import org.gms.client.Job;
+import org.gms.client.QuestStatus;
+import org.gms.net.packet.Packet;
+import org.gms.property.ServiceProperty;
 import org.gms.server.quest.MonsterCardRingQuest;
+import org.gms.server.quest.Quest;
+import org.gms.service.ConfigService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import javax.sql.DataSource;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -20,8 +36,48 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class LifeProofQuestTest {
+    private static final int PROGRESS_KEY = 0;
+
+    @BeforeAll
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    static void setUpApplicationContext() throws Exception {
+        ApplicationContext context = mock(ApplicationContext.class);
+        ServiceProperty serviceProperty = new ServiceProperty();
+        MessageSource messageSource = mock(MessageSource.class);
+        ConfigService configService = mock(ConfigService.class);
+        DataSource dataSource = mock(DataSource.class);
+        Connection connection = mock(Connection.class);
+        PreparedStatement statement = mock(PreparedStatement.class);
+        Map<Class<?>, Object> beans = new HashMap<>();
+
+        when(configService.loadGameConfigs()).thenReturn(List.of());
+        when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeUpdate()).thenReturn(1);
+
+        beans.put(ServiceProperty.class, serviceProperty);
+        beans.put(MessageSource.class, messageSource);
+        beans.put(ConfigService.class, configService);
+        beans.put(DataSource.class, dataSource);
+
+        doAnswer(invocation -> bean(beans, invocation.getArgument(0)))
+                .when(context).getBean(any(Class.class));
+        doAnswer(invocation -> bean(beans, invocation.getArgument(1)))
+                .when(context).getBean(anyString(), any(Class.class));
+
+        Field field = org.gms.manager.ServerManager.class.getDeclaredField("applicationContext");
+        field.setAccessible(true);
+        field.set(null, context);
+    }
 
     @Test
     void questIdsFollowStageJobBlockFormula() {
@@ -41,6 +97,38 @@ class LifeProofQuestTest {
         int bridge = LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR, LifeProofQuest.BRIDGE_SLOT_START);
         assertTrue(LifeProofQuest.isQuestId(bridge));
         assertFalse(LifeProofQuest.isVisibleQuestId(bridge));
+    }
+
+    @Test
+    void lifeProofStateCompletedStagesUseCurrentStageAndHighestRewardedStage() {
+        assertEquals(Set.of(1, 2), HpChallengeService.lifeProofStateCompletedStages(3, 0));
+        assertEquals(Set.of(1, 2), HpChallengeService.lifeProofStateCompletedStages(1, 2));
+        assertEquals(Set.of(1, 2, 3), HpChallengeService.lifeProofStateCompletedStages(3, 3));
+        assertTrue(HpChallengeService.lifeProofStateCompletedStages(1, 0).isEmpty());
+    }
+
+    @Test
+    void stateCompletedStagesNormalizeMageVisibleCountsAndClearHiddenQuestState() {
+        Character chr = newLifeProofCharacter(Job.FP_ARCHMAGE);
+        int retiredT1 = 5142;
+        int retiredT2 = 5268;
+        int bridgeT1 = LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE,
+                LifeProofQuest.BRIDGE_SLOT_START);
+        int reservedT2 = LifeProofQuest.reservedQuestId(2, HpChallengeService.JobBranch.MAGE);
+        putQuest(chr, retiredT1, QuestStatus.Status.COMPLETED, "001");
+        putQuest(chr, retiredT2, QuestStatus.Status.STARTED, "000");
+        putQuest(chr, bridgeT1, QuestStatus.Status.COMPLETED, null);
+        putQuest(chr, reservedT2, QuestStatus.Status.STARTED, null);
+
+        LifeProofQuest.normalizeCompletedStages(chr, HpChallengeService.JobBranch.MAGE,
+                HpChallengeService.lifeProofStateCompletedStages(3, 0));
+
+        assertCompletedVisibleCount(chr, 1, HpChallengeService.JobBranch.MAGE, 16);
+        assertCompletedVisibleCount(chr, 2, HpChallengeService.JobBranch.MAGE, 13);
+        assertQuestStatus(chr, retiredT1, QuestStatus.Status.NOT_STARTED);
+        assertQuestStatus(chr, retiredT2, QuestStatus.Status.NOT_STARTED);
+        assertQuestStatus(chr, bridgeT1, QuestStatus.Status.NOT_STARTED);
+        assertQuestStatus(chr, reservedT2, QuestStatus.Status.NOT_STARTED);
     }
 
     @Test
@@ -222,27 +310,14 @@ class LifeProofQuestTest {
 
         for (LifeProofQuest.QuestMeta meta : LifeProofQuest.allVisibleQuests()) {
             String detail = childValue(topLevelImgDir(info, meta.questId()), "string", "1");
+            assertLifeProofQuestDetailComplete(detail, meta);
             switch (meta.objective().type()) {
-                case ITEM -> assertTrue(detail.contains("#c" + meta.objective().itemId() + "# / "
-                                + meta.objective().requiredCount()),
-                        "item quest detail must use #c progress macro: " + meta.questId());
                 case KILL, BOSS -> assertMobProgressMacros(check, detail, meta);
                 case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
-                        assertProgressMacroWithoutTargetSuffix(detail, "#a" + meta.questId() + "1#",
-                                meta.questId());
-                case OPTION_SLOT -> assertProgressMacroWithoutTargetSuffix(detail, "#a" + meta.questId() + "1#",
-                        meta.questId());
-                case NPC_TALK -> assertTrue(detail.contains("#a" + meta.questId() + "1# / 1"),
-                        "npc talk quest detail must keep explicit visit target count: " + meta.questId());
-                case MESO -> {
-                    assertTrue(detail.contains("#a" + meta.questId() + "1# / 1"),
-                            "meso quest detail must use virtual #a progress macro: " + meta.questId());
-                    assertTrue(detail.contains("需要缴纳金币：" + meta.objective().mesoCost()),
-                            "meso quest detail must keep meso cost visible: " + meta.questId());
-                }
-                case SELECT_OPTION, REWARD -> {
-                    // Selector and reward tasks are completed by hook flow and do not expose quantity progress.
-                }
+                        assertLifeProofProgressMarker(detail, meta.questId());
+                case OPTION_SLOT -> assertLifeProofProgressMarker(detail, meta.questId());
+                case NPC_TALK -> assertLifeProofProgressMarker(detail, meta.questId());
+                case ITEM, MESO, SELECT_OPTION, REWARD -> assertLifeProofProgressMarker(detail, meta.questId());
             }
         }
     }
@@ -400,6 +475,47 @@ class LifeProofQuestTest {
                 "base wz must not contain monster card ring quest nodes in " + path);
     }
 
+    private static void assertHiddenQuestInfoNotVisible(Element questInfo, int questId) {
+        assertEquals("", childValue(questInfo, "string", "name"),
+                "hidden life proof QuestInfo.name must be omitted: " + questId);
+        assertEquals("", childValue(questInfo, "string", "0"),
+                "hidden life proof QuestInfo start text must be omitted: " + questId);
+        assertEquals("", childValue(questInfo, "string", "1"),
+                "hidden life proof QuestInfo progress text must be omitted: " + questId);
+        assertEquals("", childValue(questInfo, "string", "2"),
+                "hidden life proof QuestInfo completion text must be omitted: " + questId);
+        assertEquals("", childValue(questInfo, "string", "parent"),
+                "hidden life proof QuestInfo.parent must be omitted: " + questId);
+        assertEquals("", childValue(questInfo, "int", "order"),
+                "hidden life proof QuestInfo.order must be omitted: " + questId);
+        assertEquals("", childValue(questInfo, "int", "area"),
+                "hidden life proof QuestInfo.area must be omitted: " + questId);
+    }
+
+    private static void assertHiddenQuestCheckNotStartable(Element check, int reservedQuestId, int questId,
+                                                           String questDir) {
+        Element start = childImgDir(check, "0");
+        Element complete = childImgDir(check, "1");
+        assertEquals("", childValue(start, "int", "npc"),
+                "hidden life proof Check start npc must be omitted in " + questDir + ": " + questId);
+        assertEquals("", childValue(start, "int", "lvmin"),
+                "hidden life proof Check lvmin must be omitted in " + questDir + ": " + questId);
+        assertEquals("", childValue(start, "string", "startscript"),
+                "hidden life proof Check startscript must be omitted in " + questDir + ": " + questId);
+        assertNull(childImgDirOrNull(start, "job"),
+                "hidden life proof Check job gate must be omitted in " + questDir + ": " + questId);
+        assertEquals(Integer.toString(reservedQuestId),
+                childValue(start, "quest", "0", "int", "id"),
+                "hidden life proof quest must depend on its reserved lock quest in " + questDir + ": " + questId);
+        assertEquals("2",
+                childValue(start, "quest", "0", "int", "state"),
+                "hidden life proof quest lock must require completed reserved quest in " + questDir + ": " + questId);
+        assertEquals("", childValue(complete, "int", "npc"),
+                "hidden life proof Check complete npc must be omitted in " + questDir + ": " + questId);
+        assertEquals("", childValue(complete, "string", "endscript"),
+                "hidden life proof Check endscript must be omitted in " + questDir + ": " + questId);
+    }
+
     private static void assertLifeProofQuestWzClientSafe(String questDir) throws Exception {
         Path infoPath = resolveQuestXml(questDir + "/QuestInfo.img.xml");
         Path checkPath = resolveQuestXml(questDir + "/Check.img.xml");
@@ -442,6 +558,9 @@ class LifeProofQuestTest {
                      slot <= LifeProofQuest.OPTION_SLOT_END; slot++) {
                     int retiredQuestId = LifeProofQuest.questId(stage, branch, slot);
                     Element retiredInfo = topLevelImgDir(infoDocument, retiredQuestId);
+                    assertHiddenQuestInfoNotVisible(retiredInfo, retiredQuestId);
+                    Element retired = topLevelImgDir(checkDocument, retiredQuestId);
+                    assertHiddenQuestCheckNotStartable(retired, reservedQuestId, retiredQuestId, questDir);
                     assertEquals("", childValue(retiredInfo, "string", "parent"),
                             "retired optional QuestInfo.parent must be omitted from quest list: "
                                     + retiredQuestId);
@@ -452,17 +571,13 @@ class LifeProofQuestTest {
                 for (int slot = LifeProofQuest.BRIDGE_SLOT_START; slot < LifeProofQuest.RESERVED_SLOT; slot++) {
                     int bridgeQuestId = LifeProofQuest.questId(stage, branch, slot);
                     Element bridgeInfo = topLevelImgDir(infoDocument, bridgeQuestId);
+                    assertHiddenQuestInfoNotVisible(bridgeInfo, bridgeQuestId);
                     assertEquals("", childValue(bridgeInfo, "string", "parent"),
                             "bridge QuestInfo.parent must be omitted: " + bridgeQuestId);
                     assertEquals("", childValue(bridgeInfo, "int", "order"),
                             "bridge QuestInfo.order must be omitted: " + bridgeQuestId);
                     Element bridge = topLevelImgDir(checkDocument, bridgeQuestId);
-                    assertEquals(Integer.toString(reservedQuestId),
-                            childValue(bridge, "0", "quest", "0", "int", "id"),
-                            "bridge quest must depend on its reserved lock quest in " + questDir + ": " + bridgeQuestId);
-                    assertEquals("2",
-                            childValue(bridge, "0", "quest", "0", "int", "state"),
-                            "bridge quest lock must require completed reserved quest in " + questDir + ": " + bridgeQuestId);
+                    assertHiddenQuestCheckNotStartable(bridge, reservedQuestId, bridgeQuestId, questDir);
                 }
             }
         }
@@ -535,11 +650,11 @@ class LifeProofQuestTest {
             case SELECTOR -> meta.selectorNo() == 1
                     ? previousVisibleQuest(meta).questId()
                     : LifeProofQuest.questId(meta.stage(), meta.branch(),
-                            LifeProofQuest.BRIDGE_SLOT_START + meta.selectorNo() - 2);
+                            LifeProofQuest.OPTION_SLOT_START + meta.selectorNo() - 2);
             case OPTION_SLOT -> LifeProofQuest.questId(meta.stage(), meta.branch(),
                     LifeProofQuest.SELECTOR_SLOT_START + meta.selectorNo() - 1);
             case REWARD -> LifeProofQuest.questId(meta.stage(), meta.branch(),
-                    LifeProofQuest.BRIDGE_SLOT_START + LifeProofQuest.OPTIONAL_REQUIRED_COUNT - 1);
+                    LifeProofQuest.OPTION_SLOT_START + LifeProofQuest.OPTIONAL_REQUIRED_COUNT - 1);
             case BRIDGE, RESERVED, RETIRED_OPTION -> 0;
         };
     }
@@ -607,6 +722,26 @@ class LifeProofQuestTest {
                 "quest detail must not append explicit target count after client progress macro: " + questId);
     }
 
+    private static void assertLifeProofQuestDetailComplete(String detail, LifeProofQuest.QuestMeta meta) {
+        assertTrue(detail.contains(LifeProofQuest.stageStory(meta.stage())),
+                "quest detail must include stage story for quest " + meta.questId());
+        assertTrue(detail.contains("目标："),
+                "quest detail must include objective label for quest " + meta.questId());
+        assertTrue(detail.contains("当前进度："),
+                "quest detail must include progress label for quest " + meta.questId());
+        assertTrue(detail.contains("完成方式："),
+                "quest detail must include completion method for quest " + meta.questId());
+        assertFalse(detail.contains("..."),
+                "quest detail must not rely on placeholder ellipsis for quest " + meta.questId());
+    }
+
+    private static void assertLifeProofProgressMarker(String detail, int questId) {
+        assertTrue(detail.contains("@@BD_LP_PROGRESS:" + questId + "@@"),
+                "quest detail must contain hook progress marker for quest " + questId);
+        assertFalse(Pattern.compile("#a" + questId + "\\d#").matcher(detail).find(),
+                "non-mob life proof quest detail must not use client #a macro: " + questId);
+    }
+
     @Test
     void mesoProgressUsesSingleVirtualStep() {
         LifeProofQuest.QuestMeta meso = LifeProofQuest.allQuestMetas()
@@ -627,6 +762,42 @@ class LifeProofQuestTest {
         assertEquals(Integer.toString(meta.objective().requiredCount()),
                 childValue(complete, "item", "0", "int", "count"),
                 "item gate count must match metadata: " + meta.questId());
+    }
+
+    private static Object bean(Map<Class<?>, Object> beans, Class<?> type) {
+        return beans.computeIfAbsent(type, key -> mock(key));
+    }
+
+    private static Character newLifeProofCharacter(Job job) {
+        Client client = new CapturingClient();
+        Character chr = Character.getDefault(client);
+        client.setPlayer(chr);
+        chr.setId(10001);
+        chr.setLevel(180);
+        chr.setJob(job);
+        return chr;
+    }
+
+    private static void putQuest(Character chr, int questId, QuestStatus.Status status, String progress) {
+        QuestStatus questStatus = new QuestStatus(Quest.getInstance(questId), status, 1032001);
+        if (progress != null) {
+            questStatus.setProgress(PROGRESS_KEY, progress);
+        }
+        chr.getQuests().put((short) questId, questStatus);
+    }
+
+    private static void assertCompletedVisibleCount(Character chr, int stage, HpChallengeService.JobBranch branch,
+                                                    int expectedCount) {
+        int completed = 0;
+        for (LifeProofQuest.QuestMeta meta : LifeProofQuest.stageBranchVisibleQuests(stage, branch)) {
+            assertQuestStatus(chr, meta.questId(), QuestStatus.Status.COMPLETED);
+            completed++;
+        }
+        assertEquals(expectedCount, completed, "visible completed count for stage " + stage + " " + branch);
+    }
+
+    private static void assertQuestStatus(Character chr, int questId, QuestStatus.Status status) {
+        assertEquals(status.getId(), chr.getQuestStatus(questId), "quest " + questId);
     }
 
     private static List<LifeProofQuest.QuestMeta> stageBranchVisibleQuests(LifeProofQuest.QuestMeta meta) {
@@ -805,5 +976,15 @@ class LifeProofQuestTest {
             return modulePath;
         }
         return Path.of("gms-server").resolve(relativePath);
+    }
+
+    private static final class CapturingClient extends Client {
+        private CapturingClient() {
+            super(null, -1, null, null, -123, -123);
+        }
+
+        @Override
+        public void sendPacket(Packet packet) {
+        }
     }
 }

@@ -113,10 +113,10 @@ T1 拜访链的领取 NPC 由当前职业路线动态计算：第一个拜访任
 3. 领取第 1 个附加试炼选择任务。
 4. 从 8 个附加试炼候选中选择 1 个，脚本完成 selector，并强制开启对应固定槽位
    `base+12..14`。
-5. 完成固定槽位后，服务端静默完成对应隐藏桥 `base+21`。
-6. 第 2 个 selector 通过 `base+21` 解锁，第 3 个 selector 通过 `base+22` 解锁。
-7. 完成第 3 个固定槽位后，服务端静默完成 `base+23`。
-8. 奖励任务 `base+20` 通过 `base+23` 解锁。
+5. 完成固定槽位后，服务端可以静默完成对应隐藏桥 `base+21..23` 作为兼容内部标记。
+6. 第 2 个 selector 通过固定槽位 `base+12` 完成状态解锁，第 3 个 selector 通过 `base+13` 解锁。
+7. 完成第 3 个固定槽位 `base+14` 后，阶段奖励任务 `base+20` 解锁。
+8. 隐藏桥不参与客户端可见任务链的开始条件。
 9. 领取奖励后，下一阶段第一个任务通过上一阶段奖励任务完成状态解锁。
 
 完成当前任务后，如果下一可领取任务的 `startNpcId` 等于当前 NPC，且 `Quest.canStart` 成立，
@@ -143,9 +143,11 @@ T1 拜访链的领取 NPC 由当前职业路线动态计算：第一个拜访任
 任务节点，否则旧客户端可能在按 Q 打开任务列表时崩溃。隐藏桥必须同时写入 `Check.img`、
 `QuestInfo.img` 和 `Act.img`。
 
-隐藏桥不允许被玩家自然领取。它们的开始条件固定依赖本职业本阶段保留任务 `base+24` 完成；
-`base+24` 永不完成，也不写入 WZ，所以隐藏桥不会在可领取任务里显示。服务端在具体附加任务
-完成后通过脚本强制完成对应隐藏桥，用它解锁下一个 selector 或阶段奖励任务。
+隐藏桥、保留任务和退役候选不允许被玩家自然领取。若为了客户端扫描安全保留占位节点，`QuestInfo`
+不得写 `name`、`0/1/2`、`area`、`parent/order`，`Check` 不得写 `npc`、`startscript` 或
+`endscript`；开始条件固定依赖本职业本阶段永不完成的保留任务 `base+24`。服务端在具体附加任务
+完成后可以强制完成对应隐藏桥作为历史兼容标记，但下一个 selector 和阶段奖励任务只依赖可见固定
+附加试炼槽位完成状态。
 
 ## 进行中对话文案口径
 
@@ -167,6 +169,12 @@ T1 拜访链的领取 NPC 由当前职业路线动态计算：第一个拜访任
 生命之证规则。
 不允许把 645 个可见任务一次性下发给客户端。超出单包上限时必须由 v4 分批下发，客户端收齐后
 再替换 active rules，避免本地任务点击回退到客户端默认任务文本。
+
+登录进入频道时，服务端在 `PacketCreator.getCharInfo(player)` 前执行
+`LifeProofQuest.normalizeForLogin`，并在发送 `InteractionHook` rules/progress 前完成同步。这个归一只处理当前角色：如果阶段奖励任务已经完成、有效奖励记录存在、`hp_challenge_state.highest_rewarded_stage >= stage` 或
+`hp_challenge_state.current_stage > stage`，则把该阶段本职业可见步骤补齐为完成，并清理旧版附加试炼和隐藏桥任务状态，避免旧号在
+`正在进行` 和 `完成` 页签同时出现同一阶段的残留步骤。玩家数据修复以登录归一为主；SQL 只用于
+审计或明确的一次性预清理，不作为唯一修复路径。
 
 生命之证不拦截普通 `NPC_TALK(0x003A)` 和旧自定义菜单选择项。点击一转教官的普通对话、
 其他入口、职业转职文本、商店和其他 NPC 功能必须保持原逻辑。普通双击 NPC 不允许写入
@@ -282,17 +290,23 @@ T1 拜访教官任务中，目标导师承载生命之证完成对话。普通�
   避免 8 个候选被 Q 列表全部计入系列步数。
 - 原 `MAP` 类型全部替换为收集任务。
 
-任务详情进度使用原生任务宏展示：
+Q 任务详情 `QuestInfo.1` 必须包含阶段背景、明确目标、当前进度和完成方式。奖励任务的完成方式也
+必须写清楚回到本职业一转教官领取本阶段生命之证，不能只写泛泛的“回去领取奖励”。
 
-- 收集任务使用 `#c{itemId}# / required`。
+任务详情进度规则：
+
 - 击杀和 Boss 任务按 WZ `mob` 子节点顺序写 `#o{mobId}# #r#a{questId}{index}##k`，
-  `index` 从 1 开始；客户端原生 `#a` 会按 `mob` 条件渲染 `当前/目标`，不要再手写
-  `/ required`。多目标“任意一种”任务由服务端把所有目标 mob progress 同步成同一值。
-- `PQ_ANY`、`PQ_PIRATE`、`PQ_TOY_OR_PIRATE`、`SCROLL_100` 和 `JUMP_MANUAL`
-  使用单个虚拟 progress entry，详情写 `#a{questId}1#`，由客户端原生 `#a` 根据 `infoex`
-  门槛渲染 `当前/目标`，不要再追加 `/ required`。
-- `NPC_TALK` 和 `MESO` 继续使用单个虚拟 progress entry，详情写 `#a{questId}1# / 1`。
-  金币金额继续显示在任务文案和 WZ `money` 条件中。
+  `index` 从 1 开始且只能使用 `1..9`；客户端原生 `#a` 会按 `mob` 条件渲染 `当前/目标`，
+  不要再手写 `/ required`。多目标“任意一种”任务由服务端把所有目标 mob progress 同步成
+  同一值；如果目标超过 9 个，后续目标只能复用前 9 个安全进度宏，不能写 `#a{questId}10#`
+  这类双位索引。
+- 收集、`PQ_ANY`、`PQ_PIRATE`、`PQ_TOY_OR_PIRATE`、`SCROLL_100`、`JUMP_MANUAL`、
+  `NPC_TALK`、`MESO`、`SELECT_OPTION`、`OPTION_SLOT` 和 `REWARD` 不在任务列表详情里使用
+  `#a`。客户端原生 `#a` 只按 WZ `mob` 条件安全渲染进度；`infoex`、`money` 或空完成条件
+  配 `#a` 会导致旧客户端在按 `Q` 展开任务列表时访问空进度列表。非 `mob` 任务详情写
+  `@@BD_LP_PROGRESS:{questId}@@` 占位符，由 `ijl15` 根据服务端
+  `INTERACTION_HOOK_PROGRESS(0x1004)` 推送的当前角色进度替换成 `current/required`。
+  缓存缺失时客户端临时显示 `...` 并在 `interaction-hook.log` 记录 `hit=0`。
 - `QuestStatus.progressData` 按 progress 插入顺序拼接三位数；服务端读取 WZ `mob` 时必须保留
   子节点顺序，生命之证写入虚拟 progress 时固定使用 key `0`。
 
