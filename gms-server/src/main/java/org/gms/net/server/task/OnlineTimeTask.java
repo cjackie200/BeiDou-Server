@@ -6,11 +6,13 @@ import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class OnlineTimeTask implements Runnable {
-    private final AtomicReference<LocalDate> lastUpdated = new AtomicReference<>(LocalDate.now());
+    private static final int RESET_HOUR = 6;
+    private final AtomicReference<LocalDate> lastUpdated = new AtomicReference<>(getRewardCycleDate());
     private final AtomicBoolean running = new AtomicBoolean(false);
 
     @Override
@@ -21,7 +23,7 @@ public class OnlineTimeTask implements Runnable {
         if (!running.compareAndSet(false, true)) {
             return;
         }
-        LocalDate now = LocalDate.now();
+        LocalDate now = getRewardCycleDate();
         boolean isNextDay = now.isAfter(lastUpdated.get());
         for (final Channel chan : Server.getInstance().getAllChannels()) {
             if (chan == null || chan.getPlayerStorage() == null) {
@@ -50,10 +52,26 @@ public class OnlineTimeTask implements Runnable {
 
     private int getInitialOnlineTime(Character chr) {
         try {
-            String timeStr = chr.getAbstractPlayerInteraction().getAccountExtendValue(ExtendKey.ONLINE_TIME.getKey(), true);
+            String cycleStr = chr.getAbstractPlayerInteraction().getAccountExtendValue(ExtendKey.ONLINE_REWARD_CYCLE.getKey());
+            String currentCycle = getRewardCycleDate().toString();
+            if (cycleStr == null) {
+                String legacyTimeStr = chr.getAbstractPlayerInteraction().getAccountExtendValue(ExtendKey.ONLINE_TIME.getKey(), true);
+                int legacyTime = legacyTimeStr == null ? 0 : Integer.parseInt(legacyTimeStr);
+                chr.getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(ExtendKey.ONLINE_TIME.getKey(), String.valueOf(legacyTime));
+                chr.getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(ExtendKey.ONLINE_REWARD_CYCLE.getKey(), currentCycle);
+                return legacyTime;
+            }
+            if (!currentCycle.equals(cycleStr)) {
+                return 0;
+            }
+            String timeStr = chr.getAbstractPlayerInteraction().getAccountExtendValue(ExtendKey.ONLINE_TIME.getKey());
             return timeStr == null ? 0 : Integer.parseInt(timeStr);
         } catch (Exception e) {
             return 0;
         }
+    }
+
+    public static LocalDate getRewardCycleDate() {
+        return LocalDateTime.now().minusHours(RESET_HOUR).toLocalDate();
     }
 }
