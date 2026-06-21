@@ -34,6 +34,8 @@ import org.gms.server.partyquest.GuardianSpawnPoint;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.NumberTool;
 import org.gms.util.StringUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.sql.Connection;
@@ -47,6 +49,7 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MapFactory {
+    private static final Logger log = LoggerFactory.getLogger(MapFactory.class);
     private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
     private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
@@ -290,7 +293,9 @@ public class MapFactory {
                 String id = DataTool.getString(reactor.getChildByPath("id"));
                 if (id != null) {
                     Reactor newReactor = loadReactor(reactor, id, (byte) DataTool.getInt(reactor.getChildByPath("f"), 0));
-                    map.spawnReactor(newReactor);
+                    if (newReactor != null) {
+                        map.spawnReactor(newReactor);
+                    }
                 }
             }
         }
@@ -348,7 +353,12 @@ public class MapFactory {
     }
 
     private static Reactor loadReactor(Data reactor, String id, final byte FacingDirection) {
-        Reactor myReactor = new Reactor(ReactorFactory.getReactor(Integer.parseInt(id)), Integer.parseInt(id));
+        ReactorStats stats = ReactorFactory.getReactor(Integer.parseInt(id));
+        if (stats == null) {
+            log.warn("Reactor {} referenced by map but missing from Reactor.wz, skipping", id);
+            return null;
+        }
+        Reactor myReactor = new Reactor(stats, Integer.parseInt(id));
         int x = DataTool.getInt(reactor.getChildByPath("x"));
         int y = DataTool.getInt(reactor.getChildByPath("y"));
         myReactor.setFacingDirection(FacingDirection);

@@ -43,6 +43,22 @@ public final class LifeProofQuest {
     public static final int RESERVED_SLOT = 24;
     public static final int OPTIONAL_REQUIRED_COUNT = 3;
     public static final int PROOF_ITEM_ID = 4033011;
+
+    /**
+     * Returns the map-collection item ID for the player's current active LifeProof MAP quest,
+     * or 0 if the player has no active MAP-collection quest.
+     * Used by Reactor scripts to grant the correct stage-specific collection item.
+     */
+    public static int activeMapCollectionItemId(Character chr) {
+        if (chr == null) return 0;
+        Optional<Integer> questId = resolveCurrentQuestId(chr);
+        if (questId.isEmpty()) return 0;
+        QuestMeta meta = QUESTS.get(questId.get());
+        if (meta == null || !meta.isVisible()) return 0;
+        Objective objective = effectiveObjective(chr, meta);
+        if (objective == null || objective.type() != ObjectiveType.ITEM) return 0;
+        return objective.itemId();
+    }
     public static final int DYNAMIC_DROP_CHANCE = 350000;
     private static final int CUSTOM_PROGRESS_KEY = 0;
 
@@ -1426,16 +1442,16 @@ public final class LifeProofQuest {
     private static Map<String, ItemCollection> buildItemCollections() {
         Map<String, ItemCollection> items = new HashMap<>();
         items.put("visit_hidden_maps", new ItemCollection(4033000, "初醒隐秘生命之证", 50, List.of(6130200, 6230400)));
-        items.put("visit_leafre_maps", new ItemCollection(4033001, "龙林生命之证", 20, List.of(8140101, 8140102, 8140103)));
+        items.put("visit_leafre_maps", new ItemCollection(4005000, "力量水晶", 30, List.of(8140101, 8140102, 8140103)));
         items.put("visit_leafre_dragon_maps", new ItemCollection(4033002, "龙巢生命之证", 40, List.of(8140700, 8140701, 8140702, 8140703)));
-        items.put("visit_ludi_time", new ItemCollection(4033003, "时间裂缝生命之证", 10, List.of(8140200, 8140300)));
+        items.put("visit_ludi_time", new ItemCollection(4005001, "智慧水晶", 30, List.of(8140200, 8140300)));
         items.put("visit_ludi_maps", new ItemCollection(4033004, "玩具塔生命之证", 60, List.of(7140000, 8141100, 8140200, 8140300)));
-        items.put("visit_expedition", new ItemCollection(4033005, "远征生命之证", 10, List.of(8190003, 8190004, 8140500)));
-        items.put("visit_deep_sea", new ItemCollection(4033006, "深海生命之证", 15, List.of(8140600, 8141300, 8142100)));
+        items.put("visit_expedition", new ItemCollection(4005004, "黑暗水晶", 30, List.of(8190003, 8190004, 8140500)));
+        items.put("visit_deep_sea", new ItemCollection(4005002, "敏捷水晶", 30, List.of(8140600, 8141300, 8142100)));
         items.put("visit_deep_sea_hidden", new ItemCollection(4033007, "暗流生命之证", 50, List.of(7130020, 8140600, 8150100, 8150101)));
-        items.put("visit_temple", new ItemCollection(4033008, "神殿生命之证", 35, List.of(8200005, 8200006, 8200009, 8200010)));
+        items.put("visit_temple", new ItemCollection(4005003, "幸运水晶", 30, List.of(8200005, 8200006, 8200009, 8200010)));
         items.put("visit_temple_maps", new ItemCollection(4033009, "回忆生命之证", 75, List.of(8200005, 8200006, 8200007, 8200008, 8200009, 8200010, 8200011, 8200012)));
-        items.put("visit_final", new ItemCollection(4033010, "终印生命之证", 15, List.of(8190004, 8200011, 8200012)));
+        items.put("visit_final", new ItemCollection(4005004, "黑暗水晶", 30, List.of(8190004, 8200011, 8200012)));
         return items;
     }
 

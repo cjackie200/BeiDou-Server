@@ -3801,7 +3801,7 @@
     <imgdir name="5223" />
 
     <imgdir name="5225">
-        <string name="name" value="生命之证 II：在神木村和龙林入口区域击杀半人马收集龙林生命之证" />
+        <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5225@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
@@ -3947,7 +3947,7 @@
     <imgdir name="5248" />
 
     <imgdir name="5250">
-        <string name="name" value="生命之证 II：在神木村和龙林入口区域击杀半人马收集龙林生命之证" />
+        <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5250@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
@@ -4093,7 +4093,7 @@
     <imgdir name="5273" />
 
     <imgdir name="5275">
-        <string name="name" value="生命之证 II：在神木村和龙林入口区域击杀半人马收集龙林生命之证" />
+        <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5275@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
@@ -4239,7 +4239,7 @@
     <imgdir name="5298" />
 
     <imgdir name="5300">
-        <string name="name" value="生命之证 II：在神木村和龙林入口区域击杀半人马收集龙林生命之证" />
+        <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5300@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
@@ -4385,7 +4385,7 @@
     <imgdir name="5323" />
 
     <imgdir name="5325">
-        <string name="name" value="生命之证 II：在神木村和龙林入口区域击杀半人马收集龙林生命之证" />
+        <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5325@@"/>
         <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
@@ -4531,7 +4531,7 @@
     <imgdir name="5348" />
 
     <imgdir name="5350">
-        <string name="name" value="生命之证 III：在玩具城和时间控制室击杀大立钟收集时间裂缝生命之证" />
+        <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5350@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
@@ -4677,7 +4677,7 @@
     <imgdir name="5373" />
 
     <imgdir name="5375">
-        <string name="name" value="生命之证 III：在玩具城和时间控制室击杀大立钟收集时间裂缝生命之证" />
+        <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5375@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
@@ -4823,7 +4823,7 @@
     <imgdir name="5398" />
 
     <imgdir name="5400">
-        <string name="name" value="生命之证 III：在玩具城和时间控制室击杀大立钟收集时间裂缝生命之证" />
+        <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5400@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
@@ -4969,7 +4969,7 @@
     <imgdir name="5423" />
 
     <imgdir name="5425">
-        <string name="name" value="生命之证 III：在玩具城和时间控制室击杀大立钟收集时间裂缝生命之证" />
+        <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5425@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
@@ -5115,7 +5115,7 @@
     <imgdir name="5448" />
 
     <imgdir name="5450">
-        <string name="name" value="生命之证 III：在玩具城和时间控制室击杀大立钟收集时间裂缝生命之证" />
+        <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5450@@"/>
         <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
@@ -5261,7 +5261,7 @@
     <imgdir name="5473" />
 
     <imgdir name="5475">
-        <string name="name" value="生命之证 IV：在扎昆入口和时间控制室击杀骷髅龙收集远征生命之证" />
+        <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5475@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
@@ -5407,7 +5407,7 @@
     <imgdir name="5498" />
 
     <imgdir name="5500">
-        <string name="name" value="生命之证 IV：在扎昆入口和时间控制室击杀骷髅龙收集远征生命之证" />
+        <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5500@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
@@ -5553,7 +5553,7 @@
     <imgdir name="5523" />
 
     <imgdir name="5525">
-        <string name="name" value="生命之证 IV：在扎昆入口和时间控制室击杀骷髅龙收集远征生命之证" />
+        <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5525@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
@@ -5699,7 +5699,7 @@
     <imgdir name="5548" />
 
     <imgdir name="5550">
-        <string name="name" value="生命之证 IV：在扎昆入口和时间控制室击杀骷髅龙收集远征生命之证" />
+        <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5550@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
@@ -5845,7 +5845,7 @@
     <imgdir name="5573" />
 
     <imgdir name="5575">
-        <string name="name" value="生命之证 IV：在扎昆入口和时间控制室击杀骷髅龙收集远征生命之证" />
+        <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5575@@"/>
         <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
@@ -5991,7 +5991,7 @@
     <imgdir name="5598" />
 
     <imgdir name="5600">
-        <string name="name" value="生命之证 V：在水下世界和深海峡谷击杀骨骸鱼等收集深海生命之证" />
+        <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5600@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
@@ -6137,7 +6137,7 @@
     <imgdir name="5623" />
 
     <imgdir name="5625">
-        <string name="name" value="生命之证 V：在水下世界和深海峡谷击杀骨骸鱼等收集深海生命之证" />
+        <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5625@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
@@ -6283,7 +6283,7 @@
     <imgdir name="5648" />
 
     <imgdir name="5650">
-        <string name="name" value="生命之证 V：在水下世界和深海峡谷击杀骨骸鱼等收集深海生命之证" />
+        <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5650@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
@@ -6429,7 +6429,7 @@
     <imgdir name="5673" />
 
     <imgdir name="5675">
-        <string name="name" value="生命之证 V：在水下世界和深海峡谷击杀骨骸鱼等收集深海生命之证" />
+        <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5675@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
@@ -6575,7 +6575,7 @@
     <imgdir name="5698" />
 
     <imgdir name="5700">
-        <string name="name" value="生命之证 V：在水下世界和深海峡谷击杀骨骸鱼等收集深海生命之证" />
+        <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5700@@"/>
         <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
@@ -6721,7 +6721,7 @@
     <imgdir name="5723" />
 
     <imgdir name="5725">
-        <string name="name" value="生命之证 VI：在时间神殿击杀后悔祭司和忘却祭司收集神殿生命之证" />
+        <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5725@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
@@ -6867,7 +6867,7 @@
     <imgdir name="5748" />
 
     <imgdir name="5750">
-        <string name="name" value="生命之证 VI：在时间神殿击杀后悔祭司和忘却祭司收集神殿生命之证" />
+        <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5750@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
@@ -7013,7 +7013,7 @@
     <imgdir name="5773" />
 
     <imgdir name="5775">
-        <string name="name" value="生命之证 VI：在时间神殿击杀后悔祭司和忘却祭司收集神殿生命之证" />
+        <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5775@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
@@ -7159,7 +7159,7 @@
     <imgdir name="5798" />
 
     <imgdir name="5800">
-        <string name="name" value="生命之证 VI：在时间神殿击杀后悔祭司和忘却祭司收集神殿生命之证" />
+        <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5800@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
@@ -7305,7 +7305,7 @@
     <imgdir name="5823" />
 
     <imgdir name="5825">
-        <string name="name" value="生命之证 VI：在时间神殿击杀后悔祭司和忘却祭司收集神殿生命之证" />
+        <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5825@@"/>
         <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
@@ -7451,7 +7451,7 @@
     <imgdir name="5848" />
 
     <imgdir name="5850">
-        <string name="name" value="生命之证 VII：在时间神殿和死龙巢穴击杀老骷髅龙和守护队长收集终印生命之证" />
+        <string name="name" value="生命之证 VII：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5850@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
@@ -7597,7 +7597,7 @@
     <imgdir name="5873" />
 
     <imgdir name="5875">
-        <string name="name" value="生命之证 VII：在时间神殿和死龙巢穴击杀老骷髅龙和守护队长收集终印生命之证" />
+        <string name="name" value="生命之证 VII：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5875@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
@@ -7743,7 +7743,7 @@
     <imgdir name="5898" />
 
     <imgdir name="5900">
-        <string name="name" value="生命之证 VII：在时间神殿和死龙巢穴击杀老骷髅龙和守护队长收集终印生命之证" />
+        <string name="name" value="生命之证 VII：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5900@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
@@ -7889,7 +7889,7 @@
     <imgdir name="5923" />
 
     <imgdir name="5925">
-        <string name="name" value="生命之证 VII：在时间神殿和死龙巢穴击杀老骷髅龙和守护队长收集终印生命之证" />
+        <string name="name" value="生命之证 VII：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5925@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
@@ -8035,7 +8035,7 @@
     <imgdir name="5948" />
 
     <imgdir name="5950">
-        <string name="name" value="生命之证 VII：在时间神殿和死龙巢穴击杀老骷髅龙和守护队长收集终印生命之证" />
+        <string name="name" value="生命之证 VII：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5950@@"/>
         <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
