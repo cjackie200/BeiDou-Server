@@ -225,13 +225,14 @@ class LifeProofQuestTest {
     }
 
     @Test
-    void npcTalkQuestInfoTellsPlayerToCompleteAtTargetInstructor() throws Exception {
+    void npcTalkQuestInfoUsesProgressMarker() throws Exception {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(resolveQuestXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml").toFile());
 
-        assertQuestInfoContains(document, 5100, "前往#p1012100#，点击任务完成图标");
-        assertQuestInfoContains(document, 5126, "前往#p1022000#，点击任务完成图标");
-        assertQuestInfoContains(document, 5204, "前往#p1090000#，点击任务完成图标");
+        // NPC_TALK quests now use the standard minimal field 1 format
+        assertQuestInfoContains(document, 5100, "#e任务进度#n");
+        assertQuestInfoContains(document, 5126, "#e任务进度#n");
+        assertQuestInfoContains(document, 5204, "#e任务进度#n");
     }
 
     @Test
@@ -311,14 +312,11 @@ class LifeProofQuestTest {
         for (LifeProofQuest.QuestMeta meta : LifeProofQuest.allVisibleQuests()) {
             String detail = childValue(topLevelImgDir(info, meta.questId()), "string", "1");
             assertLifeProofQuestDetailComplete(detail, meta);
-            switch (meta.objective().type()) {
-                case KILL, BOSS -> assertMobProgressMacros(check, detail, meta);
-                case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
-                        assertLifeProofProgressMarker(detail, meta.questId());
-                case OPTION_SLOT -> assertLifeProofProgressMarker(detail, meta.questId());
-                case NPC_TALK -> assertLifeProofProgressMarker(detail, meta.questId());
-                case ITEM, MESO, SELECT_OPTION, REWARD -> assertLifeProofProgressMarker(detail, meta.questId());
-            }
+            // All quest types now use the minimal field 1 format with progress marker.
+            assertLifeProofProgressMarker(detail, meta.questId());
+            // No #a macros in WZ — client-side kill tracking replaced by server-generated conditions.
+            assertFalse(Pattern.compile("#a").matcher(detail).find(),
+                    "life proof quest detail must not use client #a macro: " + meta.questId());
         }
     }
 
@@ -760,14 +758,12 @@ class LifeProofQuestTest {
     }
 
     private static void assertLifeProofQuestDetailComplete(String detail, LifeProofQuest.QuestMeta meta) {
-        assertTrue(detail.contains(LifeProofQuest.stageStory(meta.stage())),
-                "quest detail must include stage story for quest " + meta.questId());
-        assertTrue(detail.contains("目标："),
-                "quest detail must include objective label for quest " + meta.questId());
-        assertTrue(detail.contains("当前进度："),
-                "quest detail must include progress label for quest " + meta.questId());
-        assertTrue(detail.contains("完成方式："),
-                "quest detail must include completion method for quest " + meta.questId());
+        assertTrue(detail.contains("#e任务进度#n"),
+                "life proof quest detail must use bold progress header: " + meta.questId());
+        assertTrue(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
+                "life proof quest detail must contain hook progress marker: " + meta.questId());
+        assertFalse(detail.contains("#a"),
+                "life proof quest detail must not use client #a macro: " + meta.questId());
         assertFalse(detail.contains("..."),
                 "quest detail must not rely on placeholder ellipsis for quest " + meta.questId());
     }

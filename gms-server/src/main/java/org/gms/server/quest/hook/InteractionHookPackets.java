@@ -67,19 +67,25 @@ public final class InteractionHookPackets {
         if (!canSendRules(client)) {
             return;
         }
-        List<InteractionHookProgressEntry> entries = progressEntries(client.getPlayer());
-        Packet packet = buildProgressPacket(entries);
-        client.sendPacket(packet);
-        log.info("InteractionHook progress sent player={} count={} payloadBytes={}",
-                client.getPlayer().getName(),
-                entries.size(),
-                Math.max(0, packet.getBytes().length - 2));
-        for (InteractionHookProgressEntry entry : entries) {
-            for (InteractionHookProgressEntry.Condition cond : entry.conditions()) {
-                log.info("  progress entry questId={} state={} current={} required={} text=[{}]",
-                        entry.questId(), entry.state(), cond.current(), cond.required(),
-                        cond.text() == null ? "<null>" : cond.text().replace("\r", "\\r").replace("\n", "\\n"));
+        try {
+            List<InteractionHookProgressEntry> entries = progressEntries(client.getPlayer());
+            Packet packet = buildProgressPacket(entries);
+            client.sendPacket(packet);
+            log.info("InteractionHook progress sent player={} count={} payloadBytes={}",
+                    client.getPlayer().getName(),
+                    entries.size(),
+                    Math.max(0, packet.getBytes().length - 2));
+            for (InteractionHookProgressEntry entry : entries) {
+                for (InteractionHookProgressEntry.Condition cond : entry.conditions()) {
+                    log.info("  progress entry questId={} state={} current={} required={} text=[{}]",
+                            entry.questId(), entry.state(), cond.current(), cond.required(),
+                            cond.text() == null ? "<null>" : cond.text().replace("\r", "\\r").replace("\n", "\\n"));
+                }
             }
+        } catch (Exception e) {
+            log.error("InteractionHook sendProgress failed player={}: {}",
+                    client.getPlayer() != null ? client.getPlayer().getName() : "?",
+                    e.getMessage(), e);
         }
     }
 
