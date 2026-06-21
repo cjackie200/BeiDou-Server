@@ -22570,7 +22570,7 @@
     <imgdir name="29981">
       <string name="name" value="怪物卡戒指升级 Lv1"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29981@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29981@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv1。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="2"/>
@@ -22579,7 +22579,7 @@
     <imgdir name="29982">
       <string name="name" value="怪物卡戒指升级 Lv2"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29982@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29982@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv2。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="3"/>
@@ -22588,7 +22588,7 @@
     <imgdir name="29983">
       <string name="name" value="怪物卡戒指升级 Lv3"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29983@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29983@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv3。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="4"/>
@@ -22597,7 +22597,7 @@
     <imgdir name="29984">
       <string name="name" value="怪物卡戒指升级 Lv4"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29984@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29984@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv4。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="5"/>
@@ -22606,7 +22606,7 @@
     <imgdir name="29985">
       <string name="name" value="怪物卡戒指升级 Lv5"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29985@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29985@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv5。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="6"/>
@@ -22615,7 +22615,7 @@
     <imgdir name="29986">
       <string name="name" value="怪物卡戒指升级 Lv6"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29986@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29986@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv6。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="7"/>
@@ -22624,7 +22624,7 @@
     <imgdir name="29987">
       <string name="name" value="怪物卡戒指升级 Lv7"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29987@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29987@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv7。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="8"/>
@@ -22633,7 +22633,7 @@
     <imgdir name="29988">
       <string name="name" value="怪物卡戒指升级 Lv8"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29988@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29988@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv8。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="9"/>
@@ -22642,7 +22642,7 @@
     <imgdir name="29989">
       <string name="name" value="怪物卡戒指升级 Lv9"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29989@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29989@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv9。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="10"/>
@@ -22651,7 +22651,7 @@
     <imgdir name="29990">
       <string name="name" value="怪物卡戒指升级 Lv10"/>
       <string name="0" value="查看怪物卡戒指升级进度。去找#b#p0002006##k。"/>
-      <string name="1" value="升级进度：@@BD_IH_PROGRESS:29990@@"/>
+      <string name="1" value="#e任务进度#n\r\n@@BD_IH_PROGRESS:29990@@"/>
       <string name="2" value="怪物卡戒指已经升级到 Lv10。"/>
       <string name="parent" value="怪物卡戒指"/>
       <int name="order" value="11"/>

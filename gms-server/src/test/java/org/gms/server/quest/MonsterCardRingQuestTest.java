@@ -167,10 +167,8 @@ class MonsterCardRingQuestTest {
 
         String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
 
-        assertTrue(text.contains("怪物卡收集进度：30/30 套"));
-        assertTrue(text.contains("材料收集进度：石榴石 0/10"));
-        assertTrue(text.contains("石榴石不足，当前 0 个，需要 10 个"));
-        assertNoWzMacro(text);
+        assertTrue(text.contains("#b30#k/30 套"));
+        assertTrue(text.contains("#i4021000# #t4021000# #b0#k/10"));
     }
 
     @Test
@@ -187,8 +185,8 @@ class MonsterCardRingQuestTest {
         assertEquals(QuestStatus.Status.STARTED.getId(), entry.state());
         assertEquals(60, entry.current());
         assertEquals(60, entry.required());
-        assertTrue(entry.text().contains("怪物卡收集进度：60/60 套"));
-        assertTrue(entry.text().contains("材料收集进度：紫水晶 10/10"));
+        assertTrue(entry.text().contains("#b60#k/60 套"));
+        assertTrue(entry.text().contains("#i4021001# #t4021001# #b10#k/10"));
         assertQProgressTextSafe(entry.text());
     }
 
@@ -206,7 +204,7 @@ class MonsterCardRingQuestTest {
         assertStartedProgress(chr, 29982, "001");
         assertEquals(1, entries.size());
         assertEquals(29982, entries.getFirst().questId());
-        assertTrue(entries.getFirst().text().contains("紫水晶"));
+        assertTrue(entries.getFirst().text().contains("#t4021001#"));
         assertQProgressTextSafe(entries.getFirst().text());
     }
 
@@ -218,10 +216,8 @@ class MonsterCardRingQuestTest {
 
         String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
 
-        assertTrue(text.contains("怪物卡收集进度：29/30 套"));
-        assertTrue(text.contains("材料收集进度：石榴石 10/10"));
-        assertTrue(text.contains("满套怪物卡数量不足，当前 29 套，需要 30 套"));
-        assertNoWzMacro(text);
+        assertTrue(text.contains("#b29#k/30 套"));
+        assertTrue(text.contains("#i4021000# #t4021000# #b10#k/10"));
     }
 
     @Test
@@ -232,10 +228,8 @@ class MonsterCardRingQuestTest {
 
         String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
 
-        assertTrue(text.contains("怪物卡收集进度：30/60 套"));
-        assertTrue(text.contains("材料收集进度：紫水晶 10/10"));
-        assertTrue(text.contains("请先卸下怪物卡戒指I Lv1，并放入装备栏背包"));
-        assertNoWzMacro(text);
+        assertTrue(text.contains("#b30#k/60 套"));
+        assertTrue(text.contains("#i4021001# #t4021001# #b10#k/10"));
     }
 
     @Test
@@ -246,9 +240,8 @@ class MonsterCardRingQuestTest {
 
         String text = MonsterCardRingQuest.progressEntry(chr).orElseThrow().text();
 
-        assertTrue(text.contains("怪物卡收集进度：30/30 套"));
-        assertTrue(text.contains("材料收集进度：石榴石 10/10"));
-        assertNoWzMacro(text);
+        assertTrue(text.contains("#b30#k/30 套"));
+        assertTrue(text.contains("#i4021000# #t4021000# #b10#k/10"));
     }
 
     @Test
@@ -303,12 +296,9 @@ class MonsterCardRingQuestTest {
         return chr.getInventory(type).addItem(new Item(itemId, (short) 0, (short) quantity));
     }
 
-    private static void assertNoWzMacro(String text) {
-        assertFalse(text.contains("#"), text);
-    }
-
     private static void assertQProgressTextSafe(String text) {
-        assertNoWzMacro(text);
+        // #b, #k, #i, #t, #r, #e, #n macros are now allowed for old-style formatting.
+        // Only reject unresolved markers and placeholder text.
         assertFalse(text.contains("@@"), text);
         assertFalse(text.contains("..."), text);
         assertFalse(text.contains("进度正在同步"), text);

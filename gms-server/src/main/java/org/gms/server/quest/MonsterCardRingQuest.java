@@ -475,18 +475,16 @@ public final class MonsterCardRingQuest {
 
     // The ijl15 ZXString::Assign hook (0x00414617) handles marker replacement with proper
     // buffer allocation, so there is no longer a byte limit on the replacement text.
+    // Uses MapleStory WZ macros for old-style formatting: #b (blue), #k (reset), #r (red),
+    // #i{itemId}# (icon), #t{itemId}# (name).
     private static String progressEntryText(Character chr, RingState ringState, RingInfo current, int targetLevel,
                                             int completedSets, int requiredSets, UpgradeValidation validation) {
         int material = getMaterialForLevel(targetLevel);
         int materialCount = material > 0 ? chr.getItemQuantity(material, false) : 0;
         StringBuilder text = new StringBuilder();
-        text.append("怪物卡收集进度：").append(completedSets).append("/").append(requiredSets).append(" 套");
-        text.append("\r\n材料收集进度：").append(itemName(material)).append(" ")
-                .append(materialCount).append("/").append(MATERIAL_QTY);
-        if (validation != null && !validation.isOk()) {
-            text.append("\r\n").append(progressEntryReason(
-                    ringState, current, completedSets, requiredSets, material, materialCount));
-        }
+        text.append("怪物卡收集进度：").append("#b").append(completedSets).append("#k/").append(requiredSets).append(" 套");
+        text.append("\r\n材料收集进度：").append("#i").append(material).append("# #t").append(material).append("# ")
+                .append("#b").append(materialCount).append("#k/").append(MATERIAL_QTY);
         String result = text.toString();
         log.info("MonsterCardRing progressEntryText questTarget=Lv{} text=[{}]",
                 targetLevel, result.replace("\r", "\\r").replace("\n", "\\n"));
