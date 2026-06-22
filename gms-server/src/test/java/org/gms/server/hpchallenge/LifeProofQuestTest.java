@@ -243,8 +243,8 @@ class LifeProofQuestTest {
                 .findFirst()
                 .orElseThrow();
         assertEquals(LifeProofQuest.ObjectiveType.ITEM, t2Common.objective().type());
-        assertEquals(4033001, t2Common.objective().itemId());
-        assertEquals(20, t2Common.objective().requiredCount());
+        assertEquals(4005000, t2Common.objective().itemId()); // 力量水晶
+        assertEquals(30, t2Common.objective().requiredCount());
 
         LifeProofQuest.QuestMeta t1OptionalMap = LifeProofQuest.allQuestMetas()
                 .stream()

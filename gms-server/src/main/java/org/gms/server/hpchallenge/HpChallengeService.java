@@ -407,11 +407,14 @@ public final class HpChallengeService {
         int afterMaxHp = Math.min(MAX_STAT, Math.max(beforeMaxHp, target.targetHp()));
         int afterMaxMp = Math.min(MAX_STAT, Math.max(beforeMaxMp, target.targetMp()));
 
-        chr.updateMaxHpMaxMp(afterMaxHp, afterMaxMp);
-        chr.updateHp(afterMaxHp);
-        chr.updateMp(afterMaxMp);
-
         try (Connection con = DatabaseConnection.getConnection()) {
+            // Double-check inside the transaction to close the TOCTOU window (BUG #2).
+            if (hasActiveReward(chr.getId(), stage.stage())) {
+                return "该阶段奖励已经领取。";
+            }
+            chr.updateMaxHpMaxMp(afterMaxHp, afterMaxMp);
+            chr.updateHp(afterMaxHp);
+            chr.updateMp(afterMaxMp);
             try (PreparedStatement ps = con.prepareStatement("""
                     INSERT INTO hp_challenge_reward_log
                     (character_id, stage, job_id, before_maxhp, before_maxmp, before_hp, before_mp,
@@ -477,11 +480,14 @@ public final class HpChallengeService {
         int afterMaxHp = Math.min(MAX_STAT, Math.max(beforeMaxHp, target.targetHp()));
         int afterMaxMp = Math.min(MAX_STAT, Math.max(beforeMaxMp, target.targetMp()));
 
-        chr.updateMaxHpMaxMp(afterMaxHp, afterMaxMp);
-        chr.updateHp(afterMaxHp);
-        chr.updateMp(afterMaxMp);
-
         try (Connection con = DatabaseConnection.getConnection()) {
+            // Double-check inside the transaction to close the TOCTOU window (BUG #2).
+            if (hasActiveReward(chr.getId(), stage.stage())) {
+                return "该阶段奖励已经领取。";
+            }
+            chr.updateMaxHpMaxMp(afterMaxHp, afterMaxMp);
+            chr.updateHp(afterMaxHp);
+            chr.updateMp(afterMaxMp);
             try (PreparedStatement ps = con.prepareStatement("""
                     INSERT INTO hp_challenge_reward_log
                     (character_id, stage, job_id, before_maxhp, before_maxmp, before_hp, before_mp,

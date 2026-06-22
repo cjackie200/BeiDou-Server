@@ -368,7 +368,7 @@ public final class LifeProofQuest {
             startOptionSlot(chr, selectedQuest, npcId);
             sendNextQuestUpdate(chr, meta.questId(), npcId, selectedQuest);
             chr.yellowMessage("生命之证：" + selectedMessage(result));
-            context.close();
+            context.sendOk(selectedMessage(result));
             return;
         }
 
@@ -476,6 +476,12 @@ public final class LifeProofQuest {
 
     private static List<InteractionHookProgressEntry.Condition> conditionsForObjective(
             Character chr, QuestMeta meta) {
+        // Skip quests that haven't been started to avoid auto-creating QuestStatus entries.
+        byte statusByte = chr.getQuestStatus(meta.questId());
+        if (statusByte != QuestStatus.Status.STARTED.getId()
+                && statusByte != QuestStatus.Status.COMPLETED.getId()) {
+            return List.of();
+        }
         // Resolve the effective objective: for OPTION_SLOT quests this is the selected trial,
         // for all other quests it's the static objective defined at build time.
         Objective objective = effectiveObjective(chr, meta);
@@ -486,6 +492,14 @@ public final class LifeProofQuest {
 
         // OPTION_SLOT quests dispatch to the selected trial's objective type.
         if (type == ObjectiveType.KILL || type == ObjectiveType.BOSS) {
+            // For OPTION_SLOT quests, KILL/BOSS progress is stored in hp_challenge_progress DB,
+            // not in the quest status per-mob map. Use questProgressValue which reads the DB source.
+            if (meta.kind() == QuestKind.OPTION_SLOT) {
+                ProgressValue progress = questProgressValue(chr, meta);
+                return List.of(new InteractionHookProgressEntry.Condition(
+                        progress.current(), progress.required(),
+                        "击杀进度：#b" + progress.current() + "#k/#r" + progress.required() + "#k"));
+            }
             Quest quest = Quest.getInstance(meta.questId());
             if (quest == null) {
                 return List.of();
@@ -983,10 +997,12 @@ public final class LifeProofQuest {
                 return error("金币不足，需要 " + objective.mesoCost() + " 金币。");
             }
             if (meta.kind() == QuestKind.OPTION_SLOT) {
+                chr.gainMeso(-objective.mesoCost(), true, true, true);
                 HpChallengeService.completeLifeProofOptional(chr, meta.stage(), meta.selectorNo());
                 completeNextBridgeSilently(chr, meta);
+            } else {
+                chr.gainMeso(-objective.mesoCost(), true, true, true);
             }
-            chr.gainMeso(-objective.mesoCost(), true, true, true);
         }
         if (meta.kind() == QuestKind.OPTION_SLOT && objective.type() != ObjectiveType.MESO) {
             HpChallengeService.completeLifeProofOptional(chr, meta.stage(), meta.selectorNo());
@@ -1058,7 +1074,7 @@ public final class LifeProofQuest {
             case MESO -> Math.min(chr.getMeso(), objective.mesoCost());
             case SELECT_OPTION -> 0;
             case OPTION_SLOT -> optionSlotProgress(chr, meta, objective);
-            case REWARD -> 0;
+            case REWARD -> HpChallengeService.stage(meta.stage()).requiredLevel() <= chr.getLevel() && !HpChallengeService.hasActiveReward(chr.getId(), meta.stage()) ? 1 : 0;
         };
         return new ProgressValue(Math.max(0, Math.min(current, required)), required);
     }
@@ -1560,6 +1576,9 @@ public final class LifeProofQuest {
     }
 
     private static ItemCollection collectionForTask(int stage, HpChallengeService.Task task) {
+        if (task == null) {
+            return null;
+        }
         if (task.targetType() != HpChallengeService.TargetType.MAP) {
             return null;
         }
@@ -1576,7 +1595,10 @@ public final class LifeProofQuest {
                 case "3:5" -> "visit_ludi_maps";
                 case "5:6" -> "visit_deep_sea_hidden";
                 case "6:7" -> "visit_temple_maps";
-                default -> throw new IllegalStateException("unmapped map task: stage=" + stage + ", key=" + task.key());
+                default -> {
+                    log.warn("LifeProof unmapped map task: stage={} key={}", stage, task.key());
+                    yield null;
+                }
             };
         };
         return ITEM_COLLECTIONS.get(collectionKey);
@@ -1921,6 +1943,9 @@ public final class LifeProofQuest {
         } else if (objective.type() == ObjectiveType.MESO) {
             progress = chr.getMeso() >= objective.mesoCost() ? objective.requiredCount() : 0;
             HpChallengeService.setLifeProofOptionalProgress(chr, meta.stage(), meta.selectorNo(), progress);
+        } else if (objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS) {
+            // KILL/BOSS progress is already stored in hp_challenge_progress by kill handlers.
+            // selected.currentCount() reflects the DB value; keep it as the authoritative progress.
         }
 
         String value = progress >= objective.requiredCount() ? "001" : "000";
@@ -2043,7 +2068,7 @@ public final class LifeProofQuest {
     }
 
     private static List<HpChallengeService.Task> availableOptions(Character chr, QuestMeta selector) {
-        if (chr == null) {
+        if (chr == null || selector == null || selector.selectorNo() <= 0) {
             return List.of();
         }
         int expectedBridge = selector.selectorNo() == 1 ? 0 :
