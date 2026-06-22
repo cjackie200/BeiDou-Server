@@ -394,7 +394,10 @@ public final class LifeProofQuest {
             refreshQuestRules(chr);
             QuestMeta next = nextContinuationAtNpc(chr, meta, npcId);
             if (next != null) {
-                sendNextQuestUpdate(chr, meta.questId(), npcId, next.questId());
+                // 不发送 updateQuestFinish 标准包，否则客户端收到后会
+                // 自动发起新任务的 QUEST_ACTION，与下面的 openHook 产生
+                // 双重触发导致客户端崩溃(退回到登录界面)。
+                // Hook 系统通过 switchQuest + openHook 完成切换即可。
                 context.switchQuest(next.questId(), npcId, resolveCurrentAction(chr, next.questId()));
                 openHook(context);
                 return;
