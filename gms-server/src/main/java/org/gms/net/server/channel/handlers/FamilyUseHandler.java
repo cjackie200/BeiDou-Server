@@ -163,7 +163,11 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                 return;
             }
             for (PartyCharacter mpc : player.getParty().getMembers()) {
-                FamilyEntry mpcEntry = mpc.getPlayer().getFamilyEntry();
+                Character partyMember = mpc.getPlayer();
+                if (partyMember == null) {
+                    continue;
+                }
+                FamilyEntry mpcEntry = partyMember.getFamilyEntry();
                 // 没有学院的不享受
                 if (mpcEntry == null) {
                     continue;
@@ -172,13 +176,13 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                 if (!Objects.equals(mpcEntry.getFamily().getID(), familyEntry.getFamily().getID())) {
                     continue;
                 }
-                mpc.getPlayer().sendPacket(PacketCreator.familyBuff(type, effect, 1, duration * 60000));
+                partyMember.sendPacket(PacketCreator.familyBuff(type, effect, 1, duration * 60000));
                 if (type == 2) {
-                    mpc.getPlayer().setFamilyBuff(true, 2, 1);
+                    partyMember.setFamilyBuff(true, 2, 1);
                 } else {
-                    mpc.getPlayer().setFamilyBuff(true, 1, 2);
+                    partyMember.setFamilyBuff(true, 1, 2);
                 }
-                mpc.getPlayer().startFamilyBuffTimer(duration * 60000);
+                partyMember.startFamilyBuffTimer(duration * 60000);
                 // 不扣减其他人次数
 //                useEntitlement(mpcEntry, entitlement);
             }

@@ -20,6 +20,8 @@ AllowFunction-could use directly
  */
 
 
+var ExpTable = Java.type("org.gms.constants.game.ExpTable");
+
 var status = -1; 
 var text;
 //Start
@@ -80,7 +82,9 @@ function end(mode, type, selection)
 	    if (status == 0)
 	    {
 			//第一层对话
-            qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！");		
+			var rewardExp = Math.max(1, Math.floor(ExpTable.getExpNeededForLevel(qm.getLevel()) * 0.1));
+            qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！\r\n\r\n获得经验值：#b" + rewardExp + "#k（当前等级升级所需经验的10%）");
+			qm.getPlayer().gainExp(rewardExp, true, true);
 			qm.forceCompleteQuest();
 	    }
 		else

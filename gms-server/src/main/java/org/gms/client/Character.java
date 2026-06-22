@@ -9997,7 +9997,11 @@ public class Character extends AbstractCharacterObject {
             return;
         }
         String strNewOnlineTime = String.valueOf(m_iCurrentOnlineTime);
-        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(ExtendKey.ONLINE_TIME.getKey(), strNewOnlineTime, true);
+        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(ExtendKey.ONLINE_TIME.getKey(), strNewOnlineTime);
+        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue(
+                ExtendKey.ONLINE_REWARD_CYCLE.getKey(),
+                org.gms.net.server.task.OnlineTimeTask.getRewardCycleDate().toString()
+        );
     }
 
     /**

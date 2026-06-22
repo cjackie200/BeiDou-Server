@@ -25,14 +25,16 @@ var config = {
 			itemlist:[
 				// id解释：0：金币;  1：点券;  2：抵用券;  4、信用点; 5、经验值;  id ≥ 1_000_000 的为有效物品ID，自动区分，你只需要操心客户端有没有填入的物品即可。
 				{id:0,qty:10000},	//金币，数量1万
-				{id:2430033,qty:5}	//北斗指南书碎片，数量5
+				{id:2430033,qty:5},	//北斗指南书碎片，数量5
+				{id:4310000,qty:1}	//绝对音感
 			]
 		},{
 			online:30,
 			itemlist:[
 				{id:0,qty:50000},	//金币
 				{id:1,qty:1000},	//点券，数量1千
-				{id:2430033,qty:10}	//北斗指南书碎片
+				{id:2430033,qty:10},	//北斗指南书碎片
+				{id:4310000,qty:2}	//绝对音感
 			]
 		},{
 			online:60,
@@ -40,13 +42,15 @@ var config = {
 				{id:0,qty:100000},	//金币
 				{id:1,qty:1000},	//点券，数量1千
 				{id:2430033,qty:15},	//北斗指南书碎片
+				{id:4310000,qty:3}	//绝对音感
 			]
 		},{
 			online:120,
 			itemlist:[
 				{id:0,qty:150000},	//金币
-				{id:1,qty:3000},	//点券，数量1千
+				{id:1,qty:3000},	//点券，数量3千
 				{id:2430033,qty:20},	//北斗指南书碎片
+				{id:4310000,qty:4}	//绝对音感
 			]
 		},{
 			online:240,
@@ -54,7 +58,7 @@ var config = {
 				{id:0,qty:200000},	//金币
 				{id:1,qty:4000},	//点券，数量1千
 				{id:2430033,qty:25},	//北斗指南书碎片
-				{id:4310000,qty:1}	//绝对音感
+				{id:4310000,qty:5}	//绝对音感
 			]
 		},{
 			online:360,
@@ -62,7 +66,7 @@ var config = {
 				{id:0,qty:400000},	//金币
 				{id:1,qty:5000},	//点券，数量1千
 				{id:2430033,qty:30},	//北斗指南书碎片
-				{id:4310000,qty:2}	//绝对音感
+				{id:4310000,qty:6}	//绝对音感
 			]
 		},{
 			online:480,
@@ -70,7 +74,7 @@ var config = {
 				{id:0,qty:500000},	//金币
 				{id:1,qty:6000},	//点券，数量1千
 				{id:2430033,qty:35},	//北斗指南书碎片
-				{id:4310000,qty:3}	//绝对音感
+				{id:4310000,qty:7}	//绝对音感
 			]
 		},
 	]
@@ -112,10 +116,11 @@ const ITEM_TEMPLATES = {
 
 function start() {
 	var limitDt = new Date();
-	limitDt.setHours(0, 0, 5, 0);
-	if (new Date() <= limitDt) {
+	limitDt.setHours(6, 0, 5, 0);
+	if (new Date().getHours() === 6 && new Date() <= limitDt) {
 		cm.sendOkLevel("","在线奖励正在初始化中，请稍后再试...");
 	} else {
+		refreshOnlineRewardCycle();
 		g_OnlineMinutes = getOnlineMinute();
 		g_ClaimStatus = getOnlineStatus() || 0;
 		levelmain();
@@ -142,7 +147,7 @@ function levelmain() {
 		text += `\r\n#L1000##e#b一键领取可领取奖励（${claimableCount}份）#n#k#l\r\n`;
 	}
 	text += rewardListText + "\r\n\r\n";
-	text += "\r\n【领取说明】\r\n · 可单独领取，也可一键领取所有已满足条件且未领取的奖励\r\n · #b每日0点#e#r重置#b#n累计时长#k\r\n · 背包空间不足将不会发放奖励\r\n · 坚持在线时间越长，获得奖励越丰厚！"
+	text += "\r\n【领取说明】\r\n · 可单独领取，也可一键领取所有已满足条件且未领取的奖励\r\n · #b每日早上6点#e#r重置#b#n累计时长和领取状态#k\r\n · 背包空间不足将不会发放奖励\r\n · 坚持在线时间越长，获得奖励越丰厚！"
 	if (g_ClaimStatus == ((1 << config.reward.length) - 1)) {
 		cm.sendOkLevel("",text);	
 	} else {
@@ -321,7 +326,7 @@ function grantRewardItems(reward, count = 1) {
  * @returns {string}
  */
 function getOnlineStatus() {
-	return cm.getAccountExtendValue("每日在线奖励领取状态",true);
+	return cm.getAccountExtendValue("每日在线奖励领取状态");
 }
 
 /**
@@ -329,7 +334,32 @@ function getOnlineStatus() {
  * @returns {string}
  */
 function saveOnlineStatus(status) {
-	cm.saveOrUpdateAccountExtendValue("每日在线奖励领取状态", status.toString(), true);
+	cm.saveOrUpdateAccountExtendValue("每日在线奖励领取状态", status.toString());
+}
+
+/**
+ * 以每日早上6点为在线奖励换日线。
+ */
+function refreshOnlineRewardCycle() {
+	const cycle = getOnlineRewardCycle();
+	const savedCycle = cm.getAccountExtendValue("在线奖励领取刷新周期");
+	if (savedCycle == null) {
+		const legacyStatus = cm.getAccountExtendValue("每日在线奖励领取状态", true);
+		cm.saveOrUpdateAccountExtendValue("每日在线奖励领取状态", legacyStatus == null ? "0" : legacyStatus.toString());
+		cm.saveOrUpdateAccountExtendValue("在线奖励领取刷新周期", cycle);
+	} else if (savedCycle.toString() !== cycle) {
+		cm.saveOrUpdateAccountExtendValue("每日在线奖励领取状态", "0");
+		cm.saveOrUpdateAccountExtendValue("在线奖励领取刷新周期", cycle);
+	}
+}
+
+function getOnlineRewardCycle() {
+	const now = new Date();
+	const cycleDate = new Date(now.getTime() - 6 * 60 * 60 * 1000);
+	const year = cycleDate.getFullYear();
+	const month = String(cycleDate.getMonth() + 1).padStart(2, "0");
+	const day = String(cycleDate.getDate()).padStart(2, "0");
+	return `${year}-${month}-${day}`;
 }
 
 
