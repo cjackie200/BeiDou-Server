@@ -21,10 +21,9 @@ public final class AcceptToSHandler extends AbstractPacketHandler {
             c.disconnect(false, false);//Client dc's but just because I am cool I do this (:
             return;
         }
-        if (c.finishLogin() == 0) {
-            c.sendPacket(PacketCreator.getAuthSuccess(c));
-        } else {
-            c.sendPacket(PacketCreator.getLoginFailed(9));//shouldn't happen XD
-        }
+        // 注意：不调用 finishLogin()，避免将 loggedIn 设为 true
+        // 导致后续 LoginPasswordHandler.validateState() 返回 false 而丢弃登录包
+        // TOS 协议确认后，由 LoginPasswordHandler 完成实际的登录状态设置
+        c.sendPacket(PacketCreator.getAuthSuccess(c));
     }
 }
