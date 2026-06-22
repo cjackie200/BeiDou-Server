@@ -1,4 +1,4 @@
-/*
+﻿/*
 	This file is part of the OdinMS Maple Story Server
     Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
 		       Matthias Butz <matze@odinms.de>
@@ -50,7 +50,7 @@ function action(mode, type, selection) {
         text += " \r\n\r\n";
 		text += "#L3#传送自由#l \t #L69#快速转职#l \t #L70#学习技能#l\r\n";
 		text += "#L71#超级传送#l \t #L4#爆率一览#l \t #L73#" + mobVacText + "#l\r\n";
-		text += "#L2#在线奖励#l\r\n";
+		text += "#L2#在线奖励#l \t #L74#全服仓库#l\r\n";
         text += "#L0#新人福利#l \t #L1#每日签到#l\r\n";
 		// text += "#L999#测试脚本>>>未上线#l \t \r\n";
         if (cm.getPlayer().isGM()) {
@@ -104,6 +104,9 @@ function doSelect(selection) {
             break;
         case 73:
             openNpc("聚怪");
+            break;
+        case 74:
+            openNpc("全服仓库");
             break;
         // GM功能
         case 61:
