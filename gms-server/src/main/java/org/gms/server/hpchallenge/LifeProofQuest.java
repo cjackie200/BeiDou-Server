@@ -366,7 +366,8 @@ public final class LifeProofQuest {
             quest.forceStart(chr, npcId);
             quest.forceComplete(chr, npcId);
             startOptionSlot(chr, selectedQuest, npcId);
-            sendNextQuestUpdate(chr, meta.questId(), npcId, selectedQuest);
+            // 不发送 updateQuestFinish 标准包，避免客户端收到后
+            // 自动发起新任务的 QUEST_ACTION 与 sendOk 对话框产生时序竞争。
             chr.yellowMessage("生命之证：" + selectedMessage(result));
             context.sendOk(selectedMessage(result));
             return;
@@ -2018,13 +2019,6 @@ public final class LifeProofQuest {
             return null;
         }
         return next;
-    }
-
-    private static void sendNextQuestUpdate(Character chr, int currentQuestId, int npcId, int nextQuestId) {
-        if (chr == null || currentQuestId <= 0 || npcId <= 0 || nextQuestId <= 0) {
-            return;
-        }
-        chr.sendPacket(PacketCreator.updateQuestFinish((short) currentQuestId, npcId, (short) nextQuestId));
     }
 
     private static void refreshQuestRules(Character chr) {
