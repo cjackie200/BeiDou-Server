@@ -24,6 +24,7 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Pet;
+import org.gms.client.inventory.PetItemIgnore;
 import org.gms.config.GameConfig;
 import org.gms.net.packet.InPacket;
 import org.gms.server.maps.MapObject;
@@ -75,7 +76,7 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
 
             if (player.isEquippedPetItemIgnore(petIndex)) {
                 final Set<Integer> petIgnore = player.getExcludedItems();
-                return petIgnore.isEmpty() || !petIgnore.contains(Integer.MAX_VALUE);
+                return petIgnore.isEmpty() || !petIgnore.contains(PetItemIgnore.MESO);
             }
         } else {
             if (!player.isEquippedItemPouch(petIndex)) {
@@ -84,7 +85,7 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
 
             if (player.isEquippedPetItemIgnore(petIndex)) {
                 final Set<Integer> petIgnore = player.getExcludedItems();
-                return petIgnore.isEmpty() || !petIgnore.contains(mapitem.getItem().getItemId());
+                return !PetItemIgnore.shouldIgnore(petIgnore, mapitem.getItem().getItemId());
             }
         }
         return true;

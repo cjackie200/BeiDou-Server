@@ -65,9 +65,8 @@ function start(mode, type, selection)
 				qm.dispose();
 			} else
 			{
+			    qm.forceStartQuest();
 				qm.warp(100040103);
-			    qm.sendOk("谢谢您，请帮我消灭200只，但愿这样可以让冒险岛世界的黑暗气息能有效地被遏制一些。");
-			    qm.forceStartQuest(); 
                 qm.dispose();				
 			}
 
