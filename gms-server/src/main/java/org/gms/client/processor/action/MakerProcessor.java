@@ -182,6 +182,14 @@ public class MakerProcessor {
                         break;
 
                     default:
+                        if (type == 3) {
+                            completeLeftoverCrystalBatch(c, recipe, toCreate);
+                            break;
+                        }
+                        if (completeStandardItemBatch(c, recipe, toCreate, stimulantid, reagentids)) {
+                            break;
+                        }
+
                         if (toDisassemble != -1) {
                             InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (short) pos, (short) 1, false);
                         } else {
@@ -238,6 +246,117 @@ public class MakerProcessor {
             } finally {
                 c.releaseClient();
             }
+        }
+    }
+
+    private static boolean completeStandardItemBatch(Client c, MakerItemCreateEntry recipe, int toCreate,
+                                                     int stimulantid, Map<Integer, Short> reagentids) {
+        if (stimulantid != -1 || !reagentids.isEmpty() || ItemConstants.isEquipment(toCreate)
+                || recipe.getReqItems().isEmpty() || recipe.getGainItems().isEmpty()) {
+            return false;
+        }
+
+        int craftCount = Integer.MAX_VALUE;
+        for (Pair<Integer, Integer> reqItem : recipe.getReqItems()) {
+            int itemId = reqItem.getLeft();
+            int reqQuantity = reqItem.getRight();
+            if (reqQuantity <= 0) {
+                continue;
+            }
+            int available = c.getPlayer().getInventory(ItemConstants.getInventoryType(itemId)).countById(itemId);
+            craftCount = Math.min(craftCount, available / reqQuantity);
+        }
+        if (recipe.getCost() > 0) {
+            craftCount = Math.min(craftCount, c.getPlayer().getMeso() / recipe.getCost());
+        }
+        for (Pair<Integer, Integer> gainItem : recipe.getGainItems()) {
+            int gainQuantity = Math.max(gainItem.getRight(), 1);
+            craftCount = Math.min(craftCount, Short.MAX_VALUE / gainQuantity);
+        }
+        if (craftCount == Integer.MAX_VALUE || craftCount <= 0) {
+            c.sendPacket(PacketCreator.serverNotice(1, "You don't have all required items in your inventory to make " + ii.getName(toCreate) + "."));
+            c.sendPacket(PacketCreator.makerEnableActions());
+            return true;
+        }
+
+        List<Integer> addItemIds = new LinkedList<>();
+        List<Integer> addQuantities = new LinkedList<>();
+        List<Integer> removeItemIds = new LinkedList<>();
+        List<Integer> removeQuantities = new LinkedList<>();
+        List<Pair<Integer, Integer>> packetReqItems = new LinkedList<>();
+        for (Pair<Integer, Integer> gainItem : recipe.getGainItems()) {
+            addItemIds.add(gainItem.getLeft());
+            addQuantities.add(gainItem.getRight() * craftCount);
+        }
+        for (Pair<Integer, Integer> reqItem : recipe.getReqItems()) {
+            int removeQuantity = reqItem.getRight() * craftCount;
+            removeItemIds.add(reqItem.getLeft());
+            removeQuantities.add(removeQuantity);
+            packetReqItems.add(new Pair<>(reqItem.getLeft(), removeQuantity));
+        }
+        if (!c.getAbstractPlayerInteraction().canHoldAllAfterRemoving(addItemIds, addQuantities, removeItemIds, removeQuantities)) {
+            c.sendPacket(PacketCreator.serverNotice(1, "Your inventory is full."));
+            c.sendPacket(PacketCreator.makerEnableActions());
+            return true;
+        }
+
+        for (int i = 0; i < removeItemIds.size(); i++) {
+            int itemId = removeItemIds.get(i);
+            InventoryManipulator.removeById(c, ItemConstants.getInventoryType(itemId), itemId, removeQuantities.get(i), true, false);
+        }
+        int totalCost = recipe.getCost() * craftCount;
+        if (totalCost > 0) {
+            c.getPlayer().gainMeso(-totalCost, false);
+        }
+        for (int i = 0; i < addItemIds.size(); i++) {
+            InventoryManipulator.addById(c, addItemIds.get(i), addQuantities.get(i).shortValue());
+        }
+
+        Pair<Integer, Integer> firstGain = recipe.getGainItems().get(0);
+        int firstGainQuantity = firstGain.getRight() * craftCount;
+        c.sendPacket(PacketCreator.makerResult(true, firstGain.getLeft(), firstGainQuantity, totalCost, packetReqItems, -1, List.of()));
+        c.sendPacket(PacketCreator.getShowItemGain(firstGain.getLeft(), (short) firstGainQuantity, true));
+        c.sendPacket(PacketCreator.serverNotice(5, "已批量制作 " + firstGainQuantity + " 个 " + ii.getName(firstGain.getLeft()) + "。"));
+        c.sendPacket(PacketCreator.showMakerEffect(true));
+        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showForeignMakerEffect(c.getPlayer().getId(), true), false);
+        return true;
+    }
+
+    private static void completeLeftoverCrystalBatch(Client c, MakerItemCreateEntry recipe, int toCreate) {
+        Pair<Integer, Integer> reqItem = recipe.getReqItems().get(0);
+        Pair<Integer, Integer> gainItem = recipe.getGainItems().get(0);
+
+        int fromLeftover = reqItem.getLeft();
+        int reqPerCraft = reqItem.getRight();
+        int gainPerCraft = gainItem.getRight();
+        int available = c.getPlayer().getInventory(ItemConstants.getInventoryType(fromLeftover)).countById(fromLeftover);
+        int craftCount = Math.min(available / reqPerCraft, Short.MAX_VALUE / Math.max(gainPerCraft, 1));
+        if (craftCount <= 0) {
+            c.sendPacket(PacketCreator.serverNotice(1, "You don't have all required items in your inventory to make " + ii.getName(toCreate) + "."));
+            c.sendPacket(PacketCreator.makerEnableActions());
+            return;
+        }
+
+        int removeQuantity = reqPerCraft * craftCount;
+        int gainQuantity = gainPerCraft * craftCount;
+        if (!c.getAbstractPlayerInteraction().canHoldAllAfterRemoving(
+                List.of(toCreate), List.of(gainQuantity), List.of(fromLeftover), List.of(removeQuantity))) {
+            c.sendPacket(PacketCreator.serverNotice(1, "Your inventory is full."));
+            c.sendPacket(PacketCreator.makerEnableActions());
+            return;
+        }
+
+        InventoryManipulator.removeById(c, ItemConstants.getInventoryType(fromLeftover), fromLeftover, removeQuantity, true, false);
+        InventoryManipulator.addById(c, toCreate, (short) gainQuantity);
+
+        c.sendPacket(PacketCreator.makerResultCrystal(toCreate, fromLeftover));
+        c.sendPacket(PacketCreator.getShowItemGain(toCreate, (short) gainQuantity, true));
+        c.sendPacket(PacketCreator.serverNotice(5, "已批量制作 " + gainQuantity + " 个 " + ii.getName(toCreate) + "。"));
+        c.sendPacket(PacketCreator.showMakerEffect(true));
+        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showForeignMakerEffect(c.getPlayer().getId(), true), false);
+
+        if (toCreate == 4260003 && c.getPlayer().getQuestStatus(6033) == 1) {
+            c.getAbstractPlayerInteraction().setQuestProgress(6033, 1);
         }
     }
 

@@ -23,6 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.inventory.PetItemIgnore;
 import org.gms.client.inventory.Pet;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
@@ -61,7 +62,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
 
                 if (chr.isEquippedPetItemIgnore(petIndex)) {
                     final Set<Integer> petIgnore = chr.getExcludedItems();
-                    if (!petIgnore.isEmpty() && petIgnore.contains(Integer.MAX_VALUE)) {
+                    if (!petIgnore.isEmpty() && petIgnore.contains(PetItemIgnore.MESO)) {
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     }
@@ -74,7 +75,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
 
                 if (chr.isEquippedPetItemIgnore(petIndex)) {
                     final Set<Integer> petIgnore = chr.getExcludedItems();
-                    if (!petIgnore.isEmpty() && petIgnore.contains(mapitem.getItem().getItemId())) {
+                    if (PetItemIgnore.shouldIgnore(petIgnore, mapitem.getItem().getItemId())) {
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     }

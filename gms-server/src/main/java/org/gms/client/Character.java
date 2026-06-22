@@ -4467,6 +4467,9 @@ public class Character extends AbstractCharacterObject {
     public void updatePetExcludedItems(int petId, Set<Integer> newExcludedItems) {
         Set<Integer> currentExcludedItems = getExcludedForPet(petId);
         Set<Integer> normalizedExcludedItems = new LinkedHashSet<>(newExcludedItems);
+        currentExcludedItems.stream()
+                .filter(PetItemIgnore::isSpecialRule)
+                .forEach(normalizedExcludedItems::add);
 
         Set<Integer> toAdd = new LinkedHashSet<>(normalizedExcludedItems);
         toAdd.removeAll(currentExcludedItems);
@@ -4477,6 +4480,51 @@ public class Character extends AbstractCharacterObject {
         inventoryService.addPetIgnoreItems(petId, toAdd);
         inventoryService.removePetIgnoreItems(petId, toRemove);
         replacePetExcludedItemsInMemory(petId, normalizedExcludedItems);
+    }
+
+    public int setSpecialPetIgnoreRuleForSummonedPets(int ruleItemId, boolean enabled) {
+        if (!PetItemIgnore.isSpecialRule(ruleItemId) || ruleItemId == PetItemIgnore.MESO) {
+            return 0;
+        }
+
+        int updated = 0;
+        for (Pet pet : getPets()) {
+            if (pet == null || !pet.isSummoned()) {
+                continue;
+            }
+
+            int petId = pet.getUniqueId();
+            loadPetExcludedItems(petId);
+            Set<Integer> currentExcludedItems = new LinkedHashSet<>(getExcludedForPet(petId));
+            if (enabled && PetItemIgnore.isEquipBelowLevelRule(ruleItemId)) {
+                currentExcludedItems.removeIf(PetItemIgnore::isEquipBelowLevelRule);
+            } else if (!enabled && PetItemIgnore.isEquipBelowLevelRule(ruleItemId)) {
+                boolean changed = currentExcludedItems.removeIf(PetItemIgnore::isEquipBelowLevelRule);
+                if (!changed) {
+                    continue;
+                }
+                replacePetExcludedItems(petId, currentExcludedItems);
+                updated++;
+                continue;
+            }
+
+            boolean changed = enabled ? currentExcludedItems.add(ruleItemId) : currentExcludedItems.remove(ruleItemId);
+            if (!changed) {
+                continue;
+            }
+
+            replacePetExcludedItems(petId, currentExcludedItems);
+            updated++;
+        }
+        commitExcludedItems();
+        return updated;
+    }
+
+    private void replacePetExcludedItems(int petId, Set<Integer> itemIds) {
+        Set<Integer> previousItems = getExcludedForPet(petId);
+        inventoryService.removePetIgnoreItems(petId, previousItems);
+        inventoryService.addPetIgnoreItems(petId, itemIds);
+        replacePetExcludedItemsInMemory(petId, itemIds);
     }
 
     /**
