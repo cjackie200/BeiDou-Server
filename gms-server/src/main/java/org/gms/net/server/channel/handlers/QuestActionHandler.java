@@ -90,14 +90,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             log.info("Native QUEST_ACTION player={} action={} questId={} npcId={} hookHandled={}",
                     player.getName(), action, questId, npcId, handled);
         }
-        if (!handled && lifeProofQuest && isHookQuestAction(action)) {
-            if (player != null) {
-                log.info("Native QUEST_ACTION player={} action={} questId={} npcId={} hookHandled=lifeProofRejected",
-                        player.getName(), action, questId, npcId);
-            }
-            c.sendPacket(PacketCreator.enableActions());
-            return true;
-        }
+        // 不再静默拦截未处理的 LifeProof 任务操作。
+        // 让原生任务流程（canStart/canComplete + 任务脚本）处理，
+        // 避免玩家点击任务入口后毫无反应。
         return handled;
     }
 
