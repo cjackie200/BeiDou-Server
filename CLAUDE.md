@@ -148,3 +148,53 @@ Vue 3 项目，使用 Arco Design Pro 模板：
 - `jwt.secret` — JWT 签名密钥（生产环境需修改）
 
 服务端版本定义在 `ServerConstants.BEI_DOU_VERSION`（当前 `1.11`），游戏协议版本 `ServerConstants.VERSION`（83）。
+
+## 补丁安装程序打包
+
+服务端补丁安装程序是一个 .NET 8 WinForms 应用，将 `patch-data.zip` 嵌入为资源，用户通过 GUI 选择目标目录后自动解压覆盖升级。
+
+**项目位置**：`D:\Game\BeiDou\ServerPatcher\`（Windows 路径）
+
+### 生成 patch-data.zip
+
+补丁数据包含 v1.0.0 → 当前版本间变更的所有运行时文件（非源码）及最新 JAR：
+
+```bash
+# 1. 确保最新 JAR 已构建（包含 Web 后台）
+mvn clean package -pl gms-server -DskipTests
+
+# 2. 生成 patch-data.zip
+cd /home/jackie/code/beidou/BeiDou-Server
+CHANGED=$(git diff --name-only v1.0.0 HEAD -- gms-server/ | grep -vE "src/main/java|src/test|pom\.xml|\.java$|target/")
+TMPDIR=/tmp/server-patch-tmp && rm -rf $TMPDIR && mkdir -p $TMPDIR
+echo "$CHANGED" | while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  rel="${f#gms-server/}"
+  src="gms-server/$rel"
+  if [ -f "$src" ]; then mkdir -p "$(dirname "$TMPDIR/$rel")" && cp "$src" "$TMPDIR/$rel"; fi
+done
+mkdir -p $TMPDIR/target && cp gms-server/target/BeiDou.jar $TMPDIR/target/
+cd $TMPDIR && zip -r /tmp/server-patch-data.zip . -q
+
+# 3. 复制到 Patcher 资源目录
+cp /tmp/server-patch-data.zip "/mnt/d/Game/BeiDou/ServerPatcher/Resources/patch-data.zip"
+```
+
+### 更新版本号
+
+修改 `D:\Game\BeiDou\ServerPatcher\` 下以下文件中的版本号：
+- `MainForm.cs` — Form Text（2处）、成功提示信息（1处）
+- `ServerPatcher.csproj` — AssemblyName、ApplicationTitle、Version、Description
+- `build.bat` — echo 版本信息、输出 exe 路径（4处）
+- `build.bat` 中 `DeletedFiles` 列表如需增删同步更新
+
+### 构建 .exe
+
+```bash
+cd /mnt/d/Game/BeiDou/ServerPatcher
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true
+```
+
+输出：`bin/Release/net8.0-windows/win-x64/publish/BeiDou-Server-Patcher-vX.X.X.exe`（自包含版约 140MB）
+
+也可直接运行 `build.bat`（Windows 下双击），同时生成自包含版和框架依赖版。
