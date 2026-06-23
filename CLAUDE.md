@@ -18,7 +18,9 @@ BeiDou Server 是一个冒险岛 v83 服务端模拟器，基于 [Cosmic](https:
 mvn clean package -pl gms-server
 
 # 运行（在 gms-server 目录下执行，需要 JDK 21）
-java -Dspring.config.location=application.yml -jar target/BeiDou.jar
+java -jar target/BeiDou.jar
+# 如需外部覆盖配置，复制 src/main/resources/application.yml 到当前目录后：
+# java -Dspring.config.location=file:application.yml -jar target/BeiDou.jar
 
 # 直接用 Maven 运行
 mvn spring-boot:run -pl gms-server
