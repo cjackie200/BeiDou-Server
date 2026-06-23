@@ -19,4 +19,10 @@ class QuestActionHandlerTest {
         assertFalse(QuestActionHandler.isHookQuestAction((byte) 0));
         assertFalse(QuestActionHandler.isHookQuestAction((byte) 3));
     }
+
+    @Test
+    void darkWukongHuntQuestCanUseRemoteScriptEntry() {
+        assertTrue(QuestActionHandler.isRemoteScriptQuest((short) 30005));
+        assertFalse(QuestActionHandler.isRemoteScriptQuest((short) 30004));
+    }
 }

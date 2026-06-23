@@ -41,6 +41,7 @@ import org.gms.constants.skills.NightLord;
 import org.gms.constants.skills.NightWalker;
 import org.gms.constants.skills.Shadower;
 import org.gms.constants.skills.ThunderBreaker;
+import org.gms.constants.skills.Bowmaster;
 import org.gms.constants.skills.WindArcher;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.Packet;
@@ -51,11 +52,16 @@ import org.gms.server.StatEffect;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 public final class RangedAttackHandler extends AbstractDealDamageHandler {
     private static final Logger log = LoggerFactory.getLogger(RangedAttackHandler.class);
+    private static final int HURRICANE_EXTRA_ARROW_DAMAGE_PERCENT = 50;
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -68,6 +74,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
         chr.getAutobanManager().spam(8);*/
 
         AttackInfo attack = parseDamage(p, chr, true, false);
+        addHurricaneExtraArrow(attack);
 
         if (chr.getBuffEffect(BuffStat.MORPH) != null) {
             if (chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
@@ -254,5 +261,40 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 applyAttack(attack, chr, bulletCount);
             }
         }
+    }
+
+    private static void addHurricaneExtraArrow(AttackInfo attack) {
+        if (attack.skill != Bowmaster.HURRICANE || attack.numDamage <= 0 || attack.numDamage > 2) {
+            return;
+        }
+
+        for (Map.Entry<Integer, List<Integer>> entry : attack.allDamage.entrySet()) {
+            List<Integer> damages = entry.getValue();
+            if (damages == null || damages.isEmpty()) {
+                continue;
+            }
+
+            List<Integer> adjustedDamages = new ArrayList<>(damages.size() * 2);
+            if (attack.numDamage == 1) {
+                for (Integer damage : damages) {
+                    adjustedDamages.add(damage);
+                    adjustedDamages.add(getHurricaneExtraArrowDamage(damage));
+                }
+            } else {
+                for (int i = 0; i < damages.size(); i += 2) {
+                    int damage = damages.get(i);
+                    adjustedDamages.add(damage);
+                    adjustedDamages.add(getHurricaneExtraArrowDamage(damage));
+                }
+            }
+            entry.setValue(adjustedDamages);
+        }
+
+        attack.numDamage = 2;
+        attack.numAttackedAndDamage = (attack.numAttacked << 4) | (attack.numDamage & 0xF);
+    }
+
+    private static int getHurricaneExtraArrowDamage(int damage) {
+        return damage <= 0 ? 0 : Math.max(1, damage * HURRICANE_EXTRA_ARROW_DAMAGE_PERCENT / 100);
     }
 }

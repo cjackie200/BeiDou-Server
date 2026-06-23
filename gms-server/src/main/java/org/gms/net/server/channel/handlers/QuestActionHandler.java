@@ -45,6 +45,7 @@ import java.awt.*;
  */
 public final class QuestActionHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(QuestActionHandler.class);
+    private static final short DARK_WUKONG_HUNT_QUEST = 30005;
 
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, Character player, Quest quest, int npcId) {
@@ -100,6 +101,21 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         return action == 1 || action == 2 || action == 4 || action == 5;
     }
 
+    static boolean isRemoteScriptQuest(short questId) {
+        return questId == DARK_WUKONG_HUNT_QUEST;
+    }
+
+    private static boolean canUseQuestNpc(Client c, InPacket p, Character player, Quest quest, short questId, int npcId) {
+        if (isRemoteScriptQuest(questId)) {
+            return true;
+        }
+        if (isNpcNearby(p, player, quest, npcId)) {
+            return true;
+        }
+        c.sendPacket(PacketCreator.enableActions());
+        return false;
+    }
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte action = p.readByte();
@@ -108,6 +124,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         Quest quest = Quest.getInstance(questid);
         if (player.getMapId() == MapId.JAIL) {   //监狱地图不可使用任务脚本
             player.dropMessage(1,I18nUtil.getMessage("ActionHandler.map.message1"));
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         switch (action) {
@@ -121,13 +138,13 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
-                if (!isNpcNearby(p, player, quest, npc)) {
+                if (!canUseQuestNpc(c, p, player, quest, questid, npc)) {
                     return;
                 }
-                if (quest.canStart(player, npc)) {
+                if (quest.canStart(player, npc) || isRemoteScriptQuest(questid)) {
                     boolean success = QuestScriptManager.getInstance().checkFunctionExists(c, questid, npc, "start");
                     boolean hasScriptRequirement = quest.hasScriptRequirement(false);
-                    if (hasScriptRequirement && success) {
+                    if ((hasScriptRequirement || isRemoteScriptQuest(questid)) && success) {
                         QuestScriptManager.getInstance().start(c, questid, npc);
                     } else {
                         quest.start(player, npc);
@@ -141,15 +158,16 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                     return;
                 }
                 boolean lifeProofProgress = shouldOpenLifeProofEndScript(player, quest, questid);
-                boolean npcNearby = isNpcNearby(p, player, quest, npc);
+                boolean npcNearby = isRemoteScriptQuest(questid) || isNpcNearby(p, player, quest, npc);
                 if (!npcNearby && !lifeProofProgress) {
+                    c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
                 int scriptNpc = npcNearby ? npc : 0;
                 if (quest.canComplete(player, scriptNpc)) {
                     boolean success = QuestScriptManager.getInstance().checkFunctionExists(c, questid, scriptNpc, "end");
                     boolean hasScriptRequirement = quest.hasScriptRequirement(true);
-                    if (hasScriptRequirement && success) {
+                    if ((hasScriptRequirement || isRemoteScriptQuest(questid)) && success) {
                         QuestScriptManager.getInstance().end(c, questid, scriptNpc);
                     } else {
                         if (p.available() >= 2) {
@@ -161,6 +179,8 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                     }
                 } else if (shouldOpenLifeProofEndScript(player, quest, questid)) {
                     QuestScriptManager.getInstance().end(c, questid, scriptNpc);
+                } else {
+                    c.sendPacket(PacketCreator.enableActions());
                 }
                 break;
             }
@@ -176,10 +196,10 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
-                if (!isNpcNearby(p, player, quest, npc)) {
+                if (!canUseQuestNpc(c, p, player, quest, questid, npc)) {
                     return;
                 }
-                if (quest.canStart(player, npc)) {
+                if (quest.canStart(player, npc) || isRemoteScriptQuest(questid)) {
                     QuestScriptManager.getInstance().start(c, questid, npc);
                 }
                 break;
@@ -190,13 +210,16 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                     return;
                 }
                 boolean lifeProofProgress = shouldOpenLifeProofEndScript(player, quest, questid);
-                boolean npcNearby = isNpcNearby(p, player, quest, npc);
+                boolean npcNearby = isRemoteScriptQuest(questid) || isNpcNearby(p, player, quest, npc);
                 if (!npcNearby && !lifeProofProgress) {
+                    c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
                 int scriptNpc = npcNearby ? npc : 0;
                 if (quest.canComplete(player, scriptNpc) || lifeProofProgress) {
                     QuestScriptManager.getInstance().end(c, questid, scriptNpc);
+                } else {
+                    c.sendPacket(PacketCreator.enableActions());
                 }
                 break;
             }

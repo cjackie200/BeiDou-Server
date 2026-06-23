@@ -34,6 +34,9 @@ import java.util.Map;
  * @author Matze
  */
 public class QuestStatus {
+    private static final short DARK_WUKONG_HUNT_QUEST = 30005;
+    private static final int DARK_WUKONG_HUNT_MOB = 4230101;
+
     public enum Status {
         UNDEFINED(-1),
         NOT_STARTED(0),
@@ -134,6 +137,9 @@ public class QuestStatus {
         for (int i : Quest.getInstance(questID).getRelevantMobs()) {
             progress.put(i, "000");
         }
+        if (questID == DARK_WUKONG_HUNT_QUEST) {
+            progress.putIfAbsent(DARK_WUKONG_HUNT_MOB, "000");
+        }
         //this.setUpdated();
     }
 
@@ -156,6 +162,15 @@ public class QuestStatus {
 
     public boolean progress(int id) {
         String currentStr = progress.get(id);
+        if (currentStr == null) {
+            if (questID == DARK_WUKONG_HUNT_QUEST && id == DARK_WUKONG_HUNT_MOB) {
+                currentStr = "000";
+                progress.put(id, currentStr);
+            } else {
+                return false;
+            }
+        }
+
         if (currentStr == null) {
             return false;
         }

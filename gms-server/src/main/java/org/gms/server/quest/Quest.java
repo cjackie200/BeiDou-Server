@@ -88,6 +88,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @author Ronan - support for medal quests
  */
 public class Quest {
+    private static final short DARK_WUKONG_HUNT_QUEST = 30005;
+    private static final int DARK_WUKONG_HUNT_MOB = 4230101;
+    private static final int DARK_WUKONG_HUNT_REQUIRED_KILLS = 200;
+
     private static final Logger log = LoggerFactory.getLogger(Quest.class);
     private static volatile Map<Integer, Quest> quests = new HashMap<>();
     private static volatile Map<Integer, Integer> infoNumberQuests = new HashMap<>();
@@ -308,6 +312,11 @@ public class Quest {
             return false;
         }
 
+        if (id == DARK_WUKONG_HUNT_QUEST) {
+            return getQuestProgress(mqs, DARK_WUKONG_HUNT_MOB) >= DARK_WUKONG_HUNT_REQUIRED_KILLS
+                    && canQuestByInfoProgress(chr);
+        }
+
         for (AbstractQuestRequirement r : completeReqs.values()) {
             if (!r.check(chr, npcid)) {
                 return false;
@@ -429,6 +438,9 @@ public class Quest {
     }
 
     public List<Integer> getRelevantMobs() {
+        if (id == DARK_WUKONG_HUNT_QUEST) {
+            return List.of(DARK_WUKONG_HUNT_MOB);
+        }
         return relevantMobs;
     }
 
@@ -453,6 +465,10 @@ public class Quest {
     }
 
     public int getMobAmountNeeded(int mid) {
+        if (id == DARK_WUKONG_HUNT_QUEST && mid == DARK_WUKONG_HUNT_MOB) {
+            return DARK_WUKONG_HUNT_REQUIRED_KILLS;
+        }
+
         AbstractQuestRequirement req = completeReqs.get(QuestRequirementType.MOB);
         if (req == null) {
             return 0;
@@ -461,6 +477,14 @@ public class Quest {
         MobRequirement mreq = (MobRequirement) req;
 
         return mreq.getRequiredMobCount(mid);
+    }
+
+    private int getQuestProgress(QuestStatus status, int mobId) {
+        try {
+            return Integer.parseInt(status.getProgress(mobId));
+        } catch (NumberFormatException ex) {
+            return 0;
+        }
     }
 
     public short getInfoNumber(Status qs) {
