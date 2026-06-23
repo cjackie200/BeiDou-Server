@@ -45,7 +45,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     private static boolean handleInteractionHook(Client c, byte action, byte lastMsg, int selection) {
         boolean handled = InteractionHookManager.handleNativeDialogSelection(c, action, lastMsg, selection);
         if (shouldLogInteraction(c, selection)) {
-            log.info("Native NPC_MORE player={} action={} lastMsg={} selection={} cmNpc={} qmNpc={} hookHandled={}",
+            log.debug("Native NPC_MORE player={} action={} lastMsg={} selection={} cmNpc={} qmNpc={} hookHandled={}",
                     c.getPlayer() == null ? "?" : c.getPlayer().getName(),
                     action,
                     lastMsg,

@@ -23,10 +23,14 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
 import org.gms.client.inventory.PetItemIgnore;
+import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.GameConfig;
+import org.gms.constants.id.ItemId;
 import org.gms.net.packet.InPacket;
+import org.gms.server.ItemInformationProvider;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapItem;
@@ -101,10 +105,33 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
             if (mapItem.isPlayerDrop()||!player.needQuestItem(mapItem.getQuest(), mapItem.getItemId())) {
                 continue;
             }
+            if (!canFitItem(player, mapItem)) {
+                continue;
+            }
             if (shouldPickupItem(player, mapItem, slot) && (mapItem.getOwnerId() == player.getId()
                     || mapItem.getOwnerId() == player.getPartyId())) {
             player.pickupItem(item, (int) slot);  // 执行拾取操作
                 }
         }
+    }
+
+    private boolean canFitItem(Character player, MapItem mapItem) {
+        if (player == null || mapItem == null || mapItem.getMeso() > 0) {
+            return true;
+        }
+        Item item = mapItem.getItem();
+        if (item == null) {
+            return false;
+        }
+
+        int itemId = item.getItemId();
+        if (ItemId.isNxCard(itemId)) {
+            return true;
+        }
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        if (ii.isConsumeOnPickup(itemId)) {
+            return true;
+        }
+        return InventoryManipulator.checkSpace(player.getClient(), itemId, item.getQuantity(), item.getOwner());
     }
 }

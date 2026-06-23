@@ -621,7 +621,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 + " MID: " + distanceHackWorstMonster.getId()
                                 + " " + bboxInfo
                 );
-                log.warn(
+                log.debug(
                         "Player: {} maxDistanceSqToMob: {} thresholdSq: {} SID: {} MID: {} {}",
                         player.getName(),
                         distanceHackWorstDistance,

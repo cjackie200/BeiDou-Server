@@ -88,7 +88,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         Character player = c.getPlayer();
         boolean lifeProofQuest = LifeProofQuest.isVisibleQuestId(questId);
         if (player != null && (lifeProofQuest || MonsterCardRingQuest.isMonsterCardRingQuest(questId))) {
-            log.info("Native QUEST_ACTION player={} action={} questId={} npcId={} hookHandled={}",
+            log.debug("Native QUEST_ACTION player={} action={} questId={} npcId={} hookHandled={}",
                     player.getName(), action, questId, npcId, handled);
         }
         // 不再静默拦截未处理的 LifeProof 任务操作。
