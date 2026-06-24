@@ -52,6 +52,7 @@ function action(mode, type, selection) {
 		text += "#L3#传送自由#l \t #L69#快速转职#l \t #L70#学习技能#l\r\n";
 		text += "#L71#超级传送#l \t #L4#爆率一览#l \t #L73#" + mobVacText + "#l\r\n";
 		text += "#L2#在线奖励#l \t #L74#全服仓库#l \t #L75#宠物排除#l\r\n";
+		text += "#L76#重置新手技能#l\r\n";
         if (isSuperShopPublic()) {
             text += "#L62#超级商店#l\r\n";
         }
@@ -117,6 +118,9 @@ function doSelect(selection) {
             break;
         case 75:
             openNpc("宠物排除");
+            break;
+        case 76:
+            openNpc("重置新手技能");
             break;
         // GM功能
         case 61:

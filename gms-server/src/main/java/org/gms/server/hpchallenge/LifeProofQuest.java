@@ -1016,6 +1016,28 @@ public final class LifeProofQuest {
         return ok("已完成：" + meta.name());
     }
 
+    public static String afterNativeComplete(Character chr, int questId, int npcId) {
+        if (chr == null) {
+            return "";
+        }
+        refreshQuestRules(chr);
+
+        QuestMeta completed = QUESTS.get(questId);
+        if (completed == null) {
+            return "";
+        }
+        QuestMeta next = nextAvailableQuest(chr, completed.branch());
+        if (next == null) {
+            return "";
+        }
+
+        int startNpcId = startNpcId(next);
+        if (startNpcId == npcId) {
+            return "\r\n\r\n下一步仍在#p" + startNpcId + "#，请重新点击该 NPC 头上的生命之证任务入口。";
+        }
+        return "\r\n\r\n下一步请前往#p" + startNpcId + "#，点击生命之证任务入口。";
+    }
+
     private static String progressPrompt(Character chr, QuestMeta meta, int npcId) {
         StringBuilder sb = new StringBuilder();
         Objective objective = effectiveObjective(chr, meta);
