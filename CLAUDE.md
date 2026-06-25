@@ -11,6 +11,25 @@ BeiDou Server 是一个冒险岛 v83 服务端模拟器，基于 [Cosmic](https:
 
 ## 构建与运行命令
 
+### 开发环境
+
+- **OS**: Windows 11
+- **JDK**: Azul Zulu 21 (`C:\Program Files\Zulu\zulu-21\`)，`JAVA_HOME` 已配置
+- **MySQL**: MySQL 8.4 (`C:\Program Files\MySQL\MySQL Server 8.4\`)，Windows 服务名 `MySQL84`，root/root
+- **Maven**: 通过 `mvn` 命令调用（确保 PATH 中包含 Maven）
+
+### 服务端启动（推荐）
+
+```powershell
+# 菜单式启动器（Windows 原生）
+.\scripts\start-windows-server.ps1 -Action start
+
+# 或通过 bat 调用
+scripts\start-windows-server.bat
+```
+
+支持操作：`start` / `stop` / `status` / `mysql-start`。脚本自动管理 MySQL 服务启停、数据库校验、破坏性迁移警告、端口冲突检测。
+
 ### 服务端 (gms-server)
 
 ```bash
@@ -30,7 +49,7 @@ mvn test -pl gms-server -Dtest=TestClassName
 mvn test -pl gms-server
 ```
 
-服务端首次启动会自动创建 MySQL 数据库。需要本地运行 MySQL 8+。
+服务端首次启动通过 Flyway 自动创建/迁移数据库表。MySQL 8.4 服务名为 `MySQL84`，数据库 `beidou`，凭证 `root/root`。
 
 **IDE 设置**：IntelliJ IDEA 中将运行配置的工作目录设为 `gms-server`。非 root 数据库用户需要 `performance_schema.user_variables_by_table` 的 `SELECT` 权限和 `mysql` 数据库的 `SHOW VIEW` 权限。
 
@@ -118,15 +137,17 @@ Vue 3 项目，使用 Arco Design Pro 模板：
 
 ## 仓库与外部目录结构
 
-| 路径 (WSL) | Windows 路径 | 说明 |
+主开发环境为 Windows 11，WSL 内路径仅作备选参考。
+
+| Windows 路径 | 路径 (WSL) | 说明 |
 |-------------|-------------|------|
-| `/home/jackie/code/beidou/BeiDou-Server/` | — | **服务端仓库**（本仓库） |
+| `D:\Game\BeiDou\BeiDou-Server\` | `/home/jackie/code/beidou/BeiDou-Server/` | **服务端仓库**（本仓库） |
 | `├─ gms-server/` | — | Java 21 / Spring Boot 服务端 |
 | `├─ gms-ui/` | — | Vue 3 网页管理后台 |
-| `/mnt/d/Game/BeiDou/BeiDou-ijl15/` | `D:\Game\BeiDou\BeiDou-ijl15\` | **ijl15 DLL 项目**（C++ / Detours） |
+| `D:\Game\BeiDou\BeiDou-ijl15\` | `/mnt/d/Game/BeiDou/BeiDou-ijl15/` | **ijl15 DLL 项目**（C++ / Detours） |
 | `├─ ezorsia/` | — | DLL 源代码（Client.cpp、codecaves.h、AddyLocations.h 等） |
 | `├─ out/Release/` | — | 构建输出 → `ijl15.dll` |
-| `/mnt/d/Game/BeiDou/BeiDou-Client/` | `D:\Game\BeiDou\BeiDou-Client\` | **游戏客户端目录** |
+| `D:\Game\BeiDou\BeiDou-Client\` | `/mnt/d/Game/BeiDou/BeiDou-Client/` | **游戏客户端目录** |
 | `├─ ijl15.dll` | — | 从 ijl15 构建输出复制过来 |
 | `├─ config.ini` | — | 运行时配置（分辨率、服务器 IP 等） |
 
@@ -157,14 +178,14 @@ Vue 3 项目，使用 Arco Design Pro 模板：
 
 ### 生成 patch-data.zip
 
-补丁数据包含 v1.0.0 → 当前版本间变更的所有运行时文件（非源码）及最新 JAR：
+补丁数据包含 v1.0.0 → 当前版本间变更的所有运行时文件（非源码）及最新 JAR。以下脚本在 **Git Bash**（Windows 自带）或 WSL 中执行：
 
 ```bash
 # 1. 确保最新 JAR 已构建（包含 Web 后台）
 mvn clean package -pl gms-server -DskipTests
 
 # 2. 生成 patch-data.zip
-cd /home/jackie/code/beidou/BeiDou-Server
+cd /d/Game/BeiDou/BeiDou-Server
 CHANGED=$(git diff --name-only v1.0.0 HEAD -- gms-server/ | grep -vE "src/main/java|src/test|pom\.xml|\.java$|target/")
 TMPDIR=/tmp/server-patch-tmp && rm -rf $TMPDIR && mkdir -p $TMPDIR
 echo "$CHANGED" | while IFS= read -r f; do
@@ -177,7 +198,7 @@ mkdir -p $TMPDIR/target && cp gms-server/target/BeiDou.jar $TMPDIR/target/
 cd $TMPDIR && zip -r /tmp/server-patch-data.zip . -q
 
 # 3. 复制到 Patcher 资源目录
-cp /tmp/server-patch-data.zip "/mnt/d/Game/BeiDou/ServerPatcher/Resources/patch-data.zip"
+cp /tmp/server-patch-data.zip "/d/Game/BeiDou/ServerPatcher/Resources/patch-data.zip"
 ```
 
 ### 更新版本号
@@ -190,8 +211,8 @@ cp /tmp/server-patch-data.zip "/mnt/d/Game/BeiDou/ServerPatcher/Resources/patch-
 
 ### 构建 .exe
 
-```bash
-cd /mnt/d/Game/BeiDou/ServerPatcher
+```powershell
+cd D:\Game\BeiDou\ServerPatcher
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true
 ```
 
