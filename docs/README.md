@@ -11,7 +11,7 @@
 - [怪物卡戒指任务链实现说明](monster-card-ring-quest-chain.md)
 - [InteractionHook 通用交互 Hook 方案](interaction-hook-v3.md)
 - [InteractionHook v4 分组与分批规则下发方案](interaction-hook-v4-rule-batching.md)
-- [背包栏位策略](inventory-slot-policy.md)
+- [背包栏位与物品堆叠策略](inventory-slot-policy.md)
 
 ## 规约
 
