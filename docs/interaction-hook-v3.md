@@ -18,6 +18,7 @@
 - S2C rules：`S2C_INTERACTION_HOOK_RULES = 0x1001`
 - S2C result：`S2C_INTERACTION_HOOK_RESULT = 0x1002`
 - S2C progress：`S2C_INTERACTION_HOOK_PROGRESS = 0x1004`
+- S2C client runtime config：`S2C_CLIENT_RUNTIME_CONFIG = 0x1005`
 - 除字符串长度外，全部整数字段使用小端序 `int32`
 - rules/event/result 不传字符串；progress 包只传服务端生成的短进度文本
 
@@ -43,7 +44,7 @@ dialogState
 
 ```text
 subCommand = 0x1003
-version = 4
+version = 5
 scope
 batchId
 batchIndex
@@ -77,17 +78,17 @@ selectionId
 `S2C 0x1002 result` 当前字段顺序：
 
 ```text
-version = 4
+version = 5
 requestId
 resultCode
 ```
 
-客户端接收 result 时兼容 `version=3` 和 `version=4`。
+客户端接收 result 时兼容 `version=3` 和 `version=5`。
 
 `S2C 0x1004 progress` 当前字段顺序：
 
 ```text
-version = 4
+version = 5
 entryCount
 entries...
 ```
@@ -107,6 +108,17 @@ text
 `@@BD_LP_PROGRESS:{questId}@@` 和误写的 `@@DB_IH_PROGRESS:{questId}@@`。服务端每次下发完整缓存
 entries，避免单业务刷新清空另一业务进度。客户端替换时接受数字后一到多个 `@` 作为 marker 结束，
 用于兼容 Q 详情构造过程中的单 `@` 截断形态。
+
+`S2C 0x1005 client runtime config` 当前字段顺序：
+
+```text
+version = 5
+enableAutoKeyDownFix
+```
+
+`enableAutoKeyDownFix` 使用 `int32` 布尔值，`1` 表示开启客户端长按技能按键伤害修复，`0` 表示关闭。
+服务端配置项为 `game_config.enable_client_auto_keydown_fix`，默认 `true`。客户端 DLL 默认开启该修复；
+登录收到服务端配置包后以服务端值为准，后台修改该配置时服务端会向在线客户端广播最新值。
 
 ## 枚举
 
@@ -271,6 +283,8 @@ pending 行为：
 - `CustomPacketHandler` 将 `0x1003` 分发给 `InteractionHookManager.handleEvent()`。
 - 登录和进频道后下发 `InteractionHook v4 rules`：先 `CLEAR_SCOPE ALL_RULES`，再下发
   `CHARACTER_QUEST_RULES`、`MAP_NPC_RULES` 和生命之证 progress。
+- 登录后下发 `S2C_CLIENT_RUNTIME_CONFIG(0x1005)`，用于控制 `ijl15` 运行时开关，例如
+  `enable_client_auto_keydown_fix`。
 - rules 必须按当前角色和当前地图压缩下发，只包含当前角色已有状态的任务、当前可接或进行中的任务，
   以及当前地图真实存在的可 Hook NPC；不得把生命之证、怪物卡戒指等全系列所有任务一次性下发给客户端。
   每包最多 100 条，超出必须分批。客户端收齐完整 batch 后才替换 active rules。

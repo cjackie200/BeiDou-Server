@@ -2,9 +2,13 @@ package org.gms.server.quest.hook;
 
 import org.gms.client.Client;
 import org.gms.client.QuestStatus;
+import org.gms.config.GameConfig;
+import org.gms.dao.entity.GameConfigDO;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.OutPacket;
 import org.gms.net.packet.Packet;
+import org.gms.net.server.Server;
+import org.gms.net.server.world.World;
 import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.slf4j.Logger;
@@ -16,6 +20,7 @@ import java.util.List;
 
 public final class InteractionHookPackets {
     private static final Logger log = LoggerFactory.getLogger(InteractionHookPackets.class);
+    private static final String ENABLE_CLIENT_AUTO_KEYDOWN_FIX_CONFIG = "enable_client_auto_keydown_fix";
     public static final int C2S_INTERACTION_HOOK_EVENT = 0x1003;
     private static final int V4_RULE_PAYLOAD_HEADER_BYTES = 30;
     private static final int RULE_BYTES = 28;
@@ -27,6 +32,7 @@ public final class InteractionHookPackets {
         if (!canSendRules(client)) {
             return;
         }
+        sendClientRuntimeConfig(client);
         clearAllRules(client);
         sendCharacterQuestRules(client);
         sendMapNpcRules(client);
@@ -87,6 +93,45 @@ public final class InteractionHookPackets {
                     client.getPlayer() != null ? client.getPlayer().getName() : "?",
                     e.getMessage(), e);
         }
+    }
+
+    public static void sendClientRuntimeConfig(Client client) {
+        if (!canSendRules(client)) {
+            return;
+        }
+        boolean enableAutoKeyDownFix = isClientAutoKeyDownFixEnabled();
+        client.sendPacket(buildClientRuntimeConfigPacket(enableAutoKeyDownFix));
+        log.info("Client runtime config sent player={} enableAutoKeyDownFix={}",
+                client.getPlayer().getName(),
+                enableAutoKeyDownFix);
+    }
+
+    public static void broadcastClientRuntimeConfigIfNeeded(GameConfigDO config) {
+        if (config == null || !ENABLE_CLIENT_AUTO_KEYDOWN_FIX_CONFIG.equalsIgnoreCase(config.getConfigCode())) {
+            return;
+        }
+        broadcastClientRuntimeConfig();
+    }
+
+    public static void broadcastClientRuntimeConfig() {
+        boolean enableAutoKeyDownFix = isClientAutoKeyDownFixEnabled();
+        Packet packet = buildClientRuntimeConfigPacket(enableAutoKeyDownFix);
+        int sent = 0;
+        for (World world : Server.getInstance().getWorlds()) {
+            if (world == null || world.getPlayerStorage() == null) {
+                continue;
+            }
+            for (org.gms.client.Character chr : world.getPlayerStorage().getAllCharacters()) {
+                if (chr == null || chr.getClient() == null) {
+                    continue;
+                }
+                chr.getClient().sendPacket(packet);
+                sent++;
+            }
+        }
+        log.info("Client runtime config broadcast enableAutoKeyDownFix={} recipients={}",
+                enableAutoKeyDownFix,
+                sent);
     }
 
     public static void sendResult(Client client, int requestId, InteractionHookResultCode resultCode) {
@@ -155,6 +200,13 @@ public final class InteractionHookPackets {
         return packet;
     }
 
+    static Packet buildClientRuntimeConfigPacket(boolean enableAutoKeyDownFix) {
+        OutPacket packet = OutPacket.create(SendOpcode.CLIENT_RUNTIME_CONFIG);
+        packet.writeInt(InteractionHookProtocol.VERSION);
+        packet.writeInt(enableAutoKeyDownFix ? 1 : 0);
+        return packet;
+    }
+
     static List<InteractionHookProgressEntry> progressEntries(org.gms.client.Character chr) {
         if (chr == null) {
             return List.of();
@@ -181,6 +233,10 @@ public final class InteractionHookPackets {
 
     private static boolean canSendRules(Client client) {
         return client != null && client.getPlayer() != null;
+    }
+
+    private static boolean isClientAutoKeyDownFixEnabled() {
+        return Boolean.TRUE.equals(GameConfig.get("server", ENABLE_CLIENT_AUTO_KEYDOWN_FIX_CONFIG, Boolean.TRUE));
     }
 
     private static void sendRuleScope(Client client, int scope, List<InteractionHookRule> rules) {

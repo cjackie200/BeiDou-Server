@@ -171,6 +171,25 @@ class InteractionHookRegistryTest {
     }
 
     @Test
+    void clientRuntimeConfigPacketUsesStableLayout() {
+        Packet enabled = InteractionHookPackets.buildClientRuntimeConfigPacket(true);
+        byte[] enabledBytes = enabled.getBytes();
+
+        assertEquals(0x1005, readU16(enabledBytes, 0));
+        assertEquals(InteractionHookProtocol.VERSION, readI32(enabledBytes, 2));
+        assertEquals(1, readI32(enabledBytes, 6));
+        assertEquals(10, enabledBytes.length);
+
+        Packet disabled = InteractionHookPackets.buildClientRuntimeConfigPacket(false);
+        byte[] disabledBytes = disabled.getBytes();
+
+        assertEquals(0x1005, readU16(disabledBytes, 0));
+        assertEquals(InteractionHookProtocol.VERSION, readI32(disabledBytes, 2));
+        assertEquals(0, readI32(disabledBytes, 6));
+        assertEquals(10, disabledBytes.length);
+    }
+
+    @Test
     void progressEntriesMergeLifeProofAndMonsterCardRing() {
         Character chr = newCharacter(Job.HERO, 30);
         addRing(chr, 0);

@@ -16,6 +16,7 @@ import org.gms.model.dto.ConfigTypeDTO;
 import org.gms.model.dto.GameConfigReqDTO;
 import org.gms.net.server.Server;
 import org.gms.property.ServiceProperty;
+import org.gms.server.quest.hook.InteractionHookPackets;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
@@ -111,6 +112,7 @@ public class ConfigService {
         condition.setUpdateTime(new Date());
         gameConfigMapper.insertSelective(condition);
         GameConfig.add(condition);
+        InteractionHookPackets.broadcastClientRuntimeConfigIfNeeded(condition);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -131,6 +133,7 @@ public class ConfigService {
                 .build());
         gameConfigDO.setConfigValue(condition.getConfigValue());
         GameConfig.update(gameConfigDO);
+        InteractionHookPackets.broadcastClientRuntimeConfigIfNeeded(gameConfigDO);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -145,6 +148,7 @@ public class ConfigService {
                 .build());
         gameConfigMapper.deleteById(id);
         GameConfig.remove(gameConfigDO);
+        InteractionHookPackets.broadcastClientRuntimeConfigIfNeeded(gameConfigDO);
     }
 
     @Transactional(rollbackFor = Exception.class)
