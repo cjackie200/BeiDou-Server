@@ -112,6 +112,8 @@ import static java.util.concurrent.TimeUnit.*;
 
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
+    private static final int MAX_INVENTORY_SLOTS = 96;
+    private static final int DEFAULT_INVENTORY_SLOTS = MAX_INVENTORY_SLOTS;
 
     @Getter
     @Setter
@@ -535,8 +537,10 @@ public class Character extends AbstractCharacterObject {
 
         for (InventoryType type : InventoryType.values()) {
             byte b = 24;
-            if (type == InventoryType.CASH) {
-                b = 96;
+            if (type == InventoryType.EQUIP || type == InventoryType.USE || type == InventoryType.SETUP || type == InventoryType.ETC) {
+                b = DEFAULT_INVENTORY_SLOTS;
+            } else if (type == InventoryType.CASH) {
+                b = MAX_INVENTORY_SLOTS;
             }
             inventory[type.ordinal()] = new Inventory(this, type, b);
         }
@@ -575,10 +579,10 @@ public class Character extends AbstractCharacterObject {
         ret.accountId = c.getAccID();
         ret.buddylist = new BuddyList(20);
         ret.mapleMount = null;
-        ret.getInventory(InventoryType.EQUIP).setSlotLimit(24);
-        ret.getInventory(InventoryType.USE).setSlotLimit(24);
-        ret.getInventory(InventoryType.SETUP).setSlotLimit(24);
-        ret.getInventory(InventoryType.ETC).setSlotLimit(24);
+        ret.getInventory(InventoryType.EQUIP).setSlotLimit(DEFAULT_INVENTORY_SLOTS);
+        ret.getInventory(InventoryType.USE).setSlotLimit(DEFAULT_INVENTORY_SLOTS);
+        ret.getInventory(InventoryType.SETUP).setSlotLimit(DEFAULT_INVENTORY_SLOTS);
+        ret.getInventory(InventoryType.ETC).setSlotLimit(DEFAULT_INVENTORY_SLOTS);
 
         // Select a keybinding method
         boolean useCustomKeySet = GameConfig.getServerBoolean("use_custom_keyset");
@@ -6677,10 +6681,10 @@ public class Character extends AbstractCharacterObject {
             cdo.setMountexp(chr.getMapleMount().getExp());
             cdo.setMounttiredness(chr.getMapleMount().getTiredness());
         }
-        cdo.setEquipslots((int) chr.getSlots(0));
-        cdo.setUseslots((int) chr.getSlots(1));
-        cdo.setSetupslots((int) chr.getSlots(2));
-        cdo.setEtcslots((int) chr.getSlots(3));
+        cdo.setEquipslots((int) chr.getSlots(InventoryType.EQUIP.getType()));
+        cdo.setUseslots((int) chr.getSlots(InventoryType.USE.getType()));
+        cdo.setSetupslots((int) chr.getSlots(InventoryType.SETUP.getType()));
+        cdo.setEtcslots((int) chr.getSlots(InventoryType.ETC.getType()));
         // todo 未完成
         return cdo;
     }
@@ -7436,7 +7440,7 @@ public class Character extends AbstractCharacterObject {
 
             try {
                 // Character info
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (str, dex, luk, `int`, gm, skincolor, gender, job, hair, face, map, meso, spawnpoint, accountid, name, world, hp, mp, maxhp, maxmp, level, ap, sp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (str, dex, luk, `int`, gm, skincolor, gender, job, hair, face, map, meso, spawnpoint, accountid, name, world, hp, mp, maxhp, maxmp, level, ap, sp, equipslots, useslots, setupslots, etcslots) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, attrStr);
                     ps.setInt(2, attrDex);
                     ps.setInt(3, attrLuk);
@@ -7467,6 +7471,10 @@ public class Character extends AbstractCharacterObject {
                     }
                     String sp = sps.toString();
                     ps.setString(23, sp.substring(0, sp.length() - 1));
+                    ps.setInt(24, getSlots(InventoryType.EQUIP.getType()));
+                    ps.setInt(25, getSlots(InventoryType.USE.getType()));
+                    ps.setInt(26, getSlots(InventoryType.SETUP.getType()));
+                    ps.setInt(27, getSlots(InventoryType.ETC.getType()));
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
@@ -8368,12 +8376,12 @@ public class Character extends AbstractCharacterObject {
     }
 
     public byte getSlots(int type) {
-        return type == InventoryType.CASH.getType() ? 96 : inventory[type].getSlotLimit();
+        return type == InventoryType.CASH.getType() ? (byte) MAX_INVENTORY_SLOTS : inventory[type].getSlotLimit();
     }
 
     public boolean canGainSlots(int type, int slots) {
         slots += inventory[type].getSlotLimit();
-        return slots <= 96;
+        return slots <= MAX_INVENTORY_SLOTS;
     }
 
     public boolean gainSlots(int type, int slots) {
