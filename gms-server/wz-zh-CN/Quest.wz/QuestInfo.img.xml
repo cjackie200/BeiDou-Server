@@ -3157,10 +3157,10 @@
       </imgdir>
 
     <imgdir name="5131">
-        <string name="name" value="生命之证 I：击杀魔精灵" />
+        <string name="name" value="生命之证 I：击杀黑石头人" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5131@@" />
-        <string name="2" value="已完成：生命之证 I：击杀魔精灵。" />
+        <string name="2" value="已完成：生命之证 I：击杀黑石头人。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="7" />
         <int name="area" value="31" />
