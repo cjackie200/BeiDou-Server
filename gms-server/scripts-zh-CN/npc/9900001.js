@@ -132,9 +132,7 @@ function doSelect(selection) {
                 cm.dispose();
                 break;
             }
-            cm.dispose();
-            cm.openShopNPC(9900001);
-            cm.dispose();
+            openNpc("超级商店");
             break;
         case 63:
             openNpc("Salon");
