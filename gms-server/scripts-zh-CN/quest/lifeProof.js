@@ -140,6 +140,9 @@ function end(mode, type, selection) {
         var result = LifeProofQuest.complete(qm.getPlayer(), questId, qm.getNpc());
         if (isOk(result)) {
             qm.forceCompleteQuest();
+            var nextTip = LifeProofQuest.afterNativeComplete(qm.getPlayer(), questId, qm.getNpc());
+            qm.sendOk(message(result) + String(nextTip));
+            return;
         }
         qm.sendOk(message(result));
         return;

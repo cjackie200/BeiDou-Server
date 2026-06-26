@@ -25,8 +25,12 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.PetItemIgnore;
 import org.gms.client.inventory.Pet;
+import org.gms.client.inventory.Item;
+import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.constants.id.ItemId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.server.ItemInformationProvider;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
 import org.gms.util.PacketCreator;
@@ -82,9 +86,33 @@ public final class PetLootHandler extends AbstractPacketHandler {
                 }
             }
 
+            if (!canFitItem(chr, mapitem)) {
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
             chr.pickupItem(ob, petIndex);
         } catch (NullPointerException | ClassCastException e) {
             c.sendPacket(PacketCreator.enableActions());
         }
+    }
+
+    private boolean canFitItem(Character chr, MapItem mapitem) {
+        if (chr == null || mapitem == null || mapitem.getMeso() > 0) {
+            return true;
+        }
+        Item item = mapitem.getItem();
+        if (item == null) {
+            return false;
+        }
+
+        int itemId = item.getItemId();
+        if (ItemId.isNxCard(itemId)) {
+            return true;
+        }
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        if (ii.isConsumeOnPickup(itemId)) {
+            return true;
+        }
+        return InventoryManipulator.checkSpace(chr.getClient(), itemId, item.getQuantity(), item.getOwner());
     }
 }

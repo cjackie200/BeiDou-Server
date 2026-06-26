@@ -42,6 +42,7 @@ import java.util.Map;
  */
 public class QuestScriptManager extends AbstractScriptManager {
     private static final Logger log = LoggerFactory.getLogger(QuestScriptManager.class);
+    private static final short DARK_WUKONG_HUNT_QUEST = 30005;
     private static final QuestScriptManager instance = new QuestScriptManager();
 
     private final Map<Client, QuestActionManager> qms = new HashMap<>();
@@ -118,8 +119,10 @@ public class QuestScriptManager extends AbstractScriptManager {
         Quest quest = Quest.getInstance(questid);
         boolean lifeProofProgress = LifeProofQuest.isVisibleQuestId(questid)
                 && c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED);
+        boolean remoteScriptQuest = questid == DARK_WUKONG_HUNT_QUEST;
         if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED)
-                || (!lifeProofProgress && !c.getPlayer().getMap().containsNPC(npc) && !quest.isAutoComplete())) {
+                || (!lifeProofProgress && !remoteScriptQuest && !c.getPlayer().getMap().containsNPC(npc)
+                && !quest.isAutoComplete())) {
             dispose(c);
             return;
         }

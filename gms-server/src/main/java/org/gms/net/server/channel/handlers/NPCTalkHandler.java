@@ -82,7 +82,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
 
                 boolean hookHandled = InteractionHookManager.handleNativeNpcClick(c, oid, npc.getId());
                 if (shouldLogInteraction(c, npc.getId())) {
-                    log.info("Native NPC_TALK player={} objectId={} npcId={} hookHandled={}",
+                    log.debug("Native NPC_TALK player={} objectId={} npcId={} hookHandled={}",
                             c.getPlayer().getName(), oid, npc.getId(), hookHandled);
                 }
                 if (hookHandled) {

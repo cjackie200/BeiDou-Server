@@ -621,7 +621,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 + " MID: " + distanceHackWorstMonster.getId()
                                 + " " + bboxInfo
                 );
-                log.warn(
+                log.debug(
                         "Player: {} maxDistanceSqToMob: {} thresholdSq: {} SID: {} MID: {} {}",
                         player.getName(),
                         distanceHackWorstDistance,
@@ -1002,6 +1002,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                 if (effect != null) {
                     int maxattack = Math.max(effect.getBulletCount(), effect.getAttackCount());
+                    if (ret.skill == Bowmaster.HURRICANE) {
+                        maxattack = Math.max(maxattack, 2);
+                    }
                     if (shadowPartner) {
                         maxattack = maxattack * 2;
                     }
@@ -1144,7 +1147,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
 
         return skillId == Marauder.ENERGY_CHARGE
-                || skillId == ThunderBreaker.ENERGY_CHARGE;
+                || skillId == ThunderBreaker.ENERGY_CHARGE
+                || skillId == Bowmaster.HURRICANE;
     }
 
     /**

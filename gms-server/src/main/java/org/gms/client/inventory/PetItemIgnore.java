@@ -64,8 +64,7 @@ public final class PetItemIgnore {
         } catch (RuntimeException e) {
             return false;
         }
-        return effect != null && (effect.getHp() > 0 || effect.getHpRate() > 0.0
-                || effect.getMp() > 0 || effect.getMpRate() > 0.0);
+        return effect != null && (effect.getHp() > 0 || effect.getMp() > 0);
     }
 
     private static boolean isEquipBelowLevel(int itemId, int level) {

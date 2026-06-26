@@ -77,15 +77,17 @@ public final class InteractionHookPackets {
             List<InteractionHookProgressEntry> entries = progressEntries(client.getPlayer());
             Packet packet = buildProgressPacket(entries);
             client.sendPacket(packet);
-            log.info("InteractionHook progress sent player={} count={} payloadBytes={}",
+            log.debug("InteractionHook progress sent player={} count={} payloadBytes={}",
                     client.getPlayer().getName(),
                     entries.size(),
                     Math.max(0, packet.getBytes().length - 2));
-            for (InteractionHookProgressEntry entry : entries) {
-                for (InteractionHookProgressEntry.Condition cond : entry.conditions()) {
-                    log.info("  progress entry questId={} state={} current={} required={} text=[{}]",
-                            entry.questId(), entry.state(), cond.current(), cond.required(),
-                            cond.text() == null ? "<null>" : cond.text().replace("\r", "\\r").replace("\n", "\\n"));
+            if (log.isDebugEnabled()) {
+                for (InteractionHookProgressEntry entry : entries) {
+                    for (InteractionHookProgressEntry.Condition cond : entry.conditions()) {
+                        log.debug("  progress entry questId={} state={} current={} required={} text=[{}]",
+                                entry.questId(), entry.state(), cond.current(), cond.required(),
+                                cond.text() == null ? "<null>" : cond.text().replace("\r", "\\r").replace("\n", "\\n"));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -280,7 +282,7 @@ public final class InteractionHookPackets {
                                       int batchCount, int packetBytes) {
         int payloadBytes = Math.max(0, packetBytes - 2);
         int ruleCount = Math.max(0, (payloadBytes - V4_RULE_PAYLOAD_HEADER_BYTES) / RULE_BYTES);
-        log.info("InteractionHook rules sent player={} scope={} batchId={} batch={}/{} mode={} count={} payloadBytes={}",
+        log.debug("InteractionHook rules sent player={} scope={} batchId={} batch={}/{} mode={} count={} payloadBytes={}",
                 client.getPlayer().getName(),
                 scopeName(scope),
                 batchId,

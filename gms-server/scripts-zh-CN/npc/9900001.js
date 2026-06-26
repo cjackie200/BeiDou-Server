@@ -26,6 +26,7 @@
 var OldTitle ="\t\t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\t\t\t\t\r\n";
 var status = -1;
 var i = 0;
+var GameConfig = Java.type("org.gms.config.GameConfig");
 function start() {
     action(1, 0, 0)
 }
@@ -51,6 +52,10 @@ function action(mode, type, selection) {
 		text += "#L3#传送自由#l \t #L69#快速转职#l \t #L70#学习技能#l\r\n";
 		text += "#L71#超级传送#l \t #L4#爆率一览#l \t #L73#" + mobVacText + "#l\r\n";
 		text += "#L2#在线奖励#l \t #L74#全服仓库#l \t #L75#宠物排除#l\r\n";
+		text += "#L76#重置新手技能#l\r\n";
+        if (isSuperShopPublic()) {
+            text += "#L62#超级商店#l\r\n";
+        }
         if (cm.getCharacterExtendValue("新人福利礼包") != "已领取") {
             text += "#L0#新人福利#l \t ";
         }
@@ -114,14 +119,20 @@ function doSelect(selection) {
         case 75:
             openNpc("宠物排除");
             break;
+        case 76:
+            openNpc("重置新手技能");
+            break;
         // GM功能
         case 61:
             openNpc("万能传送");
             break;
         case 62:
-            cm.dispose();
-            cm.openShopNPC(9900001);
-            cm.dispose();
+            if (!cm.getPlayer().isGM() && !isSuperShopPublic()) {
+                cm.sendOk("超级商店暂未开放。");
+                cm.dispose();
+                break;
+            }
+            openNpc("超级商店");
             break;
         case 63:
             openNpc("Salon");
@@ -152,4 +163,8 @@ function doSelect(selection) {
 function openNpc(scriptName) {
     cm.dispose();
     cm.openNpc(9900001, scriptName);
+}
+
+function isSuperShopPublic() {
+    return GameConfig.getServerBoolean("use_super_shop_public");
 }
