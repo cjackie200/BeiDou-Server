@@ -12,18 +12,18 @@ if not exist "%PS1_FILE%" (
 )
 
 echo.
-echo ╔══════════════════════════════════════════════════╗
-echo ║        BeiDou Server - Windows Launcher         ║
-echo ╚══════════════════════════════════════════════════╝
+echo ==================================================
+echo        BeiDou Server - Windows Launcher
+echo ==================================================
 echo.
-echo    [1] 启动服务端 (start)
-echo    [2] 停止服务端 (stop)
-echo    [3] 查看状态   (status)
-echo    [4] 仅启动 MySQL (mysql-start)
-echo    [0] 退出
+echo    [1] Start server       (start)
+echo    [2] Stop server        (stop)
+echo    [3] Show status        (status)
+echo    [4] Start MySQL only   (mysql-start)
+echo    [0] Exit
 echo.
 
-set /p CHOICE="请选择 [1]: "
+set /p CHOICE="Select [1]: "
 if "%CHOICE%"=="" set CHOICE=1
 
 set ACTION=start
@@ -34,12 +34,29 @@ if "%CHOICE%"=="4" set ACTION=mysql-start
 if "%CHOICE%"=="0" exit /b 0
 
 echo.
-echo 正在执行: %ACTION%
+echo Running: %ACTION%
 echo.
 
-powershell -NoProfile -ExecutionPolicy Bypass -File "%PS1_FILE%" -Action %ACTION%
+set "PWSH_EXE="
+if exist "D:\App\PowerShell\7\pwsh.exe" set "PWSH_EXE=D:\App\PowerShell\7\pwsh.exe"
+
+if not defined PWSH_EXE (
+    for /f "delims=" %%P in ('where pwsh.exe 2^>nul') do (
+        if not defined PWSH_EXE set "PWSH_EXE=%%P"
+    )
+)
+
+if not defined PWSH_EXE (
+    echo ERROR: Cannot find PowerShell 7 pwsh.exe
+    echo Please install PowerShell 7 or add pwsh.exe to PATH.
+    pause
+    exit /b 1
+)
+
+echo PowerShell: %PWSH_EXE%
+"%PWSH_EXE%" -NoProfile -ExecutionPolicy Bypass -File "%PS1_FILE%" -Action %ACTION%
 
 echo.
-echo ──────────────────────────────────────────────────
-echo 脚本执行完毕。
+echo --------------------------------------------------
+echo Done.
 pause

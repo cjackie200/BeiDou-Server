@@ -246,8 +246,11 @@ function Get-ServerPID {
     }
     $javaProcs = Get-Process -Name 'java' -ErrorAction SilentlyContinue
     foreach ($proc in $javaProcs) {
-        $wmi = Get-WmiObject Win32_Process -Filter "ProcessId=$($proc.Id)" -ErrorAction SilentlyContinue
-        if ($wmi -and ($wmi.CommandLine -match 'BeiDou\.jar|ServerApplication')) {
+        $procInfo = Get-CimInstance Win32_Process -Filter "ProcessId=$($proc.Id)" -ErrorAction SilentlyContinue
+        if (-not $procInfo -and (Get-Command Get-WmiObject -ErrorAction SilentlyContinue)) {
+            $procInfo = Get-WmiObject Win32_Process -Filter "ProcessId=$($proc.Id)" -ErrorAction SilentlyContinue
+        }
+        if ($procInfo -and ($procInfo.CommandLine -match 'BeiDou\.jar|ServerApplication')) {
             return $proc.Id
         }
     }
