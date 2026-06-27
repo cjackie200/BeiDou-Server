@@ -30,16 +30,13 @@ public enum WZFiles {
     }
 
     public Path getFile() {
-        // 优先取语言文件夹，没有则取wz
-        Path wzPath = Path.of(DIRECTORY, fileName);
-        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-        Path langPath = Path.of(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
+        Path langPath = getLanguageFile();
 
         // 语言目录存在且有实际文件时才使用，否则回退到 wz 基础目录
         if (Files.exists(langPath) && !isEmptyDir(langPath)) {
             return langPath;
         }
-        return wzPath;
+        return getBaseFile();
     }
 
     private static boolean isEmptyDir(Path dir) {
@@ -48,6 +45,15 @@ public enum WZFiles {
         } catch (IOException e) {
             return true;
         }
+    }
+
+    public Path getBaseFile() {
+        return Path.of(DIRECTORY, fileName);
+    }
+
+    public Path getLanguageFile() {
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        return Path.of(DIRECTORY + "-" + serviceProperty.getLanguage(), fileName);
     }
 
     public String getFilePath() {
