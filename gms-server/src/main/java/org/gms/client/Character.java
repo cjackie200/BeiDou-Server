@@ -4524,6 +4524,48 @@ public class Character extends AbstractCharacterObject {
         return updated;
     }
 
+    public boolean hasSpecialPetIgnoreRuleForSummonedPets(int ruleItemId) {
+        if (!PetItemIgnore.isSpecialRule(ruleItemId) || ruleItemId == PetItemIgnore.MESO) {
+            return false;
+        }
+
+        for (Pet pet : getPets()) {
+            if (pet == null || !pet.isSummoned()) {
+                continue;
+            }
+
+            int petId = pet.getUniqueId();
+            loadPetExcludedItems(petId);
+            Set<Integer> currentExcludedItems = getExcludedForPet(petId);
+            if (PetItemIgnore.isEquipBelowLevelRule(ruleItemId)) {
+                if (currentExcludedItems.stream().anyMatch(PetItemIgnore::isEquipBelowLevelRule)) {
+                    return true;
+                }
+            } else if (currentExcludedItems.contains(ruleItemId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getSummonedPetIgnoreEquipBelowLevel() {
+        int equipBelowLevel = 0;
+        for (Pet pet : getPets()) {
+            if (pet == null || !pet.isSummoned()) {
+                continue;
+            }
+
+            int petId = pet.getUniqueId();
+            loadPetExcludedItems(petId);
+            for (Integer itemId : getExcludedForPet(petId)) {
+                if (itemId != null && PetItemIgnore.isEquipBelowLevelRule(itemId)) {
+                    equipBelowLevel = Math.max(equipBelowLevel, PetItemIgnore.equipBelowLevelFromRule(itemId));
+                }
+            }
+        }
+        return equipBelowLevel;
+    }
+
     private void replacePetExcludedItems(int petId, Set<Integer> itemIds) {
         Set<Integer> previousItems = getExcludedForPet(petId);
         inventoryService.removePetIgnoreItems(petId, previousItems);
