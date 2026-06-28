@@ -74,9 +74,10 @@ function action(mode, type, selection) {
                     cm.sendOk("嗨。欢迎来到#b玩具塔副本阶段" + stage + "#k。你需要远程人员在这里。他们必须杀死三只老鼠，这将触发一些东西。接下来就是你自己去发现了！给我3张通行证！");
                     eim.setProperty("statusStg" + stage, 0);
                 } else if (state == 0) {       // check stage completion
-                    if (cm.haveItem(4001022, 3)) {
+                    var reqL = Math.min(eim.getPlayerCount() * 1, 3);
+                    if (cm.haveItem(4001022, reqL)) {
                         cm.sendOk("干得好！你已经收集了所有3个#b#t4001022#。#k");
-                        cm.gainItem(4001022, -3);
+                        cm.gainItem(4001022, -reqL);
 
                         eim.setProperty("statusStg" + stage, 1);
                         clearStage(stage, eim, curMap);

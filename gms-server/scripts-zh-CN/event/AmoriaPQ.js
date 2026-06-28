@@ -25,7 +25,7 @@
 
 var isPq = true;
 var onlyMarriedPlayers = true;
-var minPlayers = 6, maxPlayers = 6;
+var minPlayers = 1, maxPlayers = 6;
 var minLevel = 40, maxLevel = 255;
 var entryMap = 670010200;
 var exitMap = 670011000;
@@ -264,6 +264,8 @@ function playerRevive(eim, player) { // player presses ok on the death pop up.
 
 function playerDisconnected(eim, player) {
     if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
+    eim.setProperty("stage2combo", null);
+    eim.setProperty("stage3combo", null);
         eim.unregisterPlayer(player);
         end(eim);
     } else {
@@ -273,6 +275,8 @@ function playerDisconnected(eim, player) {
 
 function leftParty(eim, player) {
     if (eim.isEventTeamLackingNow(false, minPlayers, player)) {
+    eim.setProperty("stage2combo", null);
+    eim.setProperty("stage3combo", null);
         end(eim);
     } else {
         playerLeft(eim, player);

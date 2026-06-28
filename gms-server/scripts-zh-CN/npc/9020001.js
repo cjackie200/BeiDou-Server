@@ -67,42 +67,44 @@ function clearStage(stage, eim, curMap) {
     eim.linkToNextStage(stage, "kpq", curMap);  //opens the portal to the next map
 }
 
+
 function rectangleStages(eim, property, areaCombos, areaRects) {
-    const GameConfig = Java.type('org.gms.config.GameConfig');
-    if(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1){
-        return true;
+    var playerCount = eim.getPlayerCount();
+    var required = Math.min(playerCount, 3);
+    var comboStr = eim.getProperty(property);
+    if (comboStr != null) {
+        var ones = 0;
+        var parts = comboStr.split(",");
+        for (var k = 0; k < parts.length; k++) { if (parts[k] == "1") ones++; }
+        if (ones != required) comboStr = null;
     }
-    var c = eim.getProperty(property);
-    if (c == null) {
-        c = Math.floor(Math.random() * areaCombos.length);
-        eim.setProperty(property, c.toString());
-    } else {
-        c = parseInt(c);
+    if (comboStr == null) {
+        var combo = [];
+        for (var i = 0; i < areaRects.length; i++) combo.push(0);
+        var pos = [];
+        for (var i = 0; i < areaRects.length; i++) pos.push(i);
+        for (var i = pos.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var tmp = pos[i]; pos[i] = pos[j]; pos[j] = tmp;
+        }
+        for (var i = 0; i < required; i++) combo[pos[i]] = 1;
+        comboStr = combo.join(",");
+        eim.setProperty(property, comboStr);
     }
-
-    // get player placement
+    var curCombo = comboStr.split(",");
+    for (var i = 0; i < curCombo.length; i++) curCombo[i] = parseInt(curCombo[i]);
     var players = eim.getPlayers();
-    var playerPlacement = [0, 0, 0, 0, 0, 0];
-
-    for (var i = 0; i < eim.getPlayerCount(); i++) {
+    var playerPlacement = [];
+    for (var i = 0; i < areaRects.length; i++) playerPlacement.push(0);
+    for (var i = 0; i < playerCount; i++) {
         for (var j = 0; j < areaRects.length; j++) {
             if (areaRects[j].contains(players.get(i).getPosition())) {
-                playerPlacement[j] += 1;
-                break;
+                playerPlacement[j] += 1; break;
             }
         }
     }
-
-    var curCombo = areaCombos[c];
-    var accept = true;
-    for (var j = 0; j < curCombo.length; j++) {
-        if (curCombo[j] != playerPlacement[j]) {
-            accept = false;
-            break;
-        }
-    }
-
-    return accept;
+    for (var j = 0; j < curCombo.length; j++) { if (curCombo[j] != playerPlacement[j]) return false; }
+    return true;
 }
 
 var status = -1;
@@ -139,12 +141,6 @@ function action(mode, type, selection) {
                     cm.sendNext("太棒了！你通过了所有的关卡来到了这一点。这是为了你出色的表现而给予的小奖品。在接受之前，请确保你的使用和其他物品栏有空位可用。");
                 }
             } else if (curMap == 103000800) {   // stage 1
-                const GameConfig = Java.type('org.gms.config.GameConfig');
-                if (eim.getPlayerCount() == 1 && !GameConfig.getServerBoolean("use_enable_stage_skip")) {
-                    cm.sendOk("这里的机关需要多人配合才能解开，一个人恐怕难以应付。等你找到了可靠的伙伴，再一起回来挑战吧！");
-                    cm.dispose();
-                    return;
-                }
                 if (cm.isEventLeader()) {
                     var numpasses = eim.getPlayerCount() - 1;     // minus leader
 
@@ -193,8 +189,17 @@ function action(mode, type, selection) {
                     cm.sendOk("跟随你的队长给出的指示来完成这个阶段。");
                 } else if (eim.getProperty(stgProperty) == null) {
                     cm.sendNext("嗨。欢迎来到第二阶段。在我旁边，你会看到一些绳子，在这些绳子中，有#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3名队伍成员找到正确的绳子然后挂在上面#k\r\n但是，如果你挂得太低，这不算作答案；请确保靠近绳子中间位置才算作正确答案。此外，你的队伍只允许有3名成员挂在绳子上，队伍的队长必须#b双击我来检查答案是否正确#k。现在，寻找正确的绳子挂上去吧！");
-                    var c = Math.floor(Math.random() * stgCombos.length);
-                    eim.setProperty(stgProperty, c.toString());
+                    var required = Math.min(eim.getPlayerCount(), 3);
+                    var combo = [];
+                    for (var i = 0; i < stgAreas.length; i++) combo.push(0);
+                    var pos = [];
+                    for (var i = 0; i < stgAreas.length; i++) pos.push(i);
+                    for (var i = pos.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var tmp = pos[i]; pos[i] = pos[j]; pos[j] = tmp;
+                    }
+                    for (var i = 0; i < required; i++) combo[pos[i]] = 1;
+                    eim.setProperty(stgProperty, combo.join(","));
                 } else {
                     var accept = rectangleStages(eim, stgProperty, stgCombos, stgAreas);
 
@@ -219,8 +224,17 @@ function action(mode, type, selection) {
                     cm.sendOk("跟随你的队长给出的指示来完成这个阶段。");
                 } else if (eim.getProperty(stgProperty) == null) {
                     cm.sendNext("嗨。欢迎来到第三阶段。在我旁边，你会看到一些平台。在这些平台中，#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3个队员找到正确的平台站上去#k\r\n但是，如果你站得太靠边，是不行的；请确保靠近平台的中间位置才算作正确答案。此外，你的队伍只允许有3名成员站在平台上。一旦他们在上面，队伍的队长必须#b双击我来检查答案是否正确#k。现在，寻找正确的平台吧！");
-                    var c = Math.floor(Math.random() * stgCombos.length);
-                    eim.setProperty(stgProperty, c.toString());
+                    var required = Math.min(eim.getPlayerCount(), 3);
+                    var combo = [];
+                    for (var i = 0; i < stgAreas.length; i++) combo.push(0);
+                    var pos = [];
+                    for (var i = 0; i < stgAreas.length; i++) pos.push(i);
+                    for (var i = pos.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var tmp = pos[i]; pos[i] = pos[j]; pos[j] = tmp;
+                    }
+                    for (var i = 0; i < required; i++) combo[pos[i]] = 1;
+                    eim.setProperty(stgProperty, combo.join(","));
                 } else {
                     var accept = rectangleStages(eim, stgProperty, stgCombos, stgAreas);
 
@@ -245,8 +259,17 @@ function action(mode, type, selection) {
                     cm.sendOk("跟随你的队长给出的指示来完成这个阶段。");
                 } else if (eim.getProperty(stgProperty) == null) {
                     cm.sendNext("嗨。欢迎来到第四阶段。在我旁边，你会看到一些木桶。在这些木桶中，#b3个与传送你到下一阶段的传送门相连#k。你只需要让#b3个队员找到正确的木桶站上去#k\r\n但是，如果你站得太靠边，这不算作答案；请站在木桶的中间才算作正确答案。此外，你的队伍只允许有3名成员站在木桶上。队伍的队长必须#b双击我来检查答案是否正确#k。现在，寻找正确的木桶站上去吧！");
-                    var c = Math.floor(Math.random() * stgCombos.length);
-                    eim.setProperty(stgProperty, c.toString());
+                    var required = Math.min(eim.getPlayerCount(), 3);
+                    var combo = [];
+                    for (var i = 0; i < stgAreas.length; i++) combo.push(0);
+                    var pos = [];
+                    for (var i = 0; i < stgAreas.length; i++) pos.push(i);
+                    for (var i = pos.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var tmp = pos[i]; pos[i] = pos[j]; pos[j] = tmp;
+                    }
+                    for (var i = 0; i < required; i++) combo[pos[i]] = 1;
+                    eim.setProperty(stgProperty, combo.join(","));
                 } else {
                     var accept = rectangleStages(eim, stgProperty, stgCombos, stgAreas);
 
@@ -262,9 +285,10 @@ function action(mode, type, selection) {
                 cm.dispose();
             } else if (curMap == 103000804) {   // stage 5
                 if (eim.isEventLeader(cm.getPlayer())) {
-                    if (cm.haveItem(4001008, 10)) {
+                    var reqBoss = Math.min(eim.getPlayerCount() * 4, 10);
+                    if (cm.haveItem(4001008, reqBoss)) {
                         cm.sendNext("这是通往最后的奖励阶段的传送门。这个阶段让你更容易地击败普通怪物。你将有一定的时间来尽可能多地狩猎，但你可以随时通过NPC中途离开这个阶段。再次恭喜你通过了所有的阶段。让你的队伍跟我对话，他们可以通过到达奖励阶段来领取奖品。保重……");
-                        cm.gainItem(4001008, -10);
+                        cm.gainItem(4001008, -reqBoss);
 
                         clearStage(stage, eim, curMap);
                         eim.clearPQ();

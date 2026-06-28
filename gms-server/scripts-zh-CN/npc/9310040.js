@@ -22,7 +22,7 @@ function action(mode, type, selection) {
     }
 
     if (flow == "start8539" && status == 0 && mode == 0) {
-        cm.sendOk("些许小事，就不麻烦施主了。");
+        cm.sendOk("It is a small matter. I shall not trouble you further.");
         cm.dispose();
         return;
     }
@@ -42,25 +42,25 @@ function action(mode, type, selection) {
             cm.haveItem(ITEM_LETTER_TO_SENIOR, 1) &&
             Quest.getInstance(QUEST_FIND_SENIOR_1).canComplete(player, npcId)) {
             flow = "complete8538";
-            cm.sendNext("阿弥陀佛，贫僧有礼了。不知施主找贫僧，所为何事。");
+            cm.sendNext("Amitabha. Greetings, traveler. What brings you to seek me out?");
             return;
         }
 
         if (!cm.isQuestStarted(QUEST_FIND_SENIOR_2) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_2) &&
             Quest.getInstance(QUEST_FIND_SENIOR_2).canStart(player, npcId)) {
             flow = "start8539";
-            cm.sendAcceptDecline("原来是#b#p9310052##k师弟所托，贫僧入世修行未满，还不能回寺。这里有书信一封，请施主带给我的小师弟，不知可否？");
+            cm.sendAcceptDecline("Ah, so it is my junior #b#p9310052##k who sent you. I have not yet completed my ascetic training, so I cannot return to the temple. May I trouble you to deliver this letter to my junior?");
             return;
         }
 
         if (cm.isQuestStarted(QUEST_FIND_SENIOR_2) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
-            cm.sendOk("请施主早日将书信送与我那小师弟，免得他挂念，于修行不利。");
+            cm.sendOk("Please deliver the letter to my junior as soon as possible, so he may cease worrying, lest it hinder his cultivation.");
             cm.dispose();
             return;
         }
 
         if (cm.isQuestStarted(QUEST_FIND_SENIOR_1) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_1)) {
-            cm.sendOk("阿弥陀佛，贫僧有礼了。不知施主找贫僧，所为何事。");
+            cm.sendOk("Amitabha. Greetings, traveler. What brings you to seek me out?");
             cm.dispose();
             return;
         }
@@ -75,9 +75,9 @@ function action(mode, type, selection) {
             Quest.getInstance(QUEST_FIND_SENIOR_1).complete(player, npcId);
             if (cm.isQuestCompleted(QUEST_FIND_SENIOR_1)) {
                 cm.removeItem(ITEM_LETTER_TO_SENIOR, 1);
-                cm.sendOk("太谢谢你了，出来这么久让师弟担心了啊~等会再来找我。");
+                cm.sendOk("Thank you very much. I've been out so long that my junior must have been quite worried. Come find me again later.");
             } else {
-                cm.sendOk("似乎暂时无法完成任务（请确认携带了要交付的物品，并确保背包空间充足）。");
+                cm.sendOk("Unable to complete the quest at this time. (Please ensure you have the required item and sufficient inventory space.)");
             }
             cm.dispose();
             return;
@@ -87,9 +87,9 @@ function action(mode, type, selection) {
             Quest.getInstance(QUEST_FIND_SENIOR_2).start(player, npcId);
             if (cm.isQuestStarted(QUEST_FIND_SENIOR_2)) {
                 cm.gainItem(ITEM_LETTER_FROM_SENIOR, 1);
-                cm.sendOk("如此多谢施主了。");
+                cm.sendOk("Thank you kindly.");
             } else {
-                cm.sendOk("似乎暂时无法接取任务（请确认等级/职业条件，并确保背包有空位）。");
+                cm.sendOk("Unable to start the quest at this time. (Please check level/job requirements and ensure you have inventory space.)");
             }
             cm.dispose();
             return;

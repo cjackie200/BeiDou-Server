@@ -72,9 +72,10 @@ function action(mode, type, selection) {
                     cm.sendOk("嗨。欢迎来到 #b玩具塔副本阶段"+ stage +"#k。收集地图上泡泡鱼身上的32个 #t4001022#，然后和我交谈。");
                     eim.setProperty("statusStg" + stage, 0);
                 } else {       // check stage completion
-                    if (cm.haveItem(4001022, 32)) {
+                    var reqL = Math.min(eim.getPlayerCount() * 7, 32);
+                    if (cm.haveItem(4001022, reqL)) {
                         cm.sendOk("干得好！你已经收集了所有32个#b#t4001022#。#k");
-                        cm.gainItem(4001022, -32);
+                        cm.gainItem(4001022, -reqL);
 
                         eim.setProperty("statusStg" + stage, 1);
                         clearStage(stage, eim, curMap);

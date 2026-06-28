@@ -72,9 +72,10 @@ function action(mode, type, selection) {
                     cm.sendOk("嗨。欢迎来到#b玩具塔副本阶段"+ stage +"#k。这是新的阶段，但每个人都必须合作。这里有6个传送门。一个被无法战胜的怪物守卫着，一个非常高。我希望你和你的队伍分别进入每一个，并打破里面的箱子。带回掉落物品——应该有24个。");
                     eim.setProperty("statusStg" + stage, 0);
                 } else {       // check stage completion
-                    if (cm.haveItem(4001022, 24)) {
+                    var reqL = Math.min(eim.getPlayerCount() * 5, 24);
+                    if (cm.haveItem(4001022, reqL)) {
                         cm.sendOk("干得好！你已经收集了所有24个#b#t4001022#。#k");
-                        cm.gainItem(4001022, -24);
+                        cm.gainItem(4001022, -reqL);
 
                         eim.setProperty("statusStg" + stage, 1);
                         clearStage(stage, eim, curMap);

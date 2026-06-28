@@ -24,8 +24,8 @@
  */
 
 var isPq = true;
-var minPlayers = 3, maxPlayers = 6;
-var minLevel = 21, maxLevel = 30;
+var minPlayers = 1, maxPlayers = 6;
+var minLevel = 21, maxLevel = 255;
 var entryMap = 103000800;
 var exitMap = 103000890;
 var recruitMap = 103000000;
@@ -191,6 +191,9 @@ function playerRevive(eim, player) { // player presses ok on the death pop up.
 
 function playerDisconnected(eim, player) {
     if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
+    eim.setProperty("stg2Property", null);
+    eim.setProperty("stg3Property", null);
+    eim.setProperty("stg4Property", null);
         eim.unregisterPlayer(player);
         end(eim);
     } else {
@@ -200,6 +203,9 @@ function playerDisconnected(eim, player) {
 
 function leftParty(eim, player) {
     if (eim.isEventTeamLackingNow(false, minPlayers, player)) {
+    eim.setProperty("stg2Property", null);
+    eim.setProperty("stg3Property", null);
+    eim.setProperty("stg4Property", null);
         end(eim);
     } else {
         playerLeft(eim, player);

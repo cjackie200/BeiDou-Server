@@ -22,7 +22,7 @@ function action(mode, type, selection) {
     }
 
     if (flow == "start8538" && status == 1 && mode == 0) {
-        cm.sendOk("阿弥陀佛，施主既有要事在身，小僧不敢叨扰。施主若得闲暇时，再来帮小僧便可...");
+        cm.sendOk("Amitabha. Since you have important matters to attend to, I shall not impose. Please come help me when you have time...");
         cm.dispose();
         return;
     }
@@ -42,25 +42,25 @@ function action(mode, type, selection) {
             cm.haveItem(ITEM_LETTER_FROM_SENIOR, 1) &&
             Quest.getInstance(QUEST_FIND_SENIOR_2).canComplete(player, npcId)) {
             flow = "complete8539";
-            cm.sendNext("啊，师兄的信。原来师兄正在精修禅宗，多谢施主带来师兄的音信。小僧无以为报，些许物件，还请施主笑纳。");
+            cm.sendNext("Ah, a letter from my senior! He is in deep meditation. Thank you for bringing me his news. I have little to offer, but please accept these humble gifts.");
             return;
         }
 
         if (!cm.isQuestStarted(QUEST_FIND_SENIOR_1) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_1) &&
             Quest.getInstance(QUEST_FIND_SENIOR_1).canStart(player, npcId)) {
             flow = "start8538";
-            cm.sendNext("这位施主，小僧有事相求，万望施主不吝相助。");
+            cm.sendNext("Greetings, traveler. This humble monk has a favor to ask. Would you be willing to help?");
             return;
         }
 
         if (cm.isQuestStarted(QUEST_FIND_SENIOR_1) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_1)) {
-            cm.sendOk("小僧的师兄法号#b#p9310040##k，还请施主代为寻找。");
+            cm.sendOk("My senior brother's dharma name is #b#p9310040##k. Please help me find him.");
             cm.dispose();
             return;
         }
 
         if (cm.isQuestStarted(QUEST_FIND_SENIOR_2) && !cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
-            cm.sendOk("师兄的书信还未送到吗？请施主见到师兄后替小僧带回音信。");
+            cm.sendOk("Has my senior's letter not yet arrived? Please bring back word from him when you meet.");
             cm.dispose();
             return;
         }
@@ -72,7 +72,7 @@ function action(mode, type, selection) {
 
     if (status == 1) {
         if (flow == "start8538") {
-            cm.sendAcceptDecline("小僧有个师兄早年外出苦修，时日已久却不见音信，小僧好不挂念，还请施主代为寻找。小僧的师兄法号#b#p9310040##k。");
+            cm.sendAcceptDecline("My senior brother left long ago for ascetic training, but has not returned for a long time. I am worried about him. Please help me find him. His dharma name is #b#p9310040##k.");
             return;
         }
 
@@ -80,9 +80,9 @@ function action(mode, type, selection) {
             Quest.getInstance(QUEST_FIND_SENIOR_2).complete(player, npcId);
             if (cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
                 cm.removeItem(ITEM_LETTER_FROM_SENIOR, 1);
-                cm.sendOk("小僧无以为报，些许物件，还请施主笑纳。");
+                cm.sendOk("I have little to offer, but please accept these humble gifts.");
             } else {
-                cm.sendOk("似乎暂时无法完成任务（请确认携带了师兄的信，并确保背包有空位）。");
+                cm.sendOk("Unable to complete the quest at this time. (Please ensure you have my senior's letter and sufficient inventory space.)");
             }
             cm.dispose();
             return;
@@ -97,9 +97,9 @@ function action(mode, type, selection) {
             Quest.getInstance(QUEST_FIND_SENIOR_1).start(player, npcId);
             if (cm.isQuestStarted(QUEST_FIND_SENIOR_1)) {
                 cm.gainItem(ITEM_LETTER_TO_SENIOR, 1);
-                cm.sendOk("小僧的师兄法号#b#p9310040##k，还请施主代为寻找。");
+                cm.sendOk("My senior brother's dharma name is #b#p9310040##k. Please help me find him.");
             } else {
-                cm.sendOk("似乎暂时无法接取任务（请确认等级/职业条件，并确保背包有空位）。");
+                cm.sendOk("Unable to start the quest at this time. (Please check level/job requirements and ensure you have inventory space.)");
             }
             cm.dispose();
             return;
