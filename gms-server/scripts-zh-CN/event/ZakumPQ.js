@@ -26,7 +26,7 @@
 /** 是否为远征队(Party Quest)模式 */
 var isPq = true;
 /** minPlayers - 队伍最小人数 , maxPlayers - 队伍最大人数 */
-var minPlayers = 6, maxPlayers = 6;
+var minPlayers = 1, maxPlayers = 6;
 /** minLevel - 最低等级限制 , maxLevel - 最高等级限制 */
 var minLevel = 50, maxLevel = 255;
 /** entryMap - 入口地图ID , exitMap - 退出地图ID */

@@ -72,9 +72,10 @@ function action(mode, type, selection) {
                     cm.sendOk("嗨。欢迎来到 #b玩具塔副本阶段:"+ stage +"#k。收集玩具鼠身上的 25 个 #t4001022#，然后和我交谈。");
                     eim.setProperty("statusStg" + stage, 0);
                 } else {       // check stage completion
-                    if (cm.haveItem(4001022, 25)) {
+                    var reqL = Math.min(eim.getPlayerCount() * 5, 25);
+                    if (cm.haveItem(4001022, reqL)) {
                         cm.sendOk("干得好！你已经收集了所有25个#b#t4001022#。#k");
-                        cm.gainItem(4001022, -25);
+                        cm.gainItem(4001022, -reqL);
 
                         eim.setProperty("statusStg" + stage, 1);
                         clearStage(stage, eim, curMap);

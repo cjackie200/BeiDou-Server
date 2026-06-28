@@ -88,7 +88,8 @@ function action(mode, type, selection) {
                 }
                 break;
             case 920010200: //walkway
-                if (!cm.haveItem(4001050, 30)) {
+                var reqO1 = Math.min(eim.getPlayerCount() * 6, 30);
+                if (!cm.haveItem(4001050, reqO1)) {
                     cm.sendOk("收集这个阶段怪物身上的30个雕像碎片，然后请把它们带给我，这样我就可以把它们拼在一起！");
                 } else {
                     cm.sendOk("你已经找到了它们！这里是第一块雕像碎片。");
@@ -134,32 +135,28 @@ function action(mode, type, selection) {
                 break;
             case 920010500: //sealed
                 if (eim.getIntProperty("statusStg4") == -1) {
-                    var total = 3;
+                    var targetTotal = Math.min(eim.getPlayerCount(), 3);
+                    var remaining = targetTotal;
                     for (var i = 0; i < 2; i++) {
-                        var rnd = Math.round(Math.random() * total);
-                        total -= rnd;
+                        var rnd = Math.round(Math.random() * remaining);
+                        remaining -= rnd;
 
                         eim.setProperty("stage4_" + i, rnd);
                     }
-                    eim.setProperty("stage4_2", "" + total);
+                    eim.setProperty("stage4_2", "" + remaining);
 
                     eim.setProperty("statusStg4", "0");
                 }
                 if (eim.getIntProperty("statusStg4") == 0) {
                     var players = Array();
-                    var total = 0;
+                    var actualTotal = 0;
                     for (var i = 0; i < 3; i++) {
                         var z = cm.getMap().getNumPlayersInArea(i);
                         players.push(z);
-                        total += z;
+                        actualTotal += z;
                     }
-                    if (total != 3) {
+                    if (actualTotal != Math.min(eim.getPlayerCount(), 3)) {
                         const GameConfig = Java.type('org.gms.config.GameConfig');
-                        if(GameConfig.getServerBoolean("use_enable_stage_skip") && eim.getPlayerCount() == 1){
-                            cm.getMap().getReactorByName("stone4").forceHitReactor(1);
-                            eim.giveEventPlayersExp(3500);
-                            clearStage(4, eim);
-                        }else{
                             cm.sendOk("这些平台上需要有在场的3名玩家。");
                         }
                     } else {
@@ -190,7 +187,8 @@ function action(mode, type, selection) {
                 break;
             case 920010600: //lounge
                 if (eim.getIntProperty("statusStg5") == -1) {
-                    if (!cm.haveItem(4001052, 40)) {
+                    var reqO5 = Math.min(eim.getPlayerCount() * 8, 40);
+                    if (!cm.haveItem(4001052, reqO5)) {
                         cm.sendOk("在这个阶段从怪物身上收集40个雕像碎片，然后请把它们带给我，这样我就可以把它们拼在一起！");
                     } else {
                         cm.sendOk("你已经找到了它们！这里是第五块雕像碎片。");
@@ -241,7 +239,7 @@ function action(mode, type, selection) {
 
                 if (eim.getIntProperty("statusStg6") == 0) {
                     var react = "";
-                    var total = 0;
+                    var actualTotal = 0;
                     for (var i = 1; i <= 5; i++) {
                         if (cm.getMap().getReactorByName("" + i).getState() > 0) {
                             react += "1";

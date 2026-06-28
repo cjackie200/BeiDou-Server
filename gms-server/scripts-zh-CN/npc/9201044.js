@@ -68,9 +68,9 @@ function spawnMobs(maxSpawn) {
     }
 }
 
-function generateCombo1() {
+function generateCombo1(eim) {
     var positions = Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
-    var rndPicked = Math.floor(Math.random() * Math.pow(3, 5));
+    var rndPicked = Math.floor(Math.random() * Math.pow(3, Math.min(eim.getPlayerCount(), 5)));
 
     while (rndPicked > 0) {
         (positions[rndPicked % 3])++;
@@ -89,8 +89,8 @@ function generateCombo1() {
     return returnString;
 }
 
-function generateCombo2() {
-    var toPick = 5, rndPicked;
+function generateCombo2(eim) {
+    var toPick = Math.min(eim.getPlayerCount(), 5), rndPicked;
     var positions = Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
     while (toPick > 0) {
         rndPicked = Math.floor(Math.random() * 9);
@@ -200,13 +200,13 @@ function action(mode, type, selection) {
                                 }
                             }
 
-                            if (playersOnCombo == 5/* || cm.getPlayer().gmLevel() > 1*/ || debug) {
+                            if (playersOnCombo == Math.min(eim.getPlayerCount(), 5)/* || cm.getPlayer().gmLevel() > 1*/ || debug) {
                                 var comboStr = eim.getProperty("stage" + stage + "combo");
                                 if (comboStr == null || comboStr == "") {
                                     if (stage == 2) {
-                                        comboStr = generateCombo1();
+                                        comboStr = generateCombo1(eim);
                                     } else {
-                                        comboStr = generateCombo2();
+                                        comboStr = generateCombo2(eim);
                                     }
 
                                     eim.setProperty("stage" + stage + "combo", comboStr);

@@ -48,7 +48,8 @@ function action(mode, type, selection) {
           if (chosen == 0) {
               cm.sendNext("这片地方可以说是绝佳之处，每逢满月你都能品尝到月兔制作的美味年糕。");
           } else if (chosen == 1) {
-              if (cm.haveItem(4001101, 10)) {
+              var reqH = Math.min(cm.getEventInstance().getPlayerCount() * 4, 10);
+                if (cm.haveItem(4001101, reqH)) {
                   cm.sendNext("哦……这不是月兔做的年糕吗？请把年糕给我。嗯……这些看起来很美味。下次再带更多的 #b#t4001101##k 来找我哦。一路平安！");
               } else {
                   cm.sendOk("我建议你检查一下，确保你确实收集了 #b10 个 #t4001101##k。");
@@ -64,7 +65,8 @@ function action(mode, type, selection) {
           if (chosen == 0) {
               cm.sendNextPrev("在这片区域收集遍布各处的迎月花种子，然后把种子种在月牙附近的土壤里，就能看到迎月花盛开。迎月花有六种，每种都需要不同的土壤。土壤必须适合花的种子，这一点至关重要。");
           } else if (chosen == 1) {
-              cm.gainItem(4001101, -10);
+              var reqH2 = Math.min(cm.getEventInstance().getPlayerCount() * 4, 10);
+                cm.gainItem(4001101, -reqH2);
 
               var eim = cm.getEventInstance();
               clearStage(1, eim);

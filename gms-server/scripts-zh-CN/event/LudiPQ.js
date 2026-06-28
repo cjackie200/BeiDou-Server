@@ -24,8 +24,8 @@
  */
 
 var isPq = true;
-var minPlayers = 5, maxPlayers = 6;
-var minLevel = 35, maxLevel = 50;
+var minPlayers = 1, maxPlayers = 6;
+var minLevel = 35, maxLevel = 255;
 var entryMap = 922010100;
 var exitMap = 922010000;
 var recruitMap = 221024500;
@@ -228,6 +228,7 @@ function playerRevive(eim, player) { // player presses ok on the death pop up.
 
 function playerDisconnected(eim, player) {
     if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
+    eim.setProperty("stage8combo", null);
         eim.unregisterPlayer(player);
         end(eim);
     } else {
@@ -237,6 +238,7 @@ function playerDisconnected(eim, player) {
 
 function leftParty(eim, player) {
     if (eim.isEventTeamLackingNow(false, minPlayers, player)) {
+    eim.setProperty("stage8combo", null);
         end(eim);
     } else {
         playerLeft(eim, player);
