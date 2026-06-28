@@ -1,11 +1,13 @@
 var GlobalStorageService = Java.type("org.gms.server.GlobalStorageService");
+var ArrayList = Java.type("java.util.ArrayList");
 
 var VIEW_PAGE_SIZE = 80;
 var state = "main";
 var viewGroup = 1;
 var viewPageNo = 1;
-var entries = null;
-var depositItems = null;
+var viewKeyword = "";
+var entries = new ArrayList();
+var depositItems = new ArrayList();
 var lastWithdrawMessage = "";
 var lastDepositMessage = "";
 var batchResultMessage = "";
@@ -24,6 +26,8 @@ function action(mode, type, selection) {
         handleMain(selection);
     } else if (state === "view") {
         handleView(selection);
+    } else if (state === "searchInput") {
+        handleSearchInput();
     } else if (state === "depositItem") {
         handleDepositItem(selection);
     } else if (state === "batchType") {
@@ -41,7 +45,7 @@ function showMain() {
     state = "main";
     var text = "#e全服仓库#n\r\n";
     text += "总容量：#b" + GlobalStorageService.getTotalCapacity() + "#k 格";
-    text += "　剩余：#b" + GlobalStorageService.getRemainingCapacity() + "#k 格\r\n\r\n";
+    text += "  剩余：#b" + GlobalStorageService.getRemainingCapacity() + "#k 格\r\n\r\n";
     text += "#L1#查看/取出装备#l\r\n";
     text += "#L2#查看/取出消耗#l\r\n";
     text += "#L3#查看/取出其他#l\r\n";
@@ -53,6 +57,7 @@ function showMain() {
 
 function handleMain(selection) {
     if (selection >= 1 && selection <= 3) {
+        viewKeyword = "";
         showGroup(selection, 1);
     } else if (selection === 4) {
         lastDepositMessage = "";
@@ -67,14 +72,24 @@ function handleMain(selection) {
 function showGroup(group, page) {
     state = "view";
     viewGroup = group;
-    var total = GlobalStorageService.countByInventoryGroup(group);
+
+    var sortedEntries = getSortedEntries(group, viewKeyword);
+    var total = sortedEntries.size();
     var maxPage = Math.max(1, Math.ceil(total / VIEW_PAGE_SIZE));
     viewPageNo = Math.max(1, Math.min(page, maxPage));
-    entries = getSortedPageEntries(group, total, viewPageNo);
+    entries = sliceEntries(sortedEntries, viewPageNo);
 
     var text = "#e全服仓库 - " + getGroupName(group) + "#n\r\n";
-    text += "数量：#b" + total + "#k　列表页：" + viewPageNo + " / " + maxPage + "\r\n";
+    text += "数量：#b" + total + "#k  列表页：" + viewPageNo + " / " + maxPage + "\r\n";
+    if (viewKeyword !== "") {
+        text += "当前搜索：#b" + viewKeyword + "#k\r\n";
+    }
     text += "点击物品会直接取出，请确认背包有空位。\r\n\r\n";
+    text += "#L900003#关键词搜索#l ";
+    if (viewKeyword !== "") {
+        text += "#L900004#清除搜索#l ";
+    }
+    text += "#L900000#返回#l\r\n\r\n";
 
     if (lastWithdrawMessage !== "") {
         text += "#b" + lastWithdrawMessage + "#k\r\n\r\n";
@@ -82,7 +97,11 @@ function showGroup(group, page) {
     }
 
     if (entries.isEmpty()) {
-        text += "#d当前分类没有物品。#k\r\n";
+        if (viewKeyword !== "") {
+            text += "#d当前分类没有包含这个关键词的物品。#k\r\n";
+        } else {
+            text += "#d当前分类没有物品。#k\r\n";
+        }
     } else {
         for (var i = 0; i < entries.size(); i++) {
             var entry = entries.get(i);
@@ -99,7 +118,6 @@ function showGroup(group, page) {
     if (viewPageNo < maxPage) {
         text += "#L900002#下一页#l ";
     }
-    text += "#L900000#返回#l";
     cm.sendSimple(text);
 }
 
@@ -116,6 +134,16 @@ function handleView(selection) {
         showGroup(viewGroup, viewPageNo + 1);
         return;
     }
+    if (selection === 900003) {
+        state = "searchInput";
+        cm.sendGetText("请输入要搜索的物品关键词，可以输入物品名或物品ID。\r\n留空则清除搜索。");
+        return;
+    }
+    if (selection === 900004) {
+        viewKeyword = "";
+        showGroup(viewGroup, 1);
+        return;
+    }
     if (selection < 0 || selection >= entries.size()) {
         showMessage("选择无效。");
         return;
@@ -127,9 +155,14 @@ function handleView(selection) {
     showGroup(viewGroup, viewPageNo);
 }
 
-function getSortedPageEntries(group, total, page) {
-    var ArrayList = Java.type("java.util.ArrayList");
+function handleSearchInput() {
+    viewKeyword = normalizeKeyword(cm.getText());
+    showGroup(viewGroup, 1);
+}
+
+function getSortedEntries(group, keyword) {
     var sortedEntries = new ArrayList();
+    var total = GlobalStorageService.countByInventoryGroup(group);
     if (total <= 0) {
         return sortedEntries;
     }
@@ -138,7 +171,10 @@ function getSortedPageEntries(group, total, page) {
     var currentCharName = String(cm.getPlayer().getName());
     var items = [];
     for (var i = 0; i < allEntries.size(); i++) {
-        items.push(allEntries.get(i));
+        var entry = allEntries.get(i);
+        if (matchesKeyword(entry, keyword)) {
+            items.push(entry);
+        }
     }
 
     items.sort(function (left, right) {
@@ -166,16 +202,42 @@ function getSortedPageEntries(group, total, page) {
         return 0;
     });
 
-    var start = (page - 1) * VIEW_PAGE_SIZE;
-    var end = Math.min(start + VIEW_PAGE_SIZE, items.length);
-    for (var index = start; index < end; index++) {
+    for (var index = 0; index < items.length; index++) {
         sortedEntries.add(items[index]);
     }
     return sortedEntries;
 }
 
+function sliceEntries(sortedEntries, page) {
+    var pageEntries = new ArrayList();
+    var start = (page - 1) * VIEW_PAGE_SIZE;
+    var end = Math.min(start + VIEW_PAGE_SIZE, sortedEntries.size());
+    for (var index = start; index < end; index++) {
+        pageEntries.add(sortedEntries.get(index));
+    }
+    return pageEntries;
+}
+
+function matchesKeyword(entry, keyword) {
+    keyword = normalizeKeyword(keyword);
+    if (keyword === "") {
+        return true;
+    }
+
+    var lowerKeyword = keyword.toLowerCase();
+    var itemIdText = String(entry.itemId());
+    var itemName = String(entry.getName()).toLowerCase();
+    return itemIdText.indexOf(lowerKeyword) >= 0 || itemName.indexOf(lowerKeyword) >= 0;
+}
+
+function normalizeKeyword(text) {
+    if (text === null || text === undefined) {
+        return "";
+    }
+    return String(text).replace(/^\s+|\s+$/g, "");
+}
+
 function getItemCategory(itemId) {
-    // 冒险岛物品 ID 的前三位代表大类，例如 204 为卷轴、200 为药水。
     return Math.floor(itemId / 10000);
 }
 
@@ -274,6 +336,7 @@ function handleBatchResult(selection) {
     } else if (selection === 2) {
         showBatchType();
     } else if (selection >= 3 && selection <= 5) {
+        viewKeyword = "";
         showGroup(selection - 2, 1);
     } else {
         showMain();
