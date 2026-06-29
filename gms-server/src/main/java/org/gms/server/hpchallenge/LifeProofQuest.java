@@ -1108,8 +1108,23 @@ public final class LifeProofQuest {
     private static String progressText(Character chr, QuestMeta meta, int npcId) {
         Objective objective = effectiveObjective(chr, meta);
         return switch (objective.type()) {
-            case KILL, BOSS -> mobTargetText(objective) + "，#b" + mobProgress(chr, meta)
-                    + "#k/#r" + objective.requiredCount() + "#k";
+            case KILL, BOSS -> {
+                if (objective.perMob()) {
+                    StringBuilder sb = new StringBuilder();
+                    QuestStatus st = chr.getQuest(Quest.getInstance(meta.questId()));
+                    for (int i = 0; i < objective.targetIds().size(); i++) {
+                        if (i > 0) sb.append("\r\n");
+                        int tid = objective.targetIds().get(i);
+                        int p = parseProgress(st.getProgress(tid));
+                        sb.append(MonsterInformationProvider.getInstance().getMobNameFromId(tid))
+                                .append(" #b").append(p)
+                                .append("#k/#r").append(objective.requiredCount()).append("#k");
+                    }
+                    yield sb.toString();
+                }
+                yield mobTargetText(objective) + "，#b" + mobProgress(chr, meta)
+                        + "#k/#r" + objective.requiredCount() + "#k";
+            }
             case ITEM -> {
                 List<ItemCollection> multi = multiItemCollections(meta);
                 if (multi != null) {
