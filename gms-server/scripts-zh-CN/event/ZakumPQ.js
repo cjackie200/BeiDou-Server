@@ -96,11 +96,11 @@ function setEventExclusives(eim) {
  */
 function setEventRewards(eim) {
     var evLevel = 1;    // 清除PQ时的奖励等级
-    itemSet = [];
-    itemQty = [];
+    var itemSet = [];
+    var itemQty = [];
     eim.setEventRewards(evLevel, itemSet, itemQty);  // 空物品奖励
 
-    expStages = [];
+    var expStages = [];
     eim.setEventClearStageExp(expStages);         // 空经验奖励
 }
 
@@ -260,8 +260,12 @@ function playerDead(eim, player) {}
  * @param {Player} player - 玩家对象
  */
 function playerRevive(eim, player) {
-    eim.unregisterPlayer(player);
-    if (eim.isEventTeamLackingNow(true, minPlayers, player)) end(eim);
+    if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
+        eim.unregisterPlayer(player);
+        end(eim);
+    } else {
+        eim.unregisterPlayer(player);
+    }
 }
 
 /**
@@ -270,8 +274,12 @@ function playerRevive(eim, player) {
  * @param {Player} player - 玩家对象
  */
 function playerDisconnected(eim, player) {
-    eim.unregisterPlayer(player);
-    if (eim.isEventTeamLackingNow(true, minPlayers, player)) end(eim);
+    if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
+        eim.unregisterPlayer(player);
+        end(eim);
+    } else {
+        eim.unregisterPlayer(player);
+    }
 }
 
 /**

@@ -52,7 +52,7 @@ function action(mode, type, selection) {
                 if (cm.haveItem(4001101, reqH)) {
                   cm.sendNext("哦……这不是月兔做的年糕吗？请把年糕给我。嗯……这些看起来很美味。下次再带更多的 #b#t4001101##k 来找我哦。一路平安！");
               } else {
-                  cm.sendOk("我建议你检查一下，确保你确实收集了 #b10 个 #t4001101##k。");
+                  cm.sendOk("我建议你检查一下，确保你确实收集了 #b" + reqH + " 个 #t4001101##k。");
                   cm.dispose();
               }
           } else if (chosen == 2) {
@@ -90,7 +90,7 @@ function action(mode, type, selection) {
           }
       } else if (status == 4) {
           if (chosen == 0) {
-              cm.sendNextPrev("我希望你和你的队员们合作，给我弄来 10 个年糕。我强烈建议你在规定时间内把年糕给我。");
+              cm.sendNextPrev("我希望你和你的队员们合作，给我弄来 " + Math.min(cm.getEventInstance().getPlayerCount() * 4, 10) + " 个年糕。我强烈建议你在规定时间内把年糕给我。");
           }
       } else {
           cm.dispose();

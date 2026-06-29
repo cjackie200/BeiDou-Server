@@ -72,7 +72,7 @@ function setEventRequirements() {
         reqStr += minLevel;
     }
 
-    reqStr += "\r\n    All members of the same guild";
+    reqStr += "\r\n    所有成员须为同一公会";
 
     reqStr += "\r\n   时间限制: ";
     reqStr += eventTime + " 分钟";
@@ -253,7 +253,7 @@ function changedMap(eim, player, mapid) {
 
 function afterChangedMap(eim, player, mapid) {
     if (mapid == 990000100) {
-        var texttt = "So, here is the brief. You guys should be warned that, once out on the fortress outskirts, anyone that would not be equipping the #b#t1032033##k will die instantly due to the deteriorated state of the air around there. That being said, once your team moves out, make sure to #bhit the glowing rocks#k in that region and #bequip the dropped item#k before advancing stages. That will protect you thoroughly from the air sickness. Good luck!";
+        var texttt = "简要说明：一旦进入要塞外围区域，任何未装备#b#t1032033##k的人都会因空气恶化而立即死亡。因此，队伍前进时请务必#b击打该区域发光的岩石#k，并#b装备掉落的物品#k再推进阶段。这将保护你免受空气毒素的侵害。祝你好运！";
         player.getAbstractPlayerInteraction().npcTalk(9040000, texttt);
     }
 }

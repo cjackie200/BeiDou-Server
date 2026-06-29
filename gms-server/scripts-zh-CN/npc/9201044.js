@@ -69,13 +69,13 @@ function spawnMobs(maxSpawn) {
 }
 
 function generateCombo1(eim) {
+    var required = Math.min(eim.getPlayerCount(), 5);
     var positions = Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
-    var rndPicked = Math.floor(Math.random() * Math.pow(3, Math.min(eim.getPlayerCount(), 5)));
-
-    while (rndPicked > 0) {
-        (positions[rndPicked % 3])++;
-
-        rndPicked = Math.floor(rndPicked / 3);
+    var toPlace = required;
+    while (toPlace > 0) {
+        var pos = Math.floor(Math.random() * 9);
+        positions[pos]++;
+        toPlace--;
     }
 
     var returnString = "";
@@ -163,9 +163,9 @@ function action(mode, type, selection) {
                     if (stage == 1) {
                         cm.sendOk("嗨。欢迎来到阿莫利亚挑战的#b舞台#k。在这个阶段，与#p9201047#交谈，他会向你传达任务的进一步细节。在打碎下面的魔镜后，将碎片交给#p9201047#，然后来这里获得进入下一个阶段的权限。");
                     } else if (stage == 2) {
-                        cm.sendOk("嗨。欢迎来到阿莫利亚挑战的#b舞台#k。在这个阶段，让你的5名队员以某种方式爬上平台，尝试组合解锁通往下一级的传送门。当你感觉准备好了，和我交谈，我会告诉你情况。然而，请做好准备，如果传送门在几次尝试后没有解锁，怪物将会生成。");
+                        cm.sendOk("嗨。欢迎来到阿莫利亚挑战的#b舞台#k。在这个阶段，让你的" + Math.min(eim.getPlayerCount(), 5) + "名队员以某种方式爬上平台，尝试组合解锁通往下一级的传送门。当你感觉准备好了，和我交谈，我会告诉你情况。然而，请做好准备，如果传送门在几次尝试后没有解锁，怪物将会生成。");
                     } else if (stage == 3) {
-                        cm.sendOk("嗨。欢迎来到阿莫利亚挑战的#b舞台#k。在这个阶段，让你的5名队员分别爬上平台，尝试组合以解锁通往下一级的传送门。当你准备好时，和我交谈，我会告诉你情况。提示：失败时，数一下场景中出现的史莱姆数量，这将告诉你有多少人的位置是正确的。");
+                        cm.sendOk("嗨。欢迎来到阿莫利亚挑战的#b舞台#k。在这个阶段，让你的" + Math.min(eim.getPlayerCount(), 5) + "名队员分别爬上平台，尝试组合以解锁通往下一级的传送门。当你准备好时，和我交谈，我会告诉你情况。提示：失败时，数一下场景中出现的史莱姆数量，这将告诉你有多少人的位置是正确的。");
                     }
 
                     var st = (autopass) ? 2 : 0;
@@ -187,7 +187,7 @@ function action(mode, type, selection) {
                         }
                     } else if (stage == 2 || stage == 3) {
                         if (map.countMonsters() == 0) {
-                            objset = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            var objset = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                             var playersOnCombo = 0;
                             var party = cm.getEventInstance().getPlayers();
                             for (var i = 0; i < party.size(); i++) {
@@ -260,10 +260,10 @@ function action(mode, type, selection) {
 
                                         if (guessedRight == 6) { //6 unused slots on this stage
                                             cm.sendNext("所有的绳子重量都不同。考虑你接下来的行动，然后再试一次。");
-                                            cm.mapMessage(5, "Amos: Hmm... All ropes weigh differently.");
+                                            cm.mapMessage(5, "Amos：嗯……所有绳子的重量都不同。");
                                         } else {
                                             cm.sendNext("一根绳子重量相同。考虑你接下来的行动，然后再试一次。");
-                                            cm.mapMessage(5, "Amos: Hmm... One rope weigh the same.");
+                                            cm.mapMessage(5, "Amos：嗯……有一根绳子的重量相同。");
                                         }
                                     } else {
                                         spawnMobs(playersRight);
@@ -272,7 +272,7 @@ function action(mode, type, selection) {
                                             eim.setProperty("stage2combo", "");
 
                                             cm.sendNext("你已经未能发现正确的组合，现在将被重置。重新开始吧！");
-                                            cm.mapMessage(5, "Amos: You have failed to discover the right combination, now it shall be reset. Start over again!");
+                                            cm.mapMessage(5, "Amos：你未能找到正确的组合，现在将重置。重新开始吧！");
                                         }
                                     }
 
@@ -281,9 +281,9 @@ function action(mode, type, selection) {
                                 }
                             } else {
                                 if (stage == 2) {
-                                    cm.sendNext("看起来你们还没有找到这个试炼的方法。考虑一下在平台上安排5名成员。记住，只允许有5人站在平台上，如果你移动了，可能就不算作答案了，所以请记住这一点。继续努力！");
+                                    cm.sendNext("看起来你们还没有找到这个试炼的方法。考虑一下在平台上安排" + Math.min(eim.getPlayerCount(), 5) + "名成员。记住，只允许有" + Math.min(eim.getPlayerCount(), 5) + "人站在平台上，如果你移动了，可能就不算作答案了，所以请记住这一点。继续努力！");
                                 } else {
-                                    cm.sendNext("看起来你们还没有找到这个试炼的方法。考虑一下在不同平台上安排队伍成员的方式。记住，只允许有5个人站在平台上，如果你移动了，可能就不算作答案了，所以请记住这一点。继续努力！");
+                                    cm.sendNext("看起来你们还没有找到这个试炼的方法。考虑一下在不同平台上安排队伍成员的方式。记住，只允许有" + Math.min(eim.getPlayerCount(), 5) + "个人站在平台上，如果你移动了，可能就不算作答案了，所以请记住这一点。继续努力！");
                                 }
 
                                 cm.dispose();

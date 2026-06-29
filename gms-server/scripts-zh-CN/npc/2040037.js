@@ -68,19 +68,19 @@ function action(mode, type, selection) {
             if (eim.isEventLeader(cm.getPlayer())) {
                 var state = eim.getIntProperty("statusStg" + stage);
 
+                var reqL = Math.min(eim.getPlayerCount() * 3, 15);
                 if (state == -1) {           // preamble
-                    cm.sendOk("嗨。欢迎来到 #b玩具塔副本阶段"+ stage +"#k。收集地图上散落的箱子里的 15 个 #t4001022#，然后和我交谈。");
+                    cm.sendOk("嗨。欢迎来到 #b玩具塔副本阶段"+ stage +"#k。收集地图上散落的箱子里的 " + reqL + " 个 #t4001022#，然后和我交谈。");
                     eim.setProperty("statusStg" + stage, 0);
                 } else {       // check stage completion
-                    var reqL = Math.min(eim.getPlayerCount() * 3, 15);
                     if (cm.haveItem(4001022, reqL)) {
-                        cm.sendOk("干得好！你已经收集了所有15个#b#t4001022#。#k");
+                        cm.sendOk("干得好！你已经收集了所有" + reqL + "个#b#t4001022#。#k");
                         cm.gainItem(4001022, -reqL);
 
                         eim.setProperty("statusStg" + stage, 1);
                         clearStage(stage, eim, curMap);
                     } else {
-                        cm.sendNext("抱歉，你没有全部15个#b#t4001022#。#k");
+                        cm.sendNext("抱歉，你没有全部" + reqL + "个#b#t4001022#。#k");
                     }
                 }
             } else {

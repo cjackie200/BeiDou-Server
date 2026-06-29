@@ -143,7 +143,6 @@ function setup(level, lobbyid) {
     eim.getInstanceMap(922010404).resetPQ(level);
     eim.getInstanceMap(922010405).resetPQ(level);
     eim.getInstanceMap(922010500).resetPQ(level);
-    eim.getInstanceMap(922010500).resetPQ(level);
     eim.getInstanceMap(922010501).resetPQ(level);
     eim.getInstanceMap(922010502).resetPQ(level);
     eim.getInstanceMap(922010503).resetPQ(level);

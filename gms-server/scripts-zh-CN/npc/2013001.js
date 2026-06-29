@@ -90,7 +90,7 @@ function action(mode, type, selection) {
             case 920010200: //walkway
                 var reqO1 = Math.min(eim.getPlayerCount() * 6, 30);
                 if (!cm.haveItem(4001050, reqO1)) {
-                    cm.sendOk("收集这个阶段怪物身上的30个雕像碎片，然后请把它们带给我，这样我就可以把它们拼在一起！");
+                    cm.sendOk("收集这个阶段怪物身上的" + reqO1 + "个雕像碎片，然后请把它们带给我，这样我就可以把它们拼在一起！");
                 } else {
                     cm.sendOk("你已经找到了它们！这里是第一块雕像碎片。");
                     cm.removeAll(4001050);
@@ -188,7 +188,7 @@ function action(mode, type, selection) {
                 if (eim.getIntProperty("statusStg5") == -1) {
                     var reqO5 = Math.min(eim.getPlayerCount() * 8, 40);
                     if (!cm.haveItem(4001052, reqO5)) {
-                        cm.sendOk("在这个阶段从怪物身上收集40个雕像碎片，然后请把它们带给我，这样我就可以把它们拼在一起！");
+                        cm.sendOk("在这个阶段从怪物身上收集" + reqO5 + "个雕像碎片，然后请把它们带给我，这样我就可以把它们拼在一起！");
                     } else {
                         cm.sendOk("你已经找到了它们！这里是第五块雕像碎片。");
                         cm.removeAll(4001052);

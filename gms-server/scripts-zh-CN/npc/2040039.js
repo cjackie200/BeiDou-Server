@@ -68,19 +68,19 @@ function action(mode, type, selection) {
             if (eim.isEventLeader(cm.getPlayer())) {
                 var state = eim.getIntProperty("statusStg" + stage);
 
+                var reqL = Math.min(eim.getPlayerCount() * 2, 6);
                 if (state == -1) {           // preamble
-                    cm.sendOk("嗨。欢迎来到#b玩具塔副本阶段"+ stage +"#k。在这个阶段，有几种生物隐藏在这座塔的内部阴影中。其中一些无法通过物理手段击败，因此需要使用魔法攻击来完成任务，而其他一些则相反。这次给我带来6个#t4001022#。");
+                    cm.sendOk("嗨。欢迎来到#b玩具塔副本阶段"+ stage +"#k。在这个阶段，有几种生物隐藏在这座塔的内部阴影中。其中一些无法通过物理手段击败，因此需要使用魔法攻击来完成任务，而其他一些则相反。这次给我带来" + reqL + "个#t4001022#。");
                     eim.setProperty("statusStg" + stage, 0);
                 } else {                      // check stage completion
-                    var reqL = Math.min(eim.getPlayerCount() * 2, 6);
                     if (cm.haveItem(4001022, reqL)) {
-                        cm.sendOk("干得好！你已经收集了所有6个#b#t4001022#。#k");
+                        cm.sendOk("干得好！你已经收集了所有" + reqL + "个#b#t4001022#。#k");
                         cm.gainItem(4001022, -reqL);
 
                         eim.setProperty("statusStg" + stage, 1);
                         clearStage(stage, eim, curMap);
                     } else {
-                        cm.sendNext("抱歉，你没有全部6个 #b#t4001022#。#k");
+                        cm.sendNext("抱歉，你没有全部" + reqL + "个 #b#t4001022#。#k");
                     }
                 }
             } else {
