@@ -1089,7 +1089,7 @@ public final class LifeProofQuest {
         sb.append("#e").append(meta.name()).append("#n\r\n\r\n");
         sb.append(stageStory(meta.stage())).append("\r\n\r\n");
         sb.append("当前目标：").append(objective.description()).append("\r\n");
-        sb.append(progressText(chr, meta, npcId)).append("\r\n");
+        sb.append(progressText(chr, meta, npcId)).append("\r\n\r\n");
         sb.append("下一步：").append(nextStepText(chr, meta, npcId));
         return sb.toString();
     }
