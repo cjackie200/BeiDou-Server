@@ -1439,7 +1439,7 @@ public final class LifeProofQuest {
             status.setProgress(mobId, StringUtil.getLeftPaddedStr(Integer.toString(next), '0', 3));
             chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
             chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-            chr.yellowMessage("生命之证：" + objective.description() + " #o" + mobId + "# " + next
+            chr.yellowMessage("生命之证：" + objective.description() + " " + next
                     + "/" + objective.requiredCount());
             if (current < objective.requiredCount() && next >= objective.requiredCount()) {
                 refreshQuestRules(chr);
