@@ -513,14 +513,27 @@ public final class LifeProofQuest {
             if (status == null) {
                 return List.of();
             }
-            List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
-            for (int targetId : objective.targetIds()) {
-                int mobProgress = parseProgress(status.getProgress(targetId));
-                conditions.add(new InteractionHookProgressEntry.Condition(
-                        mobProgress, objective.requiredCount(),
-                        "#o" + targetId + "# 进度：#b" + mobProgress + "#k/#r" + objective.requiredCount() + "#k"));
+            // Per-mob tracking: show individual progress per monster type
+            if (objective.perMob()) {
+                List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
+                for (int targetId : objective.targetIds()) {
+                    int mobProgress = parseProgress(status.getProgress(targetId));
+                    conditions.add(new InteractionHookProgressEntry.Condition(
+                            mobProgress, objective.requiredCount(),
+                            "#o" + targetId + "# 进度：#b" + mobProgress + "#k/#r" + objective.requiredCount() + "#k"));
+                }
+                return conditions;
             }
-            return conditions;
+            // Shared progress: show one combined line for all target monsters
+            int progress = mobProgress(chr, meta);
+            StringBuilder mobNames = new StringBuilder();
+            for (int i = 0; i < objective.targetIds().size(); i++) {
+                if (i > 0) mobNames.append("/");
+                mobNames.append("#o").append(objective.targetIds().get(i)).append("#");
+            }
+            return List.of(new InteractionHookProgressEntry.Condition(
+                    progress, objective.requiredCount(),
+                    mobNames + " 进度：#b" + progress + "#k/#r" + objective.requiredCount() + "#k"));
         }
 
         ProgressValue progress = questProgressValue(chr, meta);
