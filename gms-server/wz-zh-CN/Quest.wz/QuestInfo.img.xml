@@ -3400,10 +3400,10 @@
       </imgdir>
 
     <imgdir name="5158">
-        <string name="name" value="生命之证 I：击杀白外星人队长" />
+        <string name="name" value="生命之证 I：击杀猿公" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5158@@" />
-        <string name="2" value="已完成：生命之证 I：击杀白外星人队长。" />
+        <string name="2" value="已完成：生命之证 I：击杀猿公。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="9" />
         <int name="area" value="31" />
@@ -3851,7 +3851,7 @@
         <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5225@@" />
-        <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
+        <string name="2" value="已完成：生命之证 II：收集力量水晶。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -3997,7 +3997,7 @@
         <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5250@@" />
-        <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
+        <string name="2" value="已完成：生命之证 II：收集力量水晶。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -4143,7 +4143,7 @@
         <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5275@@" />
-        <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
+        <string name="2" value="已完成：生命之证 II：收集力量水晶。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -4289,7 +4289,7 @@
         <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5300@@" />
-        <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
+        <string name="2" value="已完成：生命之证 II：收集力量水晶。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -4435,7 +4435,7 @@
         <string name="name" value="生命之证 II：收集力量水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5325@@" />
-        <string name="2" value="已完成：生命之证 II：访问神木村和龙林入口相关区域。" />
+        <string name="2" value="已完成：生命之证 II：收集力量水晶。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -4581,7 +4581,7 @@
         <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5350@@" />
-        <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
+        <string name="2" value="已完成：生命之证 III：收集智慧水晶。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -4727,7 +4727,7 @@
         <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5375@@" />
-        <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
+        <string name="2" value="已完成：生命之证 III：收集智慧水晶。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -4873,7 +4873,7 @@
         <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5400@@" />
-        <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
+        <string name="2" value="已完成：生命之证 III：收集智慧水晶。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -5019,7 +5019,7 @@
         <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5425@@" />
-        <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
+        <string name="2" value="已完成：生命之证 III：收集智慧水晶。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -5165,7 +5165,7 @@
         <string name="name" value="生命之证 III：收集智慧水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5450@@" />
-        <string name="2" value="已完成：生命之证 III：访问玩具城和时间控制室。" />
+        <string name="2" value="已完成：生命之证 III：收集智慧水晶。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -5311,7 +5311,7 @@
         <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5475@@" />
-        <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
+        <string name="2" value="已完成：生命之证 IV：收集黑暗水晶。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -5457,7 +5457,7 @@
         <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5500@@" />
-        <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
+        <string name="2" value="已完成：生命之证 IV：收集黑暗水晶。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -5603,7 +5603,7 @@
         <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5525@@" />
-        <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
+        <string name="2" value="已完成：生命之证 IV：收集黑暗水晶。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -5749,7 +5749,7 @@
         <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5550@@" />
-        <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
+        <string name="2" value="已完成：生命之证 IV：收集黑暗水晶。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -5895,7 +5895,7 @@
         <string name="name" value="生命之证 IV：收集黑暗水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5575@@" />
-        <string name="2" value="已完成：生命之证 IV：访问扎昆入口和时间控制室。" />
+        <string name="2" value="已完成：生命之证 IV：收集黑暗水晶。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -6041,7 +6041,7 @@
         <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5600@@" />
-        <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
+        <string name="2" value="已完成：生命之证 V：收集敏捷水晶。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -6187,7 +6187,7 @@
         <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5625@@" />
-        <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
+        <string name="2" value="已完成：生命之证 V：收集敏捷水晶。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -6333,7 +6333,7 @@
         <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5650@@" />
-        <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
+        <string name="2" value="已完成：生命之证 V：收集敏捷水晶。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -6479,7 +6479,7 @@
         <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5675@@" />
-        <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
+        <string name="2" value="已完成：生命之证 V：收集敏捷水晶。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -6625,7 +6625,7 @@
         <string name="name" value="生命之证 V：收集敏捷水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5700@@" />
-        <string name="2" value="已完成：生命之证 V：访问水下世界、深海峡谷和皮亚奴斯洞穴。" />
+        <string name="2" value="已完成：生命之证 V：收集敏捷水晶。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -6771,7 +6771,7 @@
         <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5725@@" />
-        <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
+        <string name="2" value="已完成：生命之证 VI：收集幸运水晶。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -6917,7 +6917,7 @@
         <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5750@@" />
-        <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
+        <string name="2" value="已完成：生命之证 VI：收集幸运水晶。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -7063,7 +7063,7 @@
         <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5775@@" />
-        <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
+        <string name="2" value="已完成：生命之证 VI：收集幸运水晶。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -7209,7 +7209,7 @@
         <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5800@@" />
-        <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
+        <string name="2" value="已完成：生命之证 VI：收集幸运水晶。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -7355,7 +7355,7 @@
         <string name="name" value="生命之证 VI：收集幸运水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5825@@" />
-        <string name="2" value="已完成：生命之证 VI：访问时间神殿、后悔之路和忘却之路指定地图。" />
+        <string name="2" value="已完成：生命之证 VI：收集幸运水晶。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -7498,10 +7498,10 @@
     <imgdir name="5848" />
 
     <imgdir name="5850">
-        <string name="name" value="生命之证 VII：收集黑暗水晶" />
+        <string name="name" value="生命之证 VII：收集五种水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5850@@" />
-        <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
+        <string name="2" value="已完成：生命之证 VII：收集五种水晶。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -7644,10 +7644,10 @@
     <imgdir name="5873" />
 
     <imgdir name="5875">
-        <string name="name" value="生命之证 VII：收集黑暗水晶" />
+        <string name="name" value="生命之证 VII：收集五种水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5875@@" />
-        <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
+        <string name="2" value="已完成：生命之证 VII：收集五种水晶。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -7790,10 +7790,10 @@
     <imgdir name="5898" />
 
     <imgdir name="5900">
-        <string name="name" value="生命之证 VII：收集黑暗水晶" />
+        <string name="name" value="生命之证 VII：收集五种水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5900@@" />
-        <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
+        <string name="2" value="已完成：生命之证 VII：收集五种水晶。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -7936,10 +7936,10 @@
     <imgdir name="5923" />
 
     <imgdir name="5925">
-        <string name="name" value="生命之证 VII：收集黑暗水晶" />
+        <string name="name" value="生命之证 VII：收集五种水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5925@@" />
-        <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
+        <string name="2" value="已完成：生命之证 VII：收集五种水晶。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
@@ -8082,10 +8082,10 @@
     <imgdir name="5948" />
 
     <imgdir name="5950">
-        <string name="name" value="生命之证 VII：收集黑暗水晶" />
+        <string name="name" value="生命之证 VII：收集五种水晶" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="#e任务进度#n\r\n@@BD_LP_PROGRESS:5950@@" />
-        <string name="2" value="已完成：生命之证 VII：访问时间神殿、死龙巢穴和暗黑龙王洞穴。" />
+        <string name="2" value="已完成：生命之证 VII：收集五种水晶。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="1" />
         <int name="area" value="31" />
