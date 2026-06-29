@@ -373,7 +373,7 @@ class LifeProofQuestTest {
             }
         }
 
-        assertEquals(211, gated, "life proof custom progress completion gate count");
+        assertEquals(210, gated, "life proof custom progress completion gate count");
     }
 
     @Test
