@@ -7,6 +7,7 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.life.MonsterDropEntry;
+import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.hook.InteractionHookAction;
 import org.gms.server.quest.hook.InteractionHookContext;
@@ -1439,7 +1440,8 @@ public final class LifeProofQuest {
             status.setProgress(mobId, StringUtil.getLeftPaddedStr(Integer.toString(next), '0', 3));
             chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
             chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-            chr.yellowMessage("生命之证：" + objective.description() + " " + next
+            String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(mobId);
+            chr.yellowMessage("生命之证：" + mobName + " " + next
                     + "/" + objective.requiredCount());
             if (current < objective.requiredCount() && next >= objective.requiredCount()) {
                 refreshQuestRules(chr);
