@@ -424,6 +424,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             log.warn("Shop ID: {} is missing from database.", id);
             ShopFactory.getInstance().getShop(11000).sendShop(c);
         }
+        c.removeClickedNPC();
     }
 
     public void maxMastery() {
