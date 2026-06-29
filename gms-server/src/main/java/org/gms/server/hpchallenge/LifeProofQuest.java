@@ -519,9 +519,10 @@ public final class LifeProofQuest {
                 List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
                 for (int targetId : objective.targetIds()) {
                     int mobProgress = parseProgress(status.getProgress(targetId));
+                    String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(targetId);
                     conditions.add(new InteractionHookProgressEntry.Condition(
                             mobProgress, objective.requiredCount(),
-                            "#o" + targetId + "# 进度：#b" + mobProgress + "#k/#r" + objective.requiredCount() + "#k"));
+                            mobName + " 进度：#b" + mobProgress + "#k/#r" + objective.requiredCount() + "#k"));
                 }
                 return conditions;
             }
@@ -530,7 +531,7 @@ public final class LifeProofQuest {
             StringBuilder mobNames = new StringBuilder();
             for (int i = 0; i < objective.targetIds().size(); i++) {
                 if (i > 0) mobNames.append("/");
-                mobNames.append("#o").append(objective.targetIds().get(i)).append("#");
+                mobNames.append(MonsterInformationProvider.getInstance().getMobNameFromId(objective.targetIds().get(i)));
             }
             return List.of(new InteractionHookProgressEntry.Condition(
                     progress, objective.requiredCount(),
