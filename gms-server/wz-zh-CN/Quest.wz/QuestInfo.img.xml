@@ -7958,11 +7958,11 @@
       </imgdir>
 
     <imgdir name="5855">
-        <string name="name" value="生命之证 VII：参与任意中阶 Boss 击杀" />
+        <string name="name" value="生命之证 VII：击杀后悔的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。
 #e任务进度#n\r\n@@BD_LP_PROGRESS:5855@@" />
-        <string name="2" value="已完成：生命之证 VII：参与任意中阶 Boss 击杀。" />
+        <string name="2" value="已完成：生命之证 VII：击杀后悔的守护队长。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -8276,11 +8276,11 @@
       </imgdir>
 
     <imgdir name="5905">
-        <string name="name" value="生命之证 VII：参与任意中阶 Boss 击杀" />
+        <string name="name" value="生命之证 VII：击杀犀牛龙怪" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。
 #e任务进度#n\r\n@@BD_LP_PROGRESS:5905@@" />
-        <string name="2" value="已完成：生命之证 VII：参与任意中阶 Boss 击杀。" />
+        <string name="2" value="已完成：生命之证 VII：击杀犀牛龙怪。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -8435,11 +8435,11 @@
       </imgdir>
 
     <imgdir name="5930">
-        <string name="name" value="生命之证 VII：参与任意中阶 Boss 击杀" />
+        <string name="name" value="生命之证 VII：击杀大海贼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。
 #e任务进度#n\r\n@@BD_LP_PROGRESS:5930@@" />
-        <string name="2" value="已完成：生命之证 VII：参与任意中阶 Boss 击杀。" />
+        <string name="2" value="已完成：生命之证 VII：击杀大海贼。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -8594,11 +8594,11 @@
       </imgdir>
 
     <imgdir name="5955">
-        <string name="name" value="生命之证 VII：参与任意中阶 Boss 击杀" />
+        <string name="name" value="生命之证 VII：击杀大海贼王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
         <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。
 #e任务进度#n\r\n@@BD_LP_PROGRESS:5955@@" />
-        <string name="2" value="已完成：生命之证 VII：参与任意中阶 Boss 击杀。" />
+        <string name="2" value="已完成：生命之证 VII：击杀大海贼王。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
