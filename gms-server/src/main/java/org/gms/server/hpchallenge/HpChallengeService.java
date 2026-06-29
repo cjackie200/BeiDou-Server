@@ -76,7 +76,7 @@ public final class HpChallengeService {
     }
 
     record Task(String key, TaskGroup group, TargetType targetType, int requiredCount, String description,
-                        List<Integer> targetIds, int optionNo, int mesoCost) {
+                        List<Integer> targetIds, int optionNo, int mesoCost, boolean perMob) {
         int primaryTarget() {
             return targetIds.isEmpty() ? 0 : targetIds.getFirst();
         }
@@ -958,17 +958,22 @@ public final class HpChallengeService {
 
     private static Task t(String key, TaskGroup group, TargetType type, int required, String description, int... ids) {
         return new Task(key, group, type, required, description,
-                Arrays.stream(ids).boxed().collect(Collectors.toList()), 0, 0);
+                Arrays.stream(ids).boxed().collect(Collectors.toList()), 0, 0, false);
+    }
+
+    private static Task tPerMob(String key, TaskGroup group, TargetType type, int required, String description, int... ids) {
+        return new Task(key, group, type, required, description,
+                Arrays.stream(ids).boxed().collect(Collectors.toList()), 0, 0, true);
     }
 
     private static Task opt(int optionNo, TargetType type, int required, String description, int... ids) {
         return new Task("optional_" + optionNo, TaskGroup.OPTIONAL, type, required, description,
-                Arrays.stream(ids).boxed().collect(Collectors.toList()), optionNo, 0);
+                Arrays.stream(ids).boxed().collect(Collectors.toList()), optionNo, 0, false);
     }
 
     private static Task mesoOpt(int optionNo, int meso) {
         return new Task("optional_" + optionNo, TaskGroup.OPTIONAL, TargetType.MESO, 1,
-                "向一转教官缴纳金币 " + meso, List.of(), optionNo, meso);
+                "向一转教官缴纳金币 " + meso, List.of(), optionNo, meso, false);
     }
 
     private static Task npcVisit(String key, int npcId, String npcName) {
@@ -1007,7 +1012,7 @@ public final class HpChallengeService {
                 List.of(opt(1, TargetType.SCROLL_100, 30, "使用任意 100% 卷轴"), opt(2, TargetType.BOSS, 3, "参与击杀蝙蝠魔", 8150000), opt(3, TargetType.PQ_ANY, 5, "完成任意组队任务"), opt(4, TargetType.MAP, 10, "在隐藏地图击杀怪物收集初醒隐秘生命之证", 100000005, 101000100, 102000100, 103000100, 105040300, 220020300, 230040400, 240040510, 270030500, 261020401), mesoOpt(5, 100000000), opt(6, TargetType.KILL, 1200, "击杀黄小丑", 6130200), opt(7, TargetType.KILL, 1200, "击杀恶灵附身的娃娃", 6230400), opt(8, TargetType.JUMP_MANUAL, 3, "完成任意跳跳任务"))
         ));
         stages.put(2, new StageConfig(2, 130, 2025, 18750, 12250, 10550, 5750,
-                List.of(t("visit_leafre_maps", TaskGroup.MAIN_COMMON, TargetType.MAP, 4, "收集力量水晶", 240020000, 240020100, 240020200, 240020300), t("kill_centaur_common", TaskGroup.MAIN_COMMON, TargetType.KILL, 1500, "击杀三色半人马", 8140101, 8140102, 8140103), t("kill_leafre_boss", TaskGroup.MAIN_COMMON, TargetType.BOSS, 1, "参与击杀火焰龙或天鹰", 8180000, 8180001)),
+                List.of(t("visit_leafre_maps", TaskGroup.MAIN_COMMON, TargetType.MAP, 4, "收集力量水晶", 240020000, 240020100, 240020200, 240020300), tPerMob("kill_centaur_common", TaskGroup.MAIN_COMMON, TargetType.KILL, 500, "击杀三色半人马", 8140101, 8140102, 8140103), t("kill_leafre_boss", TaskGroup.MAIN_COMMON, TargetType.BOSS, 1, "参与击杀火焰龙或天鹰", 8180000, 8180001)),
                 jobs(
                         List.of(t("warrior_dark_cornian", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀邪恶双刀蜥蜴", 8150201), t("warrior_birk", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀短刃蜥蜴", 8140110), t("warrior_brexton", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀犀牛龙怪", 8140703)),
                         List.of(t("mage_red_wyvern", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀红飞龙", 8150300), t("mage_blue_wyvern", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀蓝飞龙", 8150301), t("mage_dark_wyvern", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀黑飞龙", 8150302)),

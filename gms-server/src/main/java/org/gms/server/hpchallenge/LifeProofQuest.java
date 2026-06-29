@@ -116,7 +116,7 @@ public final class LifeProofQuest {
     }
 
     record Objective(ObjectiveType type, int requiredCount, String description, List<Integer> targetIds, int itemId,
-                     int mesoCost) {
+                     int mesoCost, boolean perMob) {
         boolean isCustomProgress() {
             return switch (type) {
                 case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL,
@@ -1416,23 +1416,42 @@ public final class LifeProofQuest {
         }
 
         QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
-        int current = 0;
-        for (int targetId : objective.targetIds()) {
-            current = Math.max(current, parseProgress(status.getProgress(targetId)));
-        }
-        int nextProgress = Math.min(objective.requiredCount(), current + 1);
-        String progress = StringUtil.getLeftPaddedStr(Integer.toString(nextProgress), '0', 3);
-        for (int targetId : objective.targetIds()) {
-            status.setProgress(targetId, progress);
-        }
-        chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
-        chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-        chr.yellowMessage("生命之证：" + objective.description() + " " + nextProgress
-                + "/" + objective.requiredCount());
-        if (current < objective.requiredCount() && nextProgress >= objective.requiredCount()) {
-            refreshQuestRules(chr);
+        if (objective.perMob()) {
+            // Per-mob tracking: only increment the specific mob that was killed.
+            // Satisfaction (mobProgress) returns MIN across all targets, so the
+            // quest completes only when every target reaches requiredCount.
+            String mobStr = status.getProgress(mobId);
+            int current = parseProgress(mobStr);
+            int next = Math.min(objective.requiredCount(), current + 1);
+            status.setProgress(mobId, StringUtil.getLeftPaddedStr(Integer.toString(next), '0', 3));
+            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+            chr.yellowMessage("生命之证：" + objective.description() + " #o" + mobId + "# " + next
+                    + "/" + objective.requiredCount());
+            if (current < objective.requiredCount() && next >= objective.requiredCount()) {
+                refreshQuestRules(chr);
+            } else {
+                refreshQuestProgress(chr);
+            }
         } else {
-            refreshQuestProgress(chr);
+            int current = 0;
+            for (int targetId : objective.targetIds()) {
+                current = Math.max(current, parseProgress(status.getProgress(targetId)));
+            }
+            int nextProgress = Math.min(objective.requiredCount(), current + 1);
+            String progress = StringUtil.getLeftPaddedStr(Integer.toString(nextProgress), '0', 3);
+            for (int targetId : objective.targetIds()) {
+                status.setProgress(targetId, progress);
+            }
+            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+            chr.yellowMessage("生命之证：" + objective.description() + " " + nextProgress
+                    + "/" + objective.requiredCount());
+            if (current < objective.requiredCount() && nextProgress >= objective.requiredCount()) {
+                refreshQuestRules(chr);
+            } else {
+                refreshQuestProgress(chr);
+            }
         }
     }
 
@@ -1621,7 +1640,7 @@ public final class LifeProofQuest {
                 for (int selectorNo = 1; selectorNo <= OPTIONAL_REQUIRED_COUNT; selectorNo++) {
                     int questId = questId(stageNo, branch, SELECTOR_SLOT_START + selectorNo - 1);
                     Objective objective = new Objective(ObjectiveType.SELECT_OPTION, 1,
-                            "选择第 " + selectorNo + " 项附加试炼", List.of(), 0, 0);
+                            "选择第 " + selectorNo + " 项附加试炼", List.of(), 0, 0, false);
                     QuestMeta meta = new QuestMeta(questId, stageNo, branch, QuestKind.SELECTOR,
                             SELECTOR_SLOT_START + selectorNo - 1, 0, selectorNo, null, objective,
                             stageTitle(stageNo) + "：选择试炼 " + selectorNo);
@@ -1631,7 +1650,7 @@ public final class LifeProofQuest {
                     int slot = OPTION_SLOT_START + slotNo - 1;
                     int questId = questId(stageNo, branch, slot);
                     Objective objective = new Objective(ObjectiveType.OPTION_SLOT, 1,
-                            "完成第 " + slotNo + " 项已选择附加试炼", List.of(), 0, 0);
+                            "完成第 " + slotNo + " 项已选择附加试炼", List.of(), 0, 0, false);
                     QuestMeta meta = new QuestMeta(questId, stageNo, branch, QuestKind.OPTION_SLOT, slot,
                             0, slotNo, null, objective, stageTitle(stageNo) + "：附加试炼 " + slotNo);
                     quests.put(questId, meta);
@@ -1646,7 +1665,7 @@ public final class LifeProofQuest {
                     quests.put(questId, meta);
                 }
                 int rewardQuestId = questId(stageNo, branch, REWARD_SLOT);
-                Objective reward = new Objective(ObjectiveType.REWARD, 1, "领取本阶段生命之证奖励", List.of(), 0, 0);
+                Objective reward = new Objective(ObjectiveType.REWARD, 1, "领取本阶段生命之证奖励", List.of(), 0, 0, false);
                 quests.put(rewardQuestId, new QuestMeta(rewardQuestId, stageNo, branch, QuestKind.REWARD, REWARD_SLOT,
                         0, 0, null, reward, stageTitle(stageNo) + "：生命之证"));
                 for (int bridgeNo = 1; bridgeNo <= OPTIONAL_REQUIRED_COUNT; bridgeNo++) {
@@ -1698,13 +1717,13 @@ public final class LifeProofQuest {
                 List<Integer> allDroppers = multi.stream()
                         .flatMap(c -> c.droppers().stream()).distinct().toList();
                 return new Objective(ObjectiveType.ITEM, total,
-                        task.description(), allDroppers, PROOF_ITEM_ID, 0);
+                        task.description(), allDroppers, PROOF_ITEM_ID, 0, false);
             }
         }
         ItemCollection collection = collectionForTask(stage, task);
         if (collection != null) {
             return new Objective(ObjectiveType.ITEM, collection.requiredCount(), "收集#t" + collection.itemId() + "#",
-                    collection.droppers(), collection.itemId(), 0);
+                    collection.droppers(), collection.itemId(), 0, false);
         }
         ObjectiveType type = switch (task.targetType()) {
             case KILL -> ObjectiveType.KILL;
@@ -1718,7 +1737,7 @@ public final class LifeProofQuest {
             case JUMP_MANUAL -> ObjectiveType.JUMP_MANUAL;
             case MAP -> throw new IllegalStateException("unmapped map task: " + task.key());
         };
-        return new Objective(type, task.requiredCount(), task.description(), task.targetIds(), 0, task.mesoCost());
+        return new Objective(type, task.requiredCount(), task.description(), task.targetIds(), 0, task.mesoCost(), task.perMob());
     }
 
     private static ItemCollection collectionForTask(int stage, HpChallengeService.Task task) {
