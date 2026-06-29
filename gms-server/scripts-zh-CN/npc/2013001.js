@@ -156,8 +156,7 @@ function action(mode, type, selection) {
                         actualTotal += z;
                     }
                     if (actualTotal != Math.min(eim.getPlayerCount(), 3)) {
-                        const GameConfig = Java.type('org.gms.config.GameConfig');
-                            cm.sendOk("这些平台上需要有在场的3名玩家。");
+                        cm.sendOk("这些平台上需要有在场的" + Math.min(eim.getPlayerCount(), 3) + "名玩家。");
                         }
                     } else {
                         var num_correct = 0;
@@ -243,13 +242,13 @@ function action(mode, type, selection) {
                     for (var i = 1; i <= 5; i++) {
                         if (cm.getMap().getReactorByName("" + i).getState() > 0) {
                             react += "1";
-                            total += 1;
+                            actualTotal += 1;
                         } else {
                             react += "0";
                         }
                     }
 
-                    if (total != 2) {
+                    if (actualTotal != 2) {
                         cm.sendOk("地图顶部需要精确地推动两个杠杆。");
                     } else {
                         var num_correct = 0;
