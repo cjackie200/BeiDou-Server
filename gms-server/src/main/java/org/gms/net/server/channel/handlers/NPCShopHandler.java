@@ -68,6 +68,7 @@ public final class NPCShopHandler extends AbstractPacketHandler {
         }
         case 3: // leaving :(
             c.getPlayer().setShop(null);
+            c.removeClickedNPC();
             break;
         }
 

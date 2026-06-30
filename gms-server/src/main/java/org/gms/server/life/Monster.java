@@ -114,6 +114,8 @@ public class Monster extends AbstractLoadedLife {
     private ScheduledFuture<?> monsterItemDrop = null;
     private Runnable removeAfterAction = null;
     private boolean availablePuppetUpdate = true;
+    private volatile Point lastMobVacPosition = null;
+    private volatile long lastMobVacTime = 0L;
 
     private final Lock externalLock = new ReentrantLock();
     private final Lock monsterLock = new ReentrantLock(true);
@@ -1388,8 +1390,36 @@ public class Monster extends AbstractLoadedLife {
 
         map.broadcastMessage(PacketCreator.killMonster(getObjectId(), false), getPosition());
         setPosition(newPoint);
+        markMobVacPosition(newPoint);
         map.moveMonster(this, this.getPosition());
         map.broadcastMessage(PacketCreator.spawnMonster(this, false), this.getPosition());
+    }
+
+    public boolean isNearMobVacPosition(Point target, int tolerancePixels) {
+        if (target == null || getPosition() == null) {
+            return false;
+        }
+        int tolerance = Math.max(0, tolerancePixels);
+        return getPosition().distanceSq(target) <= (double) tolerance * tolerance;
+    }
+
+    public Point getRecentMobVacPosition(long withinMillis) {
+        Point position = lastMobVacPosition;
+        if (position == null || withinMillis <= 0) {
+            return null;
+        }
+        if (System.currentTimeMillis() - lastMobVacTime > withinMillis) {
+            return null;
+        }
+        return new Point(position);
+    }
+
+    private void markMobVacPosition(Point position) {
+        if (position == null) {
+            return;
+        }
+        lastMobVacPosition = new Point(position);
+        lastMobVacTime = System.currentTimeMillis();
     }
 
     private void debuffMobStat(MonsterStatus stat) {
