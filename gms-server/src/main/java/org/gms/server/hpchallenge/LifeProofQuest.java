@@ -120,7 +120,7 @@ public final class LifeProofQuest {
                      int mesoCost, boolean perMob) {
         boolean isCustomProgress() {
             return switch (type) {
-                case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL,
+                case KILL, BOSS, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL,
                      OPTION_SLOT -> true;
                 default -> false;
             };
@@ -1447,9 +1447,6 @@ public final class LifeProofQuest {
 
         QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
         if (objective.perMob()) {
-            // Per-mob tracking: only increment the specific mob that was killed.
-            // Satisfaction (mobProgress) returns MIN across all targets, so the
-            // quest completes only when every target reaches requiredCount.
             String mobStr = status.getProgress(mobId);
             int current = parseProgress(mobStr);
             int next = Math.min(objective.requiredCount(), current + 1);
@@ -1459,7 +1456,11 @@ public final class LifeProofQuest {
             String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(mobId);
             chr.yellowMessage("生命之证：" + mobName + " " + next
                     + "/" + objective.requiredCount());
-            if (current < objective.requiredCount() && next >= objective.requiredCount()) {
+            boolean justCompleted = current < objective.requiredCount() && next >= objective.requiredCount();
+            if (justCompleted) {
+                setCustomProgressComplete(chr, active);
+            }
+            if (mobProgress(chr, active) >= objective.requiredCount()) {
                 refreshQuestRules(chr);
             } else {
                 refreshQuestProgress(chr);
@@ -1478,7 +1479,11 @@ public final class LifeProofQuest {
             chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
             chr.yellowMessage("生命之证：" + objective.description() + " " + nextProgress
                     + "/" + objective.requiredCount());
-            if (current < objective.requiredCount() && nextProgress >= objective.requiredCount()) {
+            boolean justCompleted = current < objective.requiredCount() && nextProgress >= objective.requiredCount();
+            if (justCompleted) {
+                setCustomProgressComplete(chr, active);
+            }
+            if (nextProgress >= objective.requiredCount()) {
                 refreshQuestRules(chr);
             } else {
                 refreshQuestProgress(chr);
@@ -2132,6 +2137,15 @@ public final class LifeProofQuest {
         chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
         chr.yellowMessage("生命之证：" + meta.name() + "已达成，请回一转教官完成任务。");
         refreshQuestProgress(chr);
+    }
+
+    /** 所有 KILL/BOSS 任务用 infoex 完成条件，达标时写自定义进度 001 */
+    private static void setCustomProgressComplete(Character chr, QuestMeta meta) {
+        if (chr == null || meta == null) return;
+        QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
+        status.setProgress(CUSTOM_PROGRESS_KEY, "001");
+        chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+        chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
     }
 
     public static void syncActiveObjectiveProgress(Character chr) {

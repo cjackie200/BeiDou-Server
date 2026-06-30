@@ -349,7 +349,11 @@ class LifeProofQuestTest {
             Element complete = childImgDir(topLevelImgDir(document, meta.questId()), "1");
             if (requiresInfoExCompletionGate(meta)) {
                 gated++;
-                assertEquals(String.format("%03d", meta.objective().requiredCount()),
+                boolean isKillOrBoss = meta.objective().type() == LifeProofQuest.ObjectiveType.KILL
+                        || meta.objective().type() == LifeProofQuest.ObjectiveType.BOSS;
+                String expected = isKillOrBoss ? "001"
+                        : String.format("%03d", meta.objective().requiredCount());
+                assertEquals(expected,
                         childValue(complete, "infoex", "0", "string", "value"),
                         "life proof custom progress quest must require progress before completion: "
                                 + meta.questId());
@@ -697,7 +701,9 @@ class LifeProofQuestTest {
     private static void assertCompletionGate(Element complete, LifeProofQuest.QuestMeta meta) {
         LifeProofQuest.Objective objective = meta.objective();
         switch (objective.type()) {
-            case KILL, BOSS -> assertMobGate(complete, meta);
+            case KILL, BOSS -> assertEquals("001",
+                    childValue(complete, "infoex", "0", "string", "value"),
+                    "KILL/BOSS must use infoex completion gate: " + meta.questId());
             case ITEM -> assertItemGate(complete, meta);
             case MESO -> assertEquals(Integer.toString(objective.mesoCost()), childValue(complete, "int", "money"),
                     "meso completion gate must match metadata: " + meta.questId());
@@ -985,8 +991,8 @@ class LifeProofQuestTest {
 
     private static boolean requiresInfoExCompletionGate(LifeProofQuest.QuestMeta meta) {
         return switch (meta.objective().type()) {
-            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION,
-                 OPTION_SLOT -> true;
+            case KILL, BOSS, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL,
+                 SELECT_OPTION, OPTION_SLOT -> true;
             default -> false;
         };
     }
