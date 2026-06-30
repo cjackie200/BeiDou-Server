@@ -558,7 +558,8 @@ public final class LifeProofQuest {
                     totalRequired += c.requiredCount();
                     conditions.add(new InteractionHookProgressEntry.Condition(
                             held, c.requiredCount(),
-                            "#i" + c.itemId() + "# #t" + c.itemId() + "# #b" + held + "#k/#r" + c.requiredCount() + "#k"));
+                            "#i" + c.itemId() + "# #t" + c.itemId() + "# #b" + held + "#k/#r" + c.requiredCount() + "#k"
+                                    + dropperText(c.droppers())));
                 }
                 // Add a summary line first
                 conditions.add(0, new InteractionHookProgressEntry.Condition(
@@ -570,7 +571,8 @@ public final class LifeProofQuest {
         String text = switch (type) {
             case KILL, BOSS -> throw new IllegalStateException("unreachable");
             case ITEM -> "#i" + objective.itemId() + "# #t" + objective.itemId()
-                    + "# 收集：#b" + progress.current() + "#k/#r" + progress.required() + "#k";
+                    + "# 收集：#b" + progress.current() + "#k/#r" + progress.required() + "#k"
+                    + dropperText(objective.targetIds());
             case MESO -> "金币：#b" + progress.current() + "#k/#r" + progress.required() + "#k";
             case NPC_TALK -> {
                 int npcId = objective.targetIds().isEmpty() ? 0 : objective.targetIds().getFirst();
@@ -1143,12 +1145,14 @@ public final class LifeProofQuest {
                         ItemCollection c = multi.get(i);
                         sb.append("#i").append(c.itemId()).append("# #t").append(c.itemId()).append("# ")
                                 .append("#b").append(Math.min(c.requiredCount(), itemCount(chr, c.itemId())))
-                                .append("#k/#r").append(c.requiredCount()).append("#k");
+                                .append("#k/#r").append(c.requiredCount()).append("#k")
+                                .append(dropperText(c.droppers()));
                     }
                     yield sb.toString();
                 }
                 yield "#i" + objective.itemId() + "# #t" + objective.itemId() + "# "
-                        + "#b" + itemCount(chr, objective.itemId()) + "#k/#r" + objective.requiredCount() + "#k";
+                        + "#b" + itemCount(chr, objective.itemId()) + "#k/#r" + objective.requiredCount() + "#k"
+                        + dropperText(objective.targetIds());
             }
             case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL -> "#b" + customProgress(chr, meta)
                     + "#k/#r" + objective.requiredCount() + "#k";
@@ -1363,6 +1367,20 @@ public final class LifeProofQuest {
                 sb.append("/");
             }
             sb.append("#o").append(objective.targetIds().get(i)).append("#");
+        }
+        return sb.toString();
+    }
+
+    private static String dropperText(List<Integer> mobIds) {
+        if (mobIds == null || mobIds.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder("\r\n获取：");
+        for (int i = 0; i < mobIds.size(); i++) {
+            if (i > 0) {
+                sb.append("/");
+            }
+            sb.append("#o").append(mobIds.get(i)).append("#");
         }
         return sb.toString();
     }
