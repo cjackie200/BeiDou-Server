@@ -11,6 +11,7 @@ public final class MobVacManager {
     private static final int INTERVAL_MS = 1000;
     private static final int FRONT_DISTANCE = 120;
     private static final int MAX_MONSTERS = 80;
+    private static final int TARGET_TOLERANCE_PIXELS = 24;
 
     private MobVacManager() {
     }
@@ -105,6 +106,9 @@ public final class MobVacManager {
             }
             if (mob.isBoss()) {
                 skippedBoss++;
+                continue;
+            }
+            if (mob.isNearMobVacPosition(target, TARGET_TOLERANCE_PIXELS)) {
                 continue;
             }
             try {

@@ -70,6 +70,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
+    private static final long MOB_VAC_DISTANCE_GRACE_MS = 2500L;
 
     public static class AttackInfo {
 
@@ -1191,7 +1192,18 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 false
         );
         bestSample = chooseCloserDistanceSample(bestSample, teleportBeforePos, monster, useBbox, currentPlayerPos, true, false);
-        return chooseCloserDistanceSample(bestSample, movementBeforePos, monster, useBbox, currentPlayerPos, false, true);
+        bestSample = chooseCloserDistanceSample(bestSample, movementBeforePos, monster, useBbox, currentPlayerPos, false, true);
+
+        Point mobVacPosition = monster.getRecentMobVacPosition(MOB_VAC_DISTANCE_GRACE_MS);
+        if (mobVacPosition == null || mobVacPosition.equals(monster.getPosition())) {
+            return bestSample;
+        }
+
+        double mobVacDistanceSq = calculateDistanceSq(currentPlayerPos, monster, useBbox, mobVacPosition);
+        if (mobVacDistanceSq >= bestSample.distanceSq) {
+            return bestSample;
+        }
+        return new DistanceCheckSample(currentPlayerPos, mobVacDistanceSq, false, false);
     }
 
     private static DistanceCheckSample chooseCloserDistanceSample(DistanceCheckSample currentBest, Point candidatePos, Monster monster, boolean useBbox, Point currentPlayerPos, boolean usedTeleportContext, boolean usedMovementContext) {
@@ -1220,15 +1232,19 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * useBbox=true 时按碰撞框最短距离计算。
      */
     private static double calculateDistanceSq(Point playerPos, Monster monster, boolean useBbox) {
+        return calculateDistanceSq(playerPos, monster, useBbox, monster.getPosition());
+    }
+
+    private static double calculateDistanceSq(Point playerPos, Monster monster, boolean useBbox, Point monsterPos) {
         if (!useBbox) {
-            return playerPos.distanceSq(monster.getPosition());
+            return playerPos.distanceSq(monsterPos);
         }
 
         MonsterStats stats = monster.getStats();
         if (stats == null || !stats.hasBbox()) {
-            return playerPos.distanceSq(monster.getPosition());
+            return playerPos.distanceSq(monsterPos);
         }
-        int[] bbox = getWorldBbox(monster, stats);
+        int[] bbox = getWorldBbox(monster, stats, monsterPos);
         int minX = bbox[0];
         int maxX = bbox[1];
         int minY = bbox[2];
@@ -1306,7 +1322,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
      * @return [minX, maxX, minY, maxY]
      */
     private static int[] getWorldBbox(Monster monster, MonsterStats stats) {
-        Point mobPos = monster.getPosition();
+        return getWorldBbox(monster, stats, monster.getPosition());
+    }
+
+    private static int[] getWorldBbox(Monster monster, MonsterStats stats, Point mobPos) {
         int minX = stats.getBboxMinX();
         int maxX = stats.getBboxMaxX();
         int minY = stats.getBboxMinY();
