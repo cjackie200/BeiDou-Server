@@ -33,8 +33,8 @@ scripts\start-windows-server.bat
 ### 服务端 (gms-server)
 
 ```bash
-# 构建
-mvn clean package -pl gms-server
+# 构建（⚠️ 打包补丁前必须用 package，mvn compile 不更新 target/BeiDou.jar！）
+mvn clean package -pl gms-server -DskipTests
 
 # 运行（在 gms-server 目录下执行，需要 JDK 21）
 java -Dspring.config.location=application.yml -jar target/BeiDou.jar
@@ -171,6 +171,11 @@ Vue 3 项目，使用 Arco Design Pro 模板：
 服务端版本定义在 `ServerConstants.BEI_DOU_VERSION`（当前 `1.11`），游戏协议版本 `ServerConstants.VERSION`（83）。
 
 ## 补丁安装程序打包
+
+> **⚠️ 致命规则：打包补丁前必须先执行 `mvn clean package -pl gms-server -DskipTests`！**
+> `mvn compile` 只编译 `.class` 不更新 `target/BeiDou.jar`。Patcher 的 `build.ps1`
+> 从 `gms-server/target/BeiDou.jar` 复制 JAR，如果 JAR 是旧的，所有 Java 改动静默丢失，
+> 补丁安装后不会生效。每次修改 Java 代码后打包前，必须重新 `mvn clean package`。
 
 服务端补丁安装程序是一个 .NET 8 WinForms 应用，将 `patch-data.zip` 嵌入为资源，用户通过 GUI 选择目标目录后自动解压覆盖升级。
 

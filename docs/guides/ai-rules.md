@@ -12,6 +12,12 @@
 4. 任务相关设计文档，例如 `docs/life-proof-quest-chain.md`、`docs/interaction-hook-v3.md`
 5. 涉及打包、SQL、WZ、脚本、客户端补丁时，继续阅读 `AGENTS.md` 中对应规范
 
+## 致命规则
+
+- **打包补丁前必须 `mvn clean package -pl gms-server -DskipTests`**。`mvn compile` 只编译
+  `.class`，不更新 `target/BeiDou.jar`。Patcher 的 `build.ps1` 从工作目录复制 JAR，如果 JAR
+  是旧的，所有 Java 改动静默丢失。修改任何 Java 代码后，重新打包前必须先 `mvn clean package`。
+
 ## 总原则
 
 1. 文档、协议、状态机、SQL、代码、测试必须同向落地。

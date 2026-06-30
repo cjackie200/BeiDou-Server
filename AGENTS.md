@@ -27,6 +27,7 @@
 - `mvn -pl gms-server -am test`：编译服务端模块并运行 JUnit 测试。
 - `mvn -pl gms-server -am package`：构建服务端 jar，输出到
   `gms-server/target/BeiDou.jar`。
+  **致命规则：`mvn compile` 不更新 jar！打包补丁前必须 `mvn clean package`。**
 - `cd gms-server && mvn spring-boot:run`：使用 MySQL 8 本地启动服务端。
 - `cd gms-ui && yarn install`：安装前端依赖。
 - `cd gms-ui && yarn dev`：启动 Vite 开发服务。
@@ -135,6 +136,9 @@ LocalDumps 到 `D:\Game\BeiDou\BeiDou-Client\crash-dumps`；客户端补丁提�
 `xjc -> v1.1.1`，不要默认使用最早 release tag。打包前先确认当前分支、目标 tag、
 线上基线 commit、`git status -sb` 和 `git diff --name-status $FROM..$TO`，并按差异判断
 代码、SQL、脚本、WZ、Web 后台和删除文件范围。
+
+**打包前必须先 `mvn clean package -pl gms-server -DskipTests`**，确保 `target/BeiDou.jar`
+包含最新 Java 改动。`mvn compile` 不更新 jar，Patcher 会复制旧 jar 导致补丁无效。
 
 Flyway SQL 以线上基线为准分类处理。已经属于线上基线的 migration 不得改名、不得复制成
 更高版本重复执行；只有目标版本相对基线新增的 migration 才需要保证版本号排在基线已执行

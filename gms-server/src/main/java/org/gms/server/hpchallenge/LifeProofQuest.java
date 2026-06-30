@@ -7,6 +7,7 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.life.MonsterDropEntry;
+import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.hook.InteractionHookAction;
 import org.gms.server.quest.hook.InteractionHookContext;
@@ -77,6 +78,7 @@ public final class LifeProofQuest {
     );
     private static final Map<HpChallengeService.JobBranch, BranchInfo> BRANCH_INFO = buildBranchInfo();
     private static final Map<String, ItemCollection> ITEM_COLLECTIONS = buildItemCollections();
+    private static final Map<String, List<ItemCollection>> MULTI_ITEM_COLLECTIONS = buildMultiItemCollections();
     private static final Map<Integer, QuestMeta> QUESTS = buildQuests();
 
     private LifeProofQuest() {
@@ -115,10 +117,10 @@ public final class LifeProofQuest {
     }
 
     record Objective(ObjectiveType type, int requiredCount, String description, List<Integer> targetIds, int itemId,
-                     int mesoCost) {
+                     int mesoCost, boolean perMob) {
         boolean isCustomProgress() {
             return switch (type) {
-                case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL,
+                case KILL, BOSS, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL,
                      OPTION_SLOT -> true;
                 default -> false;
             };
@@ -512,17 +514,53 @@ public final class LifeProofQuest {
             if (status == null) {
                 return List.of();
             }
-            List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
-            for (int targetId : objective.targetIds()) {
-                int mobProgress = parseProgress(status.getProgress(targetId));
-                conditions.add(new InteractionHookProgressEntry.Condition(
-                        mobProgress, objective.requiredCount(),
-                        "#o" + targetId + "# 进度：#b" + mobProgress + "#k/#r" + objective.requiredCount() + "#k"));
+            // Per-mob tracking: show individual progress per monster type
+            if (objective.perMob()) {
+                List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
+                for (int targetId : objective.targetIds()) {
+                    int mobProgress = parseProgress(status.getProgress(targetId));
+                    String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(targetId);
+                    conditions.add(new InteractionHookProgressEntry.Condition(
+                            mobProgress, objective.requiredCount(),
+                            mobName + " 进度：#b" + mobProgress + "#k/#r" + objective.requiredCount() + "#k"));
+                }
+                return conditions;
             }
-            return conditions;
+            // Shared progress: show one combined line for all target monsters
+            int progress = mobProgress(chr, meta);
+            StringBuilder mobNames = new StringBuilder();
+            for (int i = 0; i < objective.targetIds().size(); i++) {
+                if (i > 0) mobNames.append("/");
+                mobNames.append(MonsterInformationProvider.getInstance().getMobNameFromId(objective.targetIds().get(i)));
+            }
+            return List.of(new InteractionHookProgressEntry.Condition(
+                    progress, objective.requiredCount(),
+                    mobNames + " 进度：#b" + progress + "#k/#r" + objective.requiredCount() + "#k"));
         }
 
         ProgressValue progress = questProgressValue(chr, meta);
+        // Multi-item collections return one condition per item type
+        if (type == ObjectiveType.ITEM) {
+            List<ItemCollection> multi = multiItemCollections(meta);
+            if (multi != null) {
+                List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
+                int totalCurrent = 0;
+                int totalRequired = 0;
+                for (ItemCollection c : multi) {
+                    int held = Math.min(c.requiredCount(), itemCount(chr, c.itemId()));
+                    totalCurrent += held;
+                    totalRequired += c.requiredCount();
+                    conditions.add(new InteractionHookProgressEntry.Condition(
+                            held, c.requiredCount(),
+                            "#i" + c.itemId() + "# #t" + c.itemId() + "# #b" + held + "#k/#r" + c.requiredCount() + "#k"));
+                }
+                // Add a summary line first
+                conditions.add(0, new InteractionHookProgressEntry.Condition(
+                        totalCurrent, totalRequired,
+                        "五种水晶合计：#b" + totalCurrent + "#k/#r" + totalRequired + "#k"));
+                return conditions;
+            }
+        }
         String text = switch (type) {
             case KILL, BOSS -> throw new IllegalStateException("unreachable");
             case ITEM -> "#i" + objective.itemId() + "# #t" + objective.itemId()
@@ -993,8 +1031,15 @@ public final class LifeProofQuest {
             return error(result);
         }
 
-        if (objective.isCollection() && !removeItem(chr, objective.itemId(), objective.requiredCount())) {
-            return error("提交物品不足。");
+        if (objective.isCollection()) {
+            List<ItemCollection> multi = multiItemCollections(meta);
+            if (multi != null) {
+                if (!removeMultiItems(chr, multi)) {
+                    return error("提交物品不足。");
+                }
+            } else if (!removeItem(chr, objective.itemId(), objective.requiredCount())) {
+                return error("提交物品不足。");
+            }
         }
         if (objective.type() == ObjectiveType.MESO) {
             if (chr.getMeso() < objective.mesoCost()) {
@@ -1044,7 +1089,7 @@ public final class LifeProofQuest {
         sb.append("#e").append(meta.name()).append("#n\r\n\r\n");
         sb.append(stageStory(meta.stage())).append("\r\n\r\n");
         sb.append("当前目标：").append(objective.description()).append("\r\n");
-        sb.append("当前进度：").append(progressText(chr, meta, npcId)).append("\r\n");
+        sb.append(progressText(chr, meta, npcId)).append("\r\n\r\n");
         sb.append("下一步：").append(nextStepText(chr, meta, npcId));
         return sb.toString();
     }
@@ -1063,10 +1108,39 @@ public final class LifeProofQuest {
     private static String progressText(Character chr, QuestMeta meta, int npcId) {
         Objective objective = effectiveObjective(chr, meta);
         return switch (objective.type()) {
-            case KILL, BOSS -> mobTargetText(objective) + "，#b" + mobProgress(chr, meta)
-                    + "#k/#r" + objective.requiredCount() + "#k";
-            case ITEM -> "#i" + objective.itemId() + "# #t" + objective.itemId() + "# "
-                    + "#b" + itemCount(chr, objective.itemId()) + "#k/#r" + objective.requiredCount() + "#k";
+            case KILL, BOSS -> {
+                if (objective.perMob()) {
+                    StringBuilder sb = new StringBuilder();
+                    QuestStatus st = chr.getQuest(Quest.getInstance(meta.questId()));
+                    for (int i = 0; i < objective.targetIds().size(); i++) {
+                        if (i > 0) sb.append("\r\n");
+                        int tid = objective.targetIds().get(i);
+                        int p = parseProgress(st.getProgress(tid));
+                        sb.append(MonsterInformationProvider.getInstance().getMobNameFromId(tid))
+                                .append(" #b").append(p)
+                                .append("#k/#r").append(objective.requiredCount()).append("#k");
+                    }
+                    yield sb.toString();
+                }
+                yield mobTargetText(objective) + "，#b" + mobProgress(chr, meta)
+                        + "#k/#r" + objective.requiredCount() + "#k";
+            }
+            case ITEM -> {
+                List<ItemCollection> multi = multiItemCollections(meta);
+                if (multi != null) {
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < multi.size(); i++) {
+                        if (i > 0) sb.append("\r\n");
+                        ItemCollection c = multi.get(i);
+                        sb.append("#i").append(c.itemId()).append("# #t").append(c.itemId()).append("# ")
+                                .append("#b").append(Math.min(c.requiredCount(), itemCount(chr, c.itemId())))
+                                .append("#k/#r").append(c.requiredCount()).append("#k");
+                    }
+                    yield sb.toString();
+                }
+                yield "#i" + objective.itemId() + "# #t" + objective.itemId() + "# "
+                        + "#b" + itemCount(chr, objective.itemId()) + "#k/#r" + objective.requiredCount() + "#k";
+            }
             case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL -> "#b" + customProgress(chr, meta)
                     + "#k/#r" + objective.requiredCount() + "#k";
             case MESO -> "当前金币 #b" + chr.getMeso() + "#k / 需要 #r" + objective.mesoCost() + "#k";
@@ -1095,7 +1169,10 @@ public final class LifeProofQuest {
 
         int current = switch (objective.type()) {
             case KILL, BOSS -> mobProgress(chr, meta);
-            case ITEM -> itemCount(chr, objective.itemId());
+            case ITEM -> {
+                List<ItemCollection> multi = multiItemCollections(meta);
+                yield multi != null ? multiItemProgress(chr, multi) : itemCount(chr, objective.itemId());
+            }
             case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, NPC_TALK -> customProgress(chr, meta);
             case MESO -> Math.min(chr.getMeso(), objective.mesoCost());
             case SELECT_OPTION -> 0;
@@ -1150,7 +1227,13 @@ public final class LifeProofQuest {
         Objective objective = effectiveObjective(chr, meta);
         return switch (objective.type()) {
             case KILL, BOSS -> mobProgress(chr, meta) >= objective.requiredCount();
-            case ITEM -> itemCount(chr, objective.itemId()) >= objective.requiredCount();
+            case ITEM -> {
+                List<ItemCollection> multi = multiItemCollections(meta);
+                if (multi != null) {
+                    yield multiItemSatisfied(chr, multi);
+                }
+                yield itemCount(chr, objective.itemId()) >= objective.requiredCount();
+            }
             case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
                     customProgress(chr, meta) >= objective.requiredCount();
             case MESO -> chr.getMeso() >= objective.mesoCost();
@@ -1159,6 +1242,21 @@ public final class LifeProofQuest {
             case OPTION_SLOT -> false;
             case REWARD -> true;
         };
+    }
+
+    private static boolean multiItemSatisfied(Character chr, List<ItemCollection> multi) {
+        for (ItemCollection c : multi) {
+            if (itemCount(chr, c.itemId()) < c.requiredCount()) return false;
+        }
+        return true;
+    }
+
+    private static int multiItemProgress(Character chr, List<ItemCollection> multi) {
+        int total = 0;
+        for (ItemCollection c : multi) {
+            total += Math.min(c.requiredCount(), itemCount(chr, c.itemId()));
+        }
+        return total;
     }
 
     static int startNpcId(QuestMeta meta) {
@@ -1287,6 +1385,17 @@ public final class LifeProofQuest {
             return;
         }
         Objective objective = effectiveObjective(chr, active);
+        // Handle multi-item collection (Stage VII five crystals)
+        List<ItemCollection> multi = multiItemCollections(active);
+        if (multi != null) {
+            for (ItemCollection c : multi) {
+                if (!c.droppers().contains(mobId)) continue;
+                int held = chr.getInventory(ItemConstants.getInventoryType(c.itemId())).countById(c.itemId());
+                if (held >= c.requiredCount()) continue;
+                visibleQuestEntry.add(new MonsterDropEntry(c.itemId(), DYNAMIC_DROP_CHANCE, 1, 1, (short) active.questId()));
+            }
+            return;
+        }
         int itemId = objective.itemId();
         int held = chr.getInventory(ItemConstants.getInventoryType(itemId)).countById(itemId);
         if (held >= objective.requiredCount()) {
@@ -1337,23 +1446,45 @@ public final class LifeProofQuest {
         }
 
         QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
-        int current = 0;
-        for (int targetId : objective.targetIds()) {
-            current = Math.max(current, parseProgress(status.getProgress(targetId)));
-        }
-        int nextProgress = Math.min(objective.requiredCount(), current + 1);
-        String progress = StringUtil.getLeftPaddedStr(Integer.toString(nextProgress), '0', 3);
-        for (int targetId : objective.targetIds()) {
-            status.setProgress(targetId, progress);
-        }
-        chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
-        chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-        chr.yellowMessage("生命之证：" + objective.description() + " " + nextProgress
-                + "/" + objective.requiredCount());
-        if (current < objective.requiredCount() && nextProgress >= objective.requiredCount()) {
-            refreshQuestRules(chr);
+        if (objective.perMob()) {
+            String mobStr = status.getProgress(mobId);
+            int current = parseProgress(mobStr);
+            int next = Math.min(objective.requiredCount(), current + 1);
+            status.setProgress(mobId, StringUtil.getLeftPaddedStr(Integer.toString(next), '0', 3));
+            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+            String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(mobId);
+            chr.yellowMessage("生命之证：" + mobName + " " + next
+                    + "/" + objective.requiredCount());
+            boolean allDone = mobProgress(chr, active) >= objective.requiredCount();
+            if (allDone) {
+                setCustomProgressComplete(chr, active);
+            }
+            if (current < objective.requiredCount() && next >= objective.requiredCount() || allDone) {
+                refreshQuestRules(chr);
+            } else {
+                refreshQuestProgress(chr);
+            }
         } else {
-            refreshQuestProgress(chr);
+            int current = 0;
+            for (int targetId : objective.targetIds()) {
+                current = Math.max(current, parseProgress(status.getProgress(targetId)));
+            }
+            int nextProgress = Math.min(objective.requiredCount(), current + 1);
+            String progress = StringUtil.getLeftPaddedStr(Integer.toString(nextProgress), '0', 3);
+            for (int targetId : objective.targetIds()) {
+                status.setProgress(targetId, progress);
+            }
+            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+            chr.yellowMessage("生命之证：" + objective.description() + " " + nextProgress
+                    + "/" + objective.requiredCount());
+            if (current < objective.requiredCount() && nextProgress >= objective.requiredCount()) {
+                setCustomProgressComplete(chr, active);
+                refreshQuestRules(chr);
+            } else {
+                refreshQuestProgress(chr);
+            }
         }
     }
 
@@ -1497,6 +1628,32 @@ public final class LifeProofQuest {
         return items;
     }
 
+    private static Map<String, List<ItemCollection>> buildMultiItemCollections() {
+        Map<String, List<ItemCollection>> multi = new HashMap<>();
+        multi.put("visit_final", List.of(
+                new ItemCollection(4005000, "力量水晶", 10, List.of(8140101, 8140102, 8140103)),
+                new ItemCollection(4005001, "智慧水晶", 10, List.of(8140200, 8140300)),
+                new ItemCollection(4005002, "敏捷水晶", 10, List.of(8140600, 8141300, 8142100)),
+                new ItemCollection(4005003, "幸运水晶", 10, List.of(8200005, 8200006, 8200009, 8200010)),
+                new ItemCollection(4005004, "黑暗水晶", 10, List.of(8190004, 8200011, 8200012))
+        ));
+        return multi;
+    }
+
+    /**
+     * Returns the multi-item collection list for a task, or null if it's a single-item collection.
+     */
+    static List<ItemCollection> multiItemCollections(QuestMeta meta) {
+        if (meta == null) return null;
+        HpChallengeService.Task task = meta.task();
+        if (task == null) return null;
+        String collectionKey = switch (task.key()) {
+            case "visit_final" -> "visit_final";
+            default -> null;
+        };
+        return collectionKey == null ? null : MULTI_ITEM_COLLECTIONS.get(collectionKey);
+    }
+
     private static Map<Integer, QuestMeta> buildQuests() {
         Map<Integer, QuestMeta> quests = new LinkedHashMap<>();
         for (int stageNo = 1; stageNo <= 7; stageNo++) {
@@ -1516,7 +1673,7 @@ public final class LifeProofQuest {
                 for (int selectorNo = 1; selectorNo <= OPTIONAL_REQUIRED_COUNT; selectorNo++) {
                     int questId = questId(stageNo, branch, SELECTOR_SLOT_START + selectorNo - 1);
                     Objective objective = new Objective(ObjectiveType.SELECT_OPTION, 1,
-                            "选择第 " + selectorNo + " 项附加试炼", List.of(), 0, 0);
+                            "选择第 " + selectorNo + " 项附加试炼", List.of(), 0, 0, false);
                     QuestMeta meta = new QuestMeta(questId, stageNo, branch, QuestKind.SELECTOR,
                             SELECTOR_SLOT_START + selectorNo - 1, 0, selectorNo, null, objective,
                             stageTitle(stageNo) + "：选择试炼 " + selectorNo);
@@ -1526,7 +1683,7 @@ public final class LifeProofQuest {
                     int slot = OPTION_SLOT_START + slotNo - 1;
                     int questId = questId(stageNo, branch, slot);
                     Objective objective = new Objective(ObjectiveType.OPTION_SLOT, 1,
-                            "完成第 " + slotNo + " 项已选择附加试炼", List.of(), 0, 0);
+                            "完成第 " + slotNo + " 项已选择附加试炼", List.of(), 0, 0, false);
                     QuestMeta meta = new QuestMeta(questId, stageNo, branch, QuestKind.OPTION_SLOT, slot,
                             0, slotNo, null, objective, stageTitle(stageNo) + "：附加试炼 " + slotNo);
                     quests.put(questId, meta);
@@ -1541,7 +1698,7 @@ public final class LifeProofQuest {
                     quests.put(questId, meta);
                 }
                 int rewardQuestId = questId(stageNo, branch, REWARD_SLOT);
-                Objective reward = new Objective(ObjectiveType.REWARD, 1, "领取本阶段生命之证奖励", List.of(), 0, 0);
+                Objective reward = new Objective(ObjectiveType.REWARD, 1, "领取本阶段生命之证奖励", List.of(), 0, 0, false);
                 quests.put(rewardQuestId, new QuestMeta(rewardQuestId, stageNo, branch, QuestKind.REWARD, REWARD_SLOT,
                         0, 0, null, reward, stageTitle(stageNo) + "：生命之证"));
                 for (int bridgeNo = 1; bridgeNo <= OPTIONAL_REQUIRED_COUNT; bridgeNo++) {
@@ -1581,10 +1738,25 @@ public final class LifeProofQuest {
     }
 
     private static Objective objective(int stage, HpChallengeService.Task task) {
+        // Check multi-item collection first (Stage VII five crystals)
+        String multiKey = switch (task.key()) {
+            case "visit_final" -> "visit_final";
+            default -> null;
+        };
+        if (multiKey != null) {
+            List<ItemCollection> multi = MULTI_ITEM_COLLECTIONS.get(multiKey);
+            if (multi != null) {
+                int total = multi.stream().mapToInt(ItemCollection::requiredCount).sum();
+                List<Integer> allDroppers = multi.stream()
+                        .flatMap(c -> c.droppers().stream()).distinct().toList();
+                return new Objective(ObjectiveType.ITEM, total,
+                        task.description(), allDroppers, PROOF_ITEM_ID, 0, false);
+            }
+        }
         ItemCollection collection = collectionForTask(stage, task);
         if (collection != null) {
             return new Objective(ObjectiveType.ITEM, collection.requiredCount(), "收集#t" + collection.itemId() + "#",
-                    collection.droppers(), collection.itemId(), 0);
+                    collection.droppers(), collection.itemId(), 0, false);
         }
         ObjectiveType type = switch (task.targetType()) {
             case KILL -> ObjectiveType.KILL;
@@ -1598,7 +1770,7 @@ public final class LifeProofQuest {
             case JUMP_MANUAL -> ObjectiveType.JUMP_MANUAL;
             case MAP -> throw new IllegalStateException("unmapped map task: " + task.key());
         };
-        return new Objective(type, task.requiredCount(), task.description(), task.targetIds(), 0, task.mesoCost());
+        return new Objective(type, task.requiredCount(), task.description(), task.targetIds(), 0, task.mesoCost(), task.perMob());
     }
 
     private static ItemCollection collectionForTask(int stage, HpChallengeService.Task task) {
@@ -1839,12 +2011,37 @@ public final class LifeProofQuest {
         }
         chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
         chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+        setCustomProgressComplete(chr, meta);
         chr.yellowMessage("生命之证：" + meta.name() + " " + objective.requiredCount()
                 + "/" + objective.requiredCount());
     }
 
     private static String grantMissingItemsForGm(Character chr, QuestMeta meta) {
         Objective objective = effectiveObjective(chr, meta);
+        List<ItemCollection> multi = multiItemCollections(meta);
+        if (multi != null) {
+            StringBuilder sb = new StringBuilder("已补齐五种水晶：\r\n");
+            boolean anyGranted = false;
+            for (ItemCollection c : multi) {
+                int held = chr.getInventory(ItemConstants.getInventoryType(c.itemId())).countById(c.itemId());
+                int missing = c.requiredCount() - held;
+                if (missing <= 0) {
+                    sb.append("#t").append(c.itemId()).append("#已足够\r\n");
+                    continue;
+                }
+                if (!InventoryManipulator.addById(chr.getClient(), c.itemId(), (short) missing)) {
+                    return "背包空间不足，无法补齐#t" + c.itemId() + "#。";
+                }
+                chr.sendPacket(PacketCreator.getShowItemGain(c.itemId(), (short) missing, true));
+                sb.append("#t").append(c.itemId()).append("# +").append(missing).append("\r\n");
+                anyGranted = true;
+            }
+            if (anyGranted) {
+                syncActiveObjectiveProgress(chr);
+            }
+            sb.append("玩家可以回一转教官提交任务。");
+            return sb.toString();
+        }
         int held = chr.getInventory(ItemConstants.getInventoryType(objective.itemId())).countById(objective.itemId());
         int missing = objective.requiredCount() - held;
         if (missing <= 0) {
@@ -1938,6 +2135,15 @@ public final class LifeProofQuest {
         chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
         chr.yellowMessage("生命之证：" + meta.name() + "已达成，请回一转教官完成任务。");
         refreshQuestProgress(chr);
+    }
+
+    /** 所有 KILL/BOSS 任务用 infoex 完成条件，达标时写自定义进度 001 */
+    private static void setCustomProgressComplete(Character chr, QuestMeta meta) {
+        if (chr == null || meta == null) return;
+        QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
+        status.setProgress(CUSTOM_PROGRESS_KEY, "001");
+        chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+        chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
     }
 
     public static void syncActiveObjectiveProgress(Character chr) {
@@ -2111,6 +2317,17 @@ public final class LifeProofQuest {
         return true;
     }
 
+    private static boolean removeMultiItems(Character chr, List<ItemCollection> multi) {
+        if (chr == null || multi == null) return false;
+        for (ItemCollection c : multi) {
+            if (itemCount(chr, c.itemId()) < c.requiredCount()) return false;
+        }
+        for (ItemCollection c : multi) {
+            removeItem(chr, c.itemId(), c.requiredCount());
+        }
+        return true;
+    }
+
     static String questName(int stage, int order, String description) {
         return stageTitle(stage) + "：" + description;
     }
@@ -2172,15 +2389,26 @@ public final class LifeProofQuest {
     private static void appendObjectiveHint(StringBuilder sb, QuestMeta meta, Objective objective) {
         switch (objective.type()) {
             case ITEM -> {
-                sb.append("\r\n需要：#i").append(objective.itemId()).append("# #t").append(objective.itemId())
-                        .append("# #b#c").append(objective.itemId()).append("# / ")
-                        .append(objective.requiredCount()).append("#k");
-                ItemCollection collection = collectionForTask(meta.stage(), meta.task());
-                if (collection != null && !collection.droppers().isEmpty()) {
-                    sb.append("\r\n掉落怪物：");
-                    for (int i = 0; i < collection.droppers().size(); i++) {
-                        if (i > 0) sb.append("、");
-                        sb.append("#o").append(collection.droppers().get(i)).append("#");
+                List<ItemCollection> multi = multiItemCollections(meta);
+                if (multi != null) {
+                    sb.append("\r\n需要收集以下五种水晶各10个：");
+                    for (ItemCollection c : multi) {
+                        sb.append("\r\n#i").append(c.itemId()).append("# #t").append(c.itemId())
+                                .append("# #b#c").append(c.itemId()).append("# / ")
+                                .append(c.requiredCount()).append("#k");
+                    }
+                    sb.append("\r\n掉落区域：神木村、玩具城、水下世界、时间神殿、死龙巢穴");
+                } else {
+                    sb.append("\r\n需要：#i").append(objective.itemId()).append("# #t").append(objective.itemId())
+                            .append("# #b#c").append(objective.itemId()).append("# / ")
+                            .append(objective.requiredCount()).append("#k");
+                    ItemCollection collection = collectionForTask(meta.stage(), meta.task());
+                    if (collection != null && !collection.droppers().isEmpty()) {
+                        sb.append("\r\n掉落怪物：");
+                        for (int i = 0; i < collection.droppers().size(); i++) {
+                            if (i > 0) sb.append("、");
+                            sb.append("#o").append(collection.droppers().get(i)).append("#");
+                        }
                     }
                 }
             }

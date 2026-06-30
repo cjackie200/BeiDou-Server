@@ -123,7 +123,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
     }
 
-    if (!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers && mask == 3)) {
+    if (!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers && (mask == 3 || eligible.length < 2))) {
         eligible = [];
     }
     if (onlyMarriedPlayers && hasNotMarried) {

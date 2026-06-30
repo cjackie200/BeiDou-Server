@@ -450,7 +450,7 @@
         <string name="n1" value="喂! 小家伙! 不能偷我店里的东西啊…"/>
     </imgdir>
     <imgdir name="1022000">
-        <string name="name" value=" 武术教练 "/>
+        <string name="name" value="武术教练"/>
         <string name="d0" value="想成为战士来找我。。。"/>
         <string name="d1" value="想成为战士来找我。。。"/>
         <string name="func" value="战士转职官"/>

@@ -311,6 +311,7 @@ function playerRevive(eim, player) { // player presses ok on the death pop up.
 
 function playerDisconnected(eim, player) {
     if (eim.isEventTeamLackingNow(true, minPlayers, player)) {
+        eim.unregisterPlayer(player);
         end(eim);
     } else {
         playerExit(eim, player);

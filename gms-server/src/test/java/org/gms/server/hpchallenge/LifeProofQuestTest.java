@@ -229,10 +229,10 @@ class LifeProofQuestTest {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(resolveQuestXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml").toFile());
 
-        // NPC_TALK quests now use the standard minimal field 1 format
-        assertQuestInfoContains(document, 5100, "#e任务进度#n");
-        assertQuestInfoContains(document, 5126, "#e任务进度#n");
-        assertQuestInfoContains(document, 5204, "#e任务进度#n");
+        // NPC_TALK quests use progress marker (task label removed in 189e32a4a)
+        assertQuestInfoContains(document, 5100, "@@BD_LP_PROGRESS:5100@@");
+        assertQuestInfoContains(document, 5126, "@@BD_LP_PROGRESS:5126@@");
+        assertQuestInfoContains(document, 5204, "@@BD_LP_PROGRESS:5204@@");
     }
 
     @Test
@@ -349,7 +349,11 @@ class LifeProofQuestTest {
             Element complete = childImgDir(topLevelImgDir(document, meta.questId()), "1");
             if (requiresInfoExCompletionGate(meta)) {
                 gated++;
-                assertEquals(String.format("%03d", meta.objective().requiredCount()),
+                boolean isKillOrBoss = meta.objective().type() == LifeProofQuest.ObjectiveType.KILL
+                        || meta.objective().type() == LifeProofQuest.ObjectiveType.BOSS;
+                String expected = isKillOrBoss ? "001"
+                        : String.format("%03d", meta.objective().requiredCount());
+                assertEquals(expected,
                         childValue(complete, "infoex", "0", "string", "value"),
                         "life proof custom progress quest must require progress before completion: "
                                 + meta.questId());
@@ -373,7 +377,7 @@ class LifeProofQuestTest {
             }
         }
 
-        assertEquals(211, gated, "life proof custom progress completion gate count");
+        assertEquals(380, gated, "life proof custom progress completion gate count");
     }
 
     @Test
@@ -448,8 +452,6 @@ class LifeProofQuestTest {
                 assertEquals(1, countOccurrences(detail, marker),
                         "monster card ring upgrade detail must contain exactly one hook progress marker for quest "
                                 + questId);
-                assertTrue(detail.contains("任务进度"),
-                        "monster card ring upgrade detail must include progress label for quest " + questId);
                 assertFalse(detail.contains("怪物卡戒指升级目标："),
                         "monster card ring detail must not use old technical template: " + questId);
                 assertFalse(detail.contains("当前进度："),
@@ -697,7 +699,9 @@ class LifeProofQuestTest {
     private static void assertCompletionGate(Element complete, LifeProofQuest.QuestMeta meta) {
         LifeProofQuest.Objective objective = meta.objective();
         switch (objective.type()) {
-            case KILL, BOSS -> assertMobGate(complete, meta);
+            case KILL, BOSS -> assertEquals("001",
+                    childValue(complete, "infoex", "0", "string", "value"),
+                    "KILL/BOSS must use infoex completion gate: " + meta.questId());
             case ITEM -> assertItemGate(complete, meta);
             case MESO -> assertEquals(Integer.toString(objective.mesoCost()), childValue(complete, "int", "money"),
                     "meso completion gate must match metadata: " + meta.questId());
@@ -758,8 +762,6 @@ class LifeProofQuestTest {
     }
 
     private static void assertLifeProofQuestDetailComplete(String detail, LifeProofQuest.QuestMeta meta) {
-        assertTrue(detail.contains("#e任务进度#n"),
-                "life proof quest detail must use bold progress header: " + meta.questId());
         assertTrue(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
                 "life proof quest detail must contain hook progress marker: " + meta.questId());
         assertFalse(detail.contains("#a"),
@@ -985,8 +987,8 @@ class LifeProofQuestTest {
 
     private static boolean requiresInfoExCompletionGate(LifeProofQuest.QuestMeta meta) {
         return switch (meta.objective().type()) {
-            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL, SELECT_OPTION,
-                 OPTION_SLOT -> true;
+            case KILL, BOSS, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL,
+                 SELECT_OPTION, OPTION_SLOT -> true;
             default -> false;
         };
     }

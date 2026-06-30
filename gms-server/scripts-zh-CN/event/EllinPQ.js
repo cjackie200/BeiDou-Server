@@ -69,7 +69,7 @@ function setEventRequirements() {
         reqStr += minLevel;
     }
 
-    reqStr += "\r\n    For #radventurers only#k.";
+    reqStr += "\r\n    仅限#r冒险家#k职业。";
 
     reqStr += "\r\n   时间限制: ";
     reqStr += eventTime + " 分钟";
