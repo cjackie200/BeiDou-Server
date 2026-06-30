@@ -144,23 +144,35 @@ Vue 3 项目，使用 Arco Design Pro 模板：
 | `D:\Game\BeiDou\BeiDou-Server\` | `/home/jackie/code/beidou/BeiDou-Server/` | **服务端仓库**（本仓库） |
 | `├─ gms-server/` | — | Java 21 / Spring Boot 服务端 |
 | `├─ gms-ui/` | — | Vue 3 网页管理后台 |
-| `D:\Game\BeiDou\BeiDou-ijl15\` | `/mnt/d/Game/BeiDou/BeiDou-ijl15/` | **ijl15 DLL 项目**（C++ / Detours） |
+| `D:\Game\BeiDou\BeiDou-ijl15\` | `/mnt/d/Game/BeiDou/BeiDou-ijl15/` | **ijl15 DLL 源码库**（C++ / Detours）—— 客户端补丁**不使用**此仓库打包 |
 | `├─ ezorsia/` | — | DLL 源代码（Client.cpp、codecaves.h、AddyLocations.h 等） |
 | `├─ out/Release/` | — | 构建输出 → `ijl15.dll` |
-| `D:\Game\BeiDou\BeiDou-Client\` | `/mnt/d/Game/BeiDou/BeiDou-Client/` | **游戏客户端目录** |
-| `├─ ijl15.dll` | — | 从 ijl15 构建输出复制过来 |
+| `D:\Game\BeiDou\BeiDou-Client\` | `/mnt/d/Game/BeiDou/BeiDou-Client/` | **游戏客户端仓库**（客户端补丁**使用**此仓库打包） |
+| `├─ ijl15.dll` | — | 从 ijl15 构建输出复制过来并提交到此仓库 |
 | `├─ config.ini` | — | 运行时配置（分辨率、服务器 IP 等） |
 
-**部署流程**: 构建 DLL → 复制 `ijl15/out/Release/ijl15.dll` → `BeiDou-Client/ijl15.dll`
+**部署流程**: 构建 DLL → 复制 `ijl15/out/Release/ijl15.dll` → `BeiDou-Client/ijl15.dll` → 在 BeiDou-Client 仓库提交 → 打 tag → 用 Patcher 打包
 
-> **⚠️ 致命规则：修改 ijl15 DLL 源码后必须重新编译并覆盖到客户端目录！**
+> **⚠️ 致命规则 1：修改 ijl15 DLL 源码后必须重新编译并覆盖到客户端仓库！**
 > 编译命令：
 > ```powershell
 > & "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" "D:\Game\BeiDou\BeiDou-ijl15\ezorsia.sln" /p:Configuration=Release /p:Platform=x86 /m:1
 > ```
 > 编译产物：`D:\Game\BeiDou\BeiDou-ijl15\out\Release\ijl15.dll`
-> 覆盖目标：`D:\Game\BeiDou\BeiDou-Client\ijl15.dll`
+> 覆盖目标：`D:\Game\BeiDou\BeiDou-Client\ijl15.dll`（复制后在 BeiDou-Client 仓库中提交）
 > 如果不覆盖，所有 DLL 改动（KillProgressBar 进度条、QuestHook 交互、BossHP 等）都不会在客户端生效。
+
+> **⚠️ 致命规则 2：Patcher 打包时仓库参数绝对不能混！**
+>
+> | 补丁类型 | `-Repo` 参数 | `-Type` | 分支 |
+> |----------|-------------|---------|------|
+> | **服务端** | `D:\Game\BeiDou\BeiDou-Server` | `Server` | `gms-server/` |
+> | **客户端** | `D:\Game\BeiDou\BeiDou-Client` | `Client` | 仓库根目录 |
+>
+> **ijl15 是 DLL 源码库，不是客户端补丁仓库！** 客户端补丁从 BeiDou-Client 打包。
+>
+> 服务端打包前必须 `mvn clean package -pl gms-server -DskipTests` 更新 JAR。
+> 客户端打包前必须编译 ijl15 并复制 DLL 到 BeiDou-Client 并提交。
 
 ## 其他目录
 
