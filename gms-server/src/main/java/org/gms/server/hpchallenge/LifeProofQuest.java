@@ -1456,11 +1456,11 @@ public final class LifeProofQuest {
             String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(mobId);
             chr.yellowMessage("生命之证：" + mobName + " " + next
                     + "/" + objective.requiredCount());
-            boolean justCompleted = current < objective.requiredCount() && next >= objective.requiredCount();
-            if (justCompleted) {
+            boolean allDone = mobProgress(chr, active) >= objective.requiredCount();
+            if (allDone) {
                 setCustomProgressComplete(chr, active);
             }
-            if (mobProgress(chr, active) >= objective.requiredCount()) {
+            if (current < objective.requiredCount() && next >= objective.requiredCount() || allDone) {
                 refreshQuestRules(chr);
             } else {
                 refreshQuestProgress(chr);
@@ -1479,11 +1479,8 @@ public final class LifeProofQuest {
             chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
             chr.yellowMessage("生命之证：" + objective.description() + " " + nextProgress
                     + "/" + objective.requiredCount());
-            boolean justCompleted = current < objective.requiredCount() && nextProgress >= objective.requiredCount();
-            if (justCompleted) {
+            if (current < objective.requiredCount() && nextProgress >= objective.requiredCount()) {
                 setCustomProgressComplete(chr, active);
-            }
-            if (nextProgress >= objective.requiredCount()) {
                 refreshQuestRules(chr);
             } else {
                 refreshQuestProgress(chr);
@@ -2014,6 +2011,7 @@ public final class LifeProofQuest {
         }
         chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
         chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+        setCustomProgressComplete(chr, meta);
         chr.yellowMessage("生命之证：" + meta.name() + " " + objective.requiredCount()
                 + "/" + objective.requiredCount());
     }
