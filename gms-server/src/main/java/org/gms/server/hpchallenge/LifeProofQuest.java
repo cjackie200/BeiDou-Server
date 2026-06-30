@@ -502,9 +502,15 @@ public final class LifeProofQuest {
             // not in the quest status per-mob map. Use questProgressValue which reads the DB source.
             if (meta.kind() == QuestKind.OPTION_SLOT) {
                 ProgressValue progress = questProgressValue(chr, meta);
+                StringBuilder mobNames = new StringBuilder();
+                for (int i = 0; i < objective.targetIds().size(); i++) {
+                    if (i > 0) mobNames.append("/");
+                    mobNames.append(MonsterInformationProvider.getInstance().getMobNameFromId(objective.targetIds().get(i)));
+                }
+                String label = mobNames.isEmpty() ? "击杀进度" : mobNames + " 进度";
                 return List.of(new InteractionHookProgressEntry.Condition(
                         progress.current(), progress.required(),
-                        "击杀进度：#b" + progress.current() + "#k/#r" + progress.required() + "#k"));
+                        label + "：#b" + progress.current() + "#k/#r" + progress.required() + "#k"));
             }
             Quest quest = Quest.getInstance(meta.questId());
             if (quest == null) {
@@ -570,8 +576,11 @@ public final class LifeProofQuest {
                 int npcId = objective.targetIds().isEmpty() ? 0 : objective.targetIds().getFirst();
                 yield "拜访 #p" + npcId + "#：#b" + progress.current() + "#k/1";
             }
-            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE ->
-                    "组队任务：#b" + progress.current() + "#k/#r" + progress.required() + "#k 次";
+            case PQ_ANY -> "组队任务：#b" + progress.current() + "#k/#r" + progress.required() + "#k 次";
+            case PQ_PIRATE ->
+                    "海盗船组队任务：#b" + progress.current() + "#k/#r" + progress.required() + "#k 次";
+            case PQ_TOY_OR_PIRATE ->
+                    "玩具城/海盗船组队任务：#b" + progress.current() + "#k/#r" + progress.required() + "#k 次";
             case SCROLL_100 -> "卷轴强化：#b" + progress.current() + "#k/#r" + progress.required() + "#k 次";
             case JUMP_MANUAL -> "跳跃试炼：#b" + progress.current() + "#k/#r" + progress.required() + "#k 次";
             case SELECT_OPTION -> "选择 1 项附加试炼";
