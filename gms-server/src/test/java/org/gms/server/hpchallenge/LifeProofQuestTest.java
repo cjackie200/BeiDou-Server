@@ -229,10 +229,10 @@ class LifeProofQuestTest {
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                 .parse(resolveQuestXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml").toFile());
 
-        // NPC_TALK quests now use the standard minimal field 1 format
-        assertQuestInfoContains(document, 5100, "#e任务进度#n");
-        assertQuestInfoContains(document, 5126, "#e任务进度#n");
-        assertQuestInfoContains(document, 5204, "#e任务进度#n");
+        // NPC_TALK quests use progress marker (task label removed in 189e32a4a)
+        assertQuestInfoContains(document, 5100, "@@BD_LP_PROGRESS:5100@@");
+        assertQuestInfoContains(document, 5126, "@@BD_LP_PROGRESS:5126@@");
+        assertQuestInfoContains(document, 5204, "@@BD_LP_PROGRESS:5204@@");
     }
 
     @Test
@@ -452,8 +452,6 @@ class LifeProofQuestTest {
                 assertEquals(1, countOccurrences(detail, marker),
                         "monster card ring upgrade detail must contain exactly one hook progress marker for quest "
                                 + questId);
-                assertTrue(detail.contains("任务进度"),
-                        "monster card ring upgrade detail must include progress label for quest " + questId);
                 assertFalse(detail.contains("怪物卡戒指升级目标："),
                         "monster card ring detail must not use old technical template: " + questId);
                 assertFalse(detail.contains("当前进度："),
@@ -764,8 +762,6 @@ class LifeProofQuestTest {
     }
 
     private static void assertLifeProofQuestDetailComplete(String detail, LifeProofQuest.QuestMeta meta) {
-        assertTrue(detail.contains("#e任务进度#n"),
-                "life proof quest detail must use bold progress header: " + meta.questId());
         assertTrue(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
                 "life proof quest detail must contain hook progress marker: " + meta.questId());
         assertFalse(detail.contains("#a"),
