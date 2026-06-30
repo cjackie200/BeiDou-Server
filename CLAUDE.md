@@ -153,6 +153,15 @@ Vue 3 项目，使用 Arco Design Pro 模板：
 
 **部署流程**: 构建 DLL → 复制 `ijl15/out/Release/ijl15.dll` → `BeiDou-Client/ijl15.dll`
 
+> **⚠️ 致命规则：修改 ijl15 DLL 源码后必须重新编译并覆盖到客户端目录！**
+> 编译命令：
+> ```powershell
+> & "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" "D:\Game\BeiDou\BeiDou-ijl15\ezorsia.sln" /p:Configuration=Release /p:Platform=x86 /m:1
+> ```
+> 编译产物：`D:\Game\BeiDou\BeiDou-ijl15\out\Release\ijl15.dll`
+> 覆盖目标：`D:\Game\BeiDou\BeiDou-Client\ijl15.dll`
+> 如果不覆盖，所有 DLL 改动（KillProgressBar 进度条、QuestHook 交互、BossHP 等）都不会在客户端生效。
+
 ## 其他目录
 
 - **`gms-server/handbook/`** — 游戏数据速查表（物品 ID、怪物 ID、地图 ID、任务 ID 等），开发时参考
