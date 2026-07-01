@@ -2429,12 +2429,20 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    // 不可被 Boss 驱散的技能 ID 集合。需要免疫驱散的技能往这里加。
+    private static final Set<Integer> BOSS_DISPEL_IMMUNE_SKILLS = Set.of(
+            Aran.COMBO_ABILITY,         // 21000000  战神连击能力
+            Magician.MAGIC_GUARD,       // 2001002   冒险家魔法盾
+            BlazeWizard.MAGIC_GUARD,    // 12001001  炎术士魔法盾
+            Evan.MAGIC_GUARD            // 22111001  龙神魔法盾
+    );
+
     public void dispel() {
         if (!(GameConfig.getServerBoolean("use_undispel_holy_shield") && this.hasActiveBuff(Bishop.HOLY_SHIELD))) {
             List<BuffStatValueHolder> mbsvhList = getAllStatups();
             for (BuffStatValueHolder mbsvh : mbsvhList) {
                 if (mbsvh.effect.isSkill()) {
-                    if (mbsvh.effect.getBuffSourceId() != Aran.COMBO_ABILITY) { // check discovered thanks to Croosade dev team
+                    if (!BOSS_DISPEL_IMMUNE_SKILLS.contains(mbsvh.effect.getBuffSourceId())) {
                         cancelEffect(mbsvh.effect, false, mbsvh.startTime);
                     }
                 }
