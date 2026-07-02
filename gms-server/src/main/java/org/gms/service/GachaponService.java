@@ -198,14 +198,14 @@ public class GachaponService {
         }
     }
 
-    public void doGachapon(Character player, int gachaponId) {
+    public boolean doGachapon(Character player, int gachaponId) {
         rLock.lock();
         try {
             List<GachaponRewardPoolDO> pools = getActivePools(gachaponId); // 已按ID排序
             if (pools.isEmpty()) {
                 player.message("百宝箱为空，请联系管理员，百宝箱id: " + gachaponId);
                 log.error("百宝箱奖池为空，百宝箱id:{} 抽奖人:[{}] {}", gachaponId, player.getId(), player.getName());
-                return;
+                return false;
             }
 
             int point; // 积分
@@ -238,7 +238,7 @@ public class GachaponService {
                 // 如果三个奖池的权重分别是 8 8 2 / 3 3 3或其他类似的组合，那么有近乎于0（但不等于0）的概率出现null的情况
                 target = pools.getFirst();
             }
-            doReward(player, target);
+            return doReward(player, target);
         } finally {
             rLock.unlock();
         }
@@ -249,12 +249,12 @@ public class GachaponService {
         return activePools.stream().flatMap(pool -> getRewards(pool.getId()).stream()).toList();
     }
 
-    private void doReward(Character player, GachaponRewardPoolDO pool) {
+    private boolean doReward(Character player, GachaponRewardPoolDO pool) {
         List<GachaponRewardDO> poolRewards = getPoolRewards(pool.getId());
         if (poolRewards.isEmpty()) {
             player.message("奖池为空，请联系管理员");
             log.error("百宝箱奖池为空，奖池id:{} 抽奖人:[{}] {}", pool.getId(), player.getId(), player.getName());
-            return;
+            return false;
         }
 
         int random = Randomizer.nextInt(poolRewards.size());
@@ -262,7 +262,7 @@ public class GachaponService {
         Item itemGained = player.getAbstractPlayerInteraction().gainItem(reward.getItemId(), reward.getQuantity(), true, true);
         // 修复背包满导致的空指针
         if (itemGained == null) {
-            return;
+            return false;
         }
         String gachaponMessage = I18nUtil.getMessage("GachaMessage.message1",player.getMap().getMapName(),reward.getQuantity(),ItemInformationProvider.getInstance().getName(reward.getItemId()));
         player.dropMessage(gachaponMessage);
@@ -271,6 +271,7 @@ public class GachaponService {
         if (pool.getNotification()) {
             Server.getInstance().broadcastMessage(player.getWorld(), PacketCreator.gachaponMessage(itemGained, player.getMap().getMapName(), player));
         }
+        return true;
     }
 
     private List<GachaponRewardDO> getPoolRewards(Integer poolId) {
