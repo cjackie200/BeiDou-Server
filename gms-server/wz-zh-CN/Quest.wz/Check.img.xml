@@ -36686,6 +36686,32 @@
             <int name="npc" value="9000066"/>
         </imgdir>
     </imgdir>
+    <imgdir name="30002">
+        <imgdir name="0">
+            <int name="npc" value="9101002"/>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="mob">
+                <imgdir name="0">
+                    <int name="id" value="9409001"/>
+                    <int name="count" value="5"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="30003">
+        <imgdir name="0">
+            <int name="npc" value="9101001"/>
+        </imgdir>
+        <imgdir name="1">
+            <imgdir name="mob">
+                <imgdir name="0">
+                    <int name="id" value="9409000"/>
+                    <int name="count" value="5"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
     <imgdir name="3000">
         <imgdir name="0">
             <int name="npc" value="2020003"/>
