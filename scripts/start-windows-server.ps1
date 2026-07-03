@@ -180,11 +180,7 @@ function Test-MySQLPing {
 
 function Test-PortListening {
     param([int]$Port)
-    $netstatOut = netstat -ano 2>$null
-    if ($netstatOut | Select-String ":$Port\s") {
-        return $true
-    }
-    $tcpConn = Get-NetTCPConnection -LocalPort $Port -ErrorAction SilentlyContinue
+    $tcpConn = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
     if ($tcpConn) {
         return $true
     }
