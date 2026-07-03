@@ -442,8 +442,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
     }
 
-    public void doGachapon() {
-        gachaponService.doGachapon(getPlayer(), npc);
+    public boolean doGachapon() {
+        return gachaponService.doGachapon(getPlayer(), npc);
     }
 
     // public void doGachapon() {

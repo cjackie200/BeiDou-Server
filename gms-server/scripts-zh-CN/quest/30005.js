@@ -82,9 +82,10 @@ function end(mode, type, selection)
 	    {
 			//第一层对话
 			var rewardExp = Math.max(1, Math.floor(ExpTable.getExpNeededForLevel(qm.getLevel()) * 0.1));
-            qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！\r\n\r\n获得经验值：#b" + rewardExp + "#k（当前等级升级所需经验的10%）\r\n获得金币：#b1000000#k");
+            qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！\r\n\r\n获得经验值：#b" + rewardExp + "#k（当前等级升级所需经验的10%）\r\n获得金币：#b1000000#k\r\n获得道具：#b#i2340000# #t2340000# x5#k");
 			qm.getPlayer().gainExp(rewardExp, true, true);
 			qm.gainMeso(1000000);
+			qm.gainItem(2340000, 5);
 			qm.forceCompleteQuest();
 	    }
 		else

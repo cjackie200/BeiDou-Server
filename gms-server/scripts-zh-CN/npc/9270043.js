@@ -1,57 +1,100 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+// Island Gachapon helper. Kept in sync with the common Gachapon scripts so any
+// direct route to this NPC also opens tickets in batches.
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-//Gachapon
-
-var ids = [2000004, 2020012, 2000005, 2030007, 2022027, 2040001, 2041002, 2040805, 2040702, 2043802, 2040402, 2043702, 1302022, 1322021, 1322026, 1302026, 1442017, 1082147, 1102043, 1442016, 1402012, 1302027, 1322027, 1322025, 1312012, 1062000, 1332020, 1302028, 1372002, 1002033, 1092022, 1302021, 1102041, 1102042, 1322024, 1082148, 1002012, 1322012, 1322022, 1002020, 1302013, 1082146, 1442014, 1002096, 1302017, 1442012, 1322010, 1442011, 1442018, 1092011, 1092014, 1302003, 1432001, 1312011, 1002088, 1041020, 1322015, 1442004, 1422008, 1302056, 1432000, 1382001, 1041053, 1060014, 1050053, 1051032, 1050073, 1061036, 1002253, 1002034, 1051025, 1050067, 1051052, 1002072, 1002144, 1051054, 1050069, 1372007, 1050056, 1050074, 1002254, 1002274, 1002218, 1051055, 1382010, 1002246, 1050039, 1382007, 1372000, 1002013, 1050072, 1002036, 1002243, 1372008, 1382008, 1382011, 1092021, 1051034, 1050047, 1040019, 1041031, 1051033, 1002153, 1002252, 1051024, 1002153, 1050068, 1382003, 1382006, 1050055, 1051031, 1050025, 1002155, 1002245, 1452004, 1452023, 1060057, 1040071, 1002137, 1462009, 1452017, 1040025, 1041027, 1452005, 1452007, 1061057, 1472006, 1472019, 1060084, 1472028, 1002179, 1082074, 1332015, 1432001, 1060071, 1472007, 1472002, 1051009, 1061037, 1332016, 1332034, 1472020, 1102084, 1102086, 1102042, 1032026, 1082149];
-var status = 0;
+var status = -1;
+var normalTicketId = 5220000;
+var advancedTicketId = 5451000;
+var batchLimit = 50;
+var selectedTicketId = 0;
 
 function start() {
-    if (cm.haveItem(5451000)) {
-        cm.gainItem(5451000, -1);
-        cm.doGachapon();
-        cm.dispose();
-    } else if (cm.haveItem(5220000)) {
-        cm.sendYesNo("你可以使用快乐百宝箱。你想使用你的快乐百宝券吗？");
-    } else {
-        cm.sendSimple("欢迎来到冒险岛的快乐百宝箱。我可以为您做些什么呢？\r\n#L0#什么是快乐百宝箱？#l\r\n#L1#在哪里可以购买快乐百宝券？#l");
+    status = -1;
+
+    if (cm.haveItem(advancedTicketId)) {
+        selectedTicketId = advancedTicketId;
+    } else if (cm.haveItem(normalTicketId)) {
+        selectedTicketId = normalTicketId;
     }
+
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == 1 && cm.haveItem(5220000)) {
-        cm.doGachapon();
+    if (mode < 0) {
         cm.dispose();
-    } else {
-        if (mode > 0) {
-            status++;
-            if (selection == 0) {
-                cm.sendNext("玩转快乐百宝箱，赢得稀有卷轴、装备、椅子、技能书和其他酷炫物品！你只需要一张 #b快乐百宝券#k 就有机会获得随机组合的物品。");
-            } else if (selection == 1) {
-                cm.sendNext("快乐百宝券可以在#r现金商店#k购买，可以使用NX或枫叶点购买。点击屏幕右下角的红色商店图标进入#r现金商店#k，就能购买快乐百宝券。");
-                cm.dispose();
-            } else if (status == 2) {
-                cm.sendNext("你会在快乐百宝箱中找到各种各样的物品，也更容易获得与当前城镇相关的物品和卷轴。");
-                cm.dispose();
-            }
-        }
+        return;
     }
+
+    if (mode == 1) {
+        status++;
+    } else {
+        status--;
+    }
+
+    if (status == 0) {
+        if (selectedTicketId > 0) {
+            var count = cm.itemQuantity(selectedTicketId);
+            var openCount = Math.min(count, batchLimit);
+            cm.sendYesNo("你当前有 #b" + count + "#k 张#t" + selectedTicketId + "#。\r\n"
+                    + "是否连续开启 #b" + openCount + "#k 张？\r\n"
+                    + "#r背包空间不足时会自动停止。#k");
+        } else {
+            cm.sendSimple("欢迎来到冒险岛快乐百宝箱。\r\n\r\n"
+                    + "#L0#什么是快乐百宝箱？#l\r\n"
+                    + "#L1#在哪里可以买快乐百宝券？#l");
+        }
+    } else if (status == 1 && selectedTicketId > 0) {
+        openTickets(selectedTicketId);
+        cm.dispose();
+    } else if (status == 1) {
+        if (selection == 0) {
+            cm.sendNext("玩转快乐百宝箱，赢得稀有卷轴、装备、椅子、技能书和其他物品！");
+        } else {
+            cm.sendNext("快乐百宝券可以在#r现金商店#k购买。");
+        }
+    } else {
+        cm.dispose();
+    }
+}
+
+function openTickets(ticketId) {
+    var opened = 0;
+    var failed = false;
+    var count = Math.min(cm.itemQuantity(ticketId), batchLimit);
+
+    for (var i = 0; i < count; i++) {
+        if (!hasRewardSpace()) {
+            break;
+        }
+
+        cm.gainItem(ticketId, -1, false);
+        if (!cm.doGachapon()) {
+            cm.gainItem(ticketId, 1, false);
+            failed = true;
+            break;
+        }
+        opened++;
+    }
+
+    if (opened <= 0) {
+        cm.sendOk("没有成功开启百宝券，请确认背包空间足够，或联系管理员检查该百宝箱奖池。");
+        return;
+    }
+
+    var message = "本次已开启 #b" + opened + "#k 张#t" + ticketId + "#。\r\n"
+            + "剩余：#b" + cm.itemQuantity(ticketId) + "#k 张。";
+    if (opened >= batchLimit && cm.haveItem(ticketId)) {
+        message += "\r\n\r\n为了避免一次开启过多造成卡顿，每次最多开启 #b" + batchLimit + "#k 张。";
+    }
+    if (!hasRewardSpace()) {
+        message += "\r\n\r\n#r背包空间不足，已自动停止。#k";
+    }
+    if (failed) {
+        message += "\r\n\r\n#r奖池抽取失败，已停止并退还未成功消耗的券。#k";
+    }
+    cm.sendOk(message);
+}
+
+function hasRewardSpace() {
+    return cm.canHold(1302000) && cm.canHold(2000000) && cm.canHold(3010001) && cm.canHold(4000000);
 }
