@@ -42,6 +42,7 @@ function action(mode, type, selection) {
 
         if (missingSp <= 0) {
             cm.sendOk(text + "你的技能点没有缺口，不需要修复。");
+            cm.dispose();
             return;
         }
 
