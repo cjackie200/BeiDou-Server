@@ -390,7 +390,7 @@ function formatMinutes(minutes) {
  * @returns {number} 在线分钟数
  */
 function getOnlineMinute() {
-	return Math.floor(cm.getOnlineTime() / 60);
+	return Math.max(0, Math.floor(cm.getOnlineTime() / 60));
 }
 
 

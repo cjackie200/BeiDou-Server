@@ -1,5 +1,6 @@
 package org.gms.net.server.task;
 
+import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
 import org.gms.constants.string.ExtendKey;
 import org.gms.net.server.Server;
@@ -10,8 +11,10 @@ import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Slf4j
 public class OnlineTimeTask implements Runnable {
     private static final int RESET_HOUR = 6;
+    private static final int UPDATE_INTERVAL_SECONDS = 5;
     private final AtomicReference<LocalDate> lastUpdated = new AtomicReference<>(getRewardCycleDate());
     private final AtomicBoolean running = new AtomicBoolean(false);
 
@@ -23,31 +26,49 @@ public class OnlineTimeTask implements Runnable {
         if (!running.compareAndSet(false, true)) {
             return;
         }
+
         LocalDate now = getRewardCycleDate();
         boolean isNextDay = now.isAfter(lastUpdated.get());
-        for (final Channel chan : Server.getInstance().getAllChannels()) {
-            if (chan == null || chan.getPlayerStorage() == null) {
-                continue;
-            }
-            for (final Character chr : chan.getPlayerStorage().getAllCharacters()) {
-                if (chr == null) {
+        try {
+            for (final Channel chan : Server.getInstance().getAllChannels()) {
+                if (chan == null || chan.getPlayerStorage() == null) {
                     continue;
                 }
-                int onlineTime = chr.getCurrentOnlineTime();
-                if (onlineTime == -1) {
-                    // 避免异常导致running恒为true
-                    onlineTime = getInitialOnlineTime(chr);
-                } else {
-                    onlineTime += 5;
+                for (final Character chr : chan.getPlayerStorage().getAllCharacters()) {
+                    updateCharacterOnlineTime(chr, isNextDay);
                 }
-                if (isNextDay || onlineTime < 0) {
-                    onlineTime = 0;
-                }
-                chr.setCurrentOnlineTime(onlineTime);
             }
+        } finally {
+            lastUpdated.set(now);
+            running.set(false);
         }
-        running.set(false);
-        lastUpdated.set(now);
+    }
+
+    private void updateCharacterOnlineTime(Character chr, boolean isNextDay) {
+        if (chr == null) {
+            return;
+        }
+        try {
+            int previousOnlineTime = chr.getCurrentOnlineTime();
+            int onlineTime = previousOnlineTime == -1
+                    ? getInitialOnlineTime(chr)
+                    : previousOnlineTime + UPDATE_INTERVAL_SECONDS;
+            if (isNextDay || onlineTime < 0) {
+                onlineTime = 0;
+            }
+            chr.setCurrentOnlineTime(onlineTime);
+            if (shouldPersistOnlineTime(previousOnlineTime, onlineTime, isNextDay)) {
+                chr.updateOnlineTime();
+            }
+        } catch (Exception e) {
+            log.warn("Failed to update online reward time for character {}", chr.getId(), e);
+        }
+    }
+
+    private boolean shouldPersistOnlineTime(int previousOnlineTime, int onlineTime, boolean isNextDay) {
+        return isNextDay
+                || previousOnlineTime == -1
+                || previousOnlineTime / 60 != onlineTime / 60;
     }
 
     private int getInitialOnlineTime(Character chr) {

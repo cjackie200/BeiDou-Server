@@ -37,7 +37,7 @@ function action(mode, type, selection)
 			//第一层对话
 	        if (cm.getOnlineTime() < 3600)
 			{
-	             time = "今日在线时间：#e#r"+ Math.floor(cm.getOnlineTime() / 60) +"#k#n 分钟\r\n\r\n";
+	             time = "今日在线时间：#e#r"+ Math.max(0, Math.floor(cm.getOnlineTime() / 60)) +"#k#n 分钟\r\n\r\n";
 		    } 
 			else 
 			{
@@ -69,7 +69,7 @@ function action(mode, type, selection)
 		else if (status == 1 )
 		{
 			//第二层对话
-			var currentOnlineTime = Math.floor(cm.getOnlineTime() / 60);
+			var currentOnlineTime = Math.max(0, Math.floor(cm.getOnlineTime() / 60));
 			AwardItem(selection, getStatus, currentOnlineTime, OnlineLevel[selection], giftContent[selection]);
 			cm.sendOk(msg);
 			cm.dispose();

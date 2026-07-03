@@ -24,7 +24,7 @@ function action(mode, type, selection) {
             return;
         }
         if (selection === 2) {
-            toggleRule(PetItemIgnore.SCROLLS_10_60, "10%和60%卷轴");
+            toggleRule(PetItemIgnore.SCROLLS_EXCEPT_WHITE, "除祝福卷轴外的卷轴");
             return;
         }
         if (selection === 3) {
@@ -57,7 +57,7 @@ function showMenu() {
     text += "设置会应用到当前已召唤的宠物。\r\n";
     text += "需要宠物装备了道具排除能力，拾取时才会生效。\r\n\r\n";
     text += optionLine(1, "屏蔽补血/补蓝道具", cm.getPlayer().hasSpecialPetIgnoreRuleForSummonedPets(PetItemIgnore.HP_MP_CONSUMABLES));
-    text += optionLine(2, "屏蔽10%和60%卷轴", cm.getPlayer().hasSpecialPetIgnoreRuleForSummonedPets(PetItemIgnore.SCROLLS_10_60));
+    text += optionLine(2, "屏蔠除祝福卷轴外的卷轴", cm.getPlayer().hasSpecialPetIgnoreRuleForSummonedPets(PetItemIgnore.SCROLLS_EXCEPT_WHITE));
 
     var equipLevel = cm.getPlayer().getSummonedPetIgnoreEquipBelowLevel();
     var equipText = equipLevel > 0 ? "屏蔽" + equipLevel + "级以下装备" : "屏蔽X级以下装备";
