@@ -33,6 +33,7 @@ import org.gms.util.Randomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
+import org.gms.server.life.Element;
 import org.gms.util.Pair;
 
 import java.util.HashMap;
@@ -75,6 +76,11 @@ public class Equip extends Item {
     private byte level, itemLevel;
     private short flag;
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
+    private short incRMAF;  // Fire elemental MATK bonus (125 = +25%)
+    private short incRMAS;  // Poison elemental MATK bonus
+    private short incRMAI;  // Ice elemental MATK bonus
+    private short incRMAL;  // Lightning elemental MATK bonus
+    private short elemDefault;  // Default element charge level (75 = 75%)
     private float itemExp;
     private int ringid = -1;
     private boolean wear = false;
@@ -114,6 +120,11 @@ public class Equip extends Item {
         ret.jump = jump;
         ret.flag = flag;
         ret.vicious = vicious;
+        ret.incRMAF = incRMAF;
+        ret.incRMAS = incRMAS;
+        ret.incRMAI = incRMAI;
+        ret.incRMAL = incRMAL;
+        ret.elemDefault = elemDefault;
         ret.upgradeSlots = upgradeSlots;
         ret.itemLevel = itemLevel;
         ret.itemExp = itemExp;
@@ -204,6 +215,45 @@ public class Equip extends Item {
         return vicious;
     }
 
+    public short getIncRMAF() {
+        return incRMAF;
+    }
+
+    public short getIncRMAS() {
+        return incRMAS;
+    }
+
+    public short getIncRMAI() {
+        return incRMAI;
+    }
+
+    public short getIncRMAL() {
+        return incRMAL;
+    }
+
+    public short getElemDefault() {
+        return elemDefault;
+    }
+
+    /**
+     * Returns the elemental MATK bonus (in hundredths) for a given skill element.
+     * 125 = +25%, 110 = +10%, 0 = no bonus.
+     */
+    public short getElementBonus(Element element) {
+        switch (element) {
+            case FIRE:
+                return incRMAF;
+            case POISON:
+                return incRMAS;
+            case ICE:
+                return incRMAI;
+            case LIGHTING:
+                return incRMAL;
+            default:
+                return 0;
+        }
+    }
+
     @Override
     public void setFlag(short flag) {
         this.flag = flag;
@@ -271,6 +321,26 @@ public class Equip extends Item {
 
     public void setVicious(short vicious) {
         this.vicious = vicious;
+    }
+
+    public void setIncRMAF(short incRMAF) {
+        this.incRMAF = incRMAF;
+    }
+
+    public void setIncRMAS(short incRMAS) {
+        this.incRMAS = incRMAS;
+    }
+
+    public void setIncRMAI(short incRMAI) {
+        this.incRMAI = incRMAI;
+    }
+
+    public void setIncRMAL(short incRMAL) {
+        this.incRMAL = incRMAL;
+    }
+
+    public void setElemDefault(short elemDefault) {
+        this.elemDefault = elemDefault;
     }
 
     public void setUpgradeSlots(byte upgradeSlots) {

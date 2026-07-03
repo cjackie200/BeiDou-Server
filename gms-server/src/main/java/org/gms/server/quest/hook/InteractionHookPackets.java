@@ -11,6 +11,7 @@ import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
+import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,8 @@ public final class InteractionHookPackets {
             return;
         }
         sendClientRuntimeConfig(client);
+        // Send weapon elemental bonus config to client DLL
+        client.sendPacket(PacketCreator.elementalWeaponConfig(client.getPlayer()));
         clearAllRules(client);
         sendCharacterQuestRules(client);
         sendMapNpcRules(client);

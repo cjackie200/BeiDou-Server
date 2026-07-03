@@ -2691,6 +2691,10 @@ public class Character extends AbstractCharacterObject {
         if (getMessenger() != null) {
             getWorldServer().updateMessenger(getMessenger(), getName(), getWorld(), client.getChannel());
         }
+        // Notify client DLL of weapon elemental bonuses
+        if (client != null) {
+            client.sendPacket(PacketCreator.elementalWeaponConfig(this));
+        }
     }
 
     public void cancelDiseaseExpireTask() {

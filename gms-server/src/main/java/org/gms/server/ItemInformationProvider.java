@@ -574,6 +574,7 @@ public class ItemInformationProvider {
         ret.put("cursed", DataTool.getInt("cursed", info, 0));
         ret.put("success", DataTool.getInt("success", info, 0));
         ret.put("fs", DataTool.getInt("fs", info, 0));
+        ret.put("elemDefault", DataTool.getInt("elemDefault", info, 0));
 
         equipStatsCache.put(itemId, ret);
         return ret;
@@ -1239,6 +1240,16 @@ public class ItemInformationProvider {
                     nEquip.setMp((short) stat.getValue().intValue());
                 } else if (stat.getKey().equals("tuc")) {
                     nEquip.setUpgradeSlots((byte) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAF")) {
+                    nEquip.setIncRMAF((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAS")) {
+                    nEquip.setIncRMAS((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAI")) {
+                    nEquip.setIncRMAI((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAL")) {
+                    nEquip.setIncRMAL((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("elemDefault")) {
+                    nEquip.setElemDefault((short) stat.getValue().intValue());
                 } else if (isUntradeableRestricted(equipId)) {  // thanks Hyun & Thora for showing an issue with more than only "Untradeable" items being flagged as such here
                     short flag = nEquip.getFlag();
                     flag |= ItemConstants.UNTRADEABLE;

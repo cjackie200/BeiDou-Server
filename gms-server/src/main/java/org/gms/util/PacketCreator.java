@@ -608,6 +608,26 @@ public class PacketCreator {
     }
 
     /**
+     * Sends the equipped weapon's elemental bonus configuration to the client DLL.
+     * Opcode 0x1006 — values are in hundredths (125 = +25%).
+     * Sequence: FIRE, POISON, ICE, LIGHTNING, elemDefault
+     */
+    public static Packet elementalWeaponConfig(org.gms.client.Character chr) {
+        OutPacket p = OutPacket.create(SendOpcode.ELEMENTAL_WEAPON_CONFIG);
+        Item weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
+        if (weapon instanceof Equip wpn) {
+            p.writeShort(wpn.getIncRMAF());
+            p.writeShort(wpn.getIncRMAS());
+            p.writeShort(wpn.getIncRMAI());
+            p.writeShort(wpn.getIncRMAL());
+            p.writeShort(wpn.getElemDefault());
+        } else {
+            for (int i = 0; i < 5; i++) p.writeShort(0);
+        }
+        return p;
+    }
+
+    /**
      * Gets a login failed packet.
      * <p>
      * Possible values for <code>reason</code>:<br> 3: ID deleted or blocked<br>
