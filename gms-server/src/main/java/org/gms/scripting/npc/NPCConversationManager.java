@@ -417,6 +417,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void openShopNPC(int id) {
         Shop shop = ShopFactory.getInstance().getShop(id);
+        c.getPlayer().setShop(null);
+        c.removeClickedNPC();
 
         if (shop != null) {
             shop.sendShop(c);

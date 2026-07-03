@@ -26,6 +26,8 @@ import org.gms.client.autoban.AutobanFactory;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.server.Shop;
+import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,8 +40,15 @@ public final class NPCShopHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         byte bmode = p.readByte();
+        Shop shop = c.getPlayer().getShop();
         switch (bmode) {
         case 0: { // mode 0 = buy :)
+            if (shop == null) {
+                log.warn("Player {} tried to buy from a closed npc shop.", c.getPlayer().getName());
+                c.removeClickedNPC();
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
             short slot = p.readShort();// slot
             int itemId = p.readInt();
             short quantity = p.readShort();
@@ -50,20 +59,32 @@ public final class NPCShopHandler extends AbstractPacketHandler {
                 c.disconnect(true, false);
                 return;
             }
-            c.getPlayer().getShop().buy(c, slot, itemId, quantity);
+            shop.buy(c, slot, itemId, quantity);
             break;
         }
         case 1: { // sell ;)
+            if (shop == null) {
+                log.warn("Player {} tried to sell to a closed npc shop.", c.getPlayer().getName());
+                c.removeClickedNPC();
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
             short slot = p.readShort();
             int itemId = p.readInt();
             short quantity = p.readShort();
-            c.getPlayer().getShop().sell(c, ItemConstants.getInventoryType(itemId), slot, quantity);
+            shop.sell(c, ItemConstants.getInventoryType(itemId), slot, quantity);
             break;
         }
         case 2: { // recharge ;)
+            if (shop == null) {
+                log.warn("Player {} tried to recharge in a closed npc shop.", c.getPlayer().getName());
+                c.removeClickedNPC();
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
 
             byte slot = (byte) p.readShort();
-            c.getPlayer().getShop().recharge(c, slot);
+            shop.recharge(c, slot);
             break;
         }
         case 3: // leaving :(
