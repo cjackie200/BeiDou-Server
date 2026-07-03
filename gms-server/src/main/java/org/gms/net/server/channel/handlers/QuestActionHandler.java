@@ -144,7 +144,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 if (quest.canStart(player, npc) || isRemoteScriptQuest(questid)) {
                     boolean success = QuestScriptManager.getInstance().checkFunctionExists(c, questid, npc, "start");
                     boolean hasScriptRequirement = quest.hasScriptRequirement(false);
-                    if ((hasScriptRequirement || isRemoteScriptQuest(questid)) && success) {
+                    if (success && (hasScriptRequirement || isRemoteScriptQuest(questid) || quest.isAutoStart())) {
                         QuestScriptManager.getInstance().start(c, questid, npc);
                     } else {
                         quest.start(player, npc);
@@ -167,7 +167,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 if (quest.canComplete(player, scriptNpc)) {
                     boolean success = QuestScriptManager.getInstance().checkFunctionExists(c, questid, scriptNpc, "end");
                     boolean hasScriptRequirement = quest.hasScriptRequirement(true);
-                    if ((hasScriptRequirement || isRemoteScriptQuest(questid)) && success) {
+                    if (success && (hasScriptRequirement || isRemoteScriptQuest(questid) || quest.isAutoStart())) {
                         QuestScriptManager.getInstance().end(c, questid, scriptNpc);
                     } else {
                         if (p.available() >= 2) {

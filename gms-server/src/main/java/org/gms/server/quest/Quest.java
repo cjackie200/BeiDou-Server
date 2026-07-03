@@ -128,11 +128,6 @@ public class Quest {
     private Quest(int id) {
         this.id = (short) id;
 
-        Data reqData = questReq.getChildByPath(String.valueOf(id));
-        if (reqData == null) {//most likely infoEx
-            return;
-        }
-
         if (questInfo != null) {
             Data reqInfo = questInfo.getChildByPath(String.valueOf(id));
             if (reqInfo != null) {
@@ -152,6 +147,11 @@ public class Quest {
             } else {
                 log.warn("No quest data for id {}", id);
             }
+        }
+
+        Data reqData = questReq.getChildByPath(String.valueOf(id));
+        if (reqData == null) {//most likely infoEx
+            return;
         }
 
         Data startReqData = reqData.getChildByPath("0");
