@@ -41,7 +41,9 @@ public class ShopFactory {
         Shop ret = Shop.createFromDB(id, isShopId);
         if (ret != null) {
             shops.put(ret.getId(), ret);
-            npcShops.put(ret.getNpcId(), ret);
+            if (!isShopId) {
+                npcShops.put(ret.getNpcId(), ret);
+            }
         } else if (isShopId) {
             shops.put(id, null);
         } else {

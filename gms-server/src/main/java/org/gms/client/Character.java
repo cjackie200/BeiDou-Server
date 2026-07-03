@@ -5819,12 +5819,50 @@ public class Character extends AbstractCharacterObject {
     private int getChangedJobSp(Job newJob) {
         int curSp = getUsedSp(newJob) + getJobRemainingSp(newJob);
         int spGain = 0;
-        int expectedSp = getJobLevelSp(level - 10, newJob, GameConstants.getJobBranch(newJob));
+        int expectedSp = getExpectedJobSp(newJob);
         if (curSp < expectedSp) {
             spGain += (expectedSp - curSp);
         }
 
         return getSpGain(spGain, curSp, newJob);
+    }
+
+    public boolean isSkillPointRepairSupported() {
+        return !isGM() && GameConstants.getJobBranch(job) > 0 && !GameConstants.hasSPTable(job);
+    }
+
+    public int getCurrentJobExpectedSp() {
+        if (!isSkillPointRepairSupported()) {
+            return 0;
+        }
+
+        return getExpectedJobSp(job);
+    }
+
+    public int getCurrentJobOwnedSp() {
+        if (!isSkillPointRepairSupported()) {
+            return 0;
+        }
+
+        return getUsedSp(job) + getJobRemainingSp(job);
+    }
+
+    public int getMissingJobSp() {
+        if (!isSkillPointRepairSupported()) {
+            return 0;
+        }
+
+        return Math.max(0, getCurrentJobExpectedSp() - getCurrentJobOwnedSp());
+    }
+
+    public int repairMissingJobSp() {
+        int missingSp = getMissingJobSp();
+        if (missingSp <= 0) {
+            return 0;
+        }
+
+        gainSp(missingSp, GameConstants.getSkillBook(job.getId()), false);
+        return missingSp;
     }
 
     private int getUsedSp(Job job) {
@@ -5847,6 +5885,10 @@ public class Character extends AbstractCharacterObject {
         }
 
         return 3 * level + GameConstants.getChangeJobSpUpgrade(jobBranch);
+    }
+
+    private int getExpectedJobSp(Job job) {
+        return Math.min(getJobLevelSp(level - 10, job, GameConstants.getJobBranch(job)), getJobMaxSp(job));
     }
 
     private int getJobMaxSp(Job job) {
