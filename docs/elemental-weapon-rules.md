@@ -15,6 +15,13 @@
   `90/123/150/183/213`。
 - 附加 INT 按等级档位序号 `* 2` 配置；70/103/130/163/193 档分别为
   `2/4/6/8/10`。
+- 不保留额外 LUK 加成。
+- 元素杖定位为专属任务投放装备，装备限制字段统一为 `tradeBlock = 1`、
+  `only = 1`、`notSale = 1`、`storageBlock = 1`，对应不可交易、唯一持有、
+  不可售卖、不可存仓库。
+- 装备描述采用两行倍率信息加一行法师风格文案，例如 `火属性：200%`、
+  `异属性：50%`、`星焰在赤曜杖心永恒燃烧。`；不可交易、不可存仓、唯一持有等
+  限制不写入描述正文，交给装备限制标签体现。
 
 ## 字段对应
 
@@ -25,16 +32,16 @@
 - 圣属性：`incRMAH`
 - 未匹配元素倍率：`elemDefault`
 
-当前客户端原始 Data 和服务端 WZ 的元素杖节点必须同向维护：
+当前客户端 Data 和服务端中文 WZ 的元素杖节点必须同向维护：
 
-- 服务端属性资源：`gms-server/wz/Character.wz/Weapon`。当前仓库没有
-  `wz-zh-CN/Character.wz` 覆盖树，装备属性仍由 base Character WZ 承载。
-- 服务端中文名称：`gms-server/wz-zh-CN/String.wz/Eqp.img.xml`。
+- 服务端属性资源：`gms-server/wz-zh-CN/Character.wz/Weapon`。
+- 服务端中文名称与描述：`gms-server/wz-zh-CN/String.wz/Eqp.img.xml`。
 - 客户端中文资源：`BeiDou-Client/Data/Character/Weapon` 和
   `BeiDou-Client/Data/String/Eqp.img`。
 - 不维护 `gms-server/wz/String.wz/Eqp.img.xml` 或 `BeiDou-Client/EN` 的英文回退名称。
 
-每个元素杖节点只应存在一个主属性 `incRMA*` 和一个 `elemDefault`。
+每个元素杖节点只应存在一个主属性 `incRMA*` 和一个 `elemDefault`，且不应存在非零
+`incLUK`。
 
 ## 当前装备清单
 
@@ -105,7 +112,7 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 
 ## 投放规划
 
-以下为计划口径，尚未落地为任务脚本、任务 WZ 或掉落配置。
+当前已落地装备限制属性和装备描述；完整任务链、任务 WZ 和掉落 / 兑换配置仍为计划口径。
 
 70 级元素短杖建议放到魔法师一转教官汉斯 `1032001`：
 
