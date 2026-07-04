@@ -2214,13 +2214,14 @@ public final class LifeProofQuest {
     private static void syncOptionSlotProgress(Character chr, QuestMeta meta) {
         HpChallengeService.LifeProofOptionalProgress selected = selectedOptional(chr, meta);
         if (chr == null || meta == null || selected == null
-                || selected.completed()
                 || chr.getQuestStatus(meta.questId()) != QuestStatus.Status.STARTED.getId()) {
             return;
         }
         Objective objective = objective(meta.stage(), selected.task());
         int progress = selected.currentCount();
-        if (objective.type() == ObjectiveType.ITEM) {
+        if (selected.completed()) {
+            progress = objective.requiredCount();
+        } else if (objective.type() == ObjectiveType.ITEM) {
             progress = Math.min(objective.requiredCount(), itemCount(chr, objective.itemId()));
             HpChallengeService.setLifeProofOptionalProgress(chr, meta.stage(), meta.selectorNo(), progress);
         } else if (objective.type() == ObjectiveType.MESO) {
@@ -2235,7 +2236,11 @@ public final class LifeProofQuest {
         QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
         String before = status.getProgress(CUSTOM_PROGRESS_KEY);
         if (value.equals(before)) {
-            refreshQuestProgress(chr);
+            if ("001".equals(value)) {
+                refreshQuestRules(chr);
+            } else {
+                refreshQuestProgress(chr);
+            }
             return;
         }
         status.setProgress(CUSTOM_PROGRESS_KEY, value);

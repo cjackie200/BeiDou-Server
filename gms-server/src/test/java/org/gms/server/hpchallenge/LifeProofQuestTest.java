@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -384,6 +385,45 @@ class LifeProofQuestTest {
                 .filter(LifeProofQuestTest::requiresInfoExCompletionGate)
                 .count();
         assertEquals(expectedGated, gated, "life proof custom progress completion gate count");
+    }
+
+    @Test
+    void completedOptionalSlotSyncsInfoexGateForNpcCompletion() throws Exception {
+        DataSource dataSource = mock(DataSource.class);
+        Connection connection = mock(Connection.class);
+        PreparedStatement statement = mock(PreparedStatement.class);
+        ResultSet resultSet = mock(ResultSet.class);
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, false);
+        when(resultSet.getString("task_key")).thenReturn("optional_6");
+        when(resultSet.getInt("current_count")).thenReturn(999);
+        when(resultSet.getInt("required_count")).thenReturn(999);
+        when(resultSet.getBoolean("active")).thenReturn(false);
+        when(resultSet.getBoolean("completed")).thenReturn(true);
+        when(resultSet.getInt("task_order")).thenReturn(1);
+
+        installApplicationContext(dataSource);
+        try {
+            Character chr = newLifeProofCharacter(Job.FP_ARCHMAGE);
+            int questId = LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE,
+                    LifeProofQuest.OPTION_SLOT_START);
+            Quest quest = Quest.getInstance(questId);
+            QuestStatus status = new QuestStatus(quest, QuestStatus.Status.STARTED,
+                    LifeProofQuest.branchInfo(HpChallengeService.JobBranch.MAGE).instructorNpcId());
+            status.setProgress(PROGRESS_KEY, "000");
+            chr.getQuests().put((short) questId, status);
+
+            assertFalse(quest.canComplete(chr, status.getNpc()));
+
+            LifeProofQuest.syncActiveObjectiveProgress(chr);
+
+            assertEquals("001", chr.getQuest(quest).getProgress(PROGRESS_KEY));
+            assertTrue(quest.canComplete(chr, status.getNpc()));
+        } finally {
+            setUpApplicationContext();
+        }
     }
 
     @Test
@@ -814,6 +854,33 @@ class LifeProofQuestTest {
 
     private static Object bean(Map<Class<?>, Object> beans, Class<?> type) {
         return beans.computeIfAbsent(type, key -> mock(key));
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static void installApplicationContext(DataSource dataSource) throws Exception {
+        ApplicationContext context = mock(ApplicationContext.class);
+        ServiceProperty serviceProperty = new ServiceProperty();
+        MessageSource messageSource = mock(MessageSource.class);
+        ConfigService configService = mock(ConfigService.class);
+        Map<Class<?>, Object> beans = new HashMap<>();
+
+        when(configService.loadGameConfigs()).thenReturn(List.of());
+        when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        beans.put(ServiceProperty.class, serviceProperty);
+        beans.put(MessageSource.class, messageSource);
+        beans.put(ConfigService.class, configService);
+        beans.put(DataSource.class, dataSource);
+
+        doAnswer(invocation -> bean(beans, invocation.getArgument(0)))
+                .when(context).getBean(any(Class.class));
+        doAnswer(invocation -> bean(beans, invocation.getArgument(1)))
+                .when(context).getBean(anyString(), any(Class.class));
+
+        Field field = org.gms.manager.ServerManager.class.getDeclaredField("applicationContext");
+        field.setAccessible(true);
+        field.set(null, context);
     }
 
     private static Character newLifeProofCharacter(Job job) {
