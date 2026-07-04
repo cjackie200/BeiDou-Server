@@ -107,6 +107,9 @@ public class Quest {
         for (short questId = MonsterCardRingQuest.CLAIM_QUEST_ID; questId <= MonsterCardRingQuest.LAST_QUEST_ID; questId++) {
             exploitableQuests.add(questId);
         }
+        for (short questId = ElementalResonanceQuest.FIRST_QUEST_ID; questId <= ElementalResonanceQuest.LAST_QUEST_ID; questId++) {
+            exploitableQuests.add(questId);
+        }
     }
 
     protected short id;

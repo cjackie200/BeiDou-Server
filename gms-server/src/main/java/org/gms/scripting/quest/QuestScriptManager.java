@@ -28,6 +28,7 @@ import org.gms.server.hpchallenge.LifeProofQuest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractScriptManager;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.Quest;
 
@@ -56,6 +57,9 @@ public class QuestScriptManager extends AbstractScriptManager {
         ScriptEngine engine = getInvocableScriptEngine("quest/" + questid + ".js", c);
         if (engine == null && MonsterCardRingQuest.isQuestId(questid)) {
             engine = getInvocableScriptEngine("quest/monsterCardRing.js");
+        }
+        if (engine == null && ElementalResonanceQuest.isQuestId(questid)) {
+            engine = getInvocableScriptEngine("quest/elementalResonance.js");
         }
         if (engine == null && LifeProofQuest.isVisibleQuestId(questid)) {
             engine = getInvocableScriptEngine("quest/lifeProof.js", c);
