@@ -110,6 +110,7 @@ import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -612,18 +613,30 @@ public class PacketCreator {
      * Opcode 0x1006 — values are in hundredths (125 = +25%).
      * Sequence: FIRE, POISON, ICE, LIGHTNING, elemDefault
      */
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PacketCreator.class);
+
     public static Packet elementalWeaponConfig(org.gms.client.Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.ELEMENTAL_WEAPON_CONFIG);
         Item weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
-        if (weapon instanceof Equip wpn) {
-            p.writeShort(wpn.getIncRMAF());
-            p.writeShort(wpn.getIncRMAS());
-            p.writeShort(wpn.getIncRMAI());
-            p.writeShort(wpn.getIncRMAL());
-            p.writeShort(wpn.getElemDefault());
-        } else {
-            for (int i = 0; i < 5; i++) p.writeShort(0);
+        int itemId = weapon != null ? weapon.getItemId() : 0;
+
+        // Read element stats directly from WZ to bypass DB serialization issues
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        Map<String, Integer> stats = ii.getEquipStats(itemId);
+        short f = 0, s = 0, i = 0, l = 0, ed = 0;
+        if (stats != null) {
+            f = stats.getOrDefault("RMAF", 0).shortValue();
+            s = stats.getOrDefault("RMAS", 0).shortValue();
+            i = stats.getOrDefault("RMAI", 0).shortValue();
+            l = stats.getOrDefault("RMAL", 0).shortValue();
+            ed = stats.getOrDefault("elemDefault", 0).shortValue();
         }
+        p.writeShort(f);
+        p.writeShort(s);
+        p.writeShort(i);
+        p.writeShort(l);
+        p.writeShort(ed);
+        log.info("ElementalWeaponConfig itemId={} F={} S={} I={} L={} elemDefault={}", itemId, f, s, i, l, ed);
         return p;
     }
 

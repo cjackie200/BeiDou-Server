@@ -114,6 +114,13 @@ yarn lint-staged       # 运行 lint-staged (ESLint + Prettier + Stylelint)
 
 Flyway 迁移脚本位于 `src/main/resources/db/migration/` — 版本化 SQL 文件（`V1.0.0__...`、`V1.0.1__...`），启动时自动执行以创建/演进数据库结构。
 
+> **⚠️ 致命规则：新增 Flyway 迁移前必须确认最新版本号！**
+>
+> 1. **先列出已有迁移文件**：`ls gms-server/src/main/resources/db/migration/ | sort -V | tail -5`
+> 2. **取最后一个版本号 +1** 作为新迁移的版本号
+> 3. **版本号不一致会导致 Flyway 启动失败**（Found more than one migration with version X.X.X）
+> 4. **版本号不能只看文件名规律**，有的旧文件可能是 V1.8.x 但最新已是 V1.11.x，必须实际列出确认
+
 ### 服务端：国际化 (i18n)
 
 资源文件位于 `src/main/resources/i18n/`，包含 `zh_CN` 和 `en_US` 两种语言：
