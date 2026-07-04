@@ -57,7 +57,6 @@ import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.StatEffect;
 import org.gms.server.TimerManager;
-import org.gms.server.hpchallenge.HpChallengeService;
 import org.gms.server.life.LifeFactory.BanishInfo;
 import org.gms.server.loot.LootManager;
 import org.gms.server.maps.AbstractAnimatedMapObject;
@@ -620,14 +619,6 @@ public class Monster extends AbstractLoadedLife {
         Map<Character, Long> soloExpDist = new HashMap<>();
 
         Map<Integer, Character> mapPlayers = map.getMapAllPlayers();
-        Set<Integer> challengeParticipants = new HashSet<>();
-        for (Integer characterId : takenDamage.keySet()) {
-            Character chr = mapPlayers.get(characterId);
-            if (chr != null && challengeParticipants.add(chr.getId())) {
-                HpChallengeService.onMonsterKilled(chr, getId());
-            }
-        }
-
         int totalEntries = 0;   // counts "participant parties", players who no longer are available in the map is an "independent party"
         for (Entry<Integer, AtomicLong> e : takenDamage.entrySet()) {
             Character chr = mapPlayers.get(e.getKey());

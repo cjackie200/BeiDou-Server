@@ -35,6 +35,9 @@ public final class HpChallengeService {
 
     static final int MIN_LEVEL = 120;
     static final int MAX_STAT = 30000;
+    static final int MAIN_COMMON_KILL_REQUIRED = 200;
+    static final int MAIN_JOB_KILL_REQUIRED = 500;
+    static final int OPTIONAL_KILL_REQUIRED = 999;
     private static final int OPTIONAL_REQUIRED_COUNT = 3;
     private static final Set<Integer> INSTRUCTOR_IDS = Set.of(1022000, 1032001, 1012100, 1052001, 1090000);
     private static final Map<Integer, StageConfig> STAGES = buildStages();
@@ -957,18 +960,30 @@ public final class HpChallengeService {
     }
 
     private static Task t(String key, TaskGroup group, TargetType type, int required, String description, int... ids) {
-        return new Task(key, group, type, required, description,
+        return new Task(key, group, type, normalizedRequired(group, type, required), description,
                 Arrays.stream(ids).boxed().collect(Collectors.toList()), 0, 0, false);
     }
 
     private static Task tPerMob(String key, TaskGroup group, TargetType type, int required, String description, int... ids) {
-        return new Task(key, group, type, required, description,
+        return new Task(key, group, type, normalizedRequired(group, type, required), description,
                 Arrays.stream(ids).boxed().collect(Collectors.toList()), 0, 0, true);
     }
 
     private static Task opt(int optionNo, TargetType type, int required, String description, int... ids) {
-        return new Task("optional_" + optionNo, TaskGroup.OPTIONAL, type, required, description,
+        return new Task("optional_" + optionNo, TaskGroup.OPTIONAL, type,
+                normalizedRequired(TaskGroup.OPTIONAL, type, required), description,
                 Arrays.stream(ids).boxed().collect(Collectors.toList()), optionNo, 0, false);
+    }
+
+    private static int normalizedRequired(TaskGroup group, TargetType type, int required) {
+        if (type != TargetType.KILL) {
+            return required;
+        }
+        return switch (group) {
+            case MAIN_COMMON -> MAIN_COMMON_KILL_REQUIRED;
+            case MAIN_JOB -> MAIN_JOB_KILL_REQUIRED;
+            case OPTIONAL -> OPTIONAL_KILL_REQUIRED;
+        };
     }
 
     private static Task mesoOpt(int optionNo, int meso) {

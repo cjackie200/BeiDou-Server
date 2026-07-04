@@ -120,8 +120,7 @@ public final class LifeProofQuest {
                      int mesoCost, boolean perMob) {
         boolean isCustomProgress() {
             return switch (type) {
-                case KILL, BOSS, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL,
-                     OPTION_SLOT -> true;
+                case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL, OPTION_SLOT -> true;
                 default -> false;
             };
         }
@@ -1473,46 +1472,9 @@ public final class LifeProofQuest {
         }
 
         QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
-        if (objective.perMob()) {
-            String mobStr = status.getProgress(mobId);
-            int current = parseProgress(mobStr);
-            int next = Math.min(objective.requiredCount(), current + 1);
-            status.setProgress(mobId, StringUtil.getLeftPaddedStr(Integer.toString(next), '0', 3));
-            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
-            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-            String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(mobId);
-            chr.yellowMessage("生命之证：" + mobName + " " + next
-                    + "/" + objective.requiredCount());
-            boolean allDone = mobProgress(chr, active) >= objective.requiredCount();
-            if (allDone) {
-                setCustomProgressComplete(chr, active);
-            }
-            if (current < objective.requiredCount() && next >= objective.requiredCount() || allDone) {
-                refreshQuestRules(chr);
-            } else {
-                refreshQuestProgress(chr);
-            }
-        } else {
-            int current = 0;
-            for (int targetId : objective.targetIds()) {
-                current = Math.max(current, parseProgress(status.getProgress(targetId)));
-            }
-            int nextProgress = Math.min(objective.requiredCount(), current + 1);
-            String progress = StringUtil.getLeftPaddedStr(Integer.toString(nextProgress), '0', 3);
-            for (int targetId : objective.targetIds()) {
-                status.setProgress(targetId, progress);
-            }
-            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
-            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-            chr.yellowMessage("生命之证：" + objective.description() + " " + nextProgress
-                    + "/" + objective.requiredCount());
-            if (current < objective.requiredCount() && nextProgress >= objective.requiredCount()) {
-                setCustomProgressComplete(chr, active);
-                refreshQuestRules(chr);
-            } else {
-                refreshQuestProgress(chr);
-            }
-        }
+        boolean changed = migrateLegacyMainMobProgress(status, objective);
+        changed = syncSharedMainMobProgress(status, objective) || changed;
+        refreshMainMobProgress(chr, active, status, changed);
     }
 
     public static boolean shouldSkipGenericMobProgress(Character chr, QuestStatus status, int mobId) {
@@ -1523,10 +1485,74 @@ public final class LifeProofQuest {
         if (meta == null || meta != currentStartedVisibleQuest(chr)) {
             return false;
         }
+        if (meta.kind() != QuestKind.OPTION_SLOT) {
+            return false;
+        }
         Objective objective = effectiveObjective(chr, meta);
         return objective != null
                 && (objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS)
                 && objective.targetIds().contains(mobId);
+    }
+
+    private static boolean migrateLegacyMainMobProgress(QuestStatus status, Objective objective) {
+        if (status == null || objective == null
+                || objective.type() != ObjectiveType.KILL && objective.type() != ObjectiveType.BOSS) {
+            return false;
+        }
+        boolean changed = false;
+        int legacyProgress = parseProgress(status.getProgress(CUSTOM_PROGRESS_KEY));
+        if (legacyProgress > 0) {
+            int migratedCount = Math.min(legacyProgress, objective.requiredCount());
+            String migratedProgress = paddedProgress(migratedCount);
+            for (int targetId : objective.targetIds()) {
+                if (parseProgress(status.getProgress(targetId)) < migratedCount) {
+                    status.setProgress(targetId, migratedProgress);
+                    changed = true;
+                }
+            }
+        }
+        if (status.removeProgress(CUSTOM_PROGRESS_KEY)) {
+            changed = true;
+        }
+        return changed;
+    }
+
+    private static boolean syncSharedMainMobProgress(QuestStatus status, Objective objective) {
+        if (status == null || objective == null || objective.perMob()
+                || objective.type() != ObjectiveType.KILL && objective.type() != ObjectiveType.BOSS) {
+            return false;
+        }
+        int progress = 0;
+        for (int targetId : objective.targetIds()) {
+            progress = Math.max(progress, parseProgress(status.getProgress(targetId)));
+        }
+        progress = Math.min(objective.requiredCount(), progress);
+        String value = paddedProgress(progress);
+        boolean changed = false;
+        for (int targetId : objective.targetIds()) {
+            if (!value.equals(status.getProgress(targetId))) {
+                status.setProgress(targetId, value);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    private static void refreshMainMobProgress(Character chr, QuestMeta meta, QuestStatus status, boolean changed) {
+        if (changed) {
+            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+        }
+        Quest quest = Quest.getInstance(meta.questId());
+        if (quest.canComplete(chr, completeNpcId(meta))) {
+            refreshQuestRules(chr);
+            return;
+        }
+        refreshQuestProgress(chr);
+    }
+
+    private static String paddedProgress(int progress) {
+        return StringUtil.getLeftPaddedStr(Integer.toString(Math.max(0, progress)), '0', 3);
     }
 
     public static void syncActiveMesoProgress(Character chr) {
@@ -2038,7 +2064,6 @@ public final class LifeProofQuest {
         }
         chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
         chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-        setCustomProgressComplete(chr, meta);
         chr.yellowMessage("生命之证：" + meta.name() + " " + objective.requiredCount()
                 + "/" + objective.requiredCount());
     }
@@ -2164,15 +2189,6 @@ public final class LifeProofQuest {
         refreshQuestProgress(chr);
     }
 
-    /** 所有 KILL/BOSS 任务用 infoex 完成条件，达标时写自定义进度 001 */
-    private static void setCustomProgressComplete(Character chr, QuestMeta meta) {
-        if (chr == null || meta == null) return;
-        QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
-        status.setProgress(CUSTOM_PROGRESS_KEY, "001");
-        chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
-        chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-    }
-
     public static void syncActiveObjectiveProgress(Character chr) {
         QuestMeta active = currentStartedVisibleQuest(chr);
         if (active == null) {
@@ -2182,7 +2198,15 @@ public final class LifeProofQuest {
             syncOptionSlotProgress(chr, active);
             return;
         }
-        if (effectiveObjective(chr, active).type() == ObjectiveType.MESO) {
+        Objective objective = effectiveObjective(chr, active);
+        if (objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS) {
+            QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
+            boolean changed = migrateLegacyMainMobProgress(status, objective);
+            changed = syncSharedMainMobProgress(status, objective) || changed;
+            refreshMainMobProgress(chr, active, status, changed);
+            return;
+        }
+        if (objective.type() == ObjectiveType.MESO) {
             syncMesoProgress(chr, active);
         }
     }

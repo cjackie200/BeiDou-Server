@@ -191,6 +191,10 @@ public class QuestStatus {
         //this.setUpdated();
     }
 
+    public boolean removeProgress(int id) {
+        return progress.remove(id) != null;
+    }
+
     public boolean madeProgress() {
         return progress.size() > 0;
     }

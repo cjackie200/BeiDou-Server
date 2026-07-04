@@ -6854,14 +6854,18 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void raiseQuestMobCount(int id) {
+        raiseQuestMobCount(id, true);
+    }
+
+    private void raiseQuestMobCount(int id, boolean notifyLifeProof) {
         // It seems nexon uses monsters that don't exist in the WZ (except string) to merge multiple mobs together for these 3 monsters.
         // We also want to run mobKilled for both since there are some quest that don't use the updated ID...
         if (id == MobId.GREEN_MUSHROOM || id == MobId.DEJECTED_GREEN_MUSHROOM) {
-            raiseQuestMobCount(MobId.GREEN_MUSHROOM_QUEST);
+            raiseQuestMobCount(MobId.GREEN_MUSHROOM_QUEST, false);
         } else if (id == MobId.ZOMBIE_MUSHROOM || id == MobId.ANNOYED_ZOMBIE_MUSHROOM) {
-            raiseQuestMobCount(MobId.ZOMBIE_MUSHROOM_QUEST);
+            raiseQuestMobCount(MobId.ZOMBIE_MUSHROOM_QUEST, false);
         } else if (id == MobId.GHOST_STUMP || id == MobId.SMIRKING_GHOST_STUMP) {
-            raiseQuestMobCount(MobId.GHOST_STUMP_QUEST);
+            raiseQuestMobCount(MobId.GHOST_STUMP_QUEST, false);
         }
 
         int lastQuestProcessed = 0;
@@ -6886,6 +6890,9 @@ public class Character extends AbstractCharacterObject {
             }
         } catch (Exception e) {
             log.warn("Character.mobKilled. chrId {}, last quest processed: {}", this.id, lastQuestProcessed, e);
+        }
+        if (notifyLifeProof) {
+            HpChallengeService.onMonsterKilled(this, id);
         }
     }
 

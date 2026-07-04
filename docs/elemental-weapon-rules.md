@@ -44,7 +44,9 @@
 每个元素杖节点只应存在一个主属性 `incRMA*` 和一个 `elemDefault`，且 `incLUK`
 必须与 `incINT` 相同。
 服务端 `Equip` 和 `inventoryequipment` 需要完整保存 `incRMAF/incRMAS/incRMAI/incRMAL/incRMAH/elemDefault`。
-未发布元素杖不写历史实例刷新迁移；本地测试装备直接清理后重新发放。
+任务链正式发布时，`V1.11.29__cleanup_premature_elemental_weapons.sql` 会一次性清理全服提前获得的
+70-193 档元素杖，覆盖角色背包/身上、仓库、现金仓、雇佣商店、MTS 和全服仓库等持久化位置。
+发布后的正常任务产出不应通过启动代码反复清理。
 
 ## 当前装备清单
 

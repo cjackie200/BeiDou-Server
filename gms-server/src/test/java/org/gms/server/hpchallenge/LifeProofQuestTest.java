@@ -312,11 +312,11 @@ class LifeProofQuestTest {
         for (LifeProofQuest.QuestMeta meta : LifeProofQuest.allVisibleQuests()) {
             String detail = childValue(topLevelImgDir(info, meta.questId()), "string", "1");
             assertLifeProofQuestDetailComplete(detail, meta);
-            // All quest types now use the minimal field 1 format with progress marker.
+            if (usesNativeMobProgress(meta)) {
+                assertMobProgressMacros(check, detail, meta);
+                continue;
+            }
             assertLifeProofProgressMarker(detail, meta.questId());
-            // No #a macros in WZ — client-side kill tracking replaced by server-generated conditions.
-            assertFalse(Pattern.compile("#a").matcher(detail).find(),
-                    "life proof quest detail must not use client #a macro: " + meta.questId());
         }
     }
 
@@ -349,11 +349,7 @@ class LifeProofQuestTest {
             Element complete = childImgDir(topLevelImgDir(document, meta.questId()), "1");
             if (requiresInfoExCompletionGate(meta)) {
                 gated++;
-                boolean isKillOrBoss = meta.objective().type() == LifeProofQuest.ObjectiveType.KILL
-                        || meta.objective().type() == LifeProofQuest.ObjectiveType.BOSS;
-                String expected = isKillOrBoss ? "001"
-                        : String.format("%03d", meta.objective().requiredCount());
-                assertEquals(expected,
+                assertEquals(String.format("%03d", meta.objective().requiredCount()),
                         childValue(complete, "infoex", "0", "string", "value"),
                         "life proof custom progress quest must require progress before completion: "
                                 + meta.questId());
@@ -361,6 +357,13 @@ class LifeProofQuestTest {
                         childValue(complete, "int", "infoNumber"),
                         "life proof custom progress quest should use its own quest progress by default: "
                                 + meta.questId());
+                continue;
+            }
+
+            if (usesNativeMobProgress(meta)) {
+                assertMobGate(complete, meta);
+                assertNull(childImgDirOrNull(complete, "infoex"),
+                        "native mob life proof quest must not keep legacy infoex gate: " + meta.questId());
                 continue;
             }
 
@@ -377,7 +380,10 @@ class LifeProofQuestTest {
             }
         }
 
-        assertEquals(380, gated, "life proof custom progress completion gate count");
+        long expectedGated = LifeProofQuest.allVisibleQuests().stream()
+                .filter(LifeProofQuestTest::requiresInfoExCompletionGate)
+                .count();
+        assertEquals(expectedGated, gated, "life proof custom progress completion gate count");
     }
 
     @Test
@@ -699,9 +705,11 @@ class LifeProofQuestTest {
     private static void assertCompletionGate(Element complete, LifeProofQuest.QuestMeta meta) {
         LifeProofQuest.Objective objective = meta.objective();
         switch (objective.type()) {
-            case KILL, BOSS -> assertEquals("001",
-                    childValue(complete, "infoex", "0", "string", "value"),
-                    "KILL/BOSS must use infoex completion gate: " + meta.questId());
+            case KILL, BOSS -> {
+                assertMobGate(complete, meta);
+                assertNull(childImgDirOrNull(complete, "infoex"),
+                        "KILL/BOSS must use native mob completion gate: " + meta.questId());
+            }
             case ITEM -> assertItemGate(complete, meta);
             case MESO -> assertEquals(Integer.toString(objective.mesoCost()), childValue(complete, "int", "money"),
                     "meso completion gate must match metadata: " + meta.questId());
@@ -762,10 +770,15 @@ class LifeProofQuestTest {
     }
 
     private static void assertLifeProofQuestDetailComplete(String detail, LifeProofQuest.QuestMeta meta) {
-        assertTrue(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
-                "life proof quest detail must contain hook progress marker: " + meta.questId());
-        assertFalse(detail.contains("#a"),
-                "life proof quest detail must not use client #a macro: " + meta.questId());
+        if (usesNativeMobProgress(meta)) {
+            assertFalse(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
+                    "native mob life proof quest detail must not use hook progress marker: " + meta.questId());
+        } else {
+            assertTrue(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
+                    "life proof quest detail must contain hook progress marker: " + meta.questId());
+            assertFalse(detail.contains("#a"),
+                    "non-mob life proof quest detail must not use client #a macro: " + meta.questId());
+        }
         assertFalse(detail.contains("..."),
                 "quest detail must not rely on placeholder ellipsis for quest " + meta.questId());
     }
@@ -987,10 +1000,16 @@ class LifeProofQuestTest {
 
     private static boolean requiresInfoExCompletionGate(LifeProofQuest.QuestMeta meta) {
         return switch (meta.objective().type()) {
-            case KILL, BOSS, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL,
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL,
                  SELECT_OPTION, OPTION_SLOT -> true;
             default -> false;
         };
+    }
+
+    private static boolean usesNativeMobProgress(LifeProofQuest.QuestMeta meta) {
+        return meta.kind() == LifeProofQuest.QuestKind.MAIN
+                && (meta.objective().type() == LifeProofQuest.ObjectiveType.KILL
+                || meta.objective().type() == LifeProofQuest.ObjectiveType.BOSS);
     }
 
     private static Element childImgDirOrNull(Element parent, String childName) {

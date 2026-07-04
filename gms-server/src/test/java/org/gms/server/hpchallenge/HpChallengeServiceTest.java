@@ -52,6 +52,24 @@ class HpChallengeServiceTest {
         assertEquals("BOSS", invoke(commonTasks.get(5), "targetType").toString());
     }
 
+    @Test
+    void killCountsAreNormalizedForNativeMobQuestProgress() throws Exception {
+        for (Object stage : stages().values()) {
+            for (Object task : listValue(stage, "commonTasks")) {
+                assertKillCount(task);
+            }
+            Map<?, ?> jobTasks = mapValue(stage, "jobTasks");
+            for (Object tasks : jobTasks.values()) {
+                for (Object task : (List<?>) tasks) {
+                    assertKillCount(task);
+                }
+            }
+            for (Object task : listValue(stage, "optionalTasks")) {
+                assertKillCount(task);
+            }
+        }
+    }
+
     private static void assertStage(Object stage, int requiredLevel, int mageHp, int mageMp, int warriorHp,
                                     int brawlerHp, int otherHp, int commonTasks, int mesoCost) throws Exception {
         assertEquals(requiredLevel, intValue(stage, "requiredLevel"));
@@ -73,6 +91,21 @@ class HpChallengeServiceTest {
         boolean foundMesoTask = listValue(stage, "optionalTasks").stream()
                 .anyMatch(task -> intValueUnchecked(task, "mesoCost") == mesoCost);
         assertTrue(foundMesoTask, "missing meso task " + mesoCost);
+    }
+
+    private static void assertKillCount(Object task) throws Exception {
+        if (!"KILL".equals(invoke(task, "targetType").toString())) {
+            return;
+        }
+        String group = invoke(task, "group").toString();
+        int expected = switch (group) {
+            case "MAIN_COMMON" -> 200;
+            case "MAIN_JOB" -> 500;
+            case "OPTIONAL" -> 999;
+            default -> throw new AssertionError("unknown task group " + group);
+        };
+        assertEquals(expected, intValue(task, "requiredCount"),
+                "normalized KILL count for " + group + " task " + invoke(task, "key"));
     }
 
     @SuppressWarnings("unchecked")

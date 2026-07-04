@@ -3086,7 +3086,7 @@
     <imgdir name="5105">
         <string name="name" value="生命之证 I：参与击杀蝙蝠魔" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5105@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8150000# #r#a51051##k" />
         <string name="2" value="已完成：生命之证 I：参与击杀蝙蝠魔。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="6" />
@@ -3096,7 +3096,7 @@
     <imgdir name="5106">
         <string name="name" value="生命之证 I：击杀月牙牛魔王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5106@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130100# #r#a51061##k" />
         <string name="2" value="已完成：生命之证 I：击杀月牙牛魔王。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="7" />
@@ -3106,7 +3106,7 @@
     <imgdir name="5107">
         <string name="name" value="生命之证 I：击杀长枪牛魔王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5107@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130101# #r#a51071##k" />
         <string name="2" value="已完成：生命之证 I：击杀长枪牛魔王。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="8" />
@@ -3116,7 +3116,7 @@
     <imgdir name="5108">
         <string name="name" value="生命之证 I：击杀指挥官骷髅" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5108@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130103# #r#a51081##k" />
         <string name="2" value="已完成：生命之证 I：击杀指挥官骷髅。" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="9" />
@@ -3262,7 +3262,7 @@
     <imgdir name="5130">
         <string name="name" value="生命之证 I：参与击杀蝙蝠魔" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5130@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8150000# #r#a51301##k" />
         <string name="2" value="已完成：生命之证 I：参与击杀蝙蝠魔。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="6" />
@@ -3272,7 +3272,7 @@
     <imgdir name="5131">
         <string name="name" value="生命之证 I：击杀时之鬼兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5131@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o6300100# #r#a51311##k" />
         <string name="2" value="已完成：生命之证 I：击杀时之鬼兵。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="7" />
@@ -3282,7 +3282,7 @@
     <imgdir name="5132">
         <string name="name" value="生命之证 I：击杀时之鬼将" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5132@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o6400100# #r#a51321##k" />
         <string name="2" value="已完成：生命之证 I：击杀时之鬼将。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="8" />
@@ -3292,7 +3292,7 @@
     <imgdir name="5133">
         <string name="name" value="生命之证 I：击杀强化死灵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5133@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130300# #r#a51331##k" />
         <string name="2" value="已完成：生命之证 I：击杀强化死灵。" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="9" />
@@ -3438,7 +3438,7 @@
     <imgdir name="5155">
         <string name="name" value="生命之证 I：参与击杀蝙蝠魔" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5155@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8150000# #r#a51551##k" />
         <string name="2" value="已完成：生命之证 I：参与击杀蝙蝠魔。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="6" />
@@ -3448,7 +3448,7 @@
     <imgdir name="5156">
         <string name="name" value="生命之证 I：击杀哈维" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5156@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140001# #r#a51561##k" />
         <string name="2" value="已完成：生命之证 I：击杀哈维。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="7" />
@@ -3458,7 +3458,7 @@
     <imgdir name="5157">
         <string name="name" value="生命之证 I：击杀血腥哈维" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5157@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140002# #r#a51571##k" />
         <string name="2" value="已完成：生命之证 I：击杀血腥哈维。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="8" />
@@ -3468,7 +3468,7 @@
     <imgdir name="5158">
         <string name="name" value="生命之证 I：击杀狼人" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5158@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130200# #r#a51581##k" />
         <string name="2" value="已完成：生命之证 I：击杀狼人。" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="9" />
@@ -3614,7 +3614,7 @@
     <imgdir name="5180">
         <string name="name" value="生命之证 I：参与击杀蝙蝠魔" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5180@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8150000# #r#a51801##k" />
         <string name="2" value="已完成：生命之证 I：参与击杀蝙蝠魔。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="6" />
@@ -3624,7 +3624,7 @@
     <imgdir name="5181">
         <string name="name" value="生命之证 I：击杀死灵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5181@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130010# #r#a51811##k" />
         <string name="2" value="已完成：生命之证 I：击杀死灵。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="7" />
@@ -3634,7 +3634,7 @@
     <imgdir name="5182">
         <string name="name" value="生命之证 I：击杀恶灵附身的娃娃" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5182@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o6230400# #r#a51821##k" />
         <string name="2" value="已完成：生命之证 I：击杀恶灵附身的娃娃。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="8" />
@@ -3644,7 +3644,7 @@
     <imgdir name="5183">
         <string name="name" value="生命之证 I：击杀蓝帽海贼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5183@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7140000# #r#a51831##k" />
         <string name="2" value="已完成：生命之证 I：击杀蓝帽海贼。" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="9" />
@@ -3790,7 +3790,7 @@
     <imgdir name="5205">
         <string name="name" value="生命之证 I：参与击杀蝙蝠魔" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5205@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8150000# #r#a52051##k" />
         <string name="2" value="已完成：生命之证 I：参与击杀蝙蝠魔。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="6" />
@@ -3800,7 +3800,7 @@
     <imgdir name="5206">
         <string name="name" value="生命之证 I：击杀刺鳍鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5206@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130020# #r#a52061##k" />
         <string name="2" value="已完成：生命之证 I：击杀刺鳍鱼。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="7" />
@@ -3810,7 +3810,7 @@
     <imgdir name="5207">
         <string name="name" value="生命之证 I：击杀火焰猎犬" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5207@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140500# #r#a52071##k" />
         <string name="2" value="已完成：生命之证 I：击杀火焰猎犬。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="8" />
@@ -3820,7 +3820,7 @@
     <imgdir name="5208">
         <string name="name" value="生命之证 I：击杀双刀蓝帽海贼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5208@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7160000# #r#a52081##k" />
         <string name="2" value="已完成：生命之证 I：击杀双刀蓝帽海贼。" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="9" />
@@ -3926,7 +3926,7 @@
     <imgdir name="5226">
         <string name="name" value="生命之证 II：击杀三色半人马" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5226@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140101# #r#a52261##k\r\n#o8140102# #r#a52262##k\r\n#o8140103# #r#a52263##k" />
         <string name="2" value="已完成：生命之证 II：击杀三色半人马。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="2" />
@@ -3936,7 +3936,7 @@
     <imgdir name="5227">
         <string name="name" value="生命之证 II：参与击杀火焰龙或天鹰" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5227@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8180000# #r#a52271##k\r\n#o8180001# #r#a52272##k" />
         <string name="2" value="已完成：生命之证 II：参与击杀火焰龙或天鹰。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="3" />
@@ -3946,7 +3946,7 @@
     <imgdir name="5228">
         <string name="name" value="生命之证 II：击杀邪恶双刀蜥蜴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5228@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150201# #r#a52281##k" />
         <string name="2" value="已完成：生命之证 II：击杀邪恶双刀蜥蜴。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="4" />
@@ -3956,7 +3956,7 @@
     <imgdir name="5229">
         <string name="name" value="生命之证 II：击杀短刃蜥蜴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5229@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140110# #r#a52291##k" />
         <string name="2" value="已完成：生命之证 II：击杀短刃蜥蜴。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="5" />
@@ -3966,7 +3966,7 @@
     <imgdir name="5230">
         <string name="name" value="生命之证 II：击杀犀牛龙怪" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5230@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140703# #r#a52301##k" />
         <string name="2" value="已完成：生命之证 II：击杀犀牛龙怪。" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="6" />
@@ -4072,7 +4072,7 @@
     <imgdir name="5251">
         <string name="name" value="生命之证 II：击杀三色半人马" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5251@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140101# #r#a52511##k\r\n#o8140102# #r#a52512##k\r\n#o8140103# #r#a52513##k" />
         <string name="2" value="已完成：生命之证 II：击杀三色半人马。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="2" />
@@ -4082,7 +4082,7 @@
     <imgdir name="5252">
         <string name="name" value="生命之证 II：参与击杀火焰龙或天鹰" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5252@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8180000# #r#a52521##k\r\n#o8180001# #r#a52522##k" />
         <string name="2" value="已完成：生命之证 II：参与击杀火焰龙或天鹰。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="3" />
@@ -4092,7 +4092,7 @@
     <imgdir name="5253">
         <string name="name" value="生命之证 II：击杀红飞龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5253@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150300# #r#a52531##k" />
         <string name="2" value="已完成：生命之证 II：击杀红飞龙。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="4" />
@@ -4102,7 +4102,7 @@
     <imgdir name="5254">
         <string name="name" value="生命之证 II：击杀蓝飞龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5254@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150301# #r#a52541##k" />
         <string name="2" value="已完成：生命之证 II：击杀蓝飞龙。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="5" />
@@ -4112,7 +4112,7 @@
     <imgdir name="5255">
         <string name="name" value="生命之证 II：击杀黑飞龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5255@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150302# #r#a52551##k" />
         <string name="2" value="已完成：生命之证 II：击杀黑飞龙。" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="6" />
@@ -4218,7 +4218,7 @@
     <imgdir name="5276">
         <string name="name" value="生命之证 II：击杀三色半人马" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5276@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140101# #r#a52761##k\r\n#o8140102# #r#a52762##k\r\n#o8140103# #r#a52763##k" />
         <string name="2" value="已完成：生命之证 II：击杀三色半人马。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="2" />
@@ -4228,7 +4228,7 @@
     <imgdir name="5277">
         <string name="name" value="生命之证 II：参与击杀火焰龙或天鹰" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5277@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8180000# #r#a52771##k\r\n#o8180001# #r#a52772##k" />
         <string name="2" value="已完成：生命之证 II：参与击杀火焰龙或天鹰。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="3" />
@@ -4238,7 +4238,7 @@
     <imgdir name="5278">
         <string name="name" value="生命之证 II：击杀哈维" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5278@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140001# #r#a52781##k" />
         <string name="2" value="已完成：生命之证 II：击杀哈维。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="4" />
@@ -4248,7 +4248,7 @@
     <imgdir name="5279">
         <string name="name" value="生命之证 II：击杀血腥哈维" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5279@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140002# #r#a52791##k" />
         <string name="2" value="已完成：生命之证 II：击杀血腥哈维。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="5" />
@@ -4258,7 +4258,7 @@
     <imgdir name="5280">
         <string name="name" value="生命之证 II：击杀蓝海龟龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5280@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140700# #r#a52801##k" />
         <string name="2" value="已完成：生命之证 II：击杀蓝海龟龙。" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="6" />
@@ -4364,7 +4364,7 @@
     <imgdir name="5301">
         <string name="name" value="生命之证 II：击杀三色半人马" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5301@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140101# #r#a53011##k\r\n#o8140102# #r#a53012##k\r\n#o8140103# #r#a53013##k" />
         <string name="2" value="已完成：生命之证 II：击杀三色半人马。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="2" />
@@ -4374,7 +4374,7 @@
     <imgdir name="5302">
         <string name="name" value="生命之证 II：参与击杀火焰龙或天鹰" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5302@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8180000# #r#a53021##k\r\n#o8180001# #r#a53022##k" />
         <string name="2" value="已完成：生命之证 II：参与击杀火焰龙或天鹰。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="3" />
@@ -4384,7 +4384,7 @@
     <imgdir name="5303">
         <string name="name" value="生命之证 II：击杀邪恶短刃蜥蜴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5303@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150200# #r#a53031##k" />
         <string name="2" value="已完成：生命之证 II：击杀邪恶短刃蜥蜴。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="4" />
@@ -4394,7 +4394,7 @@
     <imgdir name="5304">
         <string name="name" value="生命之证 II：击杀幼年纽特" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5304@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190000# #r#a53041##k" />
         <string name="2" value="已完成：生命之证 II：击杀幼年纽特。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="5" />
@@ -4404,7 +4404,7 @@
     <imgdir name="5305">
         <string name="name" value="生命之证 II：击杀巢穴魔像" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5305@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190002# #r#a53051##k" />
         <string name="2" value="已完成：生命之证 II：击杀巢穴魔像。" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="6" />
@@ -4510,7 +4510,7 @@
     <imgdir name="5326">
         <string name="name" value="生命之证 II：击杀三色半人马" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5326@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140101# #r#a53261##k\r\n#o8140102# #r#a53262##k\r\n#o8140103# #r#a53263##k" />
         <string name="2" value="已完成：生命之证 II：击杀三色半人马。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="2" />
@@ -4520,7 +4520,7 @@
     <imgdir name="5327">
         <string name="name" value="生命之证 II：参与击杀火焰龙或天鹰" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5327@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8180000# #r#a53271##k\r\n#o8180001# #r#a53272##k" />
         <string name="2" value="已完成：生命之证 II：参与击杀火焰龙或天鹰。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="3" />
@@ -4530,7 +4530,7 @@
     <imgdir name="5328">
         <string name="name" value="生命之证 II：击杀红海龟龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5328@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140701# #r#a53281##k" />
         <string name="2" value="已完成：生命之证 II：击杀红海龟龙。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="4" />
@@ -4540,7 +4540,7 @@
     <imgdir name="5329">
         <string name="name" value="生命之证 II：击杀犀牛龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5329@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140702# #r#a53291##k" />
         <string name="2" value="已完成：生命之证 II：击杀犀牛龙。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="5" />
@@ -4550,7 +4550,7 @@
     <imgdir name="5330">
         <string name="name" value="生命之证 II：击杀龙巢魔像" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5330@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190005# #r#a53301##k" />
         <string name="2" value="已完成：生命之证 II：击杀龙巢魔像。" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="6" />
@@ -4656,7 +4656,7 @@
     <imgdir name="5351">
         <string name="name" value="生命之证 III：击杀大立钟和高级大立钟" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5351@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140200# #r#a53511##k\r\n#o8140300# #r#a53512##k" />
         <string name="2" value="已完成：生命之证 III：击杀大立钟和高级大立钟。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="2" />
@@ -4666,7 +4666,7 @@
     <imgdir name="5352">
         <string name="name" value="生命之证 III：参与击杀帕普拉图斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5352@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8500002# #r#a53521##k" />
         <string name="2" value="已完成：生命之证 III：参与击杀帕普拉图斯。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="3" />
@@ -4676,7 +4676,7 @@
     <imgdir name="5353">
         <string name="name" value="生命之证 III：击杀大海贼王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5353@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8141100# #r#a53531##k" />
         <string name="2" value="已完成：生命之证 III：击杀大海贼王。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="4" />
@@ -4686,7 +4686,7 @@
     <imgdir name="5354">
         <string name="name" value="生命之证 III：击杀双刀蓝帽海贼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5354@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7160000# #r#a53541##k" />
         <string name="2" value="已完成：生命之证 III：击杀双刀蓝帽海贼。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="5" />
@@ -4696,7 +4696,7 @@
     <imgdir name="5355">
         <string name="name" value="生命之证 III：击杀强化死灵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5355@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o7130300# #r#a53551##k" />
         <string name="2" value="已完成：生命之证 III：击杀强化死灵。" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="6" />
@@ -4802,7 +4802,7 @@
     <imgdir name="5376">
         <string name="name" value="生命之证 III：击杀大立钟和高级大立钟" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5376@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140200# #r#a53761##k\r\n#o8140300# #r#a53762##k" />
         <string name="2" value="已完成：生命之证 III：击杀大立钟和高级大立钟。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="2" />
@@ -4812,7 +4812,7 @@
     <imgdir name="5377">
         <string name="name" value="生命之证 III：参与击杀帕普拉图斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5377@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8500002# #r#a53771##k" />
         <string name="2" value="已完成：生命之证 III：参与击杀帕普拉图斯。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="3" />
@@ -4822,7 +4822,7 @@
     <imgdir name="5378">
         <string name="name" value="生命之证 III：击杀时之鬼爵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5378@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8142000# #r#a53781##k" />
         <string name="2" value="已完成：生命之证 III：击杀时之鬼爵。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="4" />
@@ -4832,7 +4832,7 @@
     <imgdir name="5379">
         <string name="name" value="生命之证 III：击杀时之鬼王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5379@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8143000# #r#a53791##k" />
         <string name="2" value="已完成：生命之证 III：击杀时之鬼王。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="5" />
@@ -4842,7 +4842,7 @@
     <imgdir name="5380">
         <string name="name" value="生命之证 III：击杀强化恶灵娃娃" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5380@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o6230500# #r#a53801##k" />
         <string name="2" value="已完成：生命之证 III：击杀强化恶灵娃娃。" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="6" />
@@ -4948,7 +4948,7 @@
     <imgdir name="5401">
         <string name="name" value="生命之证 III：击杀大立钟和高级大立钟" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5401@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140200# #r#a54011##k\r\n#o8140300# #r#a54012##k" />
         <string name="2" value="已完成：生命之证 III：击杀大立钟和高级大立钟。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="2" />
@@ -4958,7 +4958,7 @@
     <imgdir name="5402">
         <string name="name" value="生命之证 III：参与击杀帕普拉图斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5402@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8500002# #r#a54021##k" />
         <string name="2" value="已完成：生命之证 III：参与击杀帕普拉图斯。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="3" />
@@ -4968,7 +4968,7 @@
     <imgdir name="5403">
         <string name="name" value="生命之证 III：击杀黄鬼怪王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5403@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130400# #r#a54031##k" />
         <string name="2" value="已完成：生命之证 III：击杀黄鬼怪王。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="4" />
@@ -4978,7 +4978,7 @@
     <imgdir name="5404">
         <string name="name" value="生命之证 III：击杀蓝鬼怪王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5404@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130401# #r#a54041##k" />
         <string name="2" value="已完成：生命之证 III：击杀蓝鬼怪王。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="5" />
@@ -4988,7 +4988,7 @@
     <imgdir name="5405">
         <string name="name" value="生命之证 III：击杀绿鬼怪王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5405@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130402# #r#a54051##k" />
         <string name="2" value="已完成：生命之证 III：击杀绿鬼怪王。" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="6" />
@@ -5094,7 +5094,7 @@
     <imgdir name="5426">
         <string name="name" value="生命之证 III：击杀大立钟和高级大立钟" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5426@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140200# #r#a54261##k\r\n#o8140300# #r#a54262##k" />
         <string name="2" value="已完成：生命之证 III：击杀大立钟和高级大立钟。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="2" />
@@ -5104,7 +5104,7 @@
     <imgdir name="5427">
         <string name="name" value="生命之证 III：参与击杀帕普拉图斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5427@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8500002# #r#a54271##k" />
         <string name="2" value="已完成：生命之证 III：参与击杀帕普拉图斯。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="3" />
@@ -5114,7 +5114,7 @@
     <imgdir name="5428">
         <string name="name" value="生命之证 III：击杀大海贼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5428@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8141000# #r#a54281##k" />
         <string name="2" value="已完成：生命之证 III：击杀大海贼。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="4" />
@@ -5124,7 +5124,7 @@
     <imgdir name="5429">
         <string name="name" value="生命之证 III：击杀蓝帽海贼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5429@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7140000# #r#a54291##k" />
         <string name="2" value="已完成：生命之证 III：击杀蓝帽海贼。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="5" />
@@ -5134,7 +5134,7 @@
     <imgdir name="5430">
         <string name="name" value="生命之证 III：击杀暗黑拉什" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5430@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130501# #r#a54301##k" />
         <string name="2" value="已完成：生命之证 III：击杀暗黑拉什。" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="6" />
@@ -5240,7 +5240,7 @@
     <imgdir name="5451">
         <string name="name" value="生命之证 III：击杀大立钟和高级大立钟" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5451@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140200# #r#a54511##k\r\n#o8140300# #r#a54512##k" />
         <string name="2" value="已完成：生命之证 III：击杀大立钟和高级大立钟。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="2" />
@@ -5250,7 +5250,7 @@
     <imgdir name="5452">
         <string name="name" value="生命之证 III：参与击杀帕普拉图斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5452@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8500002# #r#a54521##k" />
         <string name="2" value="已完成：生命之证 III：参与击杀帕普拉图斯。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="3" />
@@ -5260,7 +5260,7 @@
     <imgdir name="5453">
         <string name="name" value="生命之证 III：击杀拉什" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5453@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130500# #r#a54531##k" />
         <string name="2" value="已完成：生命之证 III：击杀拉什。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="4" />
@@ -5270,7 +5270,7 @@
     <imgdir name="5454">
         <string name="name" value="生命之证 III：击杀霍比" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5454@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o7130600# #r#a54541##k" />
         <string name="2" value="已完成：生命之证 III：击杀霍比。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="5" />
@@ -5280,7 +5280,7 @@
     <imgdir name="5455">
         <string name="name" value="生命之证 III：击杀绿霍比" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="按照任务指引完成目标，回一转教官提交。\r\n@@BD_LP_PROGRESS:5455@@" />
+        <string name="1" value="按照任务指引完成目标，回一转教官提交。\r\n#o7130601# #r#a54551##k" />
         <string name="2" value="已完成：生命之证 III：击杀绿霍比。" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="6" />
@@ -5386,7 +5386,7 @@
     <imgdir name="5476">
         <string name="name" value="生命之证 IV：击杀骷髅龙和老骷髅龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5476@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190003# #r#a54761##k\r\n#o8190004# #r#a54762##k" />
         <string name="2" value="已完成：生命之证 IV：击杀骷髅龙和老骷髅龙。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="2" />
@@ -5396,7 +5396,7 @@
     <imgdir name="5477">
         <string name="name" value="生命之证 IV：参与击杀任意中阶 Boss" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5477@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a54771##k\r\n#o8500002# #r#a54772##k\r\n#o8510000# #r#a54773##k\r\n#o8520000# #r#a54774##k" />
         <string name="2" value="已完成：生命之证 IV：参与击杀任意中阶 Boss。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="3" />
@@ -5406,7 +5406,7 @@
     <imgdir name="5478">
         <string name="name" value="生命之证 IV：击杀记忆的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5478@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200001# #r#a54781##k" />
         <string name="2" value="已完成：生命之证 IV：击杀记忆的祭司。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="4" />
@@ -5416,7 +5416,7 @@
     <imgdir name="5479">
         <string name="name" value="生命之证 IV：击杀记忆的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5479@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200002# #r#a54791##k" />
         <string name="2" value="已完成：生命之证 IV：击杀记忆的神官。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="5" />
@@ -5426,7 +5426,7 @@
     <imgdir name="5480">
         <string name="name" value="生命之证 IV：击杀记忆的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5480@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200003# #r#a54801##k" />
         <string name="2" value="已完成：生命之证 IV：击杀记忆的守护兵。" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="6" />
@@ -5532,7 +5532,7 @@
     <imgdir name="5501">
         <string name="name" value="生命之证 IV：击杀骷髅龙和老骷髅龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5501@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190003# #r#a55011##k\r\n#o8190004# #r#a55012##k" />
         <string name="2" value="已完成：生命之证 IV：击杀骷髅龙和老骷髅龙。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="2" />
@@ -5542,7 +5542,7 @@
     <imgdir name="5502">
         <string name="name" value="生命之证 IV：参与击杀任意中阶 Boss" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5502@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a55021##k\r\n#o8500002# #r#a55022##k\r\n#o8510000# #r#a55023##k\r\n#o8520000# #r#a55024##k" />
         <string name="2" value="已完成：生命之证 IV：参与击杀任意中阶 Boss。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="3" />
@@ -5552,7 +5552,7 @@
     <imgdir name="5503">
         <string name="name" value="生命之证 IV：击杀后悔的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5503@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200005# #r#a55031##k" />
         <string name="2" value="已完成：生命之证 IV：击杀后悔的祭司。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="4" />
@@ -5562,7 +5562,7 @@
     <imgdir name="5504">
         <string name="name" value="生命之证 IV：击杀后悔的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5504@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200006# #r#a55041##k" />
         <string name="2" value="已完成：生命之证 IV：击杀后悔的神官。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="5" />
@@ -5572,7 +5572,7 @@
     <imgdir name="5505">
         <string name="name" value="生命之证 IV：击杀后悔的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5505@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200007# #r#a55051##k" />
         <string name="2" value="已完成：生命之证 IV：击杀后悔的守护兵。" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="6" />
@@ -5678,7 +5678,7 @@
     <imgdir name="5526">
         <string name="name" value="生命之证 IV：击杀骷髅龙和老骷髅龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5526@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190003# #r#a55261##k\r\n#o8190004# #r#a55262##k" />
         <string name="2" value="已完成：生命之证 IV：击杀骷髅龙和老骷髅龙。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="2" />
@@ -5688,7 +5688,7 @@
     <imgdir name="5527">
         <string name="name" value="生命之证 IV：参与击杀任意中阶 Boss" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5527@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a55271##k\r\n#o8500002# #r#a55272##k\r\n#o8510000# #r#a55273##k\r\n#o8520000# #r#a55274##k" />
         <string name="2" value="已完成：生命之证 IV：参与击杀任意中阶 Boss。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="3" />
@@ -5698,7 +5698,7 @@
     <imgdir name="5528">
         <string name="name" value="生命之证 IV：击杀火焰猎犬" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5528@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140500# #r#a55281##k" />
         <string name="2" value="已完成：生命之证 IV：击杀火焰猎犬。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="4" />
@@ -5708,7 +5708,7 @@
     <imgdir name="5529">
         <string name="name" value="生命之证 IV：击杀短刃蜥蜴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5529@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140110# #r#a55291##k" />
         <string name="2" value="已完成：生命之证 IV：击杀短刃蜥蜴。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="5" />
@@ -5718,7 +5718,7 @@
     <imgdir name="5530">
         <string name="name" value="生命之证 IV：击杀时间之眼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5530@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200000# #r#a55301##k" />
         <string name="2" value="已完成：生命之证 IV：击杀时间之眼。" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="6" />
@@ -5824,7 +5824,7 @@
     <imgdir name="5551">
         <string name="name" value="生命之证 IV：击杀骷髅龙和老骷髅龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5551@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190003# #r#a55511##k\r\n#o8190004# #r#a55512##k" />
         <string name="2" value="已完成：生命之证 IV：击杀骷髅龙和老骷髅龙。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="2" />
@@ -5834,7 +5834,7 @@
     <imgdir name="5552">
         <string name="name" value="生命之证 IV：参与击杀任意中阶 Boss" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5552@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a55521##k\r\n#o8500002# #r#a55522##k\r\n#o8510000# #r#a55523##k\r\n#o8520000# #r#a55524##k" />
         <string name="2" value="已完成：生命之证 IV：参与击杀任意中阶 Boss。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="3" />
@@ -5844,7 +5844,7 @@
     <imgdir name="5553">
         <string name="name" value="生命之证 IV：击杀后悔的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5553@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200008# #r#a55531##k" />
         <string name="2" value="已完成：生命之证 IV：击杀后悔的守护队长。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="4" />
@@ -5854,7 +5854,7 @@
     <imgdir name="5554">
         <string name="name" value="生命之证 IV：击杀记忆的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5554@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8200004# #r#a55541##k" />
         <string name="2" value="已完成：生命之证 IV：击杀记忆的守护队长。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="5" />
@@ -5864,7 +5864,7 @@
     <imgdir name="5555">
         <string name="name" value="生命之证 IV：击杀忘却的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5555@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200009# #r#a55551##k" />
         <string name="2" value="已完成：生命之证 IV：击杀忘却的祭司。" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="6" />
@@ -5970,7 +5970,7 @@
     <imgdir name="5576">
         <string name="name" value="生命之证 IV：击杀骷髅龙和老骷髅龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5576@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190003# #r#a55761##k\r\n#o8190004# #r#a55762##k" />
         <string name="2" value="已完成：生命之证 IV：击杀骷髅龙和老骷髅龙。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="2" />
@@ -5980,7 +5980,7 @@
     <imgdir name="5577">
         <string name="name" value="生命之证 IV：参与击杀任意中阶 Boss" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5577@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a55771##k\r\n#o8500002# #r#a55772##k\r\n#o8510000# #r#a55773##k\r\n#o8520000# #r#a55774##k" />
         <string name="2" value="已完成：生命之证 IV：参与击杀任意中阶 Boss。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="3" />
@@ -5990,7 +5990,7 @@
     <imgdir name="5578">
         <string name="name" value="生命之证 IV：击杀尖鼻鲨鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5578@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150101# #r#a55781##k" />
         <string name="2" value="已完成：生命之证 IV：击杀尖鼻鲨鱼。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="4" />
@@ -6000,7 +6000,7 @@
     <imgdir name="5579">
         <string name="name" value="生命之证 IV：击杀邪恶短刃蜥蜴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5579@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150200# #r#a55791##k" />
         <string name="2" value="已完成：生命之证 IV：击杀邪恶短刃蜥蜴。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="5" />
@@ -6010,7 +6010,7 @@
     <imgdir name="5580">
         <string name="name" value="生命之证 IV：击杀邪恶双刀蜥蜴" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5580@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8150201# #r#a55801##k" />
         <string name="2" value="已完成：生命之证 IV：击杀邪恶双刀蜥蜴。" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="6" />
@@ -6116,7 +6116,7 @@
     <imgdir name="5601">
         <string name="name" value="生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5601@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140600# #r#a56011##k\r\n#o8141300# #r#a56012##k\r\n#o8142100# #r#a56013##k" />
         <string name="2" value="已完成：生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="2" />
@@ -6126,7 +6126,7 @@
     <imgdir name="5602">
         <string name="name" value="生命之证 V：参与击杀皮亚奴斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5602@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8510000# #r#a56021##k\r\n#o8520000# #r#a56022##k" />
         <string name="2" value="已完成：生命之证 V：参与击杀皮亚奴斯。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="3" />
@@ -6136,7 +6136,7 @@
     <imgdir name="5603">
         <string name="name" value="生命之证 V：击杀记忆的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5603@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200003# #r#a56031##k" />
         <string name="2" value="已完成：生命之证 V：击杀记忆的守护兵。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="4" />
@@ -6146,7 +6146,7 @@
     <imgdir name="5604">
         <string name="name" value="生命之证 V：击杀记忆的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5604@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200004# #r#a56041##k" />
         <string name="2" value="已完成：生命之证 V：击杀记忆的守护队长。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="5" />
@@ -6156,7 +6156,7 @@
     <imgdir name="5605">
         <string name="name" value="生命之证 V：击杀忘却的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5605@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200011# #r#a56051##k" />
         <string name="2" value="已完成：生命之证 V：击杀忘却的守护兵。" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="6" />
@@ -6262,7 +6262,7 @@
     <imgdir name="5626">
         <string name="name" value="生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5626@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140600# #r#a56261##k\r\n#o8141300# #r#a56262##k\r\n#o8142100# #r#a56263##k" />
         <string name="2" value="已完成：生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="2" />
@@ -6272,7 +6272,7 @@
     <imgdir name="5627">
         <string name="name" value="生命之证 V：参与击杀皮亚奴斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5627@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8510000# #r#a56271##k\r\n#o8520000# #r#a56272##k" />
         <string name="2" value="已完成：生命之证 V：参与击杀皮亚奴斯。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="3" />
@@ -6282,7 +6282,7 @@
     <imgdir name="5628">
         <string name="name" value="生命之证 V：击杀后悔的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5628@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200007# #r#a56281##k" />
         <string name="2" value="已完成：生命之证 V：击杀后悔的守护兵。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="4" />
@@ -6292,7 +6292,7 @@
     <imgdir name="5629">
         <string name="name" value="生命之证 V：击杀后悔的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5629@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200008# #r#a56291##k" />
         <string name="2" value="已完成：生命之证 V：击杀后悔的守护队长。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="5" />
@@ -6302,7 +6302,7 @@
     <imgdir name="5630">
         <string name="name" value="生命之证 V：击杀忘却的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5630@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200010# #r#a56301##k" />
         <string name="2" value="已完成：生命之证 V：击杀忘却的神官。" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="6" />
@@ -6408,7 +6408,7 @@
     <imgdir name="5651">
         <string name="name" value="生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5651@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140600# #r#a56511##k\r\n#o8141300# #r#a56512##k\r\n#o8142100# #r#a56513##k" />
         <string name="2" value="已完成：生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="2" />
@@ -6418,7 +6418,7 @@
     <imgdir name="5652">
         <string name="name" value="生命之证 V：参与击杀皮亚奴斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5652@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8510000# #r#a56521##k\r\n#o8520000# #r#a56522##k" />
         <string name="2" value="已完成：生命之证 V：参与击杀皮亚奴斯。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="3" />
@@ -6428,7 +6428,7 @@
     <imgdir name="5653">
         <string name="name" value="生命之证 V：击杀忘却的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5653@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200009# #r#a56531##k" />
         <string name="2" value="已完成：生命之证 V：击杀忘却的祭司。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="4" />
@@ -6438,7 +6438,7 @@
     <imgdir name="5654">
         <string name="name" value="生命之证 V：击杀忘却的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5654@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200012# #r#a56541##k" />
         <string name="2" value="已完成：生命之证 V：击杀忘却的守护队长。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="5" />
@@ -6448,7 +6448,7 @@
     <imgdir name="5655">
         <string name="name" value="生命之证 V：击杀记忆的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5655@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200002# #r#a56551##k" />
         <string name="2" value="已完成：生命之证 V：击杀记忆的神官。" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="6" />
@@ -6554,7 +6554,7 @@
     <imgdir name="5676">
         <string name="name" value="生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5676@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140600# #r#a56761##k\r\n#o8141300# #r#a56762##k\r\n#o8142100# #r#a56763##k" />
         <string name="2" value="已完成：生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="2" />
@@ -6564,7 +6564,7 @@
     <imgdir name="5677">
         <string name="name" value="生命之证 V：参与击杀皮亚奴斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5677@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8510000# #r#a56771##k\r\n#o8520000# #r#a56772##k" />
         <string name="2" value="已完成：生命之证 V：参与击杀皮亚奴斯。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="3" />
@@ -6574,7 +6574,7 @@
     <imgdir name="5678">
         <string name="name" value="生命之证 V：击杀时间之眼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5678@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200000# #r#a56781##k" />
         <string name="2" value="已完成：生命之证 V：击杀时间之眼。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="4" />
@@ -6584,7 +6584,7 @@
     <imgdir name="5679">
         <string name="name" value="生命之证 V：击杀记忆的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5679@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200001# #r#a56791##k" />
         <string name="2" value="已完成：生命之证 V：击杀记忆的祭司。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="5" />
@@ -6594,7 +6594,7 @@
     <imgdir name="5680">
         <string name="name" value="生命之证 V：击杀后悔的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5680@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200006# #r#a56801##k" />
         <string name="2" value="已完成：生命之证 V：击杀后悔的神官。" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="6" />
@@ -6700,7 +6700,7 @@
     <imgdir name="5701">
         <string name="name" value="生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5701@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140600# #r#a57011##k\r\n#o8141300# #r#a57012##k\r\n#o8142100# #r#a57013##k" />
         <string name="2" value="已完成：生命之证 V：击杀骨骸鱼、乌贼怪或致命乌贼怪。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="2" />
@@ -6710,7 +6710,7 @@
     <imgdir name="5702">
         <string name="name" value="生命之证 V：参与击杀皮亚奴斯" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5702@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8510000# #r#a57021##k\r\n#o8520000# #r#a57022##k" />
         <string name="2" value="已完成：生命之证 V：参与击杀皮亚奴斯。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="3" />
@@ -6720,7 +6720,7 @@
     <imgdir name="5703">
         <string name="name" value="生命之证 V：击杀鲨鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5703@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8150100# #r#a57031##k" />
         <string name="2" value="已完成：生命之证 V：击杀鲨鱼。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="4" />
@@ -6730,7 +6730,7 @@
     <imgdir name="5704">
         <string name="name" value="生命之证 V：击杀尖鼻鲨鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5704@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150101# #r#a57041##k" />
         <string name="2" value="已完成：生命之证 V：击杀尖鼻鲨鱼。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="5" />
@@ -6740,7 +6740,7 @@
     <imgdir name="5705">
         <string name="name" value="生命之证 V：击杀炸弹鱼屋" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5705@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140555# #r#a57051##k" />
         <string name="2" value="已完成：生命之证 V：击杀炸弹鱼屋。" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="6" />
@@ -6846,7 +6846,7 @@
     <imgdir name="5726">
         <string name="name" value="生命之证 VI：击杀后悔的祭司和忘却的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5726@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200005# #r#a57261##k\r\n#o8200009# #r#a57262##k" />
         <string name="2" value="已完成：生命之证 VI：击杀后悔的祭司和忘却的祭司。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="2" />
@@ -6856,7 +6856,7 @@
     <imgdir name="5727">
         <string name="name" value="生命之证 VI：参与击杀多多、玄冰独角兽或雷卡" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5727@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8220004# #r#a57271##k\r\n#o8220005# #r#a57272##k\r\n#o8220006# #r#a57273##k" />
         <string name="2" value="已完成：生命之证 VI：参与击杀多多、玄冰独角兽或雷卡。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="3" />
@@ -6866,7 +6866,7 @@
     <imgdir name="5728">
         <string name="name" value="生命之证 VI：击杀忘却的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5728@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200010# #r#a57281##k" />
         <string name="2" value="已完成：生命之证 VI：击杀忘却的神官。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="4" />
@@ -6876,7 +6876,7 @@
     <imgdir name="5729">
         <string name="name" value="生命之证 VI：击杀忘却的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5729@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200011# #r#a57291##k" />
         <string name="2" value="已完成：生命之证 VI：击杀忘却的守护兵。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="5" />
@@ -6886,7 +6886,7 @@
     <imgdir name="5730">
         <string name="name" value="生命之证 VI：击杀忘却的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5730@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200012# #r#a57301##k" />
         <string name="2" value="已完成：生命之证 VI：击杀忘却的守护队长。" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="6" />
@@ -6992,7 +6992,7 @@
     <imgdir name="5751">
         <string name="name" value="生命之证 VI：击杀后悔的祭司和忘却的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5751@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200005# #r#a57511##k\r\n#o8200009# #r#a57512##k" />
         <string name="2" value="已完成：生命之证 VI：击杀后悔的祭司和忘却的祭司。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="2" />
@@ -7002,7 +7002,7 @@
     <imgdir name="5752">
         <string name="name" value="生命之证 VI：参与击杀多多、玄冰独角兽或雷卡" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5752@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8220004# #r#a57521##k\r\n#o8220005# #r#a57522##k\r\n#o8220006# #r#a57523##k" />
         <string name="2" value="已完成：生命之证 VI：参与击杀多多、玄冰独角兽或雷卡。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="3" />
@@ -7012,7 +7012,7 @@
     <imgdir name="5753">
         <string name="name" value="生命之证 VI：击杀记忆的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5753@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200002# #r#a57531##k" />
         <string name="2" value="已完成：生命之证 VI：击杀记忆的神官。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="4" />
@@ -7022,7 +7022,7 @@
     <imgdir name="5754">
         <string name="name" value="生命之证 VI：击杀记忆的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5754@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200003# #r#a57541##k" />
         <string name="2" value="已完成：生命之证 VI：击杀记忆的守护兵。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="5" />
@@ -7032,7 +7032,7 @@
     <imgdir name="5755">
         <string name="name" value="生命之证 VI：击杀记忆的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5755@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200004# #r#a57551##k" />
         <string name="2" value="已完成：生命之证 VI：击杀记忆的守护队长。" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="6" />
@@ -7138,7 +7138,7 @@
     <imgdir name="5776">
         <string name="name" value="生命之证 VI：击杀后悔的祭司和忘却的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5776@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200005# #r#a57761##k\r\n#o8200009# #r#a57762##k" />
         <string name="2" value="已完成：生命之证 VI：击杀后悔的祭司和忘却的祭司。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="2" />
@@ -7148,7 +7148,7 @@
     <imgdir name="5777">
         <string name="name" value="生命之证 VI：参与击杀多多、玄冰独角兽或雷卡" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5777@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8220004# #r#a57771##k\r\n#o8220005# #r#a57772##k\r\n#o8220006# #r#a57773##k" />
         <string name="2" value="已完成：生命之证 VI：参与击杀多多、玄冰独角兽或雷卡。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="3" />
@@ -7158,7 +7158,7 @@
     <imgdir name="5778">
         <string name="name" value="生命之证 VI：击杀后悔的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5778@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200006# #r#a57781##k" />
         <string name="2" value="已完成：生命之证 VI：击杀后悔的神官。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="4" />
@@ -7168,7 +7168,7 @@
     <imgdir name="5779">
         <string name="name" value="生命之证 VI：击杀后悔的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5779@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200007# #r#a57791##k" />
         <string name="2" value="已完成：生命之证 VI：击杀后悔的守护兵。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="5" />
@@ -7178,7 +7178,7 @@
     <imgdir name="5780">
         <string name="name" value="生命之证 VI：击杀后悔的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5780@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200008# #r#a57801##k" />
         <string name="2" value="已完成：生命之证 VI：击杀后悔的守护队长。" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="6" />
@@ -7284,7 +7284,7 @@
     <imgdir name="5801">
         <string name="name" value="生命之证 VI：击杀后悔的祭司和忘却的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5801@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200005# #r#a58011##k\r\n#o8200009# #r#a58012##k" />
         <string name="2" value="已完成：生命之证 VI：击杀后悔的祭司和忘却的祭司。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="2" />
@@ -7294,7 +7294,7 @@
     <imgdir name="5802">
         <string name="name" value="生命之证 VI：参与击杀多多、玄冰独角兽或雷卡" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5802@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8220004# #r#a58021##k\r\n#o8220005# #r#a58022##k\r\n#o8220006# #r#a58023##k" />
         <string name="2" value="已完成：生命之证 VI：参与击杀多多、玄冰独角兽或雷卡。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="3" />
@@ -7304,7 +7304,7 @@
     <imgdir name="5803">
         <string name="name" value="生命之证 VI：击杀守门人" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5803@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8160000# #r#a58031##k" />
         <string name="2" value="已完成：生命之证 VI：击杀守门人。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="4" />
@@ -7314,7 +7314,7 @@
     <imgdir name="5804">
         <string name="name" value="生命之证 VI：击杀死神" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5804@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8170000# #r#a58041##k" />
         <string name="2" value="已完成：生命之证 VI：击杀死神。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="5" />
@@ -7324,7 +7324,7 @@
     <imgdir name="5805">
         <string name="name" value="生命之证 VI：击杀时间之眼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5805@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200000# #r#a58051##k" />
         <string name="2" value="已完成：生命之证 VI：击杀时间之眼。" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="6" />
@@ -7430,7 +7430,7 @@
     <imgdir name="5826">
         <string name="name" value="生命之证 VI：击杀后悔的祭司和忘却的祭司" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5826@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200005# #r#a58261##k\r\n#o8200009# #r#a58262##k" />
         <string name="2" value="已完成：生命之证 VI：击杀后悔的祭司和忘却的祭司。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="2" />
@@ -7440,7 +7440,7 @@
     <imgdir name="5827">
         <string name="name" value="生命之证 VI：参与击杀多多、玄冰独角兽或雷卡" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5827@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8220004# #r#a58271##k\r\n#o8220005# #r#a58272##k\r\n#o8220006# #r#a58273##k" />
         <string name="2" value="已完成：生命之证 VI：参与击杀多多、玄冰独角兽或雷卡。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="3" />
@@ -7450,7 +7450,7 @@
     <imgdir name="5828">
         <string name="name" value="生命之证 VI：击杀鲨鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5828@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150100# #r#a58281##k" />
         <string name="2" value="已完成：生命之证 VI：击杀鲨鱼。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="4" />
@@ -7460,7 +7460,7 @@
     <imgdir name="5829">
         <string name="name" value="生命之证 VI：击杀尖鼻鲨鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5829@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150101# #r#a58291##k" />
         <string name="2" value="已完成：生命之证 VI：击杀尖鼻鲨鱼。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="5" />
@@ -7470,7 +7470,7 @@
     <imgdir name="5830">
         <string name="name" value="生命之证 VI：击杀骨骸鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5830@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140600# #r#a58301##k" />
         <string name="2" value="已完成：生命之证 VI：击杀骨骸鱼。" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="6" />
@@ -7576,7 +7576,7 @@
     <imgdir name="5851">
         <string name="name" value="生命之证 VII：击杀老骷髅龙和忘却的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5851@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190004# #r#a58511##k\r\n#o8200012# #r#a58512##k" />
         <string name="2" value="已完成：生命之证 VII：击杀老骷髅龙和忘却的守护队长。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="2" />
@@ -7586,7 +7586,7 @@
     <imgdir name="5852">
         <string name="name" value="生命之证 VII：完成任意中阶 Boss 参与击杀" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5852@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a58521##k\r\n#o8500002# #r#a58522##k\r\n#o8510000# #r#a58523##k\r\n#o8520000# #r#a58524##k\r\n#o9420549# #r#a58525##k\r\n#o9420544# #r#a58526##k" />
         <string name="2" value="已完成：生命之证 VII：完成任意中阶 Boss 参与击杀。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="3" />
@@ -7596,7 +7596,7 @@
     <imgdir name="5853">
         <string name="name" value="生命之证 VII：击杀骷髅龙" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5853@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190003# #r#a58531##k" />
         <string name="2" value="已完成：生命之证 VII：击杀骷髅龙。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="4" />
@@ -7606,7 +7606,7 @@
     <imgdir name="5854">
         <string name="name" value="生命之证 VII：击杀守门人" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5854@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8160000# #r#a58541##k" />
         <string name="2" value="已完成：生命之证 VII：击杀守门人。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="5" />
@@ -7616,7 +7616,7 @@
     <imgdir name="5855">
         <string name="name" value="生命之证 VII：击杀死神" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5855@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8170000# #r#a58551##k" />
         <string name="2" value="已完成：生命之证 VII：击杀死神。" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="6" />
@@ -7722,7 +7722,7 @@
     <imgdir name="5876">
         <string name="name" value="生命之证 VII：击杀老骷髅龙和忘却的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5876@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190004# #r#a58761##k\r\n#o8200012# #r#a58762##k" />
         <string name="2" value="已完成：生命之证 VII：击杀老骷髅龙和忘却的守护队长。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="2" />
@@ -7732,7 +7732,7 @@
     <imgdir name="5877">
         <string name="name" value="生命之证 VII：完成任意中阶 Boss 参与击杀" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5877@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a58771##k\r\n#o8500002# #r#a58772##k\r\n#o8510000# #r#a58773##k\r\n#o8520000# #r#a58774##k\r\n#o9420549# #r#a58775##k\r\n#o9420544# #r#a58776##k" />
         <string name="2" value="已完成：生命之证 VII：完成任意中阶 Boss 参与击杀。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="3" />
@@ -7742,7 +7742,7 @@
     <imgdir name="5878">
         <string name="name" value="生命之证 VII：击杀忘却的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5878@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200010# #r#a58781##k" />
         <string name="2" value="已完成：生命之证 VII：击杀忘却的神官。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="4" />
@@ -7752,7 +7752,7 @@
     <imgdir name="5879">
         <string name="name" value="生命之证 VII：击杀忘却的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5879@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200011# #r#a58791##k" />
         <string name="2" value="已完成：生命之证 VII：击杀忘却的守护兵。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="5" />
@@ -7762,7 +7762,7 @@
     <imgdir name="5880">
         <string name="name" value="生命之证 VII：击杀后悔的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5880@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200007# #r#a58801##k" />
         <string name="2" value="已完成：生命之证 VII：击杀后悔的守护兵。" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="6" />
@@ -7868,7 +7868,7 @@
     <imgdir name="5901">
         <string name="name" value="生命之证 VII：击杀老骷髅龙和忘却的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5901@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190004# #r#a59011##k\r\n#o8200012# #r#a59012##k" />
         <string name="2" value="已完成：生命之证 VII：击杀老骷髅龙和忘却的守护队长。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="2" />
@@ -7878,7 +7878,7 @@
     <imgdir name="5902">
         <string name="name" value="生命之证 VII：完成任意中阶 Boss 参与击杀" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5902@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a59021##k\r\n#o8500002# #r#a59022##k\r\n#o8510000# #r#a59023##k\r\n#o8520000# #r#a59024##k\r\n#o9420549# #r#a59025##k\r\n#o9420544# #r#a59026##k" />
         <string name="2" value="已完成：生命之证 VII：完成任意中阶 Boss 参与击杀。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="3" />
@@ -7888,7 +7888,7 @@
     <imgdir name="5903">
         <string name="name" value="生命之证 VII：击杀犀牛龙怪" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5903@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140703# #r#a59031##k" />
         <string name="2" value="已完成：生命之证 VII：击杀犀牛龙怪。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="4" />
@@ -7898,7 +7898,7 @@
     <imgdir name="5904">
         <string name="name" value="生命之证 VII：击杀大海贼王" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5904@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8141100# #r#a59041##k" />
         <string name="2" value="已完成：生命之证 VII：击杀大海贼王。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="5" />
@@ -7908,7 +7908,7 @@
     <imgdir name="5905">
         <string name="name" value="生命之证 VII：击杀后悔的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5905@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200008# #r#a59051##k" />
         <string name="2" value="已完成：生命之证 VII：击杀后悔的守护队长。" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="6" />
@@ -8014,7 +8014,7 @@
     <imgdir name="5926">
         <string name="name" value="生命之证 VII：击杀老骷髅龙和忘却的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5926@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190004# #r#a59261##k\r\n#o8200012# #r#a59262##k" />
         <string name="2" value="已完成：生命之证 VII：击杀老骷髅龙和忘却的守护队长。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="2" />
@@ -8024,7 +8024,7 @@
     <imgdir name="5927">
         <string name="name" value="生命之证 VII：完成任意中阶 Boss 参与击杀" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5927@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a59271##k\r\n#o8500002# #r#a59272##k\r\n#o8510000# #r#a59273##k\r\n#o8520000# #r#a59274##k\r\n#o9420549# #r#a59275##k\r\n#o9420544# #r#a59276##k" />
         <string name="2" value="已完成：生命之证 VII：完成任意中阶 Boss 参与击杀。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="3" />
@@ -8034,7 +8034,7 @@
     <imgdir name="5928">
         <string name="name" value="生命之证 VII：击杀后悔的神官" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5928@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200006# #r#a59281##k" />
         <string name="2" value="已完成：生命之证 VII：击杀后悔的神官。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="4" />
@@ -8044,7 +8044,7 @@
     <imgdir name="5929">
         <string name="name" value="生命之证 VII：击杀记忆的守护兵" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5929@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200003# #r#a59291##k" />
         <string name="2" value="已完成：生命之证 VII：击杀记忆的守护兵。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="5" />
@@ -8054,7 +8054,7 @@
     <imgdir name="5930">
         <string name="name" value="生命之证 VII：击杀记忆的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5930@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8200004# #r#a59301##k" />
         <string name="2" value="已完成：生命之证 VII：击杀记忆的守护队长。" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="6" />
@@ -8160,7 +8160,7 @@
     <imgdir name="5951">
         <string name="name" value="生命之证 VII：击杀老骷髅龙和忘却的守护队长" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5951@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8190004# #r#a59511##k\r\n#o8200012# #r#a59512##k" />
         <string name="2" value="已完成：生命之证 VII：击杀老骷髅龙和忘却的守护队长。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="2" />
@@ -8170,7 +8170,7 @@
     <imgdir name="5952">
         <string name="name" value="生命之证 VII：完成任意中阶 Boss 参与击杀" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n@@BD_LP_PROGRESS:5952@@" />
+        <string name="1" value="与其他冒险家组队参与首领战，携手击败目标Boss后回一转教官提交。\r\n#o8800002# #r#a59521##k\r\n#o8500002# #r#a59522##k\r\n#o8510000# #r#a59523##k\r\n#o8520000# #r#a59524##k\r\n#o9420549# #r#a59525##k\r\n#o9420544# #r#a59526##k" />
         <string name="2" value="已完成：生命之证 VII：完成任意中阶 Boss 参与击杀。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="3" />
@@ -8180,7 +8180,7 @@
     <imgdir name="5953">
         <string name="name" value="生命之证 VII：击杀鲨鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5953@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150100# #r#a59531##k" />
         <string name="2" value="已完成：生命之证 VII：击杀鲨鱼。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="4" />
@@ -8190,7 +8190,7 @@
     <imgdir name="5954">
         <string name="name" value="生命之证 VII：击杀尖鼻鲨鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5954@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8150101# #r#a59541##k" />
         <string name="2" value="已完成：生命之证 VII：击杀尖鼻鲨鱼。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="5" />
@@ -8200,7 +8200,7 @@
     <imgdir name="5955">
         <string name="name" value="生命之证 VII：击杀骨骸鱼" />
         <string name="0" value="前往本职业一转教官，继续生命之证试炼。" />
-        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n@@BD_LP_PROGRESS:5955@@" />
+        <string name="1" value="猎杀指定怪物，达到要求数量后回一转教官提交。\r\n#o8140600# #r#a59551##k" />
         <string name="2" value="已完成：生命之证 VII：击杀骨骸鱼。" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="6" />
