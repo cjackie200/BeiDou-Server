@@ -8,12 +8,14 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
+import org.gms.server.maps.MapItem;
 import org.gms.service.ConfigService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 
+import java.awt.Point;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
@@ -32,9 +34,14 @@ import static org.mockito.Mockito.when;
 
 class ElementalResonanceQuestTest {
     private static final int PROGRESS_KEY = 0;
-    private static final int TIER_ONE_BOSS_BRIDGE = 29960;
-    private static final int TIER_ONE_MATERIAL_BRIDGE = 29961;
-    private static final int TIER_TWO_MATERIAL_BRIDGE = 29963;
+    private static final int TIER_ONE_FIRST_BOSS_BRIDGE = 29950;
+    private static final int TIER_ONE_SECOND_BOSS_BRIDGE = 29951;
+    private static final int TIER_ONE_THIRD_BOSS_BRIDGE = 29952;
+    private static final int TIER_ONE_MATERIAL_BRIDGE = 29953;
+    private static final int TIER_TWO_FIRST_BOSS_BRIDGE = 29954;
+    private static final int TIER_TWO_SECOND_BOSS_BRIDGE = 29955;
+    private static final int TIER_TWO_THIRD_BOSS_BRIDGE = 29956;
+    private static final int TIER_TWO_MATERIAL_BRIDGE = 29957;
 
     @BeforeAll
     @SuppressWarnings({"rawtypes", "unchecked"})
@@ -97,16 +104,36 @@ class ElementalResonanceQuestTest {
         assertTrue(start.success());
         assertStartedProgress(chr, 29991, "000");
 
-        addTierOneBossTokens(chr);
+        addItem(chr, 4033012, 1);
         ElementalResonanceQuest.syncQuestStateSilently(chr);
 
         assertStartedProgress(chr, 29991, "001");
 
-        var bossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29991);
-        assertTrue(bossStep.success());
-        assertQuest(chr, TIER_ONE_BOSS_BRIDGE, QuestStatus.Status.COMPLETED);
+        var firstBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29991);
+        assertTrue(firstBossStep.success());
+        assertQuest(chr, TIER_ONE_FIRST_BOSS_BRIDGE, QuestStatus.Status.COMPLETED);
         assertStartedProgress(chr, 29991, "000");
         assertEquals(0, chr.getItemQuantity(4033012, false));
+
+        addItem(chr, 4033013, 1);
+        ElementalResonanceQuest.syncQuestStateSilently(chr);
+        assertStartedProgress(chr, 29991, "001");
+
+        var secondBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29991);
+        assertTrue(secondBossStep.success());
+        assertQuest(chr, TIER_ONE_SECOND_BOSS_BRIDGE, QuestStatus.Status.COMPLETED);
+        assertStartedProgress(chr, 29991, "000");
+        assertEquals(0, chr.getItemQuantity(4033013, false));
+
+        addItem(chr, 4033014, 1);
+        ElementalResonanceQuest.syncQuestStateSilently(chr);
+        assertStartedProgress(chr, 29991, "001");
+
+        var thirdBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29991);
+        assertTrue(thirdBossStep.success());
+        assertQuest(chr, TIER_ONE_THIRD_BOSS_BRIDGE, QuestStatus.Status.COMPLETED);
+        assertStartedProgress(chr, 29991, "000");
+        assertEquals(0, chr.getItemQuantity(4033014, false));
 
         addTierOneBaseRequirements(chr);
         ElementalResonanceQuest.syncQuestStateSilently(chr);
@@ -178,14 +205,18 @@ class ElementalResonanceQuestTest {
         Character chr = newMage(70);
         putQuest(chr, 29991, QuestStatus.Status.COMPLETED, "001");
         putQuest(chr, 29992, QuestStatus.Status.STARTED, "000");
-        putQuest(chr, TIER_ONE_BOSS_BRIDGE, QuestStatus.Status.COMPLETED, null);
+        putQuest(chr, TIER_ONE_FIRST_BOSS_BRIDGE, QuestStatus.Status.COMPLETED, null);
+        putQuest(chr, TIER_ONE_SECOND_BOSS_BRIDGE, QuestStatus.Status.COMPLETED, null);
+        putQuest(chr, TIER_ONE_THIRD_BOSS_BRIDGE, QuestStatus.Status.COMPLETED, null);
         putQuest(chr, TIER_ONE_MATERIAL_BRIDGE, QuestStatus.Status.COMPLETED, null);
 
         ElementalResonanceQuest.syncQuestStateSilently(chr);
 
         assertQuest(chr, 29991, QuestStatus.Status.NOT_STARTED);
         assertQuest(chr, 29992, QuestStatus.Status.NOT_STARTED);
-        assertQuest(chr, TIER_ONE_BOSS_BRIDGE, QuestStatus.Status.NOT_STARTED);
+        assertQuest(chr, TIER_ONE_FIRST_BOSS_BRIDGE, QuestStatus.Status.NOT_STARTED);
+        assertQuest(chr, TIER_ONE_SECOND_BOSS_BRIDGE, QuestStatus.Status.NOT_STARTED);
+        assertQuest(chr, TIER_ONE_THIRD_BOSS_BRIDGE, QuestStatus.Status.NOT_STARTED);
         assertQuest(chr, TIER_ONE_MATERIAL_BRIDGE, QuestStatus.Status.NOT_STARTED);
         assertEquals(29991, ElementalResonanceQuest.resolveCurrentQuestId(chr).orElseThrow());
     }
@@ -198,15 +229,36 @@ class ElementalResonanceQuestTest {
         var start = ElementalResonanceQuest.startStage(chr, 29992);
         assertTrue(start.success());
 
-        addTierTwoBossTokens(chr);
+        addItem(chr, 4033015, 1);
         ElementalResonanceQuest.syncQuestStateSilently(chr);
         assertStartedProgress(chr, 29992, "001");
 
-        var bossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29992);
-        assertTrue(bossStep.success());
+        var firstBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29992);
+        assertTrue(firstBossStep.success());
+        assertQuest(chr, TIER_TWO_FIRST_BOSS_BRIDGE, QuestStatus.Status.COMPLETED);
         assertStartedProgress(chr, 29992, "000");
         assertEquals(0, chr.getItemQuantity(4033015, false));
         assertFalse(ElementalResonanceQuest.validateCompletion(chr, 29992, 0).isOk());
+
+        addItem(chr, 4033016, 1);
+        ElementalResonanceQuest.syncQuestStateSilently(chr);
+        assertStartedProgress(chr, 29992, "001");
+
+        var secondBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29992);
+        assertTrue(secondBossStep.success());
+        assertQuest(chr, TIER_TWO_SECOND_BOSS_BRIDGE, QuestStatus.Status.COMPLETED);
+        assertStartedProgress(chr, 29992, "000");
+        assertEquals(0, chr.getItemQuantity(4033016, false));
+
+        addItem(chr, 4033017, 1);
+        ElementalResonanceQuest.syncQuestStateSilently(chr);
+        assertStartedProgress(chr, 29992, "001");
+
+        var thirdBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29992);
+        assertTrue(thirdBossStep.success());
+        assertQuest(chr, TIER_TWO_THIRD_BOSS_BRIDGE, QuestStatus.Status.COMPLETED);
+        assertStartedProgress(chr, 29992, "000");
+        assertEquals(0, chr.getItemQuantity(4033017, false));
 
         addTierTwoBaseMaterials(chr);
         chr.setMeso(8_000_000);
@@ -222,6 +274,48 @@ class ElementalResonanceQuestTest {
         assertTrue(ElementalResonanceQuest.validateCompletion(chr, 29992, 0).isOk());
     }
 
+    @Test
+    void onlyCurrentBossTokenCanDropAndBePickedUp() {
+        Character chr = newMage(70);
+
+        var start = ElementalResonanceQuest.startStage(chr, 29991);
+        assertTrue(start.success());
+
+        assertTrue(ElementalResonanceQuest.isAllowedBossTokenDrop(chr, 2220000, 4033012, 29991));
+        assertTrue(ElementalResonanceQuest.needBossToken(chr, 4033012, 29991));
+        assertFalse(ElementalResonanceQuest.isAllowedBossTokenDrop(chr, 3220000, 4033013, 29991));
+        assertFalse(ElementalResonanceQuest.needBossToken(chr, 4033013, 29991));
+
+        addItem(chr, 4033012, 1);
+        assertFalse(ElementalResonanceQuest.isAllowedBossTokenDrop(chr, 2220000, 4033012, 29991));
+
+        var firstBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, 29991);
+        assertTrue(firstBossStep.success());
+
+        assertFalse(ElementalResonanceQuest.isAllowedBossTokenDrop(chr, 2220000, 4033012, 29991));
+        assertTrue(ElementalResonanceQuest.isAllowedBossTokenDrop(chr, 3220000, 4033013, 29991));
+        assertTrue(ElementalResonanceQuest.needBossToken(chr, 4033013, 29991));
+    }
+
+    @Test
+    void bossTokenMapDropIsVisibleAndPickableOnlyByOwner() {
+        Character owner = newMage(70);
+        Character teammate = newMage(70);
+        setCharacterId(owner, 10001);
+        setCharacterId(teammate, 10002);
+        assertTrue(ElementalResonanceQuest.startStage(owner, 29991).success());
+        assertTrue(ElementalResonanceQuest.startStage(teammate, 29991).success());
+
+        MapItem drop = new MapItem(new Item(4033012, (short) 0, (short) 1),
+                new Point(0, 0), owner, owner, owner.getClient(), (byte) 0, false, 29991);
+        drop.setDropTime(0);
+
+        assertTrue(drop.isVisibleTo(owner));
+        assertTrue(drop.canBePickedBy(owner));
+        assertFalse(drop.isVisibleTo(teammate));
+        assertFalse(drop.canBePickedBy(teammate));
+    }
+
     private static Object bean(Map<Class<?>, Object> beans, Class<?> type) {
         return beans.computeIfAbsent(type, key -> mock(key, RETURNS_DEEP_STUBS));
     }
@@ -235,10 +329,14 @@ class ElementalResonanceQuestTest {
         return chr;
     }
 
-    private static void addTierOneBossTokens(Character chr) {
-        addItem(chr, 4033012, 1);
-        addItem(chr, 4033013, 1);
-        addItem(chr, 4033014, 1);
+    private static void setCharacterId(Character chr, int id) {
+        try {
+            Field field = Character.class.getDeclaredField("id");
+            field.setAccessible(true);
+            field.setInt(chr, id);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private static void addTierOneBaseRequirements(Character chr) {
@@ -247,12 +345,6 @@ class ElementalResonanceQuestTest {
         addItem(chr, 4000061, 100);
         addItem(chr, 4021009, 1);
         chr.setMeso(2_000_000);
-    }
-
-    private static void addTierTwoBossTokens(Character chr) {
-        addItem(chr, 4033015, 1);
-        addItem(chr, 4033016, 1);
-        addItem(chr, 4033017, 1);
     }
 
     private static void addTierTwoBaseMaterials(Character chr) {

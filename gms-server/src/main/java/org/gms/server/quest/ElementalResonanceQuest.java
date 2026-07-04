@@ -21,13 +21,12 @@ public final class ElementalResonanceQuest {
     public static final int NPC_ID = 1032001;
     public static final short FIRST_QUEST_ID = 29991;
     public static final short LAST_QUEST_ID = 29995;
-    public static final short FIRST_BRIDGE_QUEST_ID = 29960;
-    public static final short LAST_BRIDGE_QUEST_ID = 29969;
+    public static final short FIRST_BRIDGE_QUEST_ID = 29950;
+    public static final short LAST_BRIDGE_QUEST_ID = 29970;
 
     private static final int VIRTUAL_PROGRESS_KEY = 0;
     private static final String PROGRESS_NOT_READY = "000";
     private static final String PROGRESS_READY = "001";
-    private static final int BRIDGES_PER_STAGE = 2;
 
     private static final int BLACK_CRYSTAL = 4021008;
     private static final int STAR_ROCK = 4021009;
@@ -43,39 +42,45 @@ public final class ElementalResonanceQuest {
     private static final Stage[] STAGES = {
             new Stage(1, FIRST_QUEST_ID, 70, "元素共鸣的初声",
                     new int[]{1372035, 1372036, 1372037, 1372038, 1372047},
-                    List.of(4033012, 4033013, 4033014),
+                    List.of(boss(2220000, 4033012), boss(3220000, 4033013), boss(6130101, 4033014)),
                     List.of(req(4000059, 100), req(4000060, 100), req(4000061, 100), req(STAR_ROCK, 1)),
                     2_000_000,
                     List.of(),
-                    0),
+                    0,
+                    (short) 29950),
             new Stage(2, (short) 29992, 100, "元素共鸣的回响",
                     new int[]{1382045, 1382046, 1382047, 1382048, 1382061},
-                    List.of(4033015, 4033016, 4033017),
+                    List.of(boss(5220000, 4033015), boss(5220002, 4033016), boss(5220003, 4033017)),
                     List.of(req(4000144, 100), req(4000146, 100), req(4000176, 20), req(BLACK_CRYSTAL, 2), req(STAR_ROCK, 1)),
                     8_000_000,
                     List.of(req(BLACK_CRYSTAL, 1), req(STAR_ROCK, 1)),
-                    2_000_000),
+                    2_000_000,
+                    (short) 29954),
             new Stage(3, (short) 29993, 133, "元素共鸣的裂隙",
                     new int[]{1372039, 1372040, 1372041, 1372042, 1372048},
-                    List.of(4033018, 4033019, 4033020),
+                    List.of(boss(6220000, 4033018), boss(6300005, 4033019), boss(8130100, 4033020)),
                     List.of(req(BLACK_CRYSTAL, 5), req(STAR_ROCK, 3)),
                     18_000_000,
                     List.of(req(BLACK_CRYSTAL, 3), req(STAR_ROCK, 2)),
-                    5_000_000),
+                    5_000_000,
+                    (short) 29958),
             new Stage(4, (short) 29994, 160, "元素共鸣的风暴",
                     new int[]{1382049, 1382050, 1382051, 1382052, 1382063},
-                    List.of(4033021, 4033022, 4033023),
+                    List.of(boss(8150000, 4033021), boss(8180000, 4033022), boss(8180001, 4033023)),
                     List.of(req(4000235, 3), req(4000243, 3), req(4001084, 1), req(BLACK_CRYSTAL, 8), req(STAR_ROCK, 5)),
                     30_000_000,
                     List.of(req(BLACK_CRYSTAL, 5), req(STAR_ROCK, 3)),
-                    10_000_000),
+                    10_000_000,
+                    (short) 29962),
             new Stage(5, (short) 29995, 190, "元素共鸣的终章",
                     new int[]{1372059, 1372060, 1372061, 1372062, 1372063},
-                    List.of(4033024, 4033025, 4033026, 4033027),
+                    List.of(boss(8500002, 4033024), boss(8800002, 4033025),
+                            boss(8810018, 4033026), boss(8820001, 4033027)),
                     List.of(req(4001083, 1), req(4001084, 1), req(4000235, 5), req(4000243, 5), req(BLACK_CRYSTAL, 10), req(STAR_ROCK, 10)),
                     80_000_000,
                     List.of(req(BLACK_CRYSTAL, 10), req(STAR_ROCK, 5)),
-                    30_000_000)
+                    30_000_000,
+                    (short) 29966)
     };
 
     private static final Set<Integer> ELEMENTAL_WEAPONS = new HashSet<>();
@@ -87,7 +92,9 @@ public final class ElementalResonanceQuest {
                 ELEMENTAL_WEAPONS.add(itemId);
                 QUEST_ITEMS.add(itemId);
             }
-            QUEST_ITEMS.addAll(stage.bossTokenIds);
+            for (BossTarget bossTarget : stage.bossTargets) {
+                QUEST_ITEMS.add(bossTarget.tokenId());
+            }
             for (Requirement requirement : stage.baseRequirements) {
                 QUEST_ITEMS.add(requirement.itemId());
             }
@@ -114,6 +121,54 @@ public final class ElementalResonanceQuest {
 
     public static boolean isQuestRelevantItem(int itemId) {
         return QUEST_ITEMS.contains(itemId);
+    }
+
+    public static boolean isBossTokenItem(int itemId) {
+        for (Stage stage : STAGES) {
+            for (BossTarget bossTarget : stage.bossTargets) {
+                if (bossTarget.tokenId() == itemId) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isBossTokenForMonster(int mobId, int itemId, int questId) {
+        Stage stage = getStageByQuestId(questId);
+        if (stage == null) {
+            return false;
+        }
+        for (BossTarget bossTarget : stage.bossTargets) {
+            if (bossTarget.mobId() == mobId && bossTarget.tokenId() == itemId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isAllowedBossTokenDrop(Character chr, int mobId, int itemId, int questId) {
+        if (!isBossTokenItem(itemId)) {
+            return true;
+        }
+        BossTarget current = currentBossTarget(chr, getStageByQuestId(questId));
+        return current != null
+                && current.mobId() == mobId
+                && current.tokenId() == itemId
+                && needBossToken(chr, itemId, questId);
+    }
+
+    public static boolean needBossToken(Character chr, int itemId, int questId) {
+        if (!isBossTokenItem(itemId)) {
+            return true;
+        }
+        if (chr == null || chr.getQuestStatus(questId) != QuestStatus.Status.STARTED.getId()) {
+            return false;
+        }
+        BossTarget current = currentBossTarget(chr, getStageByQuestId(questId));
+        return current != null
+                && current.tokenId() == itemId
+                && chr.getItemQuantity(itemId, false) < 1;
     }
 
     public static void syncQuestStateIfRelevant(Character chr, int itemId) {
@@ -252,7 +307,7 @@ public final class ElementalResonanceQuest {
         }
 
         return "#e" + stage.name + "#n\r\n\r\n"
-                + "元素的回声会沿着你的武器留下痕迹。这次共鸣会分成三步推进：先取回 Boss 共鸣凭证，再交付重铸材料，最后选择新的元素杖。\r\n\r\n"
+                + "元素的回声会沿着你的武器留下痕迹。这次共鸣会按顺序推进：逐个击败指定 Boss 并报告凭证，再交付重铸材料，最后选择新的元素杖。\r\n\r\n"
                 + stageRequirementText(chr, stage, -1)
                 + "\r\n每完成一步都回到汉斯身边确认，下一步才会开启。";
     }
@@ -306,8 +361,9 @@ public final class ElementalResonanceQuest {
         StringBuilder text = new StringBuilder("#e").append(stage.name).append("#n\r\n\r\n");
         text.append(stageRequirementText(chr, stage, -1)).append("\r\n");
         if (step == Step.BOSS_TOKENS) {
-            text.append("要把这些 Boss 共鸣凭证交给汉斯分析吗？\r\n\r\n");
-            text.append("#r交付后会消耗这些凭证，并开启普通材料准备步骤。#k");
+            BossTarget current = currentBossTarget(chr, stage);
+            text.append("要把 #b#o").append(current.mobId()).append("##k 的共鸣凭证交给汉斯分析吗？\r\n\r\n");
+            text.append("#r交付后会消耗这枚凭证，并开启下一步。#k");
             return text.toString();
         }
 
@@ -375,12 +431,14 @@ public final class ElementalResonanceQuest {
 
         Step step = currentStep(chr, stage);
         if (step == Step.BOSS_TOKENS) {
-            removeRequirements(chr, tokenRequirements(stage));
-            setBridgeCompleted(chr, stage.bossBridgeQuestId());
+            BossTarget current = currentBossTarget(chr, stage);
+            removeRequirements(chr, List.of(req(current.tokenId(), 1)));
+            setBridgeCompleted(chr, stage.bossBridgeQuestId(currentBossIndex(chr, stage)));
             setQuestStatus(chr, stage.questId, QuestStatus.Status.STARTED, true,
                     currentStepReady(chr, stage) ? PROGRESS_READY : PROGRESS_NOT_READY, true);
             return StepAdvanceResult.success("#e" + stage.name + "#n\r\n\r\n"
-                    + "Boss 共鸣凭证已经确认。\r\n\r\n下一步：准备普通材料和基础金币，再回到汉斯身边交付。");
+                    + "#b#o" + current.mobId() + "##k 的共鸣凭证已经确认。\r\n\r\n"
+                    + nextStepMessage(chr, stage));
         }
 
         removeRequirements(chr, stage.baseRequirements);
@@ -543,7 +601,11 @@ public final class ElementalResonanceQuest {
         }
 
         if (step == Step.BOSS_TOKENS) {
-            return validateRequirements(chr, tokenRequirements(stage), 0);
+            BossTarget current = currentBossTarget(chr, stage);
+            if (current == null) {
+                return StepAdvanceValidation.fail("当前 Boss 步骤状态异常。");
+            }
+            return validateRequirements(chr, List.of(req(current.tokenId(), 1)), 0);
         }
 
         return validateRequirements(chr, stage.baseRequirements, stage.baseMeso);
@@ -638,10 +700,30 @@ public final class ElementalResonanceQuest {
         if (isBridgeCompleted(chr, stage.materialBridgeQuestId())) {
             return Step.REWARD;
         }
-        if (isBridgeCompleted(chr, stage.bossBridgeQuestId())) {
-            return Step.BASE_MATERIALS;
+        if (currentBossIndex(chr, stage) >= 0) {
+            return Step.BOSS_TOKENS;
         }
-        return Step.BOSS_TOKENS;
+        return Step.BASE_MATERIALS;
+    }
+
+    private static int currentBossIndex(Character chr, Stage stage) {
+        if (chr == null || stage == null) {
+            return -1;
+        }
+        for (int i = 0; i < stage.bossTargets.size(); i++) {
+            if (!isBridgeCompleted(chr, stage.bossBridgeQuestId(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static BossTarget currentBossTarget(Character chr, Stage stage) {
+        int index = currentBossIndex(chr, stage);
+        if (index < 0) {
+            return null;
+        }
+        return stage.bossTargets.get(index);
     }
 
     private static boolean currentStepReady(Character chr, Stage stage) {
@@ -664,8 +746,9 @@ public final class ElementalResonanceQuest {
     }
 
     private static void resetStageBridges(Character chr, Stage stage) {
-        setBridgeNotStarted(chr, stage.bossBridgeQuestId());
-        setBridgeNotStarted(chr, stage.materialBridgeQuestId());
+        for (short questId : stage.bridgeQuestIds()) {
+            setBridgeNotStarted(chr, questId);
+        }
     }
 
     private static void setBridgeNotStarted(Character chr, short questId) {
@@ -742,7 +825,8 @@ public final class ElementalResonanceQuest {
 
     private static String stageStartedMessage(Stage stage) {
         return "#e" + stage.name + "#n\r\n\r\n"
-                + "去击败指定 Boss，收集共鸣凭证和材料。准备好后回到汉斯身边，我会替你完成这次元素共鸣。";
+                + "先去击败 #b#o" + stage.bossTargets.get(0).mobId()
+                + "##k，带回第一枚共鸣凭证。每完成一个 Boss 步骤都回到汉斯身边确认。";
     }
 
     private static String nextStageMessage(Stage stage) {
@@ -751,6 +835,17 @@ public final class ElementalResonanceQuest {
         }
         Stage next = STAGES[stage.index];
         return "下一阶段会在 #r" + next.requiredLevel + "#k 级开启。";
+    }
+
+    private static String nextStepMessage(Character chr, Stage stage) {
+        BossTarget nextBoss = currentBossTarget(chr, stage);
+        if (nextBoss != null) {
+            return "下一步：击败 #b#o" + nextBoss.mobId() + "##k，带回下一枚共鸣凭证。";
+        }
+        if (!isBridgeCompleted(chr, stage.materialBridgeQuestId())) {
+            return "下一步：准备普通材料和基础金币，再回到汉斯身边交付。";
+        }
+        return "下一步：点击完成书本，选择这次要共鸣的元素杖。";
     }
 
     private static String stageRequirementText(Character chr, Stage stage, int selection) {
@@ -770,14 +865,19 @@ public final class ElementalResonanceQuest {
 
         Step step = currentStep(chr, stage);
         if (step == Step.BOSS_TOKENS) {
-            text.append("\r\n#e当前步骤 1/3：收集 Boss 共鸣凭证#n\r\n");
-            text.append(requirementText(chr, tokenRequirements(stage)));
+            int bossIndex = currentBossIndex(chr, stage);
+            BossTarget bossTarget = stage.bossTargets.get(bossIndex);
+            text.append("\r\n#e当前步骤 ").append(bossIndex + 1).append("/")
+                    .append(stage.totalStepCount()).append("：击败 #o").append(bossTarget.mobId())
+                    .append("##n\r\n");
+            text.append(requirementText(chr, List.of(req(bossTarget.tokenId(), 1))));
             text.append("下一步：带着凭证回到汉斯身边报告。");
             return text.toString();
         }
 
         if (step == Step.BASE_MATERIALS) {
-            text.append("\r\n#e当前步骤 2/3：交付普通材料#n\r\n");
+            text.append("\r\n#e当前步骤 ").append(stage.bossTargets.size() + 1).append("/")
+                    .append(stage.totalStepCount()).append("：交付普通材料#n\r\n");
             text.append(requirementText(chr, stage.baseRequirements));
             text.append("基础金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
                     .append(formatMeso(stage.baseMeso)).append("#k\r\n");
@@ -785,7 +885,8 @@ public final class ElementalResonanceQuest {
             return text.toString();
         }
 
-        text.append("\r\n#e当前步骤 3/3：选择元素杖#n\r\n");
+        text.append("\r\n#e当前步骤 ").append(stage.totalStepCount()).append("/")
+                .append(stage.totalStepCount()).append("：选择元素杖#n\r\n");
         if (stage.index > 1) {
             text.append("跨属性重铸额外消耗：");
             if (selection < 0) {
@@ -806,8 +907,11 @@ public final class ElementalResonanceQuest {
 
     private static String completedStepText(Character chr, Stage stage) {
         List<String> completed = new ArrayList<>();
-        if (isBridgeCompleted(chr, stage.bossBridgeQuestId())) {
-            completed.add("Boss 共鸣凭证已报告");
+        for (int i = 0; i < stage.bossTargets.size(); i++) {
+            BossTarget bossTarget = stage.bossTargets.get(i);
+            if (isBridgeCompleted(chr, stage.bossBridgeQuestId(i))) {
+                completed.add("#o" + bossTarget.mobId() + "# 凭证已报告");
+            }
         }
         if (isBridgeCompleted(chr, stage.materialBridgeQuestId())) {
             completed.add("普通材料已交付");
@@ -854,8 +958,8 @@ public final class ElementalResonanceQuest {
 
     private static List<Requirement> tokenRequirements(Stage stage) {
         List<Requirement> requirements = new ArrayList<>();
-        for (int tokenId : stage.bossTokenIds) {
-            requirements.add(req(tokenId, 1));
+        for (BossTarget bossTarget : stage.bossTargets) {
+            requirements.add(req(bossTarget.tokenId(), 1));
         }
         return requirements;
     }
@@ -892,6 +996,10 @@ public final class ElementalResonanceQuest {
         return new Requirement(itemId, count);
     }
 
+    private static BossTarget boss(int mobId, int tokenId) {
+        return new BossTarget(mobId, tokenId);
+    }
+
     private enum Step {
         BOSS_TOKENS,
         BASE_MATERIALS,
@@ -902,6 +1010,9 @@ public final class ElementalResonanceQuest {
     }
 
     public record Requirement(int itemId, int count) {
+    }
+
+    public record BossTarget(int mobId, int tokenId) {
     }
 
     public record StaffState(int total, StaffInfo current) {
@@ -916,25 +1027,27 @@ public final class ElementalResonanceQuest {
         private final int requiredLevel;
         private final String name;
         private final int[] rewardItemIds;
-        private final List<Integer> bossTokenIds;
+        private final List<BossTarget> bossTargets;
         private final List<Requirement> baseRequirements;
         private final int baseMeso;
         private final List<Requirement> switchRequirements;
         private final int switchMeso;
+        private final short bridgeStartQuestId;
 
         private Stage(int index, short questId, int requiredLevel, String name, int[] rewardItemIds,
-                      List<Integer> bossTokenIds, List<Requirement> baseRequirements, int baseMeso,
-                      List<Requirement> switchRequirements, int switchMeso) {
+                      List<BossTarget> bossTargets, List<Requirement> baseRequirements, int baseMeso,
+                      List<Requirement> switchRequirements, int switchMeso, short bridgeStartQuestId) {
             this.index = index;
             this.questId = questId;
             this.requiredLevel = requiredLevel;
             this.name = name;
             this.rewardItemIds = rewardItemIds;
-            this.bossTokenIds = List.copyOf(bossTokenIds);
+            this.bossTargets = List.copyOf(bossTargets);
             this.baseRequirements = List.copyOf(baseRequirements);
             this.baseMeso = baseMeso;
             this.switchRequirements = List.copyOf(switchRequirements);
             this.switchMeso = switchMeso;
+            this.bridgeStartQuestId = bridgeStartQuestId;
         }
 
         public int getIndex() {
@@ -961,7 +1074,15 @@ public final class ElementalResonanceQuest {
         }
 
         public List<Integer> getBossTokenIds() {
-            return bossTokenIds;
+            List<Integer> tokenIds = new ArrayList<>();
+            for (BossTarget bossTarget : bossTargets) {
+                tokenIds.add(bossTarget.tokenId());
+            }
+            return tokenIds;
+        }
+
+        public List<BossTarget> getBossTargets() {
+            return bossTargets;
         }
 
         public List<Requirement> getBaseRequirements() {
@@ -980,12 +1101,24 @@ public final class ElementalResonanceQuest {
             return switchMeso;
         }
 
-        private short bossBridgeQuestId() {
-            return (short) (FIRST_BRIDGE_QUEST_ID + (index - 1) * BRIDGES_PER_STAGE);
+        private short bossBridgeQuestId(int bossIndex) {
+            return (short) (bridgeStartQuestId + bossIndex);
         }
 
         private short materialBridgeQuestId() {
-            return (short) (bossBridgeQuestId() + 1);
+            return (short) (bridgeStartQuestId + bossTargets.size());
+        }
+
+        private List<Short> bridgeQuestIds() {
+            List<Short> questIds = new ArrayList<>();
+            for (short questId = bridgeStartQuestId; questId <= materialBridgeQuestId(); questId++) {
+                questIds.add(questId);
+            }
+            return questIds;
+        }
+
+        private int totalStepCount() {
+            return bossTargets.size() + 2;
         }
 
         private List<Requirement> finalRequirementsFor(boolean switchElement) {

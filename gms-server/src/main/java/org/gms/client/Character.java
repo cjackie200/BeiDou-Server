@@ -5471,6 +5471,10 @@ public class Character extends AbstractCharacterObject {
             return true;
         }
 
+        if (ElementalResonanceQuest.isBossTokenItem(itemid)) {
+            return ElementalResonanceQuest.needBossToken(this, itemid, questid);
+        }
+
         int amountNeeded, questStatus = this.getQuestStatus(questid);
         if (questStatus == 0) {
             amountNeeded = Quest.getInstance(questid).getStartItemAmountNeeded(itemid);
