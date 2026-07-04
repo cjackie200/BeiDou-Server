@@ -643,23 +643,41 @@ public class MapleMap {
 
     private static void sortDropEntries(List<MonsterDropEntry> from, List<MonsterDropEntry> item,
                                         List<MonsterDropEntry> visibleQuest, List<MonsterDropEntry> otherQuest,
-                                        List<MonsterDropEntry> personalQuest, Character chr, int mobId) {
+                                        List<PersonalQuestDropEntry> personalQuest,
+                                        List<Character> personalQuestRecipients, Character chr, int mobId) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         for (MonsterDropEntry mde : from) {
             if (!ii.isQuestItem(mde.itemId)) {
                 item.add(mde);
-            } else if (ElementalResonanceQuest.isBossTokenItem(mde.itemId)) {
-                personalQuest.add(mde);
+            } else if (isPersonalQuestDropEntry(mde, ii)) {
+                for (Character recipient : personalQuestRecipients) {
+                    if (canReceivePersonalQuestDrop(recipient, mobId, mde)) {
+                        personalQuest.add(new PersonalQuestDropEntry(mde, recipient));
+                    }
+                }
             } else {
-                if (ElementalResonanceQuest.isAllowedBossTokenDrop(chr, mobId, mde.itemId, mde.questid)
-                        && chr.needQuestItem(mde.questid, mde.itemId)) {
+                if (chr.needQuestItem(mde.questid, mde.itemId)) {
                     visibleQuest.add(mde);
                 } else {
                     otherQuest.add(mde);
                 }
             }
         }
+    }
+
+    private static boolean isPersonalQuestDropEntry(MonsterDropEntry dropEntry, ItemInformationProvider ii) {
+        return dropEntry.questid > 0 && ii.isQuestItem(dropEntry.itemId);
+    }
+
+    private static boolean canReceivePersonalQuestDrop(Character chr, int mobId, MonsterDropEntry dropEntry) {
+        if (chr == null) {
+            return false;
+        }
+        if (ElementalResonanceQuest.isBossTokenItem(dropEntry.itemId)) {
+            return ElementalResonanceQuest.isAllowedBossTokenDrop(chr, mobId, dropEntry.itemId, dropEntry.questid);
+        }
+        return chr.needQuestItem(dropEntry.questid, dropEntry.itemId);
     }
 
     private byte dropItemsFromMonsterOnMap(List<MonsterDropEntry> dropEntry, Point pos, byte d, float chRate, byte droptype, int mobpos, Character chr, Monster mob) {
@@ -711,46 +729,37 @@ public class MapleMap {
         return d;
     }
 
-    private byte dropPersonalQuestItemsFromMonsterOnMap(List<MonsterDropEntry> dropEntry, Point pos, byte d,
+    private byte dropPersonalQuestItemsFromMonsterOnMap(List<PersonalQuestDropEntry> dropEntry, Point pos, byte d,
                                                         float chRate, int mobpos, Character chr, Monster mob) {
         if (dropEntry.isEmpty()) {
             return d;
         }
 
-        List<Character> recipients = personalQuestDropRecipients(chr);
-        if (recipients.isEmpty()) {
-            return d;
-        }
-
         Collections.shuffle(dropEntry);
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        for (final MonsterDropEntry de : dropEntry) {
-            if (!ElementalResonanceQuest.isBossTokenForMonster(mob.getId(), de.itemId, de.questid)) {
+        for (PersonalQuestDropEntry personalDrop : dropEntry) {
+            MonsterDropEntry de = personalDrop.dropEntry();
+            Character recipient = personalDrop.recipient();
+            if (!canReceivePersonalQuestDrop(recipient, mob.getId(), de)) {
                 continue;
             }
 
-            for (Character recipient : recipients) {
-                if (!ElementalResonanceQuest.isAllowedBossTokenDrop(recipient, mob.getId(), de.itemId, de.questid)) {
-                    continue;
-                }
-
-                float cardRate = recipient.getCardRate(de.itemId);
-                int dropChance = (int) Math.min((float) de.chance * chRate * cardRate, Integer.MAX_VALUE);
-                if (Randomizer.nextInt(999999) >= dropChance) {
-                    continue;
-                }
-
-                pos.x = mobpos + ((d % 2 == 0) ? (25 * ((d + 1) / 2)) : -(25 * (d / 2)));
-                Item idrop;
-                if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
-                    idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
-                } else {
-                    idrop = new Item(de.itemId, (short) 0,
-                            (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
-                }
-                spawnDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, recipient, (byte) 0, de.questid);
-                d++;
+            float cardRate = recipient.getCardRate(de.itemId);
+            int dropChance = (int) Math.min((float) de.chance * chRate * cardRate, Integer.MAX_VALUE);
+            if (Randomizer.nextInt(999999) >= dropChance) {
+                continue;
             }
+
+            pos.x = mobpos + ((d % 2 == 0) ? (25 * ((d + 1) / 2)) : -(25 * (d / 2)));
+            Item idrop;
+            if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
+                idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
+            } else {
+                idrop = new Item(de.itemId, (short) 0,
+                        (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
+            }
+            spawnDrop(idrop, calcDropPos(pos, mob.getPosition()), mob, recipient, (byte) 0, de.questid);
+            d++;
         }
 
         return d;
@@ -764,6 +773,22 @@ public class MapleMap {
             return List.of(chr);
         }
         return chr.getPartyMembersOnSameMap();
+    }
+
+    private void addDynamicPersonalQuestDrops(List<PersonalQuestDropEntry> personalQuestEntry,
+                                             List<Character> personalQuestRecipients, int mobId) {
+        for (Character recipient : personalQuestRecipients) {
+            List<MonsterDropEntry> dynamicDrops = new ArrayList<>();
+            LifeProofQuest.addDynamicQuestDrops(recipient, mobId, dynamicDrops);
+            for (MonsterDropEntry dynamicDrop : dynamicDrops) {
+                if (canReceivePersonalQuestDrop(recipient, mobId, dynamicDrop)) {
+                    personalQuestEntry.add(new PersonalQuestDropEntry(dynamicDrop, recipient));
+                }
+            }
+        }
+    }
+
+    private record PersonalQuestDropEntry(MonsterDropEntry dropEntry, Character recipient) {
     }
 
     private byte dropGlobalItemsFromMonsterOnMap(List<MonsterGlobalDropEntry> globalEntry, Point pos, byte d, byte droptype, int mobpos, Character chr, Monster mob) {
@@ -823,12 +848,14 @@ public class MapleMap {
         final List<MonsterDropEntry> dropEntry = new ArrayList<>();
         final List<MonsterDropEntry> visibleQuestEntry = new ArrayList<>();
         final List<MonsterDropEntry> otherQuestEntry = new ArrayList<>();
-        final List<MonsterDropEntry> personalQuestEntry = new ArrayList<>();
+        final List<PersonalQuestDropEntry> personalQuestEntry = new ArrayList<>();
+        final List<Character> personalQuestRecipients = personalQuestDropRecipients(chr);
 
         List<MonsterDropEntry> lootEntry = GameConfig.getServerBoolean("use_spawn_relevant_loot") ? mob.retrieveRelevantDrops() : mi.retrieveEffectiveDrop(mob.getId());
-        sortDropEntries(lootEntry, dropEntry, visibleQuestEntry, otherQuestEntry, personalQuestEntry, chr, mob.getId());     // thanks Articuno, Limit, Rohenn for noticing quest loots not showing up in only-quest item drops scenario
+        sortDropEntries(lootEntry, dropEntry, visibleQuestEntry, otherQuestEntry, personalQuestEntry,
+                personalQuestRecipients, chr, mob.getId());     // thanks Articuno, Limit, Rohenn for noticing quest loots not showing up in only-quest item drops scenario
 
-        LifeProofQuest.addDynamicQuestDrops(chr, mob.getId(), visibleQuestEntry);
+        addDynamicPersonalQuestDrops(personalQuestEntry, personalQuestRecipients, mob.getId());
 
         if (lootEntry.isEmpty() && visibleQuestEntry.isEmpty() && personalQuestEntry.isEmpty()) {   // thanks resinate
             return;
@@ -1036,7 +1063,7 @@ public class MapleMap {
 
     private void registerMobItemDrops(byte droptype, int mobpos, float chRate, Point pos, List<MonsterDropEntry> dropEntry,
                                       List<MonsterDropEntry> visibleQuestEntry, List<MonsterDropEntry> otherQuestEntry,
-                                      List<MonsterDropEntry> personalQuestEntry, List<MonsterGlobalDropEntry> globalEntry,
+                                      List<PersonalQuestDropEntry> personalQuestEntry, List<MonsterGlobalDropEntry> globalEntry,
                                       Character chr, Monster mob) {
         MobLootEntry mle = new MobLootEntry(droptype, mobpos, chRate, pos, dropEntry, visibleQuestEntry,
                 otherQuestEntry, personalQuestEntry, globalEntry, chr, mob);
@@ -1135,7 +1162,7 @@ public class MapleMap {
                         continue;
                     }
 
-                    if (!ElementalResonanceQuest.isBossTokenItem(mdrop.getItemId())) {
+                    if (!mdrop.isPersonalQuestDrop()) {
                         mdrop.setPartyOwnerId(partyid);
                     }
 
@@ -1200,7 +1227,7 @@ public class MapleMap {
 
     private void spawnDrop(final Item idrop, final Point dropPos, final MapObject dropper, final Character chr, final byte droptype, final short questid) {
         final MapItem mdrop = new MapItem(idrop, dropPos, dropper, chr, chr.getClient(), droptype, false, questid);
-        if (ElementalResonanceQuest.isBossTokenItem(idrop.getItemId())) {
+        if (mdrop.isPersonalQuestDrop()) {
             mdrop.setPartyOwnerId(-1);
         }
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
@@ -3573,14 +3600,14 @@ public class MapleMap {
         private final List<MonsterDropEntry> dropEntry;
         private final List<MonsterDropEntry> visibleQuestEntry;
         private final List<MonsterDropEntry> otherQuestEntry;
-        private final List<MonsterDropEntry> personalQuestEntry;
+        private final List<PersonalQuestDropEntry> personalQuestEntry;
         private final List<MonsterGlobalDropEntry> globalEntry;
         private final Character chr;
         private final Monster mob;
 
         protected MobLootEntry(byte droptype, int mobpos, float chRate, Point pos, List<MonsterDropEntry> dropEntry,
                                List<MonsterDropEntry> visibleQuestEntry, List<MonsterDropEntry> otherQuestEntry,
-                               List<MonsterDropEntry> personalQuestEntry, List<MonsterGlobalDropEntry> globalEntry,
+                               List<PersonalQuestDropEntry> personalQuestEntry, List<MonsterGlobalDropEntry> globalEntry,
                                Character chr, Monster mob) {
             this.droptype = droptype;
             this.mobpos = mobpos;

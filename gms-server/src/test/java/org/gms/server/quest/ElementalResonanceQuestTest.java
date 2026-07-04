@@ -316,6 +316,22 @@ class ElementalResonanceQuestTest {
         assertFalse(drop.canBePickedBy(teammate));
     }
 
+    @Test
+    void questItemWithQuestIdUsesPersonalPickupOwnership() {
+        Character owner = newMage(120);
+        Character teammate = newMage(120);
+        setCharacterId(owner, 11001);
+        setCharacterId(teammate, 11002);
+
+        MapItem drop = new MapItem(new Item(4033000, (short) 0, (short) 1),
+                new Point(0, 0), owner, owner, owner.getClient(), (byte) 0, false, 5100);
+        drop.setDropTime(0);
+
+        assertTrue(drop.isPersonalQuestDrop());
+        assertTrue(drop.canBePickedBy(owner));
+        assertFalse(drop.canBePickedBy(teammate));
+    }
+
     private static Object bean(Map<Class<?>, Object> beans, Class<?> type) {
         return beans.computeIfAbsent(type, key -> mock(key, RETURNS_DEEP_STUBS));
     }

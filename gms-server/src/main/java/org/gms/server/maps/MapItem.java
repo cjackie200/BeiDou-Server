@@ -23,7 +23,7 @@ package org.gms.server.maps;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Item;
-import org.gms.server.quest.ElementalResonanceQuest;
+import org.gms.server.ItemInformationProvider;
 import org.gms.util.PacketCreator;
 
 import java.awt.*;
@@ -171,8 +171,8 @@ public class MapItem extends AbstractMapObject {
         return chr.needQuestItem(questid, getItemId());
     }
 
-    private boolean isPersonalQuestDrop() {
-        return item != null && ElementalResonanceQuest.isBossTokenItem(item.getItemId());
+    public final boolean isPersonalQuestDrop() {
+        return item != null && questid > 0 && ItemInformationProvider.getInstance().isQuestItem(item.getItemId());
     }
 
     public final Client getOwnerClient() {
