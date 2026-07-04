@@ -94,6 +94,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             case LIGHTING:
                 stat = "RMAL";
                 break;
+            case HOLY:
+                stat = "RMAH";
+                break;
             default:
                 return 0;
         }

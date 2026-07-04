@@ -611,7 +611,7 @@ public class PacketCreator {
     /**
      * Sends the equipped weapon's elemental bonus configuration to the client DLL.
      * Opcode 0x1006 — values are in hundredths (200 = +100%).
-     * Sequence: FIRE, POISON, ICE, LIGHTNING, elemDefault
+     * Sequence: FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
      */
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PacketCreator.class);
 
@@ -623,20 +623,22 @@ public class PacketCreator {
         // Read element stats directly from WZ to bypass DB serialization issues
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Map<String, Integer> stats = ii.getEquipStats(itemId);
-        short f = 0, s = 0, i = 0, l = 0, ed = 0;
+        short f = 0, s = 0, i = 0, l = 0, h = 0, ed = 0;
         if (stats != null) {
             f = stats.getOrDefault("RMAF", 0).shortValue();
             s = stats.getOrDefault("RMAS", 0).shortValue();
             i = stats.getOrDefault("RMAI", 0).shortValue();
             l = stats.getOrDefault("RMAL", 0).shortValue();
+            h = stats.getOrDefault("RMAH", 0).shortValue();
             ed = stats.getOrDefault("elemDefault", 0).shortValue();
         }
         p.writeShort(f);
         p.writeShort(s);
         p.writeShort(i);
         p.writeShort(l);
+        p.writeShort(h);
         p.writeShort(ed);
-        log.info("ElementalWeaponConfig itemId={} F={} S={} I={} L={} elemDefault={}", itemId, f, s, i, l, ed);
+        log.info("ElementalWeaponConfig itemId={} F={} S={} I={} L={} H={} elemDefault={}", itemId, f, s, i, l, h, ed);
         return p;
     }
 

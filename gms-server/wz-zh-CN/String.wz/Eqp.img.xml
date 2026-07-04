@@ -19397,6 +19397,12 @@
             <imgdir name="1372046">
                 <string name="name" value="圣诞六翼天使武器(短杖)" />
             </imgdir>
+            <imgdir name="1372047">
+                <string name="name" value="圣灵珠短杖" />
+            </imgdir>
+            <imgdir name="1372048">
+                <string name="name" value="圣光短杖" />
+            </imgdir>
             <imgdir name="1372049">
                 <string name="name" value="扎昆的树枝" />
             </imgdir>
@@ -19416,6 +19422,21 @@
             <imgdir name="1372058">
                 <string name="name" value="地狱大公短杖" />
                 <string name="desc" value="#c你能够感受到地狱大公的暗黑能量。#" />
+            </imgdir>
+            <imgdir name="1372059">
+                <string name="name" value="终焰短杖" />
+            </imgdir>
+            <imgdir name="1372060">
+                <string name="name" value="终毒短杖" />
+            </imgdir>
+            <imgdir name="1372061">
+                <string name="name" value="终冰短杖" />
+            </imgdir>
+            <imgdir name="1372062">
+                <string name="name" value="终雷短杖" />
+            </imgdir>
+            <imgdir name="1372063">
+                <string name="name" value="终圣短杖" />
             </imgdir>
             <imgdir name="1382000">
                 <string name="name" value="木制长杖" />
@@ -19602,8 +19623,14 @@
             <imgdir name="1382060">
                 <string name="name" value="绯红巨炮" />
             </imgdir>
+            <imgdir name="1382061">
+                <string name="name" value="圣灵珠长杖" />
+            </imgdir>
             <imgdir name="1382062">
                 <string name="name" value="圣诞六翼天使武器(长杖)" />
+            </imgdir>
+            <imgdir name="1382063">
+                <string name="name" value="圣光长杖" />
             </imgdir>
             <imgdir name="1382066">
                 <string name="name" value="蝙蝠怪的魔灵之魂" />

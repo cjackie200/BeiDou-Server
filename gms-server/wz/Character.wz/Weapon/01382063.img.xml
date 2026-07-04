@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<imgdir name="01382052.img">
+<imgdir name="01382063.img">
   <imgdir name="info">
     <canvas name="icon" width="34" height="35">
       <vector name="origin" x="1" y="34"/>
@@ -22,13 +22,14 @@
     <int name="reqLUK" value="0"/>
     <int name="incPAD" value="108"/>
     <int name="incMAD" value="178"/>
+    <int name="incINT" value="2"/>
+    <int name="incLUK" value="1"/>
     <int name="tuc" value="7"/>
     <int name="price" value="190000"/>
     <int name="attackSpeed" value="4"/>
     <int name="cash" value="0"/>
-    <int name="incLUK" value="3"/>
     <int name="elemDefault" value="50"/>
-    <int name="incRMAL" value="200"/>
+    <int name="incRMAH" value="200"/>
     <imgdir name="level">
       <imgdir name="info">
         <imgdir name="1">
