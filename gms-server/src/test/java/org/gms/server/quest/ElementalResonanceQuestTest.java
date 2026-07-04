@@ -83,15 +83,15 @@ class ElementalResonanceQuestTest {
     }
 
     @Test
-    void thirdStageOpensAtLevel133() {
-        Character chr = newMage(132);
+    void thirdStageOpensAtLevel130() {
+        Character chr = newMage(129);
         addItem(chr, 1382045, 1);
 
         ElementalResonanceQuest.syncQuestStateSilently(chr);
 
         assertTrue(ElementalResonanceQuest.resolveCurrentQuestId(chr).isEmpty());
 
-        chr.setLevel(133);
+        chr.setLevel(130);
 
         assertEquals(29993, ElementalResonanceQuest.resolveCurrentQuestId(chr).orElseThrow());
     }

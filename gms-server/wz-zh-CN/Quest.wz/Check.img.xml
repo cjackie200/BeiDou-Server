@@ -76844,7 +76844,7 @@
   <imgdir name="29993">
   <imgdir name="0">
     <int name="npc" value="1032001"/>
-    <int name="lvmin" value="133"/>
+    <int name="lvmin" value="130"/>
     <string name="startscript" value="elementalResonance"/>
     <imgdir name="job">
       <int name="0" value="210"/>

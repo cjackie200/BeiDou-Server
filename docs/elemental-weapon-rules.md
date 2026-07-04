@@ -119,7 +119,7 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 
 元素杖通过汉斯 `1032001` 发布的 `元素共鸣` 任务链投放，归类到任务区域
 `传奇之路`。任务 ID 为 `29991..29995`，开启等级分别为
-`70/100/133/160/190`。任务脚本位于
+`70/100/130/160/190`。任务脚本位于
 `gms-server/scripts-zh-CN/quest/elementalResonance.js`，服务端状态和兑换规则由
 `ElementalResonanceQuest` 控制。
 
