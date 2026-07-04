@@ -610,7 +610,7 @@ public class PacketCreator {
 
     /**
      * Sends the equipped weapon's elemental bonus configuration to the client DLL.
-     * Opcode 0x1006 — values are in hundredths (125 = +25%).
+     * Opcode 0x1006 — values are in hundredths (200 = +100%).
      * Sequence: FIRE, POISON, ICE, LIGHTNING, elemDefault
      */
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PacketCreator.class);

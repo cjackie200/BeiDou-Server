@@ -27,7 +27,6 @@ import org.gms.client.Job;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.client.autoban.AutobanFactory;
-import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.status.MonsterStatus;
@@ -43,6 +42,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.PlayerBuffValueHolder;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.server.StatEffect;
+import org.gms.server.ItemInformationProvider;
 import org.gms.server.TimerManager;
 import org.gms.server.life.Element;
 import org.gms.server.life.ElementalEffectiveness;
@@ -74,6 +74,37 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
     private static final long MOB_VAC_DISTANCE_GRACE_MS = 2500L;
+
+    private static short getWeaponElementBonus(Item weapon, Element element) {
+        if (weapon == null || element == null) {
+            return 0;
+        }
+
+        String stat;
+        switch (element) {
+            case FIRE:
+                stat = "RMAF";
+                break;
+            case POISON:
+                stat = "RMAS";
+                break;
+            case ICE:
+                stat = "RMAI";
+                break;
+            case LIGHTING:
+                stat = "RMAL";
+                break;
+            default:
+                return 0;
+        }
+
+        Map<String, Integer> stats = ItemInformationProvider.getInstance().getEquipStats(weapon.getItemId());
+        if (stats == null) {
+            return 0;
+        }
+
+        return stats.getOrDefault(stat, 0).shortValue();
+    }
 
     public static class AttackInfo {
 
@@ -940,11 +971,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 // Weapon elemental bonus for magic attacks
                 if (magic && skill.getElement() != Element.NEUTRAL && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
                     Item weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
-                    if (weapon instanceof Equip) {
-                        short bonus = ((Equip) weapon).getElementBonus(skill.getElement());
-                        if (bonus > 0) {
-                            calcDmgMax = calcDmgMax * bonus / 100;
-                        }
+                    short bonus = getWeaponElementBonus(weapon, skill.getElement());
+                    if (bonus > 0) {
+                        calcDmgMax = calcDmgMax * bonus / 100;
                     }
                 }
                 if (ret.skill == FPWizard.POISON_BREATH || ret.skill == FPMage.POISON_MIST || ret.skill == FPArchMage.FIRE_DEMON || ret.skill == ILArchMage.ICE_DEMON) {

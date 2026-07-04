@@ -76,7 +76,7 @@ public class Equip extends Item {
     private byte level, itemLevel;
     private short flag;
     private short str, dex, _int, luk, hp, mp, watk, matk, wdef, mdef, acc, avoid, hands, speed, jump, vicious;
-    private short incRMAF;  // Fire elemental MATK bonus (125 = +25%)
+    private short incRMAF;  // Fire elemental MATK bonus (200 = +100%)
     private short incRMAS;  // Poison elemental MATK bonus
     private short incRMAI;  // Ice elemental MATK bonus
     private short incRMAL;  // Lightning elemental MATK bonus
@@ -237,7 +237,7 @@ public class Equip extends Item {
 
     /**
      * Returns the elemental MATK bonus (in hundredths) for a given skill element.
-     * 125 = +25%, 110 = +10%, 0 = no bonus.
+     * 200 = +100%, 0 = no bonus.
      */
     public short getElementBonus(Element element) {
         switch (element) {

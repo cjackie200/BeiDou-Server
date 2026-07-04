@@ -27,9 +27,8 @@
     <int name="price" value="120000"/>
     <int name="attackSpeed" value="7"/>
     <int name="cash" value="0"/>
-    <int name="elemDefault" value="75"/>
-    <int name="incRMAF" value="125"/>
-    <int name="incRMAS" value="110"/>
+    <int name="elemDefault" value="50"/>
+    <int name="incRMAF" value="200"/>
     <imgdir name="level">
       <imgdir name="info">
         <imgdir name="1">
