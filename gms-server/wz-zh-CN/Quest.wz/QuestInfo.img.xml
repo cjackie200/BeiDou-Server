@@ -2923,7 +2923,7 @@
     <imgdir name="29991">
       <string name="name" value="元素共鸣的初声" />
       <string name="0" value="汉斯正在寻找能听见元素回声的魔法师。去找#b#p1032001##k谈谈。" />
-      <string name="1" value="击败指定 Boss，收集共鸣凭证和材料，再回到#b#p1032001##k处选择第一把元素短杖。" />
+      <string name="1" value="按汉斯的指引分步推进元素共鸣：先收集 Boss 共鸣凭证，回报后再交付普通材料，最后选择第一把元素短杖。" />
       <string name="2" value="元素共鸣已经在第一把元素短杖中苏醒。" />
       <string name="parent" value="元素共鸣" />
       <int name="order" value="1" />
@@ -2932,7 +2932,7 @@
     <imgdir name="29992">
       <string name="name" value="元素共鸣的回响" />
       <string name="0" value="上一阶段元素杖传来了新的回声。带着它去找#b#p1032001##k。" />
-      <string name="1" value="击败指定 Boss，收集共鸣凭证和材料，再回到#b#p1032001##k处重铸为 103 级元素长杖。" />
+      <string name="1" value="按汉斯的指引分步推进元素共鸣：先收集 Boss 共鸣凭证，回报后再交付普通材料，最后把上一阶段元素杖重铸为 103 级元素长杖。" />
       <string name="2" value="元素共鸣已经化为更强的 103 级元素长杖。" />
       <string name="parent" value="元素共鸣" />
       <int name="order" value="2" />
@@ -2941,7 +2941,7 @@
     <imgdir name="29993">
       <string name="name" value="元素共鸣的裂隙" />
       <string name="0" value="元素杖开始回应更深处的魔力裂隙。去找#b#p1032001##k确认下一步。" />
-      <string name="1" value="击败指定 Boss，收集共鸣凭证和材料，再回到#b#p1032001##k处重铸为 133 级元素短杖。" />
+      <string name="1" value="按汉斯的指引分步推进元素共鸣：先收集 Boss 共鸣凭证，回报后再交付普通材料，最后把上一阶段元素杖重铸为 133 级元素短杖。" />
       <string name="2" value="元素共鸣已经跨过裂隙，化为 133 级元素短杖。" />
       <string name="parent" value="元素共鸣" />
       <int name="order" value="3" />
@@ -2950,7 +2950,7 @@
     <imgdir name="29994">
       <string name="name" value="元素共鸣的风暴" />
       <string name="0" value="元素杖中卷起了高阶魔力风暴。去找#b#p1032001##k让它稳定下来。" />
-      <string name="1" value="击败指定 Boss，收集共鸣凭证和材料，再回到#b#p1032001##k处重铸为 163 级元素长杖。" />
+      <string name="1" value="按汉斯的指引分步推进元素共鸣：先收集 Boss 共鸣凭证，回报后再交付普通材料，最后把上一阶段元素杖重铸为 163 级元素长杖。" />
       <string name="2" value="元素共鸣已经凝聚成 163 级元素长杖。" />
       <string name="parent" value="元素共鸣" />
       <int name="order" value="4" />
@@ -2959,12 +2959,22 @@
     <imgdir name="29995">
       <string name="name" value="元素共鸣的终章" />
       <string name="0" value="终阶元素正在呼唤你的元素杖。去找#b#p1032001##k完成最后的共鸣。" />
-      <string name="1" value="击败指定 Boss，收集共鸣凭证和材料，再回到#b#p1032001##k处重铸为 193 级终阶元素短杖。" />
+      <string name="1" value="按汉斯的指引分步推进元素共鸣：先收集 Boss 共鸣凭证，回报后再交付普通材料，最后把上一阶段元素杖重铸为 193 级终阶元素短杖。" />
       <string name="2" value="元素共鸣抵达终章，终阶元素短杖已经完成。" />
       <string name="parent" value="元素共鸣" />
       <int name="order" value="5" />
       <int name="area" value="31" />
     </imgdir>
+    <imgdir name="29960" />
+    <imgdir name="29961" />
+    <imgdir name="29962" />
+    <imgdir name="29963" />
+    <imgdir name="29964" />
+    <imgdir name="29965" />
+    <imgdir name="29966" />
+    <imgdir name="29967" />
+    <imgdir name="29968" />
+    <imgdir name="29969" />
     <imgdir name="30000">
         <string name="name" value="来自北斗开发者的问候"/>
         <string name="0" value="来到了熟悉的冒险岛，是谁在呼唤我？"/>

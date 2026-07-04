@@ -84,6 +84,7 @@ import org.gms.server.partyquest.AriantColiseum;
 import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.Quest;
 import org.gms.service.*;
 import org.gms.util.*;
@@ -3111,6 +3112,7 @@ public class Character extends AbstractCharacterObject {
                 sendPacket(PacketCreator.getShowMesoGain(gain, inChat));
             }
             LifeProofQuest.syncActiveMesoProgress(this);
+            ElementalResonanceQuest.syncQuestStateIfMesoRelevant(this);
         } else {
             enableActions();
         }

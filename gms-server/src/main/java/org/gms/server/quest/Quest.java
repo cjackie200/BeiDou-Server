@@ -110,6 +110,9 @@ public class Quest {
         for (short questId = ElementalResonanceQuest.FIRST_QUEST_ID; questId <= ElementalResonanceQuest.LAST_QUEST_ID; questId++) {
             exploitableQuests.add(questId);
         }
+        for (short questId = ElementalResonanceQuest.FIRST_BRIDGE_QUEST_ID; questId <= ElementalResonanceQuest.LAST_BRIDGE_QUEST_ID; questId++) {
+            exploitableQuests.add(questId);
+        }
     }
 
     protected short id;

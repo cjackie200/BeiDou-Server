@@ -21,10 +21,13 @@ public final class ElementalResonanceQuest {
     public static final int NPC_ID = 1032001;
     public static final short FIRST_QUEST_ID = 29991;
     public static final short LAST_QUEST_ID = 29995;
+    public static final short FIRST_BRIDGE_QUEST_ID = 29960;
+    public static final short LAST_BRIDGE_QUEST_ID = 29969;
 
     private static final int VIRTUAL_PROGRESS_KEY = 0;
     private static final String PROGRESS_NOT_READY = "000";
     private static final String PROGRESS_READY = "001";
+    private static final int BRIDGES_PER_STAGE = 2;
 
     private static final int BLACK_CRYSTAL = 4021008;
     private static final int STAR_ROCK = 4021009;
@@ -101,6 +104,10 @@ public final class ElementalResonanceQuest {
         return questId >= FIRST_QUEST_ID && questId <= LAST_QUEST_ID;
     }
 
+    public static boolean isHiddenBridgeQuestId(int questId) {
+        return questId >= FIRST_BRIDGE_QUEST_ID && questId <= LAST_BRIDGE_QUEST_ID;
+    }
+
     public static boolean isElementalWeapon(int itemId) {
         return ELEMENTAL_WEAPONS.contains(itemId);
     }
@@ -112,6 +119,18 @@ public final class ElementalResonanceQuest {
     public static void syncQuestStateIfRelevant(Character chr, int itemId) {
         if (isQuestRelevantItem(itemId)) {
             syncQuestState(chr);
+        }
+    }
+
+    public static void syncQuestStateIfMesoRelevant(Character chr) {
+        if (chr == null) {
+            return;
+        }
+        for (Stage stage : STAGES) {
+            if (chr.getQuestStatus(stage.questId) == QuestStatus.Status.STARTED.getId()) {
+                syncQuestState(chr);
+                return;
+            }
         }
     }
 
@@ -188,23 +207,27 @@ public final class ElementalResonanceQuest {
             }
 
             if (stage.index == currentStage + 1 && chr.getQuestStatus(stage.questId) == QuestStatus.Status.STARTED.getId()) {
-                String progress = validateCompletion(chr, stage, -1).isOk() ? PROGRESS_READY : PROGRESS_NOT_READY;
+                String progress = currentStepReady(chr, stage) ? PROGRESS_READY : PROGRESS_NOT_READY;
                 setQuestStatus(chr, stage.questId, QuestStatus.Status.STARTED, announce, progress, true);
                 continue;
             }
 
             setQuestStatus(chr, stage.questId, QuestStatus.Status.NOT_STARTED, announce, null, false);
+            if (stage.index > currentStage + 1) {
+                resetStageBridges(chr, stage);
+            }
         }
     }
 
     private static void syncNoStaffState(Character chr, boolean announce) {
         for (Stage stage : STAGES) {
             if (stage.index == 1 && chr.getQuestStatus(stage.questId) == QuestStatus.Status.STARTED.getId()) {
-                String progress = validateCompletion(chr, stage, -1).isOk() ? PROGRESS_READY : PROGRESS_NOT_READY;
+                String progress = currentStepReady(chr, stage) ? PROGRESS_READY : PROGRESS_NOT_READY;
                 setQuestStatus(chr, stage.questId, QuestStatus.Status.STARTED, announce, progress, true);
                 continue;
             }
             setQuestStatus(chr, stage.questId, QuestStatus.Status.NOT_STARTED, announce, null, false);
+            resetStageBridges(chr, stage);
         }
     }
 
@@ -229,9 +252,9 @@ public final class ElementalResonanceQuest {
         }
 
         return "#e" + stage.name + "#n\r\n\r\n"
-                + "元素的回声会沿着你的武器留下痕迹。击败指定 Boss，带回共鸣凭证和材料，我会替你重铸下一阶段的元素杖。\r\n\r\n"
+                + "元素的回声会沿着你的武器留下痕迹。这次共鸣会分成三步推进：先取回 Boss 共鸣凭证，再交付重铸材料，最后选择新的元素杖。\r\n\r\n"
                 + stageRequirementText(chr, stage, -1)
-                + "\r\n完成后可以从五种元素杖中选择一把。";
+                + "\r\n每完成一步都回到汉斯身边确认，下一步才会开启。";
     }
 
     public static String progressText(Character chr, int questId) {
@@ -240,15 +263,56 @@ public final class ElementalResonanceQuest {
             return "这个元素共鸣任务暂时无法处理。";
         }
 
-        CompletionValidation validation = validateCompletion(chr, stage, -1);
         StringBuilder text = new StringBuilder("#e").append(stage.name).append("#n\r\n\r\n");
         text.append(stageRequirementText(chr, stage, -1));
-        if (validation.isOk()) {
-            text.append("\r\n#b条件已经满足。回到汉斯身边提交任务，选择新的元素杖。#k");
+        Step step = currentStep(chr, stage);
+        if (step == Step.REWARD) {
+            CompletionValidation validation = validateCompletion(chr, stage, -1);
+            if (validation.isOk()) {
+                text.append("\r\n#b重铸准备已经完成。点击完成书本选择新的元素杖。#k");
+                return text.toString();
+            }
+            text.append("\r\n#r当前不能重铸：#k").append(validation.getMessage());
             return text.toString();
         }
 
-        text.append("\r\n#r当前不能完成：#k").append(validation.getMessage());
+        StepAdvanceValidation validation = validateStepAdvance(chr, stage);
+        if (validation.isOk()) {
+            text.append("\r\n#b当前步骤已经完成。点击完成书本向汉斯报告，推进到下一步。#k");
+            return text.toString();
+        }
+
+        text.append("\r\n#r当前步骤未完成：#k").append(validation.getMessage());
+        return text.toString();
+    }
+
+    public static boolean isFinalRewardStep(Character chr, int questId) {
+        Stage stage = getStageByQuestId(questId);
+        return stage != null && currentStep(chr, stage) == Step.REWARD;
+    }
+
+    public static StepAdvanceValidation validateStepAdvance(Character chr, int questId) {
+        return validateStepAdvance(chr, getStageByQuestId(questId));
+    }
+
+    public static String advancePrompt(Character chr, int questId) {
+        Stage stage = getStageByQuestId(questId);
+        StepAdvanceValidation validation = validateStepAdvance(chr, stage);
+        if (!validation.isOk()) {
+            return validation.getMessage();
+        }
+
+        Step step = currentStep(chr, stage);
+        StringBuilder text = new StringBuilder("#e").append(stage.name).append("#n\r\n\r\n");
+        text.append(stageRequirementText(chr, stage, -1)).append("\r\n");
+        if (step == Step.BOSS_TOKENS) {
+            text.append("要把这些 Boss 共鸣凭证交给汉斯分析吗？\r\n\r\n");
+            text.append("#r交付后会消耗这些凭证，并开启普通材料准备步骤。#k");
+            return text.toString();
+        }
+
+        text.append("要把这些普通材料和基础金币交给汉斯完成重铸准备吗？\r\n\r\n");
+        text.append("#r交付后会消耗普通材料和基础金币，并开启最终元素杖选择。#k");
         return text.toString();
     }
 
@@ -284,13 +348,50 @@ public final class ElementalResonanceQuest {
             text.append("将消耗上一阶段元素杖：#r#i").append(validation.current().itemId()).append("##t")
                     .append(validation.current().itemId()).append("##k\r\n");
         }
-        text.append("将消耗材料：\r\n").append(requirementText(chr, validation.requirements()));
-        text.append("金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
-                .append(formatMeso(validation.requiredMeso())).append("#k\r\n");
+        if (validation.requirements().isEmpty() && validation.requiredMeso() == 0) {
+            text.append("普通材料已经在上一步交付，本次不再额外消耗材料和金币。\r\n");
+        } else {
+            if (!validation.requirements().isEmpty()) {
+                text.append("将额外消耗材料：\r\n").append(requirementText(chr, validation.requirements()));
+            }
+            if (validation.requiredMeso() > 0) {
+                text.append("额外金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
+                        .append(formatMeso(validation.requiredMeso())).append("#k\r\n");
+            }
+        }
         if (validation.switchElement()) {
             text.append("\r\n#r本次会跨属性重铸，额外消耗星石、黑水晶和金币。#k");
         }
         return text.toString();
+    }
+
+    public static StepAdvanceResult advanceCurrentStep(Character chr, int questId) {
+        Stage stage = getStageByQuestId(questId);
+        StepAdvanceValidation validation = validateStepAdvance(chr, stage);
+        if (!validation.isOk()) {
+            syncQuestState(chr);
+            return StepAdvanceResult.fail(validation.getMessage());
+        }
+
+        Step step = currentStep(chr, stage);
+        if (step == Step.BOSS_TOKENS) {
+            removeRequirements(chr, tokenRequirements(stage));
+            setBridgeCompleted(chr, stage.bossBridgeQuestId());
+            setQuestStatus(chr, stage.questId, QuestStatus.Status.STARTED, true,
+                    currentStepReady(chr, stage) ? PROGRESS_READY : PROGRESS_NOT_READY, true);
+            return StepAdvanceResult.success("#e" + stage.name + "#n\r\n\r\n"
+                    + "Boss 共鸣凭证已经确认。\r\n\r\n下一步：准备普通材料和基础金币，再回到汉斯身边交付。");
+        }
+
+        removeRequirements(chr, stage.baseRequirements);
+        setBridgeCompleted(chr, stage.materialBridgeQuestId());
+        if (stage.baseMeso > 0) {
+            chr.gainMeso(-stage.baseMeso, true, false, true);
+        }
+        setQuestStatus(chr, stage.questId, QuestStatus.Status.STARTED, true,
+                currentStepReady(chr, stage) ? PROGRESS_READY : PROGRESS_NOT_READY, true);
+        return StepAdvanceResult.success("#e" + stage.name + "#n\r\n\r\n"
+                + "普通材料已经交付，元素杖的重铸准备完成。\r\n\r\n下一步：点击完成书本，选择这次要共鸣的元素杖。");
     }
 
     public static CompletionResult completeStage(Character chr, int questId, int selection) {
@@ -318,11 +419,7 @@ public final class ElementalResonanceQuest {
             return CompletionResult.fail("装备栏空间不足，共鸣没有完成。请整理装备栏后再试。");
         }
 
-        for (Requirement requirement : validation.requirements()) {
-            InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(requirement.itemId()),
-                    requirement.itemId(), requirement.count(), true, false);
-            chr.sendPacket(PacketCreator.getShowItemGain(requirement.itemId(), (short) -requirement.count(), true));
-        }
+        removeRequirements(chr, validation.requirements());
 
         if (validation.requiredMeso() > 0) {
             chr.gainMeso(-validation.requiredMeso(), true, false, true);
@@ -384,6 +481,10 @@ public final class ElementalResonanceQuest {
             return CompletionValidation.fail(startValidation.getMessage());
         }
 
+        if (currentStep(chr, stage) != Step.REWARD) {
+            return CompletionValidation.fail("请先按顺序完成当前元素共鸣步骤。");
+        }
+
         if (selection >= stage.rewardItemIds.length) {
             return CompletionValidation.fail("请选择有效的元素杖。");
         }
@@ -430,6 +531,24 @@ public final class ElementalResonanceQuest {
         return StartValidation.success();
     }
 
+    private static StepAdvanceValidation validateStepAdvance(Character chr, Stage stage) {
+        StartValidation startValidation = validateStartedQuest(chr, stage);
+        if (!startValidation.isOk()) {
+            return StepAdvanceValidation.fail(startValidation.getMessage());
+        }
+
+        Step step = currentStep(chr, stage);
+        if (step == Step.REWARD) {
+            return StepAdvanceValidation.fail("重铸准备已经完成，请选择新的元素杖。");
+        }
+
+        if (step == Step.BOSS_TOKENS) {
+            return validateRequirements(chr, tokenRequirements(stage), 0);
+        }
+
+        return validateRequirements(chr, stage.baseRequirements, stage.baseMeso);
+    }
+
     private static CompletionValidation validateAnyRewardSelection(Character chr, Stage stage, StaffInfo current) {
         CompletionValidation firstFailure = null;
         for (int selection = 0; selection < stage.rewardItemIds.length; selection++) {
@@ -446,7 +565,7 @@ public final class ElementalResonanceQuest {
 
     private static CompletionValidation validateExactRewardSelection(Character chr, Stage stage, StaffInfo current, int selection) {
         boolean switchElement = current != null && current.elementIndex() != selection;
-        List<Requirement> requirements = stage.requirementsFor(switchElement);
+        List<Requirement> requirements = stage.finalRequirementsFor(switchElement);
         for (Requirement requirement : requirements) {
             if (chr.getItemQuantity(requirement.itemId(), false) < requirement.count()) {
                 return CompletionValidation.fail("材料不足。\r\n需要：#b#i" + requirement.itemId() + "##t"
@@ -454,13 +573,28 @@ public final class ElementalResonanceQuest {
             }
         }
 
-        int requiredMeso = stage.requiredMeso(switchElement);
+        int requiredMeso = stage.finalRequiredMeso(switchElement);
         if (chr.getMeso() < requiredMeso) {
             return CompletionValidation.fail("金币不足。\r\n当前：#b" + formatMeso(chr.getMeso()) + "#k\r\n需要：#r"
                     + formatMeso(requiredMeso) + "#k");
         }
 
         return CompletionValidation.success(stage, current, selection, switchElement, requirements, requiredMeso);
+    }
+
+    private static StepAdvanceValidation validateRequirements(Character chr, List<Requirement> requirements, int requiredMeso) {
+        for (Requirement requirement : requirements) {
+            if (chr.getItemQuantity(requirement.itemId(), false) < requirement.count()) {
+                return StepAdvanceValidation.fail("材料不足。\r\n需要：#b#i" + requirement.itemId() + "##t"
+                        + requirement.itemId() + "# x" + requirement.count() + "#k");
+            }
+        }
+
+        if (chr.getMeso() < requiredMeso) {
+            return StepAdvanceValidation.fail("金币不足。\r\n当前：#b" + formatMeso(chr.getMeso()) + "#k\r\n需要：#r"
+                    + formatMeso(requiredMeso) + "#k");
+        }
+        return StepAdvanceValidation.success();
     }
 
     private static boolean isEligibleMage(Character chr) {
@@ -495,6 +629,54 @@ public final class ElementalResonanceQuest {
         }
 
         return new StaffState(total, current);
+    }
+
+    private static Step currentStep(Character chr, Stage stage) {
+        if (chr == null || stage == null) {
+            return Step.BOSS_TOKENS;
+        }
+        if (isBridgeCompleted(chr, stage.materialBridgeQuestId())) {
+            return Step.REWARD;
+        }
+        if (isBridgeCompleted(chr, stage.bossBridgeQuestId())) {
+            return Step.BASE_MATERIALS;
+        }
+        return Step.BOSS_TOKENS;
+    }
+
+    private static boolean currentStepReady(Character chr, Stage stage) {
+        Step step = currentStep(chr, stage);
+        if (step == Step.REWARD) {
+            return validateCompletion(chr, stage, -1).isOk();
+        }
+        return validateStepAdvance(chr, stage).isOk();
+    }
+
+    private static boolean isBridgeCompleted(Character chr, short questId) {
+        return chr.getQuestStatus(questId) == QuestStatus.Status.COMPLETED.getId();
+    }
+
+    private static void setBridgeCompleted(Character chr, short questId) {
+        QuestStatus newStatus = new QuestStatus(Quest.getInstance(questId), QuestStatus.Status.COMPLETED, NPC_ID);
+        synchronized (chr.getQuests()) {
+            chr.getQuests().put(questId, newStatus);
+        }
+    }
+
+    private static void resetStageBridges(Character chr, Stage stage) {
+        setBridgeNotStarted(chr, stage.bossBridgeQuestId());
+        setBridgeNotStarted(chr, stage.materialBridgeQuestId());
+    }
+
+    private static void setBridgeNotStarted(Character chr, short questId) {
+        Quest quest = Quest.getInstance(questId);
+        QuestStatus oldStatus = chr.getQuestNoAdd(quest);
+        if (oldStatus == null || oldStatus.getStatus() == QuestStatus.Status.NOT_STARTED) {
+            return;
+        }
+        synchronized (chr.getQuests()) {
+            chr.getQuests().put(questId, new QuestStatus(quest, QuestStatus.Status.NOT_STARTED, NPC_ID));
+        }
     }
 
     private static void setQuestStatus(Character chr, short questId, QuestStatus.Status status, boolean announce,
@@ -584,22 +766,56 @@ public final class ElementalResonanceQuest {
         if (stage.index > 1) {
             text.append("上一阶段元素杖：").append(staffLocationText(current, stage.index - 1)).append("\r\n");
         }
-        text.append("Boss 共鸣凭证：\r\n").append(requirementText(chr, tokenRequirements(stage)));
-        text.append("普通材料：\r\n").append(requirementText(chr, stage.baseRequirements));
-        text.append("金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
-                .append(formatMeso(stage.requiredMeso(false))).append("#k\r\n");
+        text.append("已完成步骤：").append(completedStepText(chr, stage)).append("\r\n");
+
+        Step step = currentStep(chr, stage);
+        if (step == Step.BOSS_TOKENS) {
+            text.append("\r\n#e当前步骤 1/3：收集 Boss 共鸣凭证#n\r\n");
+            text.append(requirementText(chr, tokenRequirements(stage)));
+            text.append("下一步：带着凭证回到汉斯身边报告。");
+            return text.toString();
+        }
+
+        if (step == Step.BASE_MATERIALS) {
+            text.append("\r\n#e当前步骤 2/3：交付普通材料#n\r\n");
+            text.append(requirementText(chr, stage.baseRequirements));
+            text.append("基础金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
+                    .append(formatMeso(stage.baseMeso)).append("#k\r\n");
+            text.append("下一步：材料交付后再选择新的元素杖。");
+            return text.toString();
+        }
+
+        text.append("\r\n#e当前步骤 3/3：选择元素杖#n\r\n");
         if (stage.index > 1) {
             text.append("跨属性重铸额外消耗：");
             if (selection < 0) {
                 text.append("#b").append(switchRequirementSummary(stage)).append("#k\r\n");
             } else if (switchElement) {
                 text.append("\r\n").append(requirementText(chr, stage.switchRequirements));
-                text.append("额外金币：#r").append(formatMeso(stage.switchMeso)).append("#k\r\n");
+                text.append("额外金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
+                        .append(formatMeso(stage.switchMeso)).append("#k\r\n");
             } else {
                 text.append("#b不需要#k\r\n");
             }
+        } else {
+            text.append("普通材料已经交付，可以直接选择第一把元素短杖。\r\n");
         }
+        text.append("下一步：选择本次共鸣的属性。");
         return text.toString();
+    }
+
+    private static String completedStepText(Character chr, Stage stage) {
+        List<String> completed = new ArrayList<>();
+        if (isBridgeCompleted(chr, stage.bossBridgeQuestId())) {
+            completed.add("Boss 共鸣凭证已报告");
+        }
+        if (isBridgeCompleted(chr, stage.materialBridgeQuestId())) {
+            completed.add("普通材料已交付");
+        }
+        if (completed.isEmpty()) {
+            return "无";
+        }
+        return String.join("、", completed);
     }
 
     private static String staffLocationText(StaffInfo current, int requiredStage) {
@@ -626,6 +842,14 @@ public final class ElementalResonanceQuest {
                     .append(count).append("#k / #r").append(requirement.count()).append("#k\r\n");
         }
         return text.toString();
+    }
+
+    private static void removeRequirements(Character chr, List<Requirement> requirements) {
+        for (Requirement requirement : requirements) {
+            InventoryManipulator.removeById(chr.getClient(), ItemConstants.getInventoryType(requirement.itemId()),
+                    requirement.itemId(), requirement.count(), true, false);
+            chr.sendPacket(PacketCreator.getShowItemGain(requirement.itemId(), (short) -requirement.count(), true));
+        }
     }
 
     private static List<Requirement> tokenRequirements(Stage stage) {
@@ -666,6 +890,12 @@ public final class ElementalResonanceQuest {
 
     private static Requirement req(int itemId, int count) {
         return new Requirement(itemId, count);
+    }
+
+    private enum Step {
+        BOSS_TOKENS,
+        BASE_MATERIALS,
+        REWARD
     }
 
     private record Element(String displayName, String themeName, String finalName) {
@@ -750,17 +980,23 @@ public final class ElementalResonanceQuest {
             return switchMeso;
         }
 
-        private List<Requirement> requirementsFor(boolean switchElement) {
-            List<Requirement> requirements = new ArrayList<>(tokenRequirements(this));
-            requirements.addAll(baseRequirements);
-            if (switchElement) {
-                requirements.addAll(switchRequirements);
-            }
-            return mergeRequirements(requirements);
+        private short bossBridgeQuestId() {
+            return (short) (FIRST_BRIDGE_QUEST_ID + (index - 1) * BRIDGES_PER_STAGE);
         }
 
-        private int requiredMeso(boolean switchElement) {
-            return baseMeso + (switchElement ? switchMeso : 0);
+        private short materialBridgeQuestId() {
+            return (short) (bossBridgeQuestId() + 1);
+        }
+
+        private List<Requirement> finalRequirementsFor(boolean switchElement) {
+            if (!switchElement) {
+                return List.of();
+            }
+            return mergeRequirements(switchRequirements);
+        }
+
+        private int finalRequiredMeso(boolean switchElement) {
+            return switchElement ? switchMeso : 0;
         }
     }
 
@@ -799,6 +1035,32 @@ public final class ElementalResonanceQuest {
 
         private static StartValidation fail(String message) {
             return new StartValidation(false, message);
+        }
+
+        public boolean isOk() {
+            return ok;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+    }
+
+    public static final class StepAdvanceValidation {
+        private final boolean ok;
+        private final String message;
+
+        private StepAdvanceValidation(boolean ok, String message) {
+            this.ok = ok;
+            this.message = message;
+        }
+
+        private static StepAdvanceValidation success() {
+            return new StepAdvanceValidation(true, "");
+        }
+
+        private static StepAdvanceValidation fail(String message) {
+            return new StepAdvanceValidation(false, message);
         }
 
         public boolean isOk() {
@@ -882,6 +1144,16 @@ public final class ElementalResonanceQuest {
 
         private static StartResult fail(String message) {
             return new StartResult(false, message);
+        }
+    }
+
+    public record StepAdvanceResult(boolean success, String message) {
+        private static StepAdvanceResult success(String message) {
+            return new StepAdvanceResult(true, message);
+        }
+
+        private static StepAdvanceResult fail(String message) {
+            return new StepAdvanceResult(false, message);
         }
     }
 
