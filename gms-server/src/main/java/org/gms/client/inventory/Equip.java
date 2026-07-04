@@ -80,6 +80,7 @@ public class Equip extends Item {
     private short incRMAS;  // Poison elemental MATK bonus
     private short incRMAI;  // Ice elemental MATK bonus
     private short incRMAL;  // Lightning elemental MATK bonus
+    private short incRMAH;  // Holy elemental MATK bonus
     private short elemDefault;  // Default element charge level (75 = 75%)
     private float itemExp;
     private int ringid = -1;
@@ -124,6 +125,7 @@ public class Equip extends Item {
         ret.incRMAS = incRMAS;
         ret.incRMAI = incRMAI;
         ret.incRMAL = incRMAL;
+        ret.incRMAH = incRMAH;
         ret.elemDefault = elemDefault;
         ret.upgradeSlots = upgradeSlots;
         ret.itemLevel = itemLevel;
@@ -231,6 +233,10 @@ public class Equip extends Item {
         return incRMAL;
     }
 
+    public short getIncRMAH() {
+        return incRMAH;
+    }
+
     public short getElemDefault() {
         return elemDefault;
     }
@@ -249,6 +255,8 @@ public class Equip extends Item {
                 return incRMAI;
             case LIGHTING:
                 return incRMAL;
+            case HOLY:
+                return incRMAH;
             default:
                 return 0;
         }
@@ -337,6 +345,10 @@ public class Equip extends Item {
 
     public void setIncRMAL(short incRMAL) {
         this.incRMAL = incRMAL;
+    }
+
+    public void setIncRMAH(short incRMAH) {
+        this.incRMAH = incRMAH;
     }
 
     public void setElemDefault(short elemDefault) {

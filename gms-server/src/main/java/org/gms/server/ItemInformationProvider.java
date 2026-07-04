@@ -1248,6 +1248,8 @@ public class ItemInformationProvider {
                     nEquip.setIncRMAI((short) stat.getValue().intValue());
                 } else if (stat.getKey().equals("RMAL")) {
                     nEquip.setIncRMAL((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAH")) {
+                    nEquip.setIncRMAH((short) stat.getValue().intValue());
                 } else if (stat.getKey().equals("elemDefault")) {
                     nEquip.setElemDefault((short) stat.getValue().intValue());
                 } else if (isUntradeableRestricted(equipId)) {  // thanks Hyun & Thora for showing an issue with more than only "Untradeable" items being flagged as such here

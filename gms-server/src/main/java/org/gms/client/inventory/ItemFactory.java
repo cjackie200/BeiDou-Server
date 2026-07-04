@@ -130,6 +130,7 @@ public enum ItemFactory {
         equip.setIncRMAS((short) rs.getInt("incRMAS"));
         equip.setIncRMAI((short) rs.getInt("incRMAI"));
         equip.setIncRMAL((short) rs.getInt("incRMAL"));
+        equip.setIncRMAH((short) rs.getInt("incRMAH"));
         equip.setElemDefault((short) rs.getInt("elemDefault"));
 
         return equip;
@@ -241,7 +242,7 @@ public enum ItemFactory {
                         psItem.executeUpdate();
 
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                            try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            try (PreparedStatement psEquip = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                                 try (ResultSet rs = psItem.getGeneratedKeys()) {
                                     if (!rs.next()) {
                                         throw new RuntimeException("Inserting item failed.");
@@ -277,7 +278,8 @@ public enum ItemFactory {
                                 psEquip.setInt(25, equip.getIncRMAS());
                                 psEquip.setInt(26, equip.getIncRMAI());
                                 psEquip.setInt(27, equip.getIncRMAL());
-                                psEquip.setInt(28, equip.getElemDefault());
+                                psEquip.setInt(28, equip.getIncRMAH());
+                                psEquip.setInt(29, equip.getElemDefault());
                                 psEquip.executeUpdate();
                             }
                         }
@@ -406,7 +408,7 @@ public enum ItemFactory {
 
                 // Equipment
                 if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
-                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO `inventoryequipment` VALUES (DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         ps.setInt(1, genKey);
 
                         Equip equip = (Equip) item;
@@ -436,7 +438,8 @@ public enum ItemFactory {
                         ps.setInt(25, equip.getIncRMAS());
                         ps.setInt(26, equip.getIncRMAI());
                         ps.setInt(27, equip.getIncRMAL());
-                        ps.setInt(28, equip.getElemDefault());
+                        ps.setInt(28, equip.getIncRMAH());
+                        ps.setInt(29, equip.getElemDefault());
                         ps.executeUpdate();
                     }
                 }
