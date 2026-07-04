@@ -7352,7 +7352,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public synchronized void resetStats() {
-        if (!GameConfig.getServerBoolean("use_auto_assign_starters_ap")) {
+        boolean enabled = GameConfig.getServerBoolean("use_auto_assign_starters_ap");
+        log.info("resetStats called enabled={} remainingAp={} str={} dex={} int={} luk={} lv={} job={}",
+            enabled, remainingAp, attrStr, attrDex, attrInt, attrLuk, getLevel(), job.getId());
+        if (!enabled) {
             return;
         }
 
