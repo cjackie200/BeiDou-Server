@@ -19424,19 +19424,19 @@
                 <string name="desc" value="#c你能够感受到地狱大公的暗黑能量。#" />
             </imgdir>
             <imgdir name="1372059">
-                <string name="name" value="终焰短杖" />
+                <string name="name" value="赤曜星焰短杖" />
             </imgdir>
             <imgdir name="1372060">
-                <string name="name" value="终毒短杖" />
+                <string name="name" value="紫藤幽梦短杖" />
             </imgdir>
             <imgdir name="1372061">
-                <string name="name" value="终冰短杖" />
+                <string name="name" value="霜月流光短杖" />
             </imgdir>
             <imgdir name="1372062">
-                <string name="name" value="终雷短杖" />
+                <string name="name" value="金霆星律短杖" />
             </imgdir>
             <imgdir name="1372063">
-                <string name="name" value="终圣短杖" />
+                <string name="name" value="白曜祈星短杖" />
             </imgdir>
             <imgdir name="1382000">
                 <string name="name" value="木制长杖" />

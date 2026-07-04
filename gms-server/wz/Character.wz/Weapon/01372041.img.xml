@@ -28,8 +28,8 @@
     <int name="attackSpeed" value="7"/>
     <int name="cash" value="0"/>
     <int name="incLUK" value="2"/>
-    <int name="elemDefault" value="50"/>
-    <int name="incRMAI" value="200"/>
+    <int name="elemDefault" value="70"/>
+    <int name="incRMAI" value="170"/>
     <imgdir name="level">
       <imgdir name="info">
         <imgdir name="1">
