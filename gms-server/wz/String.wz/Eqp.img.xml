@@ -19189,27 +19189,6 @@
       <imgdir name="1372043">
         <string name="name" value="Beginner Magician&apos;s wand"/>
       </imgdir>
-      <imgdir name="1372047">
-        <string name="name" value="Elemental Wand 9"/>
-      </imgdir>
-      <imgdir name="1372048">
-        <string name="name" value="Elemental Wand 10"/>
-      </imgdir>
-      <imgdir name="1372059">
-        <string name="name" value="Elemental Wand 11"/>
-      </imgdir>
-      <imgdir name="1372060">
-        <string name="name" value="Elemental Wand 12"/>
-      </imgdir>
-      <imgdir name="1372061">
-        <string name="name" value="Elemental Wand 13"/>
-      </imgdir>
-      <imgdir name="1372062">
-        <string name="name" value="Elemental Wand 14"/>
-      </imgdir>
-      <imgdir name="1372063">
-        <string name="name" value="Elemental Wand 15"/>
-      </imgdir>
       <imgdir name="1382000">
         <string name="name" value="Wooden Staff"/>
       </imgdir>
@@ -19380,12 +19359,6 @@
       </imgdir>
       <imgdir name="1382060">
         <string name="name" value="Crimson Arcanon"/>
-      </imgdir>
-      <imgdir name="1382061">
-        <string name="name" value="Elemental Staff 9"/>
-      </imgdir>
-      <imgdir name="1382063">
-        <string name="name" value="Elemental Staff 10"/>
       </imgdir>
       <imgdir name="1402000">
         <string name="name" value="Two-Handed Sword"/>

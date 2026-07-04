@@ -21,9 +21,12 @@
 
 当前客户端原始 Data 和服务端 WZ 的元素杖节点必须同向维护：
 
-- 服务端：`gms-server/wz/Character.wz/Weapon`
-- 客户端：`BeiDou-Client/Data/Character/Weapon`
-- 名称：服务端 `String.wz/Eqp.img.xml`、`wz-zh-CN/String.wz/Eqp.img.xml` 和客户端 `Data/String/Eqp.img`
+- 服务端属性资源：`gms-server/wz/Character.wz/Weapon`。当前仓库没有
+  `wz-zh-CN/Character.wz` 覆盖树，装备属性仍由 base Character WZ 承载。
+- 服务端中文名称：`gms-server/wz-zh-CN/String.wz/Eqp.img.xml`。
+- 客户端中文资源：`BeiDou-Client/Data/Character/Weapon` 和
+  `BeiDou-Client/Data/String/Eqp.img`。
+- 不维护 `gms-server/wz/String.wz/Eqp.img.xml` 或 `BeiDou-Client/EN` 的英文回退名称。
 
 每个元素杖节点只应存在一个 `incRMA* = 200` 和一个 `elemDefault = 50`。
 
