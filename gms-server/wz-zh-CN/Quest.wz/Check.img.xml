@@ -76796,6 +76796,7 @@
       <int name="6" value="230"/>
       <int name="7" value="231"/>
       <int name="8" value="232"/>
+      <int name="9" value="200"/>
     </imgdir>
   </imgdir>
   <imgdir name="1">
@@ -76823,6 +76824,7 @@
       <int name="6" value="230"/>
       <int name="7" value="231"/>
       <int name="8" value="232"/>
+      <int name="9" value="200"/>
     </imgdir>
     <imgdir name="quest">
       <imgdir name="0">
@@ -76856,6 +76858,7 @@
       <int name="6" value="230"/>
       <int name="7" value="231"/>
       <int name="8" value="232"/>
+      <int name="9" value="200"/>
     </imgdir>
     <imgdir name="quest">
       <imgdir name="0">
@@ -76889,6 +76892,7 @@
       <int name="6" value="230"/>
       <int name="7" value="231"/>
       <int name="8" value="232"/>
+      <int name="9" value="200"/>
     </imgdir>
     <imgdir name="quest">
       <imgdir name="0">
@@ -76922,6 +76926,7 @@
       <int name="6" value="230"/>
       <int name="7" value="231"/>
       <int name="8" value="232"/>
+      <int name="9" value="200"/>
     </imgdir>
     <imgdir name="quest">
       <imgdir name="0">

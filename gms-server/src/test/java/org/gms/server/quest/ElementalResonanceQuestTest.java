@@ -8,6 +8,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
+import org.gms.server.quest.hook.InteractionHookProgressEntry;
 import org.gms.server.maps.MapItem;
 import org.gms.service.ConfigService;
 import org.junit.jupiter.api.BeforeAll;
@@ -97,6 +98,19 @@ class ElementalResonanceQuestTest {
     }
 
     @Test
+    void tierOneOpensForLevel70Magician() {
+        Character chr = newMage(70);
+        chr.setJob(Job.MAGICIAN);
+
+        ElementalResonanceQuest.syncQuestStateSilently(chr);
+
+        assertEquals(29991, ElementalResonanceQuest.resolveCurrentQuestId(chr).orElseThrow());
+        assertTrue(ElementalResonanceQuest.validateStart(chr, 29991).isOk());
+        assertTrue(ElementalResonanceQuest.startStage(chr, 29991).success());
+        assertStartedProgress(chr, 29991, "000");
+    }
+
+    @Test
     void startedTierOneUsesVirtualReadyProgress() {
         Character chr = newMage(70);
 
@@ -146,6 +160,27 @@ class ElementalResonanceQuestTest {
         assertStartedProgress(chr, 29991, "001");
         assertTrue(ElementalResonanceQuest.validateCompletion(chr, 29991, 0).isOk());
         assertEquals(0, chr.getItemQuantity(4000059, false));
+    }
+
+    @Test
+    void hookProgressConditionsReflectCurrentStepReadiness() {
+        Character chr = newMage(70);
+
+        assertTrue(ElementalResonanceQuest.startStage(chr, 29991).success());
+
+        InteractionHookProgressEntry missing = elementalProgressEntry(chr, 29991);
+        assertFalse(allConditionsMet(missing));
+
+        addItem(chr, 4033012, 1);
+        ElementalResonanceQuest.syncQuestStateSilently(chr);
+
+        InteractionHookProgressEntry ready = elementalProgressEntry(chr, 29991);
+        assertTrue(allConditionsMet(ready));
+        assertTrue(ready.conditions().getFirst().text().contains("阶段进度：#b0#k/#r5#k"));
+        assertTrue(ready.conditions().stream().anyMatch(condition ->
+                condition.text().contains("当前步骤 1/5")
+                        && condition.text().contains("#o2220000#")
+                        && condition.text().contains("#i4033012#")));
     }
 
     @Test
@@ -395,6 +430,17 @@ class ElementalResonanceQuestTest {
     private static void assertStartedProgress(Character chr, int questId, String progress) {
         assertQuest(chr, questId, QuestStatus.Status.STARTED);
         assertEquals(progress, chr.getQuest(Quest.getInstance(questId)).getProgress(PROGRESS_KEY), "quest " + questId);
+    }
+
+    private static InteractionHookProgressEntry elementalProgressEntry(Character chr, int questId) {
+        return ElementalResonanceQuest.progressEntries(chr).stream()
+                .filter(entry -> entry.questId() == questId)
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private static boolean allConditionsMet(InteractionHookProgressEntry entry) {
+        return entry.conditions().stream().allMatch(condition -> condition.current() >= condition.required());
     }
 
     private static final class CapturingClient extends Client {

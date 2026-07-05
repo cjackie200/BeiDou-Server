@@ -533,9 +533,10 @@ public final class ElementalResonanceQuest {
     private static InteractionHookProgressEntry progressEntryForStage(Character chr, Stage stage) {
         List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
         int completedSteps = completedStepCount(chr, stage);
+        boolean ready = currentStepReady(chr, stage);
         conditions.add(new InteractionHookProgressEntry.Condition(
-                completedSteps,
-                stage.totalStepCount(),
+                ready ? 1 : 0,
+                1,
                 "#e" + stage.name + "#n 阶段进度：#b" + completedSteps + "#k/#r"
                         + stage.totalStepCount() + "#k"));
 
@@ -838,7 +839,7 @@ public final class ElementalResonanceQuest {
             return StartValidation.fail("这个元素共鸣任务暂时无法处理。");
         }
         if (!isEligibleMage(chr)) {
-            return StartValidation.fail("元素共鸣只开放给完成二转的法师。");
+            return StartValidation.fail("元素共鸣只开放给法师职业。");
         }
         if (chr.getLevel() < stage.requiredLevel) {
             return StartValidation.fail("你的等级还不够。\r\n需要等级：#r" + stage.requiredLevel + "#k");
@@ -997,7 +998,7 @@ public final class ElementalResonanceQuest {
             return false;
         }
         int jobId = chr.getJob().getId();
-        return jobId >= Job.FP_WIZARD.getId() && jobId < 300;
+        return jobId >= Job.MAGICIAN.getId() && jobId < 300;
     }
 
     public static StaffState getStaffState(Character chr) {
