@@ -37,6 +37,10 @@ function action(mode, type, selection) {
             cm.sendGetNumber("请输入要屏蔽拾取的装备等级上限。\r\n例如输入 #b100#k，宠物将不拾取 #r100级以下#k 的装备。", 100, 1, 300);
             return;
         }
+        if (selection === 4) {
+            toggleRule(PetItemIgnore.MAKER_STIMULANTS, "所有制作辅助剂/促进剂");
+            return;
+        }
 
         cm.sendOk("未知选项。");
         cm.dispose();
@@ -62,6 +66,7 @@ function showMenu() {
     var equipLevel = cm.getPlayer().getSummonedPetIgnoreEquipBelowLevel();
     var equipText = equipLevel > 0 ? "屏蔽" + equipLevel + "级以下装备" : "屏蔽X级以下装备";
     text += optionLine(3, equipText, equipLevel > 0);
+    text += optionLine(4, "屏蔽所有制作辅助剂/促进剂", cm.getPlayer().hasSpecialPetIgnoreRuleForSummonedPets(PetItemIgnore.MAKER_STIMULANTS));
     cm.sendSimple(text);
 }
 

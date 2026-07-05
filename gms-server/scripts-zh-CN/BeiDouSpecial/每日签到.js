@@ -6,6 +6,10 @@
 var status = -1;
 var text;
 var BeiDouUI ="#fMap/MapHelper.img/BeiDou/logo#";
+var ExpTable = Java.type("org.gms.constants.game.ExpTable");
+
+var WHITE_SCROLL = 2340000;
+var WHITE_SCROLL_COUNT = 10;
 
 // 每个礼包所需的在线时长
 var condition = new Array(30, 60, 120, 180, 240, 300, 360);
@@ -31,9 +35,19 @@ function action(mode, type, selection)
 			}
 			else
 			{
+			    if (!cm.canHold(WHITE_SCROLL, WHITE_SCROLL_COUNT)) {
+			        cm.sendOk("请先整理消耗栏，至少留出可领取 #b#i" + WHITE_SCROLL + "# #t" + WHITE_SCROLL + "# x" + WHITE_SCROLL_COUNT + "#k 的空间。");
+			        cm.dispose();
+			        return;
+			    }
+			    var levelUpExp = getLevelUpExp();
 			    cm.saveOrUpdateCharacterExtendValue("每日签到", "TRUE",true);
-			    cm.sendOk("签到成功");
-				cm.gainItem(2430033,1);
+				cm.gainItem(WHITE_SCROLL, WHITE_SCROLL_COUNT);
+				if (levelUpExp > 0) {
+					cm.getPlayer().gainExp(levelUpExp, true, true);
+				}
+			    cm.sendOk("签到成功\r\n\r\n获得道具：#b#i" + WHITE_SCROLL + "# #t" + WHITE_SCROLL + "# x" + WHITE_SCROLL_COUNT + "#k"
+					+ (levelUpExp > 0 ? "\r\n获得经验值：#b" + levelUpExp + "#k（直接提升1级）" : "\r\n您已达到当前职业等级上限，未获得升级经验。"));
 			    cm.dispose();				
 			}
 	    }
@@ -68,6 +82,14 @@ function CheckStatus(mode)
 		return false;
 	}	
 	return true;
+}
+
+function getLevelUpExp() {
+	var player = cm.getPlayer();
+	if (player.getLevel() >= player.getMaxClassLevel()) {
+		return 0;
+	}
+	return ExpTable.getExpNeededForLevel(cm.getLevel());
 }
 
 //获取当前时间

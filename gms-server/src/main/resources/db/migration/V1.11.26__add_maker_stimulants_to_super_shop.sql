@@ -1,0 +1,40 @@
+INSERT INTO shopitems (shopid, itemid, price, pitch, position)
+WITH maker_stimulants (itemid, sort_order) AS (
+    SELECT 4130000, 1
+    UNION ALL SELECT 4130001, 2
+    UNION ALL SELECT 4130002, 3
+    UNION ALL SELECT 4130003, 4
+    UNION ALL SELECT 4130004, 5
+    UNION ALL SELECT 4130005, 6
+    UNION ALL SELECT 4130006, 7
+    UNION ALL SELECT 4130007, 8
+    UNION ALL SELECT 4130008, 9
+    UNION ALL SELECT 4130009, 10
+    UNION ALL SELECT 4130010, 11
+    UNION ALL SELECT 4130011, 12
+    UNION ALL SELECT 4130012, 13
+    UNION ALL SELECT 4130013, 14
+    UNION ALL SELECT 4130014, 15
+    UNION ALL SELECT 4130015, 16
+    UNION ALL SELECT 4130016, 17
+    UNION ALL SELECT 4130017, 18
+    UNION ALL SELECT 4130018, 19
+    UNION ALL SELECT 4130019, 20
+    UNION ALL SELECT 4130020, 21
+    UNION ALL SELECT 4130021, 22
+    UNION ALL SELECT 4130022, 23
+),
+shop_base AS (
+    SELECT COALESCE(MAX(position), 0) AS max_position
+    FROM shopitems
+    WHERE shopid = 9900001
+)
+SELECT 9900001, maker_stimulants.itemid, 10000, 0, shop_base.max_position + maker_stimulants.sort_order
+FROM maker_stimulants
+CROSS JOIN shop_base
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM shopitems existing
+    WHERE existing.shopid = 9900001
+      AND existing.itemid = maker_stimulants.itemid
+);
