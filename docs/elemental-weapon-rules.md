@@ -126,8 +126,11 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 `ElementalResonanceQuest` 控制。
 客户端 `Q` 列表使用每个阶段完整标题作为 `parent`，显示为 `元素共鸣:初声`、
 `元素共鸣:回响`、`元素共鸣:裂隙`、`元素共鸣:风暴`、`元素共鸣:终章`，避免只显示统一系列名。
-进行中的 `QuestInfo.1` 只保留 `@@BD_IH_PROGRESS:{questId}@@` 动态进度占位符，由
-`ElementalResonanceQuest.progressEntries` 下发当前任务进度；不要把多步骤目标写成静态概述。
+进行中的 `QuestInfo.1` 使用多步骤任务详情格式：先写清当前任务目标和阶段说明，再用
+`@@BD_IH_PROGRESS:{questId}@@` 动态进度占位符显示实时条件，最后写清完成方式和下一步开放规则。
+不得回退到只有“任务进度 + marker”的空描述。
+`ElementalResonanceQuest.progressEntries` 下发当前任务的实时条件，内容按“当前步骤、目标、材料或凭证、
+下一步”组织，供客户端 `Q` 详情替换 marker。
 
 阶段奖励任务：
 

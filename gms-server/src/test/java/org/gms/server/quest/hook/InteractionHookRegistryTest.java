@@ -136,7 +136,7 @@ class InteractionHookRegistryTest {
 
         assertEquals(QuestStatus.Status.STARTED.getId(), entry.state());
         assertTrue(entry.conditions().stream().anyMatch(condition ->
-                condition.text().contains("当前步骤 1/5")
+                condition.text().contains("目标：击败")
                         && condition.text().contains("#o2220000#")
                         && condition.text().contains("#i4033012#")));
     }
