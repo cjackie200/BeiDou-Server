@@ -181,11 +181,11 @@ class ElementalResonanceQuestTest {
 
         InteractionHookProgressEntry ready = elementalProgressEntry(chr, TIER_ONE_FIRST_BOSS_STEP);
         assertTrue(allConditionsMet(ready));
-        assertTrue(ready.conditions().getFirst().text().contains("当前步骤：第 #b1#k/#r5#k 步"));
         assertTrue(ready.conditions().stream().anyMatch(condition ->
-                condition.text().contains("目标：击败")
-                        && condition.text().contains("#o2220000#")
-                        && condition.text().contains("#i4033012#")));
+                condition.text().contains("#o2220000#")
+                        && condition.text().contains("#i4033012#")
+                        && condition.text().contains("#t4033012#")
+                        && !condition.text().contains("目标：")));
     }
 
     @Test

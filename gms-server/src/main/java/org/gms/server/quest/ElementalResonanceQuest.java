@@ -615,13 +615,7 @@ public final class ElementalResonanceQuest {
     private static InteractionHookProgressEntry progressEntryForStep(Character chr, StepRef ref) {
         Stage stage = ref.stage;
         List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
-        int completedSteps = completedStepCount(chr, stage);
         boolean ready = currentStepReady(chr, ref);
-        conditions.add(new InteractionHookProgressEntry.Condition(
-                ready ? 1 : 0,
-                1,
-                "当前步骤：第 #b" + (ref.stepOrder() + 1) + "#k/#r" + stage.totalStepCount()
-                        + "#k 步，已完成 #b" + completedSteps + "#k/#r" + stage.totalStepCount() + "#k"));
 
         if (ref.type == StepType.BOSS) {
             BossTarget bossTarget = ref.bossTarget();
@@ -629,20 +623,12 @@ public final class ElementalResonanceQuest {
             conditions.add(new InteractionHookProgressEntry.Condition(
                     held,
                     1,
-                    "目标：击败 #o" + bossTarget.mobId() + "#，取得 #i" + bossTarget.tokenId()
+                    "#o" + bossTarget.mobId() + "#\r\n#i" + bossTarget.tokenId()
                             + "# #t" + bossTarget.tokenId() + "# #b" + held + "#k/#r1#k"));
-            conditions.add(new InteractionHookProgressEntry.Condition(
-                    held,
-                    1,
-                    "下一步：持有凭证后回到#p" + NPC_ID + "#提交"));
             return new InteractionHookProgressEntry(ref.questId, chr.getQuestStatus(ref.questId), conditions);
         }
 
         if (ref.type == StepType.BASE_MATERIALS) {
-            conditions.add(new InteractionHookProgressEntry.Condition(
-                    ready ? 1 : 0,
-                    1,
-                    "目标：交付本阶段重铸材料和基础金币"));
             for (Requirement requirement : stage.baseRequirements) {
                 int held = Math.min(requirement.count(), chr.getItemQuantity(requirement.itemId(), false));
                 conditions.add(new InteractionHookProgressEntry.Condition(
@@ -655,33 +641,27 @@ public final class ElementalResonanceQuest {
             conditions.add(new InteractionHookProgressEntry.Condition(
                     meso,
                     stage.baseMeso,
-                    "基础金币：#b" + formatMeso(meso) + "#k/#r" + formatMeso(stage.baseMeso) + "#k"));
-            conditions.add(new InteractionHookProgressEntry.Condition(
-                    ready ? 1 : 0,
-                    1,
-                    "下一步：材料和金币满足后回到#p" + NPC_ID + "#提交"));
+                    "金币 #b" + formatMeso(meso) + "#k/#r" + formatMeso(stage.baseMeso) + "#k"));
             return new InteractionHookProgressEntry(ref.questId, chr.getQuestStatus(ref.questId), conditions);
         }
 
         conditions.add(new InteractionHookProgressEntry.Condition(
                 ready ? 1 : 0,
                 1,
-                "目标：选择 1 把本阶段元素杖完成重铸"));
+                rewardTierText(stage) + " 5选1"));
         if (stage.index > 1) {
             StaffInfo current = getStaffState(chr).current();
             String staffText = current == null
-                    ? "上一阶段元素杖：#r未持有#k"
-                    : "上一阶段元素杖：#i" + current.itemId() + "# #t" + current.itemId() + "#";
-            conditions.add(new InteractionHookProgressEntry.Condition(1, 1, staffText));
+                    ? "上一阶段元素杖 #r未持有#k"
+                    : "#i" + current.itemId() + "# #t" + current.itemId() + "#";
+            int staffReady = current != null && current.stage() == stage.index - 1 && current.inBag() > 0
+                    ? 1 : 0;
+            conditions.add(new InteractionHookProgressEntry.Condition(staffReady, 1, staffText));
             conditions.add(new InteractionHookProgressEntry.Condition(
                     1,
                     1,
-                    "跨属性重铸额外消耗：" + switchRequirementSummary(stage)));
+                    "跨属性重铸：" + switchRequirementSummary(stage)));
         }
-        conditions.add(new InteractionHookProgressEntry.Condition(
-                ready ? 1 : 0,
-                1,
-                "下一步：点击#p" + NPC_ID + "#的完成书本，选择元素属性"));
         return new InteractionHookProgressEntry(ref.questId, chr.getQuestStatus(ref.questId), conditions);
     }
 
@@ -804,7 +784,8 @@ public final class ElementalResonanceQuest {
         completeQuestStep(chr, ref.questId);
         syncQuestState(chr);
         return StepAdvanceResult.success("#e" + stage.name + "#n\r\n\r\n"
-                + "普通材料已经交付，元素杖的重铸准备完成。\r\n\r\n下一步：点击完成书本，选择这次要共鸣的元素杖。");
+                + "普通材料已经交付，元素杖的重铸准备完成。\r\n\r\n"
+                + "汉斯已经可以为你固定新的元素属性。");
     }
 
     public static CompletionResult completeStage(Character chr, int questId, int selection) {
@@ -1282,7 +1263,7 @@ public final class ElementalResonanceQuest {
         if (nextQuestId.isPresent()) {
             StepRef next = getStepByQuestId(nextQuestId.get());
             if (next != null && next.stage == stage) {
-                return "下一步：领取 #b" + questDisplayName(next) + "#k。";
+                return "汉斯准备继续处理 #b" + questDisplayName(next) + "#k。";
             }
         }
         return nextStageMessage(stage);
@@ -1306,31 +1287,25 @@ public final class ElementalResonanceQuest {
 
         if (ref.type == StepType.BOSS) {
             BossTarget bossTarget = ref.bossTarget();
-            text.append("\r\n当前目标：击败 #o").append(bossTarget.mobId())
-                    .append("#，取得 #i").append(bossTarget.tokenId()).append("# #t")
-                    .append(bossTarget.tokenId()).append("#\r\n");
-            text.append("当前进度：\r\n");
+            text.append("\r\n汉斯需要 #o").append(bossTarget.mobId())
+                    .append("# 身上的共鸣凭证来校准杖芯。击败它后，把 #i")
+                    .append(bossTarget.tokenId()).append("# #t").append(bossTarget.tokenId())
+                    .append("# 带回给他。\r\n\r\n");
             text.append(requirementText(chr, List.of(req(bossTarget.tokenId(), 1))));
-            text.append("完成方式：持有凭证后回到#p").append(NPC_ID).append("#提交。\r\n");
-            text.append("下一步：提交后开放下一个元素共鸣步骤。");
             return text.toString();
         }
 
         if (ref.type == StepType.BASE_MATERIALS) {
-            text.append("\r\n当前目标：交付本阶段重铸材料和基础金币\r\n");
-            text.append("当前进度：\r\n");
+            text.append("\r\n几道首领回声已经收齐。汉斯要用这些普通材料稳定杖芯，并收取重铸费用。\r\n\r\n");
             text.append(requirementText(chr, stage.baseRequirements));
             text.append("基础金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
                     .append(formatMeso(stage.baseMeso)).append("#k\r\n");
-            text.append("完成方式：材料和金币满足后回到#p").append(NPC_ID).append("#提交。\r\n");
-            text.append("下一步：材料交付后开放元素杖选择步骤。");
             return text.toString();
         }
 
-        text.append("\r\n当前目标：选择 1 把本阶段元素杖完成重铸\r\n");
-        text.append("当前条件：\r\n");
+        text.append("\r\n杖芯已经准备好回应新的属性。选择后，汉斯会把元素共鸣固定到新的元素杖上。\r\n\r\n");
         if (stage.index > 1) {
-            text.append("跨属性重铸额外消耗：");
+            text.append("跨属性重铸：");
             if (selection < 0) {
                 text.append("#b").append(switchRequirementSummary(stage)).append("#k\r\n");
             } else if (switchElement) {
@@ -1343,7 +1318,6 @@ public final class ElementalResonanceQuest {
         } else {
             text.append("普通材料已经交付，可以直接选择第一把元素短杖。\r\n");
         }
-        text.append("完成方式：点击#p").append(NPC_ID).append("#的完成书本，选择本次共鸣的属性。");
         return text.toString();
     }
 
@@ -1447,6 +1421,17 @@ public final class ElementalResonanceQuest {
 
     private static String switchRequirementSummary(Stage stage) {
         return requirementSummary(stage.switchRequirements) + "，金币 " + formatMeso(stage.switchMeso);
+    }
+
+    private static String rewardTierText(Stage stage) {
+        return switch (stage.index) {
+            case 1 -> "70级元素短杖";
+            case 2 -> "103级元素长杖";
+            case 3 -> "133级元素短杖";
+            case 4 -> "163级元素长杖";
+            case 5 -> "193级终阶元素短杖";
+            default -> "本阶段元素杖";
+        };
     }
 
     private static String requirementSummary(List<Requirement> requirements) {

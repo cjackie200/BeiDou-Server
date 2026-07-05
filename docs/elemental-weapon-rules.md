@@ -126,11 +126,16 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 `ElementalResonanceQuest` 控制。
 客户端 `Q` 列表使用每个阶段完整标题作为 `parent`，显示为 `元素共鸣:初声`、
 `元素共鸣:回响`、`元素共鸣:裂隙`、`元素共鸣:风暴`、`元素共鸣:终章`，避免只显示统一系列名。
-进行中的 `QuestInfo.1` 使用多步骤任务详情格式：先写清当前任务目标和阶段说明，再用
-`@@BD_IH_PROGRESS:{questId}@@` 动态进度占位符显示实时条件，最后写清完成方式和下一步开放规则。
-不得回退到只有“任务进度 + marker”的空描述。
-`ElementalResonanceQuest.progressEntries` 下发当前任务的实时条件，内容按“当前步骤、目标、材料或凭证、
-下一步”组织，供客户端 `Q` 详情替换 marker。
+进行中的 `QuestInfo.1` 使用原版多步骤任务详情风格：先写自然叙述，说明汉斯当前需要的回声、
+材料或元素杖选择，再在末尾放置 `@@BD_IH_PROGRESS:{questId}@@` 动态进度占位符。
+不得回退到只有“任务进度 + marker”的空描述，也不得使用“任务目标：/当前进度：/完成方式：/下一步：”
+这类说明书式字段。
+每个元素共鸣任务同时写入 `summary` 和 `demandSummary`，用于 `Q` 列表摘要和需求区展示；Boss 步骤
+使用凭证道具数量摘要，材料步骤列出材料与金币，奖励步骤写明选择的元素杖档位。
+`ElementalResonanceQuest.progressEntries` 只下发当前任务的实时条件行，例如 Boss 名、凭证、材料、金币、
+上一阶段元素杖和跨属性重铸消耗，供客户端 `Q` 详情替换 marker。
+`WzPatchTool elemental-resonance-verify` 会拒绝旧模板字段、缺失 marker、缺失 `summary/demandSummary`
+或完成文本仍以“已完成：”开头的元素共鸣节点。
 
 阶段奖励任务：
 
