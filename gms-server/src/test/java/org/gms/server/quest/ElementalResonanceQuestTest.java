@@ -199,6 +199,13 @@ class ElementalResonanceQuestTest {
         assertTrue(startPrompt.contains("接受这一步委托吗？"));
 
         assertTrue(ElementalResonanceQuest.startStage(chr, TIER_ONE_FIRST_BOSS_STEP).success());
+
+        String progressBeforeReady = ElementalResonanceQuest.progressText(chr, TIER_ONE_FIRST_BOSS_STEP);
+        assertQuestDialogStyle(progressBeforeReady);
+        assertTrue(progressBeforeReady.contains("#t4033012#"));
+        assertFalse(progressBeforeReady.contains("材料不足"), progressBeforeReady);
+        assertFalse(progressBeforeReady.contains("需要："), progressBeforeReady);
+
         addItem(chr, 4033012, 1);
         ElementalResonanceQuest.syncQuestStateSilently(chr);
 
@@ -209,6 +216,19 @@ class ElementalResonanceQuestTest {
         var firstBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, TIER_ONE_FIRST_BOSS_STEP);
         assertQuestDialogStyle(firstBossStep.message());
         assertTrue(firstBossStep.message().contains("回声已经记录下来"));
+    }
+
+    @Test
+    void rewardProgressUsesNarrativeWhenPreviousStaffIsMissing() {
+        Character chr = newMage(100);
+        putTierTwoReadyForReward(chr);
+        putQuest(chr, 29992, QuestStatus.Status.STARTED, "000");
+
+        String progress = ElementalResonanceQuest.progressText(chr, 29992);
+
+        assertQuestDialogStyle(progress);
+        assertTrue(progress.contains("没有找到上一阶段元素杖"), progress);
+        assertFalse(progress.contains("你没有上一阶段元素杖"), progress);
     }
 
     @Test

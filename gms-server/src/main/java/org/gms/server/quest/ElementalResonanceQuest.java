@@ -444,7 +444,6 @@ public final class ElementalResonanceQuest {
                 text.append("\r\n#b杖芯已经稳定。选择要固定的元素吧。#k");
                 return text.toString();
             }
-            text.append("\r\n#r现在还不能重铸：#k").append(validation.getMessage());
             return text.toString();
         }
 
@@ -454,7 +453,6 @@ public final class ElementalResonanceQuest {
             return text.toString();
         }
 
-        text.append("\r\n#r还没有准备好：#k").append(validation.getMessage());
         return text.toString();
     }
 
@@ -578,7 +576,7 @@ public final class ElementalResonanceQuest {
         if (ref.type == StepType.REWARD) {
             CompletionValidation validation = validateCompletion(chr, ref, -1);
             if (!validation.isOk()) {
-                context.sendOk(validation.getMessage());
+                context.sendOk(progressText(chr, ref.questId));
                 return;
             }
             context.sendSimple(rewardSelectionPrompt(chr, ref.questId));
@@ -1290,7 +1288,7 @@ public final class ElementalResonanceQuest {
         text.append("杖芯已经稳定，可以把共鸣固定到新的元素杖上。\r\n\r\n");
         if (stage.index > 1) {
             text.append("把上一阶段的元素杖放在装备栏背包里。\r\n");
-            text.append(previousStaffText(current, stage.index - 1)).append("\r\n");
+            text.append(previousStaffText(staffState, current, stage.index - 1)).append("\r\n");
             if (selection < 0) {
                 text.append("如果改变元素属性，还需要：#b").append(switchRequirementSummary(stage)).append("#k\r\n");
             } else if (switchElement) {
@@ -1301,6 +1299,9 @@ public final class ElementalResonanceQuest {
                 text.append("沿用原来的元素属性，不需要额外材料。\r\n");
             }
         } else {
+            if (staffState.total() > 0) {
+                text.append("#r身上已经有元素杖，不能再领取第一把。#k\r\n");
+            }
             text.append("选择第一把元素短杖吧。\r\n");
         }
         return text.toString();
@@ -1319,7 +1320,10 @@ public final class ElementalResonanceQuest {
         return ref.stage.name + " - 选择元素杖";
     }
 
-    private static String previousStaffText(StaffInfo current, int requiredStage) {
+    private static String previousStaffText(StaffState staffState, StaffInfo current, int requiredStage) {
+        if (staffState != null && staffState.total() > 1) {
+            return "#r身上有多把元素杖，请先整理到只保留一把。#k";
+        }
         if (current == null) {
             return "#r没有找到上一阶段元素杖。#k";
         }
