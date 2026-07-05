@@ -12,9 +12,13 @@
 # build files
 /build/
 /dist/
+/deploy/
+**/target/
 /nbproject/
 /.settings
 /out
+tools/**/bin/
+tools/**/obj/
 *.onetoc2
 
 # Eclipse m2e generated files
