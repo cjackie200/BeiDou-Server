@@ -76781,7 +76781,7 @@
     </imgdir>
   </imgdir>
 </imgdir>
-  <imgdir name="29991">
+  <imgdir name="29950">
   <imgdir name="0">
     <int name="npc" value="1032001"/>
     <int name="lvmin" value="70"/>
@@ -76809,7 +76809,143 @@
     </imgdir>
   </imgdir>
 </imgdir>
-  <imgdir name="29992">
+  <imgdir name="29951">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="70"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29950"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29952">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="70"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29951"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29953">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="70"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29952"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29991">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="70"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29953"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29954">
   <imgdir name="0">
     <int name="npc" value="1032001"/>
     <int name="lvmin" value="100"/>
@@ -76843,7 +76979,143 @@
     </imgdir>
   </imgdir>
 </imgdir>
-  <imgdir name="29993">
+  <imgdir name="29955">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="100"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29954"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29956">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="100"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29955"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29957">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="100"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29956"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29992">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="100"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29957"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29958">
   <imgdir name="0">
     <int name="npc" value="1032001"/>
     <int name="lvmin" value="130"/>
@@ -76877,7 +77149,143 @@
     </imgdir>
   </imgdir>
 </imgdir>
-  <imgdir name="29994">
+  <imgdir name="29959">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="130"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29958"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29960">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="130"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29959"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29961">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="130"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29960"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29993">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="130"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29961"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29962">
   <imgdir name="0">
     <int name="npc" value="1032001"/>
     <int name="lvmin" value="160"/>
@@ -76911,7 +77319,143 @@
     </imgdir>
   </imgdir>
 </imgdir>
-  <imgdir name="29995">
+  <imgdir name="29963">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="160"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29962"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29964">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="160"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29963"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29965">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="160"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29964"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29994">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="160"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29965"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29966">
   <imgdir name="0">
     <int name="npc" value="1032001"/>
     <int name="lvmin" value="190"/>
@@ -76945,89 +77489,175 @@
     </imgdir>
   </imgdir>
 </imgdir>
-  <imgdir name="29950">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29951">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29952">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29953">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29954">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29955">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29956">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29957">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29958">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29959">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29960">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29961">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29962">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29963">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29964">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29965">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
-  <imgdir name="29966">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
-</imgdir>
   <imgdir name="29967">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="190"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29966"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
 </imgdir>
   <imgdir name="29968">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="190"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29967"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
 </imgdir>
   <imgdir name="29969">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="190"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29968"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
 </imgdir>
   <imgdir name="29970">
-  <imgdir name="0"/>
-  <imgdir name="1"/>
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="190"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29969"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="29995">
+  <imgdir name="0">
+    <int name="npc" value="1032001"/>
+    <int name="lvmin" value="190"/>
+    <string name="startscript" value="elementalResonance"/>
+    <imgdir name="job">
+      <int name="0" value="210"/>
+      <int name="1" value="211"/>
+      <int name="2" value="212"/>
+      <int name="3" value="220"/>
+      <int name="4" value="221"/>
+      <int name="5" value="222"/>
+      <int name="6" value="230"/>
+      <int name="7" value="231"/>
+      <int name="8" value="232"/>
+      <int name="9" value="200"/>
+    </imgdir>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="29970"/>
+        <int name="state" value="2"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="1032001"/>
+    <string name="endscript" value="elementalResonance"/>
+    <imgdir name="infoex">
+      <imgdir name="0">
+        <string name="value" value="001"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
 </imgdir>
     <imgdir name="5100">
         <imgdir name="0">

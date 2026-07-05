@@ -121,16 +121,16 @@ class InteractionHookRegistryTest {
     @Test
     void elementalResonanceHookProgressShowsCurrentStep() {
         Character chr = newElementalMage(70);
-        assertTrue(ElementalResonanceQuest.startStage(chr, 29991).success());
+        assertTrue(ElementalResonanceQuest.startStage(chr, 29950).success());
 
         ElementalResonanceInteractionHookProvider provider = new ElementalResonanceInteractionHookProvider();
         assertTrue(provider.mapNpcRules(chr, Set.of(ElementalResonanceQuest.NPC_ID)).stream()
                 .anyMatch(rule -> rule.eventMask() == InteractionHookProtocol.EVENT_MASK_NPC_CLICK
                         && rule.targetId() == ElementalResonanceQuest.NPC_ID
-                        && rule.questId() == 29991));
+                        && rule.questId() == 29950));
 
         InteractionHookProgressEntry entry = InteractionHookPackets.progressEntries(chr).stream()
-                .filter(progress -> progress.questId() == 29991)
+                .filter(progress -> progress.questId() == 29950)
                 .findFirst()
                 .orElseThrow();
 

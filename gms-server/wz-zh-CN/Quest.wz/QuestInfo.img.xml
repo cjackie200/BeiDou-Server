@@ -2920,72 +2920,240 @@
       <int name="order" value="11" />
       <int name="area" value="31" />
     </imgdir>
-    <imgdir name="29991">
-      <string name="name" value="元素共鸣:初声" />
-      <string name="0" value="汉斯正在寻找能听见元素回声的魔法师。去找#b#p1032001##k谈谈。" />
-      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29991@@" />
-      <string name="2" value="元素共鸣已经在第一把元素短杖中苏醒。" />
+    <imgdir name="29950">
+      <string name="name" value="元素共鸣:初声 - 红蜗牛王的回声" />
+      <string name="0" value="汉斯要你击败#b#o2220000##k，带回#b#t4033012##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29950@@" />
+      <string name="2" value="#o2220000#的共鸣凭证已经交给汉斯。" />
       <string name="parent" value="元素共鸣:初声" />
       <int name="order" value="1" />
       <int name="area" value="31" />
     </imgdir>
-    <imgdir name="29992">
-      <string name="name" value="元素共鸣:回响" />
-      <string name="0" value="上一阶段元素杖传来了新的回声。带着它去找#b#p1032001##k。" />
-      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29992@@" />
-      <string name="2" value="元素共鸣已经化为更强的 103 级元素长杖。" />
+    <imgdir name="29951">
+      <string name="name" value="元素共鸣:初声 - 树妖王的回声" />
+      <string name="0" value="汉斯要你击败#b#o3220000##k，带回#b#t4033013##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29951@@" />
+      <string name="2" value="#o3220000#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:初声" />
+      <int name="order" value="2" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29952">
+      <string name="name" value="元素共鸣:初声 - 蘑菇王的回声" />
+      <string name="0" value="汉斯要你击败#b#o6130101##k，带回#b#t4033014##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29952@@" />
+      <string name="2" value="#o6130101#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:初声" />
+      <int name="order" value="3" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29953">
+      <string name="name" value="元素共鸣:初声 - 重铸初声材料" />
+      <string name="0" value="Boss 回声已经收齐。准备普通材料和金币后，回到#b#p1032001##k处交付。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29953@@" />
+      <string name="2" value="普通材料已经交付，重铸准备完成。" />
+      <string name="parent" value="元素共鸣:初声" />
+      <int name="order" value="4" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29991">
+      <string name="name" value="元素共鸣:初声 - 选择元素杖" />
+      <string name="0" value="重铸准备已经完成。回到#b#p1032001##k处选择新的元素杖。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29991@@" />
+      <string name="2" value="元素共鸣已经在第一把元素短杖中苏醒。" />
+      <string name="parent" value="元素共鸣:初声" />
+      <int name="order" value="5" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29954">
+      <string name="name" value="元素共鸣:回响 - 巨居蟹的回声" />
+      <string name="0" value="汉斯要你击败#b#o5220000##k，带回#b#t4033015##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29954@@" />
+      <string name="2" value="#o5220000#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:回响" />
+      <int name="order" value="1" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29955">
+      <string name="name" value="元素共鸣:回响 - 浮士德的回声" />
+      <string name="0" value="汉斯要你击败#b#o5220002##k，带回#b#t4033016##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29955@@" />
+      <string name="2" value="#o5220002#的共鸣凭证已经交给汉斯。" />
       <string name="parent" value="元素共鸣:回响" />
       <int name="order" value="2" />
       <int name="area" value="31" />
     </imgdir>
-    <imgdir name="29993">
-      <string name="name" value="元素共鸣:裂隙" />
-      <string name="0" value="元素杖开始回应更深处的魔力裂隙。去找#b#p1032001##k确认下一步。" />
-      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29993@@" />
-      <string name="2" value="元素共鸣已经跨过裂隙，化为 133 级元素短杖。" />
+    <imgdir name="29956">
+      <string name="name" value="元素共鸣:回响 - 提莫的回声" />
+      <string name="0" value="汉斯要你击败#b#o5220003##k，带回#b#t4033017##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29956@@" />
+      <string name="2" value="#o5220003#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:回响" />
+      <int name="order" value="3" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29957">
+      <string name="name" value="元素共鸣:回响 - 重铸回响材料" />
+      <string name="0" value="Boss 回声已经收齐。准备普通材料和金币后，回到#b#p1032001##k处交付。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29957@@" />
+      <string name="2" value="普通材料已经交付，重铸准备完成。" />
+      <string name="parent" value="元素共鸣:回响" />
+      <int name="order" value="4" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29992">
+      <string name="name" value="元素共鸣:回响 - 选择元素杖" />
+      <string name="0" value="重铸准备已经完成。回到#b#p1032001##k处选择新的元素杖。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29992@@" />
+      <string name="2" value="元素共鸣已经化为更强的 103 级元素长杖。" />
+      <string name="parent" value="元素共鸣:回响" />
+      <int name="order" value="5" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29958">
+      <string name="name" value="元素共鸣:裂隙 - 多尔的回声" />
+      <string name="0" value="汉斯要你击败#b#o6220000##k，带回#b#t4033018##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29958@@" />
+      <string name="2" value="#o6220000#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:裂隙" />
+      <int name="order" value="1" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29959">
+      <string name="name" value="元素共鸣:裂隙 - 僵尸蘑菇王的回声" />
+      <string name="0" value="汉斯要你击败#b#o6300005##k，带回#b#t4033019##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29959@@" />
+      <string name="2" value="#o6300005#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:裂隙" />
+      <int name="order" value="2" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29960">
+      <string name="name" value="元素共鸣:裂隙 - 蝙蝠怪的回声" />
+      <string name="0" value="汉斯要你击败#b#o8130100##k，带回#b#t4033020##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29960@@" />
+      <string name="2" value="#o8130100#的共鸣凭证已经交给汉斯。" />
       <string name="parent" value="元素共鸣:裂隙" />
       <int name="order" value="3" />
       <int name="area" value="31" />
     </imgdir>
-    <imgdir name="29994">
-      <string name="name" value="元素共鸣:风暴" />
-      <string name="0" value="元素杖中卷起了高阶魔力风暴。去找#b#p1032001##k让它稳定下来。" />
-      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29994@@" />
-      <string name="2" value="元素共鸣已经凝聚成 163 级元素长杖。" />
+    <imgdir name="29961">
+      <string name="name" value="元素共鸣:裂隙 - 重铸裂隙材料" />
+      <string name="0" value="Boss 回声已经收齐。准备普通材料和金币后，回到#b#p1032001##k处交付。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29961@@" />
+      <string name="2" value="普通材料已经交付，重铸准备完成。" />
+      <string name="parent" value="元素共鸣:裂隙" />
+      <int name="order" value="4" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29993">
+      <string name="name" value="元素共鸣:裂隙 - 选择元素杖" />
+      <string name="0" value="重铸准备已经完成。回到#b#p1032001##k处选择新的元素杖。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29993@@" />
+      <string name="2" value="元素共鸣已经跨过裂隙，化为 133 级元素短杖。" />
+      <string name="parent" value="元素共鸣:裂隙" />
+      <int name="order" value="5" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29962">
+      <string name="name" value="元素共鸣:风暴 - 蝙蝠魔的回声" />
+      <string name="0" value="汉斯要你击败#b#o8150000##k，带回#b#t4033021##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29962@@" />
+      <string name="2" value="#o8150000#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:风暴" />
+      <int name="order" value="1" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29963">
+      <string name="name" value="元素共鸣:风暴 - 喷火龙的回声" />
+      <string name="0" value="汉斯要你击败#b#o8180000##k，带回#b#t4033022##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29963@@" />
+      <string name="2" value="#o8180000#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:风暴" />
+      <int name="order" value="2" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29964">
+      <string name="name" value="元素共鸣:风暴 - 格瑞芬多的回声" />
+      <string name="0" value="汉斯要你击败#b#o8180001##k，带回#b#t4033023##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29964@@" />
+      <string name="2" value="#o8180001#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:风暴" />
+      <int name="order" value="3" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29965">
+      <string name="name" value="元素共鸣:风暴 - 重铸风暴材料" />
+      <string name="0" value="Boss 回声已经收齐。准备普通材料和金币后，回到#b#p1032001##k处交付。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29965@@" />
+      <string name="2" value="普通材料已经交付，重铸准备完成。" />
       <string name="parent" value="元素共鸣:风暴" />
       <int name="order" value="4" />
       <int name="area" value="31" />
     </imgdir>
-    <imgdir name="29995">
-      <string name="name" value="元素共鸣:终章" />
-      <string name="0" value="终阶元素正在呼唤你的元素杖。去找#b#p1032001##k完成最后的共鸣。" />
-      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29995@@" />
-      <string name="2" value="元素共鸣抵达终章，终阶元素短杖已经完成。" />
+    <imgdir name="29994">
+      <string name="name" value="元素共鸣:风暴 - 选择元素杖" />
+      <string name="0" value="重铸准备已经完成。回到#b#p1032001##k处选择新的元素杖。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29994@@" />
+      <string name="2" value="元素杖中高阶魔力风暴已经稳定下来。" />
+      <string name="parent" value="元素共鸣:风暴" />
+      <int name="order" value="5" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29966">
+      <string name="name" value="元素共鸣:终章 - 帕普拉图斯的回声" />
+      <string name="0" value="汉斯要你击败#b#o8500002##k，带回#b#t4033024##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29966@@" />
+      <string name="2" value="#o8500002#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:终章" />
+      <int name="order" value="1" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29967">
+      <string name="name" value="元素共鸣:终章 - 扎昆的回声" />
+      <string name="0" value="汉斯要你击败#b#o8800002##k，带回#b#t4033025##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29967@@" />
+      <string name="2" value="#o8800002#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:终章" />
+      <int name="order" value="2" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29968">
+      <string name="name" value="元素共鸣:终章 - 暗黑龙王的回声" />
+      <string name="0" value="汉斯要你击败#b#o8810018##k，带回#b#t4033026##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29968@@" />
+      <string name="2" value="#o8810018#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:终章" />
+      <int name="order" value="3" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29969">
+      <string name="name" value="元素共鸣:终章 - 品克缤的回声" />
+      <string name="0" value="汉斯要你击败#b#o8820001##k，带回#b#t4033027##k。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29969@@" />
+      <string name="2" value="#o8820001#的共鸣凭证已经交给汉斯。" />
+      <string name="parent" value="元素共鸣:终章" />
+      <int name="order" value="4" />
+      <int name="area" value="31" />
+    </imgdir>
+    <imgdir name="29970">
+      <string name="name" value="元素共鸣:终章 - 终章重铸材料" />
+      <string name="0" value="Boss 回声已经收齐。准备普通材料和金币后，回到#b#p1032001##k处交付。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29970@@" />
+      <string name="2" value="普通材料已经交付，重铸准备完成。" />
       <string name="parent" value="元素共鸣:终章" />
       <int name="order" value="5" />
       <int name="area" value="31" />
     </imgdir>
-    <imgdir name="29950" />
-    <imgdir name="29951" />
-    <imgdir name="29952" />
-    <imgdir name="29953" />
-    <imgdir name="29954" />
-    <imgdir name="29955" />
-    <imgdir name="29956" />
-    <imgdir name="29957" />
-    <imgdir name="29958" />
-    <imgdir name="29959" />
-    <imgdir name="29960" />
-    <imgdir name="29961" />
-    <imgdir name="29962" />
-    <imgdir name="29963" />
-    <imgdir name="29964" />
-    <imgdir name="29965" />
-    <imgdir name="29966" />
-    <imgdir name="29967" />
-    <imgdir name="29968" />
-    <imgdir name="29969" />
-    <imgdir name="29970" />
+    <imgdir name="29995">
+      <string name="name" value="元素共鸣:终章 - 选择元素杖" />
+      <string name="0" value="重铸准备已经完成。回到#b#p1032001##k处选择新的元素杖。" />
+      <string name="1" value="任务进度&#13;&#10;@@BD_IH_PROGRESS:29995@@" />
+      <string name="2" value="元素共鸣抵达终章，终阶元素短杖已经完成。" />
+      <string name="parent" value="元素共鸣:终章" />
+      <int name="order" value="6" />
+      <int name="area" value="31" />
+    </imgdir>
     <imgdir name="30000">
         <string name="name" value="来自北斗开发者的问候"/>
         <string name="0" value="来到了熟悉的冒险岛，是谁在呼唤我？"/>
