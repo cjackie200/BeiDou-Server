@@ -76571,6 +76571,44 @@
     <int name="npc" value="2006"/>
   </imgdir>
 </imgdir>
+  <imgdir name="30005">
+  <imgdir name="0">
+    <int name="lvmin" value="40"/>
+    <string name="startscript" value="30005"/>
+  </imgdir>
+  <imgdir name="1">
+    <string name="endscript" value="30005"/>
+    <imgdir name="mob">
+      <imgdir name="0">
+        <int name="id" value="4230101"/>
+        <int name="count" value="200"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="4109">
+  <imgdir name="0">
+    <int name="npc" value="9310005"/>
+    <int name="lvmin" value="45"/>
+    <string name="start" value="2000010100"/>
+    <string name="end" value="2000010200"/>
+    <imgdir name="quest">
+      <imgdir name="0">
+        <int name="id" value="4103"/>
+        <int name="state" value="1"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+  <imgdir name="1">
+    <int name="npc" value="9310005"/>
+    <imgdir name="item">
+      <imgdir name="0">
+        <int name="id" value="4000194"/>
+        <int name="count" value="50"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
   <imgdir name="29981">
   <imgdir name="0">
     <int name="npc" value="2006"/>
