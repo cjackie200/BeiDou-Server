@@ -40,7 +40,7 @@ public final class ElementalResonanceQuest {
     };
 
     private static final Stage[] STAGES = {
-            new Stage(1, FIRST_QUEST_ID, 70, "元素共鸣的初声",
+            new Stage(1, FIRST_QUEST_ID, 70, "元素共鸣:初声",
                     new int[]{1372035, 1372036, 1372037, 1372038, 1372047},
                     List.of(boss(2220000, 4033012), boss(3220000, 4033013), boss(6130101, 4033014)),
                     List.of(req(4000059, 100), req(4000060, 100), req(4000061, 100), req(STAR_ROCK, 1)),
@@ -48,7 +48,7 @@ public final class ElementalResonanceQuest {
                     List.of(),
                     0,
                     (short) 29950),
-            new Stage(2, (short) 29992, 100, "元素共鸣的回响",
+            new Stage(2, (short) 29992, 100, "元素共鸣:回响",
                     new int[]{1382045, 1382046, 1382047, 1382048, 1382061},
                     List.of(boss(5220000, 4033015), boss(5220002, 4033016), boss(5220003, 4033017)),
                     List.of(req(4000144, 100), req(4000146, 100), req(4000176, 20), req(BLACK_CRYSTAL, 2), req(STAR_ROCK, 1)),
@@ -56,7 +56,7 @@ public final class ElementalResonanceQuest {
                     List.of(req(BLACK_CRYSTAL, 1), req(STAR_ROCK, 1)),
                     2_000_000,
                     (short) 29954),
-            new Stage(3, (short) 29993, 130, "元素共鸣的裂隙",
+            new Stage(3, (short) 29993, 130, "元素共鸣:裂隙",
                     new int[]{1372039, 1372040, 1372041, 1372042, 1372048},
                     List.of(boss(6220000, 4033018), boss(6300005, 4033019), boss(8130100, 4033020)),
                     List.of(req(BLACK_CRYSTAL, 5), req(STAR_ROCK, 3)),
@@ -64,7 +64,7 @@ public final class ElementalResonanceQuest {
                     List.of(req(BLACK_CRYSTAL, 3), req(STAR_ROCK, 2)),
                     5_000_000,
                     (short) 29958),
-            new Stage(4, (short) 29994, 160, "元素共鸣的风暴",
+            new Stage(4, (short) 29994, 160, "元素共鸣:风暴",
                     new int[]{1382049, 1382050, 1382051, 1382052, 1382063},
                     List.of(boss(8150000, 4033021), boss(8180000, 4033022), boss(8180001, 4033023)),
                     List.of(req(4000235, 3), req(4000243, 3), req(4001084, 1), req(BLACK_CRYSTAL, 8), req(STAR_ROCK, 5)),
@@ -72,7 +72,7 @@ public final class ElementalResonanceQuest {
                     List.of(req(BLACK_CRYSTAL, 5), req(STAR_ROCK, 3)),
                     10_000_000,
                     (short) 29962),
-            new Stage(5, (short) 29995, 190, "元素共鸣的终章",
+            new Stage(5, (short) 29995, 190, "元素共鸣:终章",
                     new int[]{1372059, 1372060, 1372061, 1372062, 1372063},
                     List.of(boss(8500002, 4033024), boss(8800002, 4033025),
                             boss(8810018, 4033026), boss(8820001, 4033027)),
@@ -495,6 +495,78 @@ public final class ElementalResonanceQuest {
 
     public static StartValidation validateStart(Character chr, int questId) {
         return validateStart(chr, getStageByQuestId(questId));
+    }
+
+    public static TestSupplyResult supplyCurrentTestRequirements(Character chr) {
+        if (chr == null) {
+            return TestSupplyResult.fail("角色状态异常，无法补齐元素共鸣测试条件。");
+        }
+
+        syncQuestState(chr);
+        Stage activeStage = null;
+        for (Stage stage : STAGES) {
+            if (chr.getQuestStatus(stage.questId) != QuestStatus.Status.STARTED.getId()) {
+                continue;
+            }
+            if (activeStage != null) {
+                return TestSupplyResult.fail("当前存在多个进行中的元素共鸣任务，请先修复任务状态。");
+            }
+            activeStage = stage;
+        }
+
+        if (activeStage == null) {
+            Optional<Integer> nextQuestId = resolveCurrentQuestId(chr);
+            if (nextQuestId.isPresent()) {
+                Stage nextStage = getStageByQuestId(nextQuestId.get());
+                return TestSupplyResult.fail("当前没有进行中的元素共鸣任务，请先在汉斯处领取 "
+                        + nextStage.name + "。");
+            }
+            return TestSupplyResult.fail("当前没有可补齐的元素共鸣任务，请检查职业、等级和元素杖阶段。");
+        }
+
+        StartValidation startValidation = validateStartedQuest(chr, activeStage);
+        if (!startValidation.isOk()) {
+            syncQuestState(chr);
+            return TestSupplyResult.fail(startValidation.getMessage());
+        }
+
+        Step step = currentStep(chr, activeStage);
+        if (step == Step.BOSS_TOKENS) {
+            BossTarget current = currentBossTarget(chr, activeStage);
+            if (current == null) {
+                return TestSupplyResult.fail("当前 Boss 步骤状态异常，无法补齐测试凭证。");
+            }
+            if (!addMissingRequirements(chr, List.of(req(current.tokenId(), 1)))) {
+                return TestSupplyResult.fail("背包空间不足，无法补齐当前 Boss 凭证。");
+            }
+            syncQuestState(chr);
+            return TestSupplyResult.success("已补齐 " + activeStage.name + " 当前 Boss 凭证：怪物 "
+                    + current.mobId() + "，凭证 " + current.tokenId() + "。请点击完成书本向汉斯报告。");
+        }
+
+        if (step == Step.BASE_MATERIALS) {
+            if (!addMissingRequirements(chr, activeStage.baseRequirements)) {
+                return TestSupplyResult.fail("背包空间不足，无法补齐当前普通材料。");
+            }
+            int gainedMeso = addMissingMeso(chr, activeStage.baseMeso);
+            syncQuestState(chr);
+            return TestSupplyResult.success("已补齐 " + activeStage.name + " 当前普通材料和基础金币，补发金币 "
+                    + formatMeso(gainedMeso) + "。请点击完成书本向汉斯交付材料。");
+        }
+
+        CompletionValidation validation = validateCompletion(chr, activeStage, -1);
+        if (!validation.isOk()) {
+            syncQuestState(chr);
+            return TestSupplyResult.fail(validation.getMessage());
+        }
+
+        if (!addMissingRequirements(chr, activeStage.switchRequirements)) {
+            return TestSupplyResult.fail("背包空间不足，无法补齐跨属性备用材料。");
+        }
+        int gainedMeso = addMissingMeso(chr, activeStage.switchMeso);
+        syncQuestState(chr);
+        return TestSupplyResult.success("已补齐 " + activeStage.name + " 奖励选择步骤的跨属性备用材料和金币，补发金币 "
+                + formatMeso(gainedMeso) + "。请点击完成书本选择元素杖。");
     }
 
     private static StartValidation validateStart(Character chr, Stage stage) {
@@ -956,6 +1028,29 @@ public final class ElementalResonanceQuest {
         }
     }
 
+    private static boolean addMissingRequirements(Character chr, List<Requirement> requirements) {
+        for (Requirement requirement : mergeRequirements(requirements)) {
+            int missing = requirement.count() - chr.getItemQuantity(requirement.itemId(), false);
+            if (missing <= 0) {
+                continue;
+            }
+            if (!InventoryManipulator.addById(chr.getClient(), requirement.itemId(), (short) missing,
+                    chr.getName(), -1, (short) 0, -1)) {
+                return false;
+            }
+            chr.sendPacket(PacketCreator.getShowItemGain(requirement.itemId(), (short) missing, true));
+        }
+        return true;
+    }
+
+    private static int addMissingMeso(Character chr, int requiredMeso) {
+        int missing = Math.max(0, requiredMeso - chr.getMeso());
+        if (missing > 0) {
+            chr.gainMeso(missing, true, false, true);
+        }
+        return missing;
+    }
+
     private static List<Requirement> tokenRequirements(Stage stage) {
         List<Requirement> requirements = new ArrayList<>();
         for (BossTarget bossTarget : stage.bossTargets) {
@@ -1297,6 +1392,16 @@ public final class ElementalResonanceQuest {
 
         private static CompletionResult fail(String message) {
             return new CompletionResult(false, message);
+        }
+    }
+
+    public record TestSupplyResult(boolean success, String message) {
+        private static TestSupplyResult success(String message) {
+            return new TestSupplyResult(true, message);
+        }
+
+        private static TestSupplyResult fail(String message) {
+            return new TestSupplyResult(false, message);
         }
     }
 }

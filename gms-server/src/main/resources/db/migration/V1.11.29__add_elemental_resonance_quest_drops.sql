@@ -14,4 +14,9 @@ INSERT INTO drop_data (dropperid, itemid, minimum_quantity, maximum_quantity, qu
 (8500002, 4033024, 1, 1, 29995, 999999),
 (8800002, 4033025, 1, 1, 29995, 999999),
 (8810018, 4033026, 1, 1, 29995, 999999),
-(8820001, 4033027, 1, 1, 29995, 999999);
+(8820001, 4033027, 1, 1, 29995, 999999)
+ON DUPLICATE KEY UPDATE
+    minimum_quantity = VALUES(minimum_quantity),
+    maximum_quantity = VALUES(maximum_quantity),
+    questid = VALUES(questid),
+    chance = VALUES(chance);

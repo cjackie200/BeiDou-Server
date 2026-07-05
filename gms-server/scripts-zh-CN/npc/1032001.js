@@ -30,10 +30,28 @@ status = -1;
 actionx = {"1stJob": false, "2ndjob": false, "3thJobI": false, "3thJobC": false};
 job = 210;
 
+var ELEMENTAL_RESONANCE_OPTION = 1000;
+var OTHER_BUSINESS_OPTION = 1001;
+var elementalResonanceEntry = false;
+var elementalResonanceQuestId = -1;
+
 spawnPnpc = false;
 spawnPnpcFee = 7000000;
 jobType = 2;
 function start() {
+    elementalResonanceQuestId = resolveElementalResonanceQuestId();
+    if (elementalResonanceQuestId > 0) {
+        elementalResonanceEntry = true;
+        cm.sendSimple("你来得正好。元素的回声正在等待回应。\r\n#b"
+            + "#L" + ELEMENTAL_RESONANCE_OPTION + "#元素共鸣#l\r\n"
+            + "#L" + OTHER_BUSINESS_OPTION + "#其他事务#l");
+        return;
+    }
+
+    startDefault();
+}
+
+function startDefault() {
     const GameConstants = Java.type('org.gms.constants.game.GameConstants');
     if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {
         spawnPnpc = true;
@@ -84,9 +102,26 @@ function action(mode, type, selection) {
     }
 
     if (status == -1) {
-        start();
+        startDefault();
         return;
-    } else {
+    }
+
+    if (elementalResonanceEntry) {
+        if (mode != 1) {
+            cm.dispose();
+            return;
+        }
+        if (status == 0 && selection == ELEMENTAL_RESONANCE_OPTION) {
+            openElementalResonanceQuest();
+            return;
+        }
+        elementalResonanceEntry = false;
+        status = -1;
+        startDefault();
+        return;
+    }
+
+    {
         if (spawnPnpc) {
             if (mode > 0) {
                 if (cm.getMeso() < spawnPnpcFee) {
@@ -229,4 +264,24 @@ function action(mode, type, selection) {
 
 function getJobName() {
     return job == 210 ? "#b法师（火/毒）#k" : (job == 220 ? "#b法师（冰/雷）#k" : "#b牧师#k");
+}
+
+function resolveElementalResonanceQuestId() {
+    const ElementalResonanceQuest = Java.type('org.gms.server.quest.ElementalResonanceQuest');
+    ElementalResonanceQuest.syncQuestState(cm.getPlayer());
+    var questId = ElementalResonanceQuest.resolveCurrentQuestId(cm.getPlayer());
+    if (questId.isPresent()) {
+        return questId.get();
+    }
+    return -1;
+}
+
+function openElementalResonanceQuest() {
+    const QuestScriptManager = Java.type('org.gms.scripting.quest.QuestScriptManager');
+    const JavaShort = Java.type('java.lang.Short');
+    var client = cm.getClient();
+    var questId = JavaShort.valueOf(String(elementalResonanceQuestId));
+    cm.dispose();
+    client.removeClickedNPC();
+    QuestScriptManager.getInstance().start(client, questId, 1032001);
 }
