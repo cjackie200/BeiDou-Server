@@ -5,6 +5,7 @@ import org.gms.server.life.NPC;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 
 import java.util.ArrayList;
@@ -15,7 +16,8 @@ import java.util.Set;
 public final class InteractionHookRegistry {
     private static final List<InteractionHookProvider> PROVIDERS = List.of(
         new LifeProofInteractionHookProvider(),
-        new MonsterCardRingInteractionHookProvider()
+        new MonsterCardRingInteractionHookProvider(),
+        new ElementalResonanceInteractionHookProvider()
     );
 
     private InteractionHookRegistry() {
@@ -108,6 +110,10 @@ public final class InteractionHookRegistry {
 
     static boolean isMonsterCardRingQuest(int questId) {
         return MonsterCardRingQuest.isMonsterCardRingQuest(questId);
+    }
+
+    static boolean isElementalResonanceQuest(int questId) {
+        return ElementalResonanceQuest.isQuestId(questId);
     }
 
     private static Set<Integer> currentMapNpcIds(Character chr) {

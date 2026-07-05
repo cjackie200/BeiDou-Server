@@ -127,6 +127,9 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 `ElementalResonanceQuest` 控制。
 客户端 `Q` 列表使用每个阶段完整标题作为 `parent`，显示为 `元素共鸣:初声`、
 `元素共鸣:回响`、`元素共鸣:裂隙`、`元素共鸣:风暴`、`元素共鸣:终章`，避免只显示统一系列名。
+进行中的 `QuestInfo.1` 只保留 `@@BD_IH_PROGRESS:{questId}@@` 动态进度占位符，由
+`ElementalResonanceQuest.progressEntries` 下发当前 Boss、材料或奖励选择步骤；不要把多步骤目标写成
+静态概述。
 
 任务阶段：
 
@@ -148,6 +151,8 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 `parent/order/area`，不出现在任务分类中，只用于持久化阶段内步骤。
 可见任务的 WZ 完成条件只使用 `infoex=001`；真实步骤条件和材料扣除由
 `ElementalResonanceQuest` 控制。
+任务状态入口和汉斯 NPC 点击由 `InteractionHook` 接管，不在 `1032001.js` 中手写
+`元素共鸣/其他事务` 菜单，避免 NPC 原生对话和任务脚本状态串台。
 
 Boss 共鸣凭证为 `4033012..4033027`，均为任务道具，配置
 `tradeBlock=1`、`storageBlock=1`、`notSale=1`、`quest=1`、`slotMax=1`。

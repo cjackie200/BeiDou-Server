@@ -20,6 +20,7 @@ public final class InteractionHookContext {
     private final int rawAction;
     private int dialogState = InteractionHookProtocol.DIALOG_STATE_NONE;
     private boolean visibleDialogSent;
+    private int selectedOption = -1;
 
     InteractionHookContext(Client client, int requestId, int questId, int sourceNpcId, InteractionHookAction action) {
         this(client, requestId, questId, sourceNpcId, action, null);
@@ -89,6 +90,14 @@ public final class InteractionHookContext {
 
     public boolean hasVisibleDialogSent() {
         return visibleDialogSent;
+    }
+
+    public int selectedOption() {
+        return selectedOption;
+    }
+
+    public void setSelectedOption(int selectedOption) {
+        this.selectedOption = selectedOption;
     }
 
     public void resetVisibleDialogSent() {

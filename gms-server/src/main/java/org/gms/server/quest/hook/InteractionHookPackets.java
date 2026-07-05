@@ -10,6 +10,7 @@ import org.gms.net.packet.Packet;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
@@ -219,6 +220,7 @@ public final class InteractionHookPackets {
         List<InteractionHookProgressEntry> entries = new ArrayList<>();
         entries.addAll(LifeProofQuest.progressEntries(chr));
         entries.addAll(MonsterCardRingQuest.progressEntries(chr));
+        entries.addAll(ElementalResonanceQuest.progressEntries(chr));
         return entries;
     }
 

@@ -9,6 +9,10 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
+import org.gms.server.quest.hook.InteractionHookAction;
+import org.gms.server.quest.hook.InteractionHookContext;
+import org.gms.server.quest.hook.InteractionHookPackets;
+import org.gms.server.quest.hook.InteractionHookProgressEntry;
 import org.gms.util.PacketCreator;
 
 import java.util.ArrayList;
@@ -197,6 +201,32 @@ public final class ElementalResonanceQuest {
         return questIds;
     }
 
+    public static List<Integer> getHookQuestIds(Character chr) {
+        if (chr == null) {
+            return getAllQuestIds();
+        }
+        syncQuestStateSilently(chr);
+        List<Integer> questIds = new ArrayList<>();
+        for (short questId = FIRST_QUEST_ID; questId <= LAST_QUEST_ID; questId++) {
+            if (chr.getQuestStatus(questId) != QuestStatus.Status.NOT_STARTED.getId()) {
+                questIds.add((int) questId);
+            }
+        }
+        resolveCurrentQuestId(chr).ifPresent(questId -> {
+            if (!questIds.contains(questId)) {
+                questIds.add(questId);
+            }
+        });
+        return questIds;
+    }
+
+    public static Optional<Integer> resolveNpcHook(Character chr, int npcId) {
+        if (npcId != NPC_ID) {
+            return Optional.empty();
+        }
+        return resolveCurrentQuestId(chr);
+    }
+
     public static Stage getStage(int stageIndex) {
         if (stageIndex < 1 || stageIndex > STAGES.length) {
             return null;
@@ -250,6 +280,7 @@ public final class ElementalResonanceQuest {
         StaffState staffState = getStaffState(chr);
         if (staffState.total() == 0) {
             syncNoStaffState(chr, announce);
+            syncClientQuestEntrypoints(chr, announce);
             return;
         }
 
@@ -272,6 +303,7 @@ public final class ElementalResonanceQuest {
                 resetStageBridges(chr, stage);
             }
         }
+        syncClientQuestEntrypoints(chr, announce);
     }
 
     private static void syncNoStaffState(Character chr, boolean announce) {
@@ -284,6 +316,14 @@ public final class ElementalResonanceQuest {
             setQuestStatus(chr, stage.questId, QuestStatus.Status.NOT_STARTED, announce, null, false);
             resetStageBridges(chr, stage);
         }
+    }
+
+    private static void syncClientQuestEntrypoints(Character chr, boolean announce) {
+        if (!announce || chr == null || chr.getClient() == null) {
+            return;
+        }
+        InteractionHookPackets.sendCharacterQuestRules(chr.getClient());
+        InteractionHookPackets.sendProgress(chr.getClient());
     }
 
     public static StartResult startStage(Character chr, int questId) {
@@ -344,6 +384,227 @@ public final class ElementalResonanceQuest {
     public static boolean isFinalRewardStep(Character chr, int questId) {
         Stage stage = getStageByQuestId(questId);
         return stage != null && currentStep(chr, stage) == Step.REWARD;
+    }
+
+    public static List<InteractionHookProgressEntry> progressEntries(Character chr) {
+        if (chr == null) {
+            return List.of();
+        }
+        syncQuestStateSilently(chr);
+        List<InteractionHookProgressEntry> entries = new ArrayList<>();
+        for (Stage stage : STAGES) {
+            byte status = chr.getQuestStatus(stage.questId);
+            if (status != QuestStatus.Status.STARTED.getId()) {
+                continue;
+            }
+            entries.add(progressEntryForStage(chr, stage));
+        }
+        return entries;
+    }
+
+    public static InteractionHookAction resolveCurrentAction(Character chr, int questId) {
+        Stage stage = getStageByQuestId(questId);
+        if (chr == null || stage == null) {
+            return InteractionHookAction.QUERY_PROGRESS;
+        }
+        byte status = chr.getQuestStatus(stage.questId);
+        if (status == QuestStatus.Status.NOT_STARTED.getId()) {
+            return InteractionHookAction.QUERY_START;
+        }
+        if (status != QuestStatus.Status.STARTED.getId()) {
+            return InteractionHookAction.QUERY_PROGRESS;
+        }
+        if (currentStep(chr, stage) == Step.REWARD) {
+            return validateCompletion(chr, stage, -1).isOk()
+                    ? InteractionHookAction.QUERY_COMPLETE
+                    : InteractionHookAction.QUERY_PROGRESS;
+        }
+        return validateStepAdvance(chr, stage).isOk()
+                ? InteractionHookAction.QUERY_COMPLETE
+                : InteractionHookAction.QUERY_PROGRESS;
+    }
+
+    public static void openHook(InteractionHookContext context) {
+        if (context == null || context.player() == null) {
+            return;
+        }
+
+        Character chr = context.player();
+        syncQuestState(chr);
+        Stage stage = getStageByQuestId(context.questId());
+        if (stage == null) {
+            context.sendOk("这个元素共鸣任务暂时无法处理。");
+            return;
+        }
+
+        byte status = chr.getQuestStatus(stage.questId);
+        if (status == QuestStatus.Status.NOT_STARTED.getId()) {
+            StartValidation validation = validateStart(chr, stage);
+            if (!validation.isOk()) {
+                context.sendOk(validation.getMessage());
+                return;
+            }
+            context.sendYesNo(startPrompt(chr, stage.questId));
+            return;
+        }
+
+        if (status == QuestStatus.Status.STARTED.getId()) {
+            openStartedHook(context, chr, stage);
+            return;
+        }
+
+        context.sendOk(stage.name + "已经完成。");
+    }
+
+    public static void handleHookAction(InteractionHookContext context, byte mode, byte lastMessage, int selection) {
+        if (context == null || context.player() == null) {
+            return;
+        }
+        if (mode <= 0) {
+            context.close();
+            return;
+        }
+
+        Character chr = context.player();
+        syncQuestState(chr);
+        Stage stage = getStageByQuestId(context.questId());
+        if (stage == null) {
+            context.sendOk("这个元素共鸣任务暂时无法处理。");
+            return;
+        }
+
+        byte status = chr.getQuestStatus(stage.questId);
+        if (status == QuestStatus.Status.NOT_STARTED.getId()) {
+            StartResult result = startStage(chr, stage.questId);
+            context.sendOk(result.message());
+            return;
+        }
+
+        if (status != QuestStatus.Status.STARTED.getId()) {
+            context.sendOk(stage.name + "已经完成。");
+            return;
+        }
+
+        if (currentStep(chr, stage) == Step.REWARD) {
+            handleRewardHookAction(context, chr, stage, selection);
+            return;
+        }
+
+        StepAdvanceResult result = advanceCurrentStep(chr, stage.questId);
+        context.sendOk(result.message());
+    }
+
+    private static void openStartedHook(InteractionHookContext context, Character chr, Stage stage) {
+        if (currentStep(chr, stage) == Step.REWARD) {
+            CompletionValidation validation = validateCompletion(chr, stage, -1);
+            if (!validation.isOk()) {
+                context.sendOk(validation.getMessage());
+                return;
+            }
+            context.sendSimple(rewardSelectionPrompt(chr, stage.questId));
+            return;
+        }
+
+        StepAdvanceValidation validation = validateStepAdvance(chr, stage);
+        if (!validation.isOk()) {
+            context.sendOk(progressText(chr, stage.questId));
+            return;
+        }
+        context.sendYesNo(advancePrompt(chr, stage.questId));
+    }
+
+    private static void handleRewardHookAction(InteractionHookContext context, Character chr, Stage stage,
+                                               int selection) {
+        if (context.selectedOption() < 0) {
+            CompletionValidation validation = validateCompletion(chr, stage, selection);
+            if (!validation.isOk()) {
+                context.sendOk(validation.getMessage());
+                return;
+            }
+            context.setSelectedOption(selection);
+            context.sendYesNo(completionPrompt(chr, stage.questId, selection));
+            return;
+        }
+
+        CompletionResult result = completeStage(chr, stage.questId, context.selectedOption());
+        context.sendOk(result.message());
+    }
+
+    private static InteractionHookProgressEntry progressEntryForStage(Character chr, Stage stage) {
+        List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
+        int completedSteps = completedStepCount(chr, stage);
+        conditions.add(new InteractionHookProgressEntry.Condition(
+                completedSteps,
+                stage.totalStepCount(),
+                "#e" + stage.name + "#n 阶段进度：#b" + completedSteps + "#k/#r"
+                        + stage.totalStepCount() + "#k"));
+
+        Step step = currentStep(chr, stage);
+        if (step == Step.BOSS_TOKENS) {
+            int bossIndex = currentBossIndex(chr, stage);
+            BossTarget bossTarget = stage.bossTargets.get(bossIndex);
+            int held = Math.min(1, chr.getItemQuantity(bossTarget.tokenId(), false));
+            conditions.add(new InteractionHookProgressEntry.Condition(
+                    held,
+                    1,
+                    "当前步骤 " + (bossIndex + 1) + "/" + stage.totalStepCount()
+                            + "：击败 #o" + bossTarget.mobId() + "#，带回 #i" + bossTarget.tokenId()
+                            + "# #t" + bossTarget.tokenId() + "# #b" + held + "#k/#r1#k"));
+            return new InteractionHookProgressEntry(stage.questId, chr.getQuestStatus(stage.questId), conditions);
+        }
+
+        if (step == Step.BASE_MATERIALS) {
+            conditions.add(new InteractionHookProgressEntry.Condition(
+                    completedSteps,
+                    stage.totalStepCount(),
+                    "当前步骤 " + (stage.bossTargets.size() + 1) + "/" + stage.totalStepCount()
+                            + "：交付普通材料和基础金币"));
+            for (Requirement requirement : stage.baseRequirements) {
+                int held = Math.min(requirement.count(), chr.getItemQuantity(requirement.itemId(), false));
+                conditions.add(new InteractionHookProgressEntry.Condition(
+                        held,
+                        requirement.count(),
+                        "#i" + requirement.itemId() + "# #t" + requirement.itemId() + "# #b"
+                                + held + "#k/#r" + requirement.count() + "#k"));
+            }
+            int meso = Math.min(stage.baseMeso, chr.getMeso());
+            conditions.add(new InteractionHookProgressEntry.Condition(
+                    meso,
+                    stage.baseMeso,
+                    "基础金币：#b" + formatMeso(meso) + "#k/#r" + formatMeso(stage.baseMeso) + "#k"));
+            return new InteractionHookProgressEntry(stage.questId, chr.getQuestStatus(stage.questId), conditions);
+        }
+
+        conditions.add(new InteractionHookProgressEntry.Condition(
+                1,
+                1,
+                "当前步骤 " + stage.totalStepCount() + "/" + stage.totalStepCount()
+                        + "：点击完成书本，选择 5 选 1 元素杖"));
+        if (stage.index > 1) {
+            StaffInfo current = getStaffState(chr).current();
+            String staffText = current == null
+                    ? "上一阶段元素杖：#r未持有#k"
+                    : "上一阶段元素杖：#i" + current.itemId() + "# #t" + current.itemId() + "#";
+            conditions.add(new InteractionHookProgressEntry.Condition(1, 1, staffText));
+            conditions.add(new InteractionHookProgressEntry.Condition(
+                    1,
+                    1,
+                    "跨属性重铸额外消耗：" + switchRequirementSummary(stage)));
+        }
+        return new InteractionHookProgressEntry(stage.questId, chr.getQuestStatus(stage.questId), conditions);
+    }
+
+    private static int completedStepCount(Character chr, Stage stage) {
+        int completed = 0;
+        for (int i = 0; i < stage.bossTargets.size(); i++) {
+            if (isBridgeCompleted(chr, stage.bossBridgeQuestId(i))) {
+                completed++;
+            }
+        }
+        if (isBridgeCompleted(chr, stage.materialBridgeQuestId())) {
+            completed++;
+        }
+        return completed;
     }
 
     public static StepAdvanceValidation validateStepAdvance(Character chr, int questId) {

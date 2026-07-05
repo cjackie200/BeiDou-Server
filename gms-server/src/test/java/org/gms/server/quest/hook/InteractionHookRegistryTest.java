@@ -1,11 +1,13 @@
 package org.gms.server.quest.hook;
 
 import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Job;
 import org.gms.client.MonsterBook;
+import org.gms.client.QuestStatus;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.constants.id.NpcId;
@@ -77,6 +79,8 @@ class InteractionHookRegistryTest {
         assertFalse(questRules.containsKey(LifeProofQuest.FIRST_QUEST_ID));
         assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) MonsterCardRingQuest.CLAIM_QUEST_ID).actionMask());
         assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) MonsterCardRingQuest.LAST_QUEST_ID).actionMask());
+        assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) ElementalResonanceQuest.FIRST_QUEST_ID).actionMask());
+        assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) ElementalResonanceQuest.LAST_QUEST_ID).actionMask());
         assertFalse(questRules.containsKey(1000));
     }
 
@@ -112,6 +116,29 @@ class InteractionHookRegistryTest {
         assertNull(InteractionHookAction.fromQuestRawAction(0));
         assertTrue((InteractionHookAction.ALL_MASK & InteractionHookAction.QUERY_START.mask()) != 0);
         assertTrue((InteractionHookAction.ALL_MASK & InteractionHookAction.CONFIRM_COMPLETE.mask()) != 0);
+    }
+
+    @Test
+    void elementalResonanceHookProgressShowsCurrentStep() {
+        Character chr = newElementalMage(70);
+        assertTrue(ElementalResonanceQuest.startStage(chr, 29991).success());
+
+        ElementalResonanceInteractionHookProvider provider = new ElementalResonanceInteractionHookProvider();
+        assertTrue(provider.mapNpcRules(chr, Set.of(ElementalResonanceQuest.NPC_ID)).stream()
+                .anyMatch(rule -> rule.eventMask() == InteractionHookProtocol.EVENT_MASK_NPC_CLICK
+                        && rule.targetId() == ElementalResonanceQuest.NPC_ID
+                        && rule.questId() == 29991));
+
+        InteractionHookProgressEntry entry = InteractionHookPackets.progressEntries(chr).stream()
+                .filter(progress -> progress.questId() == 29991)
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(QuestStatus.Status.STARTED.getId(), entry.state());
+        assertTrue(entry.conditions().stream().anyMatch(condition ->
+                condition.text().contains("当前步骤 1/5")
+                        && condition.text().contains("#o2220000#")
+                        && condition.text().contains("#i4033012#")));
     }
 
     @Test
@@ -363,6 +390,15 @@ class InteractionHookRegistryTest {
         client.setPlayer(chr);
         chr.setJob(job);
         chr.setMonsterBook(monsterBookWithCompletedSets(completedSets));
+        return chr;
+    }
+
+    private static Character newElementalMage(int level) {
+        CapturingClient client = new CapturingClient();
+        Character chr = Character.getDefault(client);
+        client.setPlayer(chr);
+        chr.setLevel(level);
+        chr.setJob(Job.FP_WIZARD);
         return chr;
     }
 
