@@ -45,7 +45,7 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
 
         Character chr = c.getPlayer();
         chr.setMapTransitionComplete();
-        InteractionHookPackets.sendMapNpcRules(c);
+        InteractionHookPackets.sendCurrentState(c);
 
         int beaconid = chr.getBuffSource(BuffStat.HOMING_BEACON);
         if (beaconid != -1) {

@@ -38,6 +38,13 @@ public final class InteractionHookPackets {
         // Send weapon elemental bonus config to client DLL
         client.sendPacket(PacketCreator.elementalWeaponConfig(client.getPlayer()));
         clearAllRules(client);
+        sendCurrentState(client);
+    }
+
+    public static void sendCurrentState(Client client) {
+        if (!canSendRules(client)) {
+            return;
+        }
         sendCharacterQuestRules(client);
         sendMapNpcRules(client);
         sendProgress(client);
