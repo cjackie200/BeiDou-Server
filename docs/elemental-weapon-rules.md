@@ -136,6 +136,8 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 上一阶段元素杖和跨属性重铸消耗，供客户端 `Q` 详情替换 marker。
 `WzPatchTool elemental-resonance-verify` 会拒绝旧模板字段、缺失 marker、缺失 `summary/demandSummary`
 或完成文本仍以“已完成：”开头的元素共鸣节点。
+汉斯 NPC 对话也采用同一风格：标题使用当前步骤任务名，正文只保留剧情句、需求物品/金币和确认句；
+不得出现“任务列表”“完成书本”“当前目标：”“当前进度：”“完成方式：”“下一步：”等系统说明式文案。
 
 阶段奖励任务：
 

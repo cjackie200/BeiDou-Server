@@ -189,6 +189,29 @@ class ElementalResonanceQuestTest {
     }
 
     @Test
+    void npcDialogsUseQuestNarrativeStyle() {
+        Character chr = newMage(70);
+
+        String startPrompt = ElementalResonanceQuest.startPrompt(chr, TIER_ONE_FIRST_BOSS_STEP);
+        assertQuestDialogStyle(startPrompt);
+        assertTrue(startPrompt.contains("元素矿石里传来了最初的回声。"));
+        assertTrue(startPrompt.contains("#t4033012#"));
+        assertTrue(startPrompt.contains("接受这一步委托吗？"));
+
+        assertTrue(ElementalResonanceQuest.startStage(chr, TIER_ONE_FIRST_BOSS_STEP).success());
+        addItem(chr, 4033012, 1);
+        ElementalResonanceQuest.syncQuestStateSilently(chr);
+
+        String advancePrompt = ElementalResonanceQuest.advancePrompt(chr, TIER_ONE_FIRST_BOSS_STEP);
+        assertQuestDialogStyle(advancePrompt);
+        assertTrue(advancePrompt.contains("交给我吗？"));
+
+        var firstBossStep = ElementalResonanceQuest.advanceCurrentStep(chr, TIER_ONE_FIRST_BOSS_STEP);
+        assertQuestDialogStyle(firstBossStep.message());
+        assertTrue(firstBossStep.message().contains("回声已经记录下来"));
+    }
+
+    @Test
     void completionValidationRejectsEquippedPreviousStaff() {
         Character chr = newMage(100);
         addItem(chr, InventoryType.EQUIPPED, 1372035, 1);
@@ -459,6 +482,16 @@ class ElementalResonanceQuestTest {
 
     private static boolean allConditionsMet(InteractionHookProgressEntry entry) {
         return entry.conditions().stream().allMatch(condition -> condition.current() >= condition.required());
+    }
+
+    private static void assertQuestDialogStyle(String text) {
+        assertFalse(text.contains("任务列表"), text);
+        assertFalse(text.contains("完成书本"), text);
+        assertFalse(text.contains("当前目标："), text);
+        assertFalse(text.contains("当前进度："), text);
+        assertFalse(text.contains("完成方式："), text);
+        assertFalse(text.contains("下一步："), text);
+        assertFalse(text.contains("已完成步骤："), text);
     }
 
     private static final class CapturingClient extends Client {

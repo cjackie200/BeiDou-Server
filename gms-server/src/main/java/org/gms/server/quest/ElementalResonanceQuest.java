@@ -425,10 +425,9 @@ public final class ElementalResonanceQuest {
             return validation.getMessage();
         }
 
-        Stage stage = ref.stage;
-        return "#e" + stage.name + "#n\r\n\r\n"
-                + "元素共鸣会按任务列表中的步骤逐步推进。完成当前目标后回到汉斯处提交，下一步才会开启。\r\n\r\n"
-                + stepRequirementText(chr, ref, -1);
+        return "#e" + questDisplayName(ref) + "#n\r\n\r\n"
+                + stepRequirementText(chr, ref, -1)
+                + "\r\n接受这一步委托吗？";
     }
 
     public static String progressText(Character chr, int questId) {
@@ -437,26 +436,25 @@ public final class ElementalResonanceQuest {
             return "这个元素共鸣任务暂时无法处理。";
         }
 
-        Stage stage = ref.stage;
-        StringBuilder text = new StringBuilder("#e").append(stage.name).append("#n\r\n\r\n");
+        StringBuilder text = new StringBuilder("#e").append(questDisplayName(ref)).append("#n\r\n\r\n");
         text.append(stepRequirementText(chr, ref, -1));
         if (ref.type == StepType.REWARD) {
             CompletionValidation validation = validateCompletion(chr, ref, -1);
             if (validation.isOk()) {
-                text.append("\r\n#b重铸准备已经完成。点击完成书本选择新的元素杖。#k");
+                text.append("\r\n#b杖芯已经稳定。选择要固定的元素吧。#k");
                 return text.toString();
             }
-            text.append("\r\n#r当前不能重铸：#k").append(validation.getMessage());
+            text.append("\r\n#r现在还不能重铸：#k").append(validation.getMessage());
             return text.toString();
         }
 
         StepAdvanceValidation validation = validateStepAdvance(chr, ref);
         if (validation.isOk()) {
-            text.append("\r\n#b当前步骤已经完成。点击完成书本向汉斯报告，推进到下一步。#k");
+            text.append("\r\n#b需要的东西已经齐了，把它交给汉斯吧。#k");
             return text.toString();
         }
 
-        text.append("\r\n#r当前步骤未完成：#k").append(validation.getMessage());
+        text.append("\r\n#r还没有准备好：#k").append(validation.getMessage());
         return text.toString();
     }
 
@@ -665,22 +663,6 @@ public final class ElementalResonanceQuest {
         return new InteractionHookProgressEntry(ref.questId, chr.getQuestStatus(ref.questId), conditions);
     }
 
-    private static int completedStepCount(Character chr, Stage stage) {
-        int completed = 0;
-        for (int i = 0; i < stage.bossTargets.size(); i++) {
-            if (isQuestCompleted(chr, stage.bossBridgeQuestId(i))) {
-                completed++;
-            }
-        }
-        if (isQuestCompleted(chr, stage.materialBridgeQuestId())) {
-            completed++;
-        }
-        if (isQuestCompleted(chr, stage.questId)) {
-            completed++;
-        }
-        return completed;
-    }
-
     public static StepAdvanceValidation validateStepAdvance(Character chr, int questId) {
         return validateStepAdvance(chr, getStepByQuestId(questId));
     }
@@ -692,18 +674,16 @@ public final class ElementalResonanceQuest {
             return validation.getMessage();
         }
 
-        Stage stage = ref.stage;
-        StringBuilder text = new StringBuilder("#e").append(stage.name).append("#n\r\n\r\n");
+        StringBuilder text = new StringBuilder("#e").append(questDisplayName(ref)).append("#n\r\n\r\n");
         text.append(stepRequirementText(chr, ref, -1)).append("\r\n");
         if (ref.type == StepType.BOSS) {
             BossTarget current = ref.bossTarget();
-            text.append("要把 #b#o").append(current.mobId()).append("##k 的共鸣凭证交给汉斯分析吗？\r\n\r\n");
-            text.append("#r交付后会消耗这枚凭证，并开启下一步。#k");
+            text.append("把 #b#i").append(current.tokenId()).append("##t").append(current.tokenId())
+                    .append("##k 交给我吗？");
             return text.toString();
         }
 
-        text.append("要把这些普通材料和基础金币交给汉斯完成重铸准备吗？\r\n\r\n");
-        text.append("#r交付后会消耗普通材料和基础金币，并开启最终元素杖选择。#k");
+        text.append("把这些材料和金币交给我吗？");
         return text.toString();
     }
 
@@ -715,9 +695,9 @@ public final class ElementalResonanceQuest {
         }
 
         Stage stage = ref.stage;
-        StringBuilder text = new StringBuilder("#e选择元素杖#n\r\n\r\n");
+        StringBuilder text = new StringBuilder("#e").append(questDisplayName(ref)).append("#n\r\n\r\n");
         text.append(stepRequirementText(chr, ref, -1));
-        text.append("\r\n请选择这次要共鸣的属性：\r\n");
+        text.append("\r\n选择要固定的元素：\r\n");
         for (int i = 0; i < stage.rewardItemIds.length; i++) {
             int itemId = stage.rewardItemIds[i];
             text.append("#L").append(i).append("##i").append(itemId).append("# #t").append(itemId).append("#  ")
@@ -735,25 +715,22 @@ public final class ElementalResonanceQuest {
 
         Stage stage = ref.stage;
         int rewardItemId = stage.rewardItemIds[selection];
-        StringBuilder text = new StringBuilder("要选择 #b#i").append(rewardItemId).append("##t").append(rewardItemId)
-                .append("##k 吗？\r\n\r\n");
+        StringBuilder text = new StringBuilder("#e").append(questDisplayName(ref)).append("#n\r\n\r\n")
+                .append("要把共鸣固定在 #b#i").append(rewardItemId).append("##t").append(rewardItemId)
+                .append("##k 上吗？\r\n\r\n");
         if (stage.index > 1 && validation.current() != null) {
-            text.append("将消耗上一阶段元素杖：#r#i").append(validation.current().itemId()).append("##t")
+            text.append("会用掉上一阶段元素杖：#r#i").append(validation.current().itemId()).append("##t")
                     .append(validation.current().itemId()).append("##k\r\n");
         }
-        if (validation.requirements().isEmpty() && validation.requiredMeso() == 0) {
-            text.append("普通材料已经在上一步交付，本次不再额外消耗材料和金币。\r\n");
-        } else {
-            if (!validation.requirements().isEmpty()) {
-                text.append("将额外消耗材料：\r\n").append(requirementText(chr, validation.requirements()));
-            }
-            if (validation.requiredMeso() > 0) {
-                text.append("额外金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
-                        .append(formatMeso(validation.requiredMeso())).append("#k\r\n");
-            }
+        if (!validation.requirements().isEmpty()) {
+            text.append("还需要这些材料：\r\n").append(requirementText(chr, validation.requirements()));
+        }
+        if (validation.requiredMeso() > 0) {
+            text.append("金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
+                    .append(formatMeso(validation.requiredMeso())).append("#k\r\n");
         }
         if (validation.switchElement()) {
-            text.append("\r\n#r本次会跨属性重铸，额外消耗星石、黑水晶和金币。#k");
+            text.append("\r\n#r这次会改变元素属性。#k");
         }
         return text.toString();
     }
@@ -773,7 +750,7 @@ public final class ElementalResonanceQuest {
             completeQuestStep(chr, ref.questId);
             syncQuestState(chr);
             return StepAdvanceResult.success("#e" + stage.name + "#n\r\n\r\n"
-                    + "#b#o" + current.mobId() + "##k 的共鸣凭证已经确认。\r\n\r\n"
+                    + "#b#o" + current.mobId() + "##k 的回声已经记录下来。\r\n\r\n"
                     + nextStepMessage(chr, stage));
         }
 
@@ -784,8 +761,7 @@ public final class ElementalResonanceQuest {
         completeQuestStep(chr, ref.questId);
         syncQuestState(chr);
         return StepAdvanceResult.success("#e" + stage.name + "#n\r\n\r\n"
-                + "普通材料已经交付，元素杖的重铸准备完成。\r\n\r\n"
-                + "汉斯已经可以为你固定新的元素属性。");
+                + "材料已经足够，杖芯稳定下来了。");
     }
 
     public static CompletionResult completeStage(Character chr, int questId, int selection) {
@@ -822,7 +798,7 @@ public final class ElementalResonanceQuest {
 
         completeQuestStep(chr, stage.questId);
         syncQuestState(chr);
-        return CompletionResult.success("#e元素共鸣完成#n\r\n\r\n你获得了 #b#i" + rewardItemId + "##t"
+        return CompletionResult.success("#e" + stage.name + "#n\r\n\r\n#b#i" + rewardItemId + "##t"
                 + rewardItemId + "##k。\r\n" + nextStageMessage(stage));
     }
 
@@ -882,7 +858,7 @@ public final class ElementalResonanceQuest {
             }
             syncQuestState(chr);
             return TestSupplyResult.success("已补齐 " + activeStage.name + " 当前 Boss 凭证：怪物 "
-                    + current.mobId() + "，凭证 " + current.tokenId() + "。请点击完成书本向汉斯报告。");
+                    + current.mobId() + "，凭证 " + current.tokenId() + "。请回到汉斯处报告。");
         }
 
         if (activeStep.type == StepType.BASE_MATERIALS) {
@@ -892,7 +868,7 @@ public final class ElementalResonanceQuest {
             int gainedMeso = addMissingMeso(chr, activeStage.baseMeso);
             syncQuestState(chr);
             return TestSupplyResult.success("已补齐 " + activeStage.name + " 当前普通材料和基础金币，补发金币 "
-                    + formatMeso(gainedMeso) + "。请点击完成书本向汉斯交付材料。");
+                    + formatMeso(gainedMeso) + "。请回到汉斯处交付材料。");
         }
 
         CompletionValidation validation = validateCompletion(chr, activeStep, -1);
@@ -907,7 +883,7 @@ public final class ElementalResonanceQuest {
         int gainedMeso = addMissingMeso(chr, activeStage.switchMeso);
         syncQuestState(chr);
         return TestSupplyResult.success("已补齐 " + activeStage.name + " 奖励选择步骤的跨属性备用材料和金币，补发金币 "
-                + formatMeso(gainedMeso) + "。请点击完成书本选择元素杖。");
+                + formatMeso(gainedMeso) + "。请回到汉斯处选择元素杖。");
     }
 
     private static StartValidation validateStart(Character chr, StepRef ref) {
@@ -1247,7 +1223,8 @@ public final class ElementalResonanceQuest {
 
     private static String stepStartedMessage(Character chr, StepRef ref) {
         return "#e" + questDisplayName(ref) + "#n\r\n\r\n"
-                + stepRequirementText(chr, ref, -1);
+                + stepRequirementText(chr, ref, -1)
+                + "\r\n拜托你了。";
     }
 
     private static String nextStageMessage(Stage stage) {
@@ -1258,12 +1235,23 @@ public final class ElementalResonanceQuest {
         return "下一阶段会在 #r" + next.requiredLevel + "#k 级开启。";
     }
 
+    private static String stageStory(Stage stage) {
+        return switch (stage.index) {
+            case 1 -> "元素矿石里传来了最初的回声。";
+            case 2 -> "初阶杖芯已经稳定，还需要更强的岛屿首领回声。";
+            case 3 -> "元素力量开始穿越裂隙，需要危险首领的气息来校准。";
+            case 4 -> "高阶元素正在卷起风暴，需要神木村和航路上的强大气息压住杖心。";
+            case 5 -> "终阶杖芯只回应真正的远征回声。";
+            default -> "元素杖仍在回应新的魔力。";
+        };
+    }
+
     private static String nextStepMessage(Character chr, Stage stage) {
         Optional<Integer> nextQuestId = resolveCurrentQuestId(chr);
         if (nextQuestId.isPresent()) {
             StepRef next = getStepByQuestId(nextQuestId.get());
             if (next != null && next.stage == stage) {
-                return "汉斯准备继续处理 #b" + questDisplayName(next) + "#k。";
+                return "还有新的回声需要处理：#b" + questDisplayName(next) + "#k。";
             }
         }
         return nextStageMessage(stage);
@@ -1279,66 +1267,43 @@ public final class ElementalResonanceQuest {
         }
 
         StringBuilder text = new StringBuilder();
-        text.append("等级：#b").append(chr.getLevel()).append("#k / #r").append(stage.requiredLevel).append("#k\r\n");
-        if (stage.index > 1) {
-            text.append("上一阶段元素杖：").append(staffLocationText(current, stage.index - 1)).append("\r\n");
-        }
-        text.append("已完成步骤：").append(completedStepText(chr, stage)).append("\r\n");
+        text.append(stageStory(stage)).append("\r\n\r\n");
 
         if (ref.type == StepType.BOSS) {
             BossTarget bossTarget = ref.bossTarget();
-            text.append("\r\n汉斯需要 #o").append(bossTarget.mobId())
-                    .append("# 身上的共鸣凭证来校准杖芯。击败它后，把 #i")
+            text.append("去击败#o").append(bossTarget.mobId())
+                    .append("#，把 #i")
                     .append(bossTarget.tokenId()).append("# #t").append(bossTarget.tokenId())
-                    .append("# 带回给他。\r\n\r\n");
+                    .append("# 带回来。\r\n\r\n");
             text.append(requirementText(chr, List.of(req(bossTarget.tokenId(), 1))));
             return text.toString();
         }
 
         if (ref.type == StepType.BASE_MATERIALS) {
-            text.append("\r\n几道首领回声已经收齐。汉斯要用这些普通材料稳定杖芯，并收取重铸费用。\r\n\r\n");
+            text.append("回声已经足够。接下来要用这些材料稳定杖芯。\r\n\r\n");
             text.append(requirementText(chr, stage.baseRequirements));
-            text.append("基础金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
+            text.append("金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
                     .append(formatMeso(stage.baseMeso)).append("#k\r\n");
             return text.toString();
         }
 
-        text.append("\r\n杖芯已经准备好回应新的属性。选择后，汉斯会把元素共鸣固定到新的元素杖上。\r\n\r\n");
+        text.append("杖芯已经稳定，可以把共鸣固定到新的元素杖上。\r\n\r\n");
         if (stage.index > 1) {
-            text.append("跨属性重铸：");
+            text.append("把上一阶段的元素杖放在装备栏背包里。\r\n");
+            text.append(previousStaffText(current, stage.index - 1)).append("\r\n");
             if (selection < 0) {
-                text.append("#b").append(switchRequirementSummary(stage)).append("#k\r\n");
+                text.append("如果改变元素属性，还需要：#b").append(switchRequirementSummary(stage)).append("#k\r\n");
             } else if (switchElement) {
-                text.append("\r\n").append(requirementText(chr, stage.switchRequirements));
-                text.append("额外金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
+                text.append("改变元素属性还需要：\r\n").append(requirementText(chr, stage.switchRequirements));
+                text.append("金币：#b").append(formatMeso(chr.getMeso())).append("#k / #r")
                         .append(formatMeso(stage.switchMeso)).append("#k\r\n");
             } else {
-                text.append("#b不需要#k\r\n");
+                text.append("沿用原来的元素属性，不需要额外材料。\r\n");
             }
         } else {
-            text.append("普通材料已经交付，可以直接选择第一把元素短杖。\r\n");
+            text.append("选择第一把元素短杖吧。\r\n");
         }
         return text.toString();
-    }
-
-    private static String completedStepText(Character chr, Stage stage) {
-        List<String> completed = new ArrayList<>();
-        for (int i = 0; i < stage.bossTargets.size(); i++) {
-            BossTarget bossTarget = stage.bossTargets.get(i);
-            if (isQuestCompleted(chr, stage.bossBridgeQuestId(i))) {
-                completed.add("#o" + bossTarget.mobId() + "# 凭证已报告");
-            }
-        }
-        if (isQuestCompleted(chr, stage.materialBridgeQuestId())) {
-            completed.add("普通材料已交付");
-        }
-        if (isQuestCompleted(chr, stage.questId)) {
-            completed.add("元素杖已选择");
-        }
-        if (completed.isEmpty()) {
-            return "无";
-        }
-        return String.join("、", completed);
     }
 
     private static String questDisplayName(StepRef ref) {
@@ -1346,28 +1311,28 @@ public final class ElementalResonanceQuest {
             return "元素共鸣";
         }
         if (ref.type == StepType.BOSS) {
-            return ref.stage.name + " - 击败 #o" + ref.bossTarget().mobId() + "#";
+            return ref.stage.name + " - #o" + ref.bossTarget().mobId() + "#的回声";
         }
         if (ref.type == StepType.BASE_MATERIALS) {
-            return ref.stage.name + " - 交付材料";
+            return ref.stage.name + " - 重铸材料";
         }
         return ref.stage.name + " - 选择元素杖";
     }
 
-    private static String staffLocationText(StaffInfo current, int requiredStage) {
+    private static String previousStaffText(StaffInfo current, int requiredStage) {
         if (current == null) {
-            return "#r未持有#k";
+            return "#r没有找到上一阶段元素杖。#k";
         }
         if (current.stage() != requiredStage) {
-            return "#r阶段不匹配#k";
+            return "#r需要上一阶段元素杖。#k";
         }
         if (current.inBag() > 0) {
-            return "#b#i" + current.itemId() + "##t" + current.itemId() + "# 已在装备栏背包#k";
+            return "#b#i" + current.itemId() + "##t" + current.itemId() + "##k";
         }
         if (current.equipped() > 0) {
-            return "#r#i" + current.itemId() + "##t" + current.itemId() + "# 当前穿戴中，请先卸下#k";
+            return "#r#i" + current.itemId() + "##t" + current.itemId() + "# 正在装备，请先卸下。#k";
         }
-        return "#r未在装备栏背包#k";
+        return "#r没有放在装备栏背包里。#k";
     }
 
     private static String requirementText(Character chr, List<Requirement> requirements) {
