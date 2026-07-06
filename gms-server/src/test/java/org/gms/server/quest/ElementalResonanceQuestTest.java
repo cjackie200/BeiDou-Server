@@ -387,6 +387,29 @@ class ElementalResonanceQuestTest {
     }
 
     @Test
+    void retargetedBossCurveUsesStableBossesAndSharedPianusStep() {
+        Character chr = newMage(190);
+        addItem(chr, 1382049, 1);
+
+        String prompt = ElementalResonanceQuest.startPrompt(chr, 29966);
+        assertTrue(prompt.contains("去击败#o8510000#或#o8520000#"), prompt);
+
+        assertTrue(ElementalResonanceQuest.startStage(chr, 29966).success());
+        InteractionHookProgressEntry progress = elementalProgressEntry(chr, 29966);
+        assertTrue(progress.conditions().stream().anyMatch(condition ->
+                condition.text().contains("#o8510000#或#o8520000#")
+                        && condition.text().contains("#t4033024#")), progress.toString());
+        assertTrue(ElementalResonanceQuest.isAllowedBossTokenDrop(chr, 8510000, 4033024, 29966));
+        assertTrue(ElementalResonanceQuest.isAllowedBossTokenDrop(chr, 8520000, 4033024, 29966));
+        assertTrue(ElementalResonanceQuest.isBossTokenForMonster(8510000, 4033024, 29966));
+        assertTrue(ElementalResonanceQuest.isBossTokenForMonster(8520000, 4033024, 29966));
+        assertFalse(ElementalResonanceQuest.isAllowedBossTokenDrop(chr, 8500002, 4033024, 29966));
+        assertFalse(ElementalResonanceQuest.isBossTokenForMonster(8150000, 4033021, 29962));
+        assertFalse(ElementalResonanceQuest.isBossTokenForMonster(8130100, 4033020, 29960));
+        assertFalse(ElementalResonanceQuest.isBossTokenForMonster(5220000, 4033015, 29954));
+    }
+
+    @Test
     void bossTokenMapDropIsVisibleAndPickableOnlyByOwner() {
         Character owner = newMage(70);
         Character teammate = newMage(70);

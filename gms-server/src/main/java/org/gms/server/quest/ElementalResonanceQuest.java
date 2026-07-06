@@ -54,7 +54,7 @@ public final class ElementalResonanceQuest {
                     (short) 29950),
             new Stage(2, (short) 29992, 100, "元素共鸣:回响",
                     new int[]{1382045, 1382046, 1382047, 1382048, 1382061},
-                    List.of(boss(5220000, 4033015), boss(5220002, 4033016), boss(5220003, 4033017)),
+                    List.of(boss(5220004, 4033015), boss(5220003, 4033016), boss(6220000, 4033017)),
                     List.of(req(4000144, 100), req(4000146, 100), req(4000176, 20), req(BLACK_CRYSTAL, 2), req(STAR_ROCK, 1)),
                     8_000_000,
                     List.of(req(BLACK_CRYSTAL, 1), req(STAR_ROCK, 1)),
@@ -62,7 +62,7 @@ public final class ElementalResonanceQuest {
                     (short) 29954),
             new Stage(3, (short) 29993, 130, "元素共鸣:裂隙",
                     new int[]{1372039, 1372040, 1372041, 1372042, 1372048},
-                    List.of(boss(6220000, 4033018), boss(6300005, 4033019), boss(8130100, 4033020)),
+                    List.of(boss(6220001, 4033018), boss(7220001, 4033019), boss(7220002, 4033020)),
                     List.of(req(BLACK_CRYSTAL, 5), req(STAR_ROCK, 3)),
                     18_000_000,
                     List.of(req(BLACK_CRYSTAL, 3), req(STAR_ROCK, 2)),
@@ -70,7 +70,7 @@ public final class ElementalResonanceQuest {
                     (short) 29958),
             new Stage(4, (short) 29994, 160, "元素共鸣:风暴",
                     new int[]{1382049, 1382050, 1382051, 1382052, 1382063},
-                    List.of(boss(8150000, 4033021), boss(8180000, 4033022), boss(8180001, 4033023)),
+                    List.of(boss(8180000, 4033021), boss(8180001, 4033022), boss(8500002, 4033023)),
                     List.of(req(4000235, 3), req(4000243, 3), req(4001084, 1), req(BLACK_CRYSTAL, 8), req(STAR_ROCK, 5)),
                     30_000_000,
                     List.of(req(BLACK_CRYSTAL, 5), req(STAR_ROCK, 3)),
@@ -78,7 +78,7 @@ public final class ElementalResonanceQuest {
                     (short) 29962),
             new Stage(5, (short) 29995, 190, "元素共鸣:终章",
                     new int[]{1372059, 1372060, 1372061, 1372062, 1372063},
-                    List.of(boss(8500002, 4033024), boss(8800002, 4033025),
+                    List.of(boss(8510000, 4033024, 8520000), boss(8800002, 4033025),
                             boss(8810018, 4033026), boss(8820001, 4033027)),
                     List.of(req(4001083, 1), req(4001084, 1), req(4000235, 5), req(4000243, 5), req(BLACK_CRYSTAL, 10), req(STAR_ROCK, 10)),
                     80_000_000,
@@ -144,7 +144,7 @@ public final class ElementalResonanceQuest {
             return false;
         }
         BossTarget bossTarget = ref.bossTarget();
-        return bossTarget != null && bossTarget.mobId() == mobId && bossTarget.tokenId() == itemId;
+        return bossTarget != null && bossTarget.matchesMob(mobId) && bossTarget.tokenId() == itemId;
     }
 
     public static boolean isAllowedBossTokenDrop(Character chr, int mobId, int itemId, int questId) {
@@ -157,7 +157,7 @@ public final class ElementalResonanceQuest {
         }
         BossTarget current = ref.bossTarget();
         return current != null
-                && current.mobId() == mobId
+                && current.matchesMob(mobId)
                 && current.tokenId() == itemId
                 && needBossToken(chr, itemId, questId);
     }
@@ -619,7 +619,7 @@ public final class ElementalResonanceQuest {
             conditions.add(new InteractionHookProgressEntry.Condition(
                     held,
                     1,
-                    "#o" + bossTarget.mobId() + "#\r\n#i" + bossTarget.tokenId()
+                    bossTargetText(bossTarget) + "\r\n#i" + bossTarget.tokenId()
                             + "# #t" + bossTarget.tokenId() + "# #b" + held + "#k/#r1#k"));
             return new InteractionHookProgressEntry(ref.questId, chr.getQuestStatus(ref.questId), conditions);
         }
@@ -748,7 +748,7 @@ public final class ElementalResonanceQuest {
             completeQuestStep(chr, ref.questId);
             syncQuestState(chr);
             return StepAdvanceResult.success("#e" + stage.name + "#n\r\n\r\n"
-                    + "#b#o" + current.mobId() + "##k 的回声已经记录下来。\r\n\r\n"
+                    + "#b" + bossTargetText(current) + "#k 的回声已经记录下来。\r\n\r\n"
                     + nextStepMessage(chr, stage));
         }
 
@@ -856,7 +856,7 @@ public final class ElementalResonanceQuest {
             }
             syncQuestState(chr);
             return TestSupplyResult.success("已补齐 " + activeStage.name + " 当前 Boss 凭证：怪物 "
-                    + current.mobId() + "，凭证 " + current.tokenId() + "。请回到汉斯处报告。");
+                    + bossTargetIds(current) + "，凭证 " + current.tokenId() + "。请回到汉斯处报告。");
         }
 
         if (activeStep.type == StepType.BASE_MATERIALS) {
@@ -1238,8 +1238,8 @@ public final class ElementalResonanceQuest {
             case 1 -> "元素矿石里传来了最初的回声。";
             case 2 -> "初阶杖芯已经稳定，还需要更强的岛屿首领回声。";
             case 3 -> "元素力量开始穿越裂隙，需要危险首领的气息来校准。";
-            case 4 -> "高阶元素正在卷起风暴，需要神木村和航路上的强大气息压住杖心。";
-            case 5 -> "终阶杖芯只回应真正的远征回声。";
+            case 4 -> "高阶元素正在卷起风暴，需要神木村和时间裂缝的强大气息压住杖心。";
+            case 5 -> "终阶杖芯只回应深海与远征尽头的回声。";
             default -> "元素杖仍在回应新的魔力。";
         };
     }
@@ -1269,8 +1269,8 @@ public final class ElementalResonanceQuest {
 
         if (ref.type == StepType.BOSS) {
             BossTarget bossTarget = ref.bossTarget();
-            text.append("去击败#o").append(bossTarget.mobId())
-                    .append("#，把 #i")
+            text.append("去击败").append(bossTargetText(bossTarget))
+                    .append("，把 #i")
                     .append(bossTarget.tokenId()).append("# #t").append(bossTarget.tokenId())
                     .append("# 带回来。\r\n\r\n");
             text.append(requirementText(chr, List.of(req(bossTarget.tokenId(), 1))));
@@ -1312,7 +1312,7 @@ public final class ElementalResonanceQuest {
             return "元素共鸣";
         }
         if (ref.type == StepType.BOSS) {
-            return ref.stage.name + " - #o" + ref.bossTarget().mobId() + "#的回声";
+            return ref.stage.name + " - " + bossTargetText(ref.bossTarget()) + "的回声";
         }
         if (ref.type == StepType.BASE_MATERIALS) {
             return ref.stage.name + " - 重铸材料";
@@ -1427,12 +1427,49 @@ public final class ElementalResonanceQuest {
         return String.format("%,d", meso);
     }
 
+    private static String bossTargetText(BossTarget bossTarget) {
+        if (bossTarget == null) {
+            return "未知 Boss";
+        }
+        List<Integer> mobIds = new ArrayList<>(bossTarget.mobIds());
+        mobIds.sort(Integer::compareTo);
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < mobIds.size(); i++) {
+            if (i > 0) {
+                text.append("或");
+            }
+            text.append("#o").append(mobIds.get(i)).append("#");
+        }
+        return text.toString();
+    }
+
+    private static String bossTargetIds(BossTarget bossTarget) {
+        if (bossTarget == null) {
+            return "未知";
+        }
+        List<Integer> mobIds = new ArrayList<>(bossTarget.mobIds());
+        mobIds.sort(Integer::compareTo);
+        StringBuilder text = new StringBuilder();
+        for (int i = 0; i < mobIds.size(); i++) {
+            if (i > 0) {
+                text.append("/");
+            }
+            text.append(mobIds.get(i));
+        }
+        return text.toString();
+    }
+
     private static Requirement req(int itemId, int count) {
         return new Requirement(itemId, count);
     }
 
-    private static BossTarget boss(int mobId, int tokenId) {
-        return new BossTarget(mobId, tokenId);
+    private static BossTarget boss(int mobId, int tokenId, int... alternateMobIds) {
+        Set<Integer> mobIds = new HashSet<>();
+        mobIds.add(mobId);
+        for (int alternateMobId : alternateMobIds) {
+            mobIds.add(alternateMobId);
+        }
+        return new BossTarget(mobId, tokenId, mobIds);
     }
 
     private enum StepType {
@@ -1466,7 +1503,22 @@ public final class ElementalResonanceQuest {
     public record Requirement(int itemId, int count) {
     }
 
-    public record BossTarget(int mobId, int tokenId) {
+    public record BossTarget(int mobId, int tokenId, Set<Integer> mobIds) {
+        public BossTarget {
+            if (mobIds == null || mobIds.isEmpty()) {
+                mobIds = Set.of(mobId);
+            } else if (!mobIds.contains(mobId)) {
+                Set<Integer> normalized = new HashSet<>(mobIds);
+                normalized.add(mobId);
+                mobIds = Set.copyOf(normalized);
+            } else {
+                mobIds = Set.copyOf(mobIds);
+            }
+        }
+
+        public boolean matchesMob(int candidateMobId) {
+            return mobIds.contains(candidateMobId);
+        }
     }
 
     public record StaffState(int total, StaffInfo current) {

@@ -2976,33 +2976,33 @@
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29954">
-      <string name="name" value="元素共鸣:回响 - 巨居蟹的回声" />
+      <string name="name" value="元素共鸣:回响 - 巨型蜈蚣的回声" />
       <string name="0" value="初阶杖芯已经稳定。等级#r100#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="初阶杖芯已经稳定，需要更强的岛屿首领回声扩展魔力。先击败#o5220000#，取得#i4033015# #t4033015#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29954@@" />
-      <string name="2" value="#o5220000#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o5220000#，带回#t4033015#。" />
+      <string name="1" value="初阶杖芯已经稳定，需要更强的区域首领回声扩展魔力。先击败#o5220004#，取得#i4033015# #t4033015#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29954@@" />
+      <string name="2" value="#o5220004#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o5220004#，带回#t4033015#。" />
       <string name="demandSummary" value="#i4033015:# #t4033015:# #c4033015# / 1" />
       <string name="parent" value="元素共鸣:回响" />
       <int name="order" value="1" />
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29955">
-      <string name="name" value="元素共鸣:回响 - 浮士德的回声" />
+      <string name="name" value="元素共鸣:回响 - 提莫的回声" />
       <string name="0" value="初阶杖芯已经稳定。等级#r100#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="初阶杖芯已经稳定，需要更强的岛屿首领回声扩展魔力。先击败#o5220002#，取得#i4033016# #t4033016#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29955@@" />
-      <string name="2" value="#o5220002#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o5220002#，带回#t4033016#。" />
+      <string name="1" value="初阶杖芯已经稳定，需要更强的区域首领回声扩展魔力。先击败#o5220003#，取得#i4033016# #t4033016#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29955@@" />
+      <string name="2" value="#o5220003#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o5220003#，带回#t4033016#。" />
       <string name="demandSummary" value="#i4033016:# #t4033016:# #c4033016# / 1" />
       <string name="parent" value="元素共鸣:回响" />
       <int name="order" value="2" />
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29956">
-      <string name="name" value="元素共鸣:回响 - 提莫的回声" />
+      <string name="name" value="元素共鸣:回响 - 多尔的回声" />
       <string name="0" value="初阶杖芯已经稳定。等级#r100#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="初阶杖芯已经稳定，需要更强的岛屿首领回声扩展魔力。先击败#o5220003#，取得#i4033017# #t4033017#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29956@@" />
-      <string name="2" value="#o5220003#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o5220003#，带回#t4033017#。" />
+      <string name="1" value="初阶杖芯已经稳定，需要更强的区域首领回声扩展魔力。先击败#o6220000#，取得#i4033017# #t4033017#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29956@@" />
+      <string name="2" value="#o6220000#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o6220000#，带回#t4033017#。" />
       <string name="demandSummary" value="#i4033017:# #t4033017:# #c4033017# / 1" />
       <string name="parent" value="元素共鸣:回响" />
       <int name="order" value="3" />
@@ -3031,33 +3031,33 @@
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29958">
-      <string name="name" value="元素共鸣:裂隙 - 多尔的回声" />
+      <string name="name" value="元素共鸣:裂隙 - 朱诺的回声" />
       <string name="0" value="元素力量开始穿越裂隙。等级#r130#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="元素力量开始穿越裂隙，需要来自危险首领的共鸣校准。先击败#o6220000#，取得#i4033018# #t4033018#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29958@@" />
-      <string name="2" value="#o6220000#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o6220000#，带回#t4033018#。" />
+      <string name="1" value="元素力量开始穿越裂隙，需要来自危险首领的共鸣校准。先击败#o6220001#，取得#i4033018# #t4033018#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29958@@" />
+      <string name="2" value="#o6220001#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o6220001#，带回#t4033018#。" />
       <string name="demandSummary" value="#i4033018:# #t4033018:# #c4033018# / 1" />
       <string name="parent" value="元素共鸣:裂隙" />
       <int name="order" value="1" />
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29959">
-      <string name="name" value="元素共鸣:裂隙 - 僵尸蘑菇王的回声" />
+      <string name="name" value="元素共鸣:裂隙 - 九尾狐的回声" />
       <string name="0" value="元素力量开始穿越裂隙。等级#r130#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="元素力量开始穿越裂隙，需要来自危险首领的共鸣校准。先击败#o6300005#，取得#i4033019# #t4033019#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29959@@" />
-      <string name="2" value="#o6300005#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o6300005#，带回#t4033019#。" />
+      <string name="1" value="元素力量开始穿越裂隙，需要来自危险首领的共鸣校准。先击败#o7220001#，取得#i4033019# #t4033019#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29959@@" />
+      <string name="2" value="#o7220001#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o7220001#，带回#t4033019#。" />
       <string name="demandSummary" value="#i4033019:# #t4033019:# #c4033019# / 1" />
       <string name="parent" value="元素共鸣:裂隙" />
       <int name="order" value="2" />
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29960">
-      <string name="name" value="元素共鸣:裂隙 - 蝙蝠怪的回声" />
+      <string name="name" value="元素共鸣:裂隙 - 妖怪禅师的回声" />
       <string name="0" value="元素力量开始穿越裂隙。等级#r130#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="元素力量开始穿越裂隙，需要来自危险首领的共鸣校准。先击败#o8130100#，取得#i4033020# #t4033020#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29960@@" />
-      <string name="2" value="#o8130100#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o8130100#，带回#t4033020#。" />
+      <string name="1" value="元素力量开始穿越裂隙，需要来自危险首领的共鸣校准。先击败#o7220002#，取得#i4033020# #t4033020#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29960@@" />
+      <string name="2" value="#o7220002#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o7220002#，带回#t4033020#。" />
       <string name="demandSummary" value="#i4033020:# #t4033020:# #c4033020# / 1" />
       <string name="parent" value="元素共鸣:裂隙" />
       <int name="order" value="3" />
@@ -3086,33 +3086,33 @@
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29962">
-      <string name="name" value="元素共鸣:风暴 - 蝙蝠魔的回声" />
+      <string name="name" value="元素共鸣:风暴 - 火焰龙的回声" />
       <string name="0" value="高阶元素开始卷起风暴。等级#r160#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="高阶元素会卷起风暴，需要神木村与航路上的强大气息压住杖心。先击败#o8150000#，取得#i4033021# #t4033021#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29962@@" />
-      <string name="2" value="#o8150000#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o8150000#，带回#t4033021#。" />
+      <string name="1" value="高阶元素会卷起风暴，需要神木村和时间裂缝的强大气息压住杖心。先击败#o8180000#，取得#i4033021# #t4033021#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29962@@" />
+      <string name="2" value="#o8180000#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o8180000#，带回#t4033021#。" />
       <string name="demandSummary" value="#i4033021:# #t4033021:# #c4033021# / 1" />
       <string name="parent" value="元素共鸣:风暴" />
       <int name="order" value="1" />
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29963">
-      <string name="name" value="元素共鸣:风暴 - 火焰龙的回声" />
+      <string name="name" value="元素共鸣:风暴 - 格瑞芬多的回声" />
       <string name="0" value="高阶元素开始卷起风暴。等级#r160#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="高阶元素会卷起风暴，需要神木村与航路上的强大气息压住杖心。先击败#o8180000#，取得#i4033022# #t4033022#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29963@@" />
-      <string name="2" value="#o8180000#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o8180000#，带回#t4033022#。" />
+      <string name="1" value="高阶元素会卷起风暴，需要神木村和时间裂缝的强大气息压住杖心。先击败#o8180001#，取得#i4033022# #t4033022#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29963@@" />
+      <string name="2" value="#o8180001#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o8180001#，带回#t4033022#。" />
       <string name="demandSummary" value="#i4033022:# #t4033022:# #c4033022# / 1" />
       <string name="parent" value="元素共鸣:风暴" />
       <int name="order" value="2" />
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29964">
-      <string name="name" value="元素共鸣:风暴 - 格瑞芬多的回声" />
+      <string name="name" value="元素共鸣:风暴 - 帕普拉图斯的回声" />
       <string name="0" value="高阶元素开始卷起风暴。等级#r160#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="高阶元素会卷起风暴，需要神木村与航路上的强大气息压住杖心。先击败#o8180001#，取得#i4033023# #t4033023#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29964@@" />
-      <string name="2" value="#o8180001#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o8180001#，带回#t4033023#。" />
+      <string name="1" value="高阶元素会卷起风暴，需要神木村和时间裂缝的强大气息压住杖心。先击败#o8500002#，取得#i4033023# #t4033023#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29964@@" />
+      <string name="2" value="#o8500002#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o8500002#，带回#t4033023#。" />
       <string name="demandSummary" value="#i4033023:# #t4033023:# #c4033023# / 1" />
       <string name="parent" value="元素共鸣:风暴" />
       <int name="order" value="3" />
@@ -3141,11 +3141,11 @@
       <int name="area" value="31" />
     </imgdir>
     <imgdir name="29966">
-      <string name="name" value="元素共鸣:终章 - 帕普拉图斯的回声" />
+      <string name="name" value="元素共鸣:终章 - 皮亚奴斯的回声" />
       <string name="0" value="终阶杖芯只会回应真正的远征回声。等级#r190#k以上的法师可以去#p1032001#继续元素共鸣。" />
-      <string name="1" value="终阶杖芯只会回应真正的远征回声，需要收束最强首领的痕迹。先击败#o8500002#，取得#i4033024# #t4033024#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29966@@" />
-      <string name="2" value="#o8500002#的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
-      <string name="summary" value="击败#o8500002#，带回#t4033024#。" />
+      <string name="1" value="终阶杖芯只回应深海与远征尽头的回声，需要收束最强首领的痕迹。先击败#o8510000#或#o8520000#，取得#i4033024# #t4033024#后交给#p1032001#。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29966@@" />
+      <string name="2" value="皮亚奴斯的共鸣凭证已经交给汉斯，杖芯记录下了这一道回声。" />
+      <string name="summary" value="击败#o8510000#或#o8520000#，带回#t4033024#。" />
       <string name="demandSummary" value="#i4033024:# #t4033024:# #c4033024# / 1" />
       <string name="parent" value="元素共鸣:终章" />
       <int name="order" value="1" />
