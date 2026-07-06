@@ -56,6 +56,7 @@ public final class LifeProofQuest {
         if (questId.isEmpty()) return 0;
         QuestMeta meta = QUESTS.get(questId.get());
         if (meta == null || !meta.isVisible()) return 0;
+        if (multiItemCollections(meta) != null) return 0;
         Objective objective = effectiveObjective(chr, meta);
         if (objective == null || objective.type() != ObjectiveType.ITEM) return 0;
         return objective.itemId();
@@ -1290,7 +1291,9 @@ public final class LifeProofQuest {
         }
         if (!objectiveSatisfied(chr, meta, npcId)) {
             return switch (objective.type()) {
-                case ITEM -> "继续收集#t" + objective.itemId() + "#。";
+                case ITEM -> multiItemCollections(meta) != null
+                        ? "继续收集五种水晶。"
+                        : "继续收集#t" + objective.itemId() + "#。";
                 case KILL, BOSS -> "继续完成指定击杀。";
                 case MESO -> "准备足够金币后回#p" + completeNpcId + "#提交。";
                 case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
@@ -1878,7 +1881,7 @@ public final class LifeProofQuest {
                 List<Integer> allDroppers = multi.stream()
                         .flatMap(c -> c.droppers().stream()).distinct().toList();
                 return new Objective(ObjectiveType.ITEM, total,
-                        task.description(), allDroppers, PROOF_ITEM_ID, 0, false);
+                        task.description(), allDroppers, 0, 0, false);
             }
         }
         ItemCollection collection = collectionForTask(stage, task);

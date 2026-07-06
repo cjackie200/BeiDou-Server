@@ -4,6 +4,9 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Job;
 import org.gms.client.QuestStatus;
+import org.gms.client.inventory.InventoryType;
+import org.gms.client.inventory.Item;
+import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
 import org.gms.server.life.NPC;
@@ -59,6 +62,7 @@ class LifeProofQuestTest {
         DataSource dataSource = mock(DataSource.class);
         Connection connection = mock(Connection.class);
         PreparedStatement statement = mock(PreparedStatement.class);
+        ResultSet resultSet = mock(ResultSet.class);
         Map<Class<?>, Object> beans = new HashMap<>();
 
         when(configService.loadGameConfigs()).thenReturn(List.of());
@@ -66,7 +70,9 @@ class LifeProofQuestTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeQuery()).thenReturn(resultSet);
         when(statement.executeUpdate()).thenReturn(1);
+        when(resultSet.next()).thenReturn(false);
 
         beans.put(ServiceProperty.class, serviceProperty);
         beans.put(MessageSource.class, messageSource);
@@ -753,6 +759,74 @@ class LifeProofQuestTest {
         }
     }
 
+    @Test
+    void fiveJobBranchesCanProgressThroughAllSevenStages() throws Exception {
+        Quest.clearCache();
+        int checked = 0;
+
+        for (Job job : List.of(Job.HERO, Job.FP_ARCHMAGE, Job.BOWMASTER, Job.NIGHTLORD, Job.CORSAIR)) {
+            Character chr = newLifeProofCharacter(job);
+            addInstructorNpcs(chr);
+            HpChallengeService.JobBranch branch = HpChallengeService.branch(job);
+
+            for (int stage = 1; stage <= 7; stage++) {
+                List<LifeProofQuest.QuestMeta> visible = LifeProofQuest.stageBranchVisibleQuests(stage, branch);
+                List<LifeProofQuest.QuestMeta> quests = stageBranchFlowQuests(stage, branch);
+                assertEquals(stage == 1 ? 16 : 13, quests.size(),
+                        "visible quest count for " + branch + " stage " + stage);
+                assertEquals(visible.size(), quests.size(),
+                        "flow quest count must match visible quest count for " + branch + " stage " + stage);
+
+                for (int index = 0; index < quests.size(); index++) {
+                    LifeProofQuest.QuestMeta meta = quests.get(index);
+                    Quest quest = Quest.getInstance(meta.questId());
+                    int startNpc = LifeProofQuest.startNpcId(meta);
+                    int completeNpc = LifeProofQuest.completeNpcId(meta);
+
+                    assertTrue(quest.canStart(chr, startNpc),
+                            "cannot start " + branch + " stage " + stage + " quest " + meta.questId());
+                    quest.forceStart(chr, startNpc);
+
+                    if (meta.objective().type() == LifeProofQuest.ObjectiveType.NPC_TALK) {
+                        assertTrue(LifeProofQuest.isAutoCompleteNpcTalk(chr, meta.questId(), completeNpc),
+                                "NPC_TALK should auto-complete at target NPC: " + meta.questId());
+                    }
+
+                    satisfyQuestRequirement(chr, meta);
+                    assertTrue(quest.canComplete(chr, completeNpc),
+                            "cannot complete " + branch + " stage " + stage + " quest " + meta.questId()
+                                    + " (" + meta.name() + ")");
+                    quest.forceComplete(chr, completeNpc);
+                    checked++;
+
+                    if (meta.objective().type() == LifeProofQuest.ObjectiveType.NPC_TALK
+                            && index + 1 < quests.size()
+                            && LifeProofQuest.startNpcId(quests.get(index + 1)) == completeNpc) {
+                        assertEquals(quests.get(index + 1).questId(),
+                                LifeProofQuest.nextContinuationQuestIdAtNpc(chr, meta.questId(), completeNpc),
+                                "NPC_TALK completion should expose next step at same target NPC: "
+                                        + meta.questId());
+                    }
+
+                    if (index + 1 < quests.size()) {
+                        LifeProofQuest.QuestMeta next = quests.get(index + 1);
+                        assertTrue(Quest.getInstance(next.questId()).canStart(chr, LifeProofQuest.startNpcId(next)),
+                                "next quest not unlocked after " + meta.questId() + ": " + next.questId());
+                    } else if (stage < 7) {
+                        LifeProofQuest.QuestMeta nextStage = LifeProofQuest.stageBranchVisibleQuests(stage + 1, branch)
+                                .getFirst();
+                        assertTrue(Quest.getInstance(nextStage.questId()).canStart(chr,
+                                        LifeProofQuest.startNpcId(nextStage)),
+                                "next stage not unlocked after reward " + meta.questId() + ": "
+                                        + nextStage.questId());
+                    }
+                }
+            }
+        }
+
+        assertEquals(470, checked, "all visible life proof quests must be traversed");
+    }
+
     private static void assertJobRequirement(Element start, LifeProofQuest.QuestMeta meta) {
         Element job = childImgDir(start, "job");
         List<Integer> jobIds = LifeProofQuest.branchInfo(meta.branch()).jobIds();
@@ -924,6 +998,21 @@ class LifeProofQuestTest {
     }
 
     private static void assertItemGate(Element complete, LifeProofQuest.QuestMeta meta) {
+        List<LifeProofQuest.ItemCollection> multi = LifeProofQuest.multiItemCollections(meta);
+        if (multi != null) {
+            Element item = childImgDir(complete, "item");
+            List<Element> gates = childImgDirs(item);
+            assertEquals(multi.size(), gates.size(),
+                    "multi-item gate count must match metadata: " + meta.questId());
+            for (int i = 0; i < multi.size(); i++) {
+                assertEquals(Integer.toString(multi.get(i).itemId()), childValue(gates.get(i), "int", "id"),
+                        "multi-item gate id must match metadata: " + meta.questId());
+                assertEquals(Integer.toString(multi.get(i).requiredCount()),
+                        childValue(gates.get(i), "int", "count"),
+                        "multi-item gate count must match metadata: " + meta.questId());
+            }
+            return;
+        }
         assertEquals(Integer.toString(meta.objective().itemId()),
                 childValue(complete, "item", "0", "int", "id"),
                 "item gate id must match metadata: " + meta.questId());
@@ -982,6 +1071,52 @@ class LifeProofQuestTest {
         chr.getMap().addMapObject(new NPC(npcId, new NPCStats("test-npc-" + npcId)));
     }
 
+    private static void addInstructorNpcs(Character chr) throws Exception {
+        for (int npcId : List.of(1022000, 1032001, 1012100, 1052001, 1090000)) {
+            addNpc(chr, npcId);
+        }
+    }
+
+    private static void satisfyQuestRequirement(Character chr, LifeProofQuest.QuestMeta meta) {
+        LifeProofQuest.Objective objective = meta.objective();
+        QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
+        switch (objective.type()) {
+            case KILL, BOSS -> {
+                for (int mobId : objective.targetIds()) {
+                    status.setProgress(mobId, paddedProgress(objective.requiredCount()));
+                }
+            }
+            case ITEM -> {
+                List<LifeProofQuest.ItemCollection> multi = LifeProofQuest.multiItemCollections(meta);
+                if (multi != null) {
+                    for (LifeProofQuest.ItemCollection item : multi) {
+                        addItem(chr, item.itemId(), item.requiredCount());
+                    }
+                    return;
+                }
+                addItem(chr, objective.itemId(), objective.requiredCount());
+            }
+            case MESO -> chr.setMeso(Math.max(chr.getMeso(), objective.mesoCost()));
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, NPC_TALK, JUMP_MANUAL,
+                 SELECT_OPTION, OPTION_SLOT -> status.setProgress(PROGRESS_KEY,
+                    paddedProgress(objective.requiredCount()));
+            case REWARD -> {
+            }
+        }
+    }
+
+    private static void addItem(Character chr, int itemId, int count) {
+        assertTrue(itemId > 0, "invalid item id");
+        InventoryType type = ItemConstants.getInventoryType(itemId);
+        assertTrue(type != InventoryType.UNDEFINED, "undefined inventory type for item " + itemId);
+        assertTrue(chr.getInventory(type).addItem(new Item(itemId, (short) 0, (short) count)) > 0,
+                "failed to add item " + itemId + " x" + count);
+    }
+
+    private static String paddedProgress(int count) {
+        return String.format("%03d", count);
+    }
+
     private static void putQuest(Character chr, int questId, QuestStatus.Status status, String progress) {
         QuestStatus questStatus = new QuestStatus(Quest.getInstance(questId), status, 1032001);
         if (progress != null) {
@@ -1006,6 +1141,35 @@ class LifeProofQuestTest {
 
     private static List<LifeProofQuest.QuestMeta> stageBranchVisibleQuests(LifeProofQuest.QuestMeta meta) {
         return LifeProofQuest.stageBranchVisibleQuests(meta.stage(), meta.branch());
+    }
+
+    private static List<LifeProofQuest.QuestMeta> stageBranchFlowQuests(int stage,
+                                                                        HpChallengeService.JobBranch branch) {
+        List<LifeProofQuest.QuestMeta> visible = LifeProofQuest.stageBranchVisibleQuests(stage, branch);
+        List<LifeProofQuest.QuestMeta> flow = new java.util.ArrayList<>();
+        visible.stream()
+                .filter(meta -> meta.kind() == LifeProofQuest.QuestKind.MAIN)
+                .forEach(flow::add);
+        for (int selectorNo = 1; selectorNo <= LifeProofQuest.OPTIONAL_REQUIRED_COUNT; selectorNo++) {
+            int selectorQuestId = LifeProofQuest.questId(stage, branch,
+                    LifeProofQuest.SELECTOR_SLOT_START + selectorNo - 1);
+            int optionQuestId = LifeProofQuest.questId(stage, branch,
+                    LifeProofQuest.OPTION_SLOT_START + selectorNo - 1);
+            flow.add(visible.stream()
+                    .filter(meta -> meta.questId() == selectorQuestId)
+                    .findFirst()
+                    .orElseThrow());
+            flow.add(visible.stream()
+                    .filter(meta -> meta.questId() == optionQuestId)
+                    .findFirst()
+                    .orElseThrow());
+        }
+        int rewardQuestId = LifeProofQuest.questId(stage, branch, LifeProofQuest.REWARD_SLOT);
+        flow.add(visible.stream()
+                .filter(meta -> meta.questId() == rewardQuestId)
+                .findFirst()
+                .orElseThrow());
+        return flow;
     }
 
     private static LifeProofQuest.QuestMeta previousVisibleQuest(LifeProofQuest.QuestMeta meta) {
