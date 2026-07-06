@@ -6,6 +6,9 @@ import org.gms.client.Job;
 import org.gms.client.QuestStatus;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
+import org.gms.server.life.NPC;
+import org.gms.server.life.NPCStats;
+import org.gms.server.maps.MapleMap;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.Quest;
 import org.gms.service.ConfigService;
@@ -322,6 +325,45 @@ class LifeProofQuestTest {
     }
 
     @Test
+    void lifeProofNpcDialogsUseOriginalStepStyleText() throws Exception {
+        DataSource dataSource = mock(DataSource.class);
+        Connection connection = mock(Connection.class);
+        PreparedStatement statement = mock(PreparedStatement.class);
+        ResultSet resultSet = mock(ResultSet.class);
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeQuery()).thenReturn(resultSet);
+        when(statement.executeUpdate()).thenReturn(1);
+        when(resultSet.next()).thenReturn(false);
+
+        installApplicationContext(dataSource);
+        try {
+            Character chr = newLifeProofCharacter(Job.HERO);
+            addNpc(chr, 1012100);
+            String start = LifeProofQuest.startPrompt(chr, 5100);
+            assertLifeProofDisplayTextHasNoTemplateLabels(start, 5100);
+            assertTrue(start.contains("导师要你先确认五大职业的意志"), start);
+            assertFalse(start.contains("拜访赫丽娜。"), start);
+
+            putQuest(chr, 5100, QuestStatus.Status.STARTED, "000");
+            String progress = LifeProofQuest.resultMessage(LifeProofQuest.endPrompt(chr, 5100, 1022000));
+            assertLifeProofDisplayTextHasNoTemplateLabels(progress, 5100);
+            assertTrue(progress.contains("去见#p1012100#"), progress);
+            assertTrue(progress.contains("与#p1012100#确认 #b0#k/#r1#k"), progress);
+
+            assertTrue(LifeProofQuest.isAutoCompleteNpcTalk(chr, 5100, 1012100));
+
+            String result = LifeProofQuest.complete(chr, 5100, 1012100);
+            assertTrue(LifeProofQuest.isOkResult(result), result);
+            assertTrue(LifeProofQuest.resultMessage(result).contains("已经记录"), result);
+            Quest.getInstance(5100).forceComplete(chr, 1012100);
+            assertEquals(5101, LifeProofQuest.nextContinuationQuestIdAtNpc(chr, 5100, 1012100));
+        } finally {
+            setUpApplicationContext();
+        }
+    }
+
+    @Test
     void questCategoryUsesLegendRoad() throws Exception {
         assertEquals("empty", childValue(DocumentBuilderFactory.newInstance().newDocumentBuilder()
                         .parse(resolveQuestXml("wz/Etc.wz/QuestCategory.img.xml").toFile())
@@ -460,6 +502,23 @@ class LifeProofQuestTest {
                     "visible life proof QuestInfo.order must follow metadata for quest " + questId + " in " + path);
             assertEquals("31", childValue(quest, "int", "area"),
                     "life proof QuestInfo.area must stay in Legend Road for quest " + questId + " in " + path);
+            String questName = childValue(quest, "string", "name");
+            String summary = childValue(quest, "string", "summary");
+            String demandSummary = childValue(quest, "string", "demandSummary");
+            assertFalse(summary.isBlank(),
+                    "visible life proof QuestInfo.summary must be present for quest " + questId + " in " + path);
+            assertFalse(summary.equals(questName),
+                    "visible life proof QuestInfo.summary must not repeat quest title for quest " + questId + " in "
+                            + path);
+            assertFalse(demandSummary.isBlank(),
+                    "visible life proof QuestInfo.demandSummary must be present for quest " + questId + " in "
+                            + path);
+            assertLifeProofDisplayTextHasNoTemplateLabels(childValue(quest, "string", "0"), questId);
+            assertLifeProofDisplayTextHasNoTemplateLabels(childValue(quest, "string", "1"), questId);
+            assertLifeProofDisplayTextHasNoTemplateLabels(summary, questId);
+            assertLifeProofDisplayTextHasNoTemplateLabels(demandSummary, questId);
+            assertFalse(childValue(quest, "string", "2").startsWith("已完成："),
+                    "life proof completion text must not use old completed prefix: " + questId + " in " + path);
         }
 
         assertEquals(470, count, "visible life proof quest count in " + path);
@@ -821,6 +880,7 @@ class LifeProofQuestTest {
         }
         assertFalse(detail.contains("..."),
                 "quest detail must not rely on placeholder ellipsis for quest " + meta.questId());
+        assertLifeProofDisplayTextHasNoTemplateLabels(detail, meta.questId());
     }
 
     private static void assertLifeProofProgressMarker(String detail, int questId) {
@@ -828,6 +888,26 @@ class LifeProofQuestTest {
                 "quest detail must contain hook progress marker for quest " + questId);
         assertFalse(Pattern.compile("#a" + questId + "\\d#").matcher(detail).find(),
                 "non-mob life proof quest detail must not use client #a macro: " + questId);
+    }
+
+    private static void assertLifeProofDisplayTextHasNoTemplateLabels(String text, int questId) {
+        String[] forbidden = {
+                "任务目标：",
+                "目标：",
+                "当前目标：",
+                "当前进度：",
+                "完成方式：",
+                "下一步：",
+                "任务列表",
+                "完成书本",
+                "接下「",
+                "这一步是「",
+                "完成了「"
+        };
+        for (String word : forbidden) {
+            assertFalse(text.contains(word), "life proof text must not use old template label " + word
+                    + " for quest " + questId + ": " + text);
+        }
     }
 
     @Test
@@ -891,6 +971,15 @@ class LifeProofQuestTest {
         chr.setLevel(180);
         chr.setJob(job);
         return chr;
+    }
+
+    private static void addNpc(Character chr, int npcId) throws Exception {
+        if (chr.getMap() == null) {
+            MapleMap map = new MapleMap(100000000, 0, 1, 100000000, 1.0f);
+            chr.setMap(map);
+            chr.setMap(100000000);
+        }
+        chr.getMap().addMapObject(new NPC(npcId, new NPCStats("test-npc-" + npcId)));
     }
 
     private static void putQuest(Character chr, int questId, QuestStatus.Status status, String progress) {
