@@ -203,6 +203,12 @@ public class InventoryService {
                     .itemLevel(obj.getByte("itemlevel"))
                     .itemExp(obj.getInt("itemexp"))
                     .ringId(obj.getInt("ringid"))
+                    .incRMAF(obj.getShort("incRMAF"))
+                    .incRMAS(obj.getShort("incRMAS"))
+                    .incRMAI(obj.getShort("incRMAI"))
+                    .incRMAL(obj.getShort("incRMAL"))
+                    .incRMAH(obj.getShort("incRMAH"))
+                    .elemDefault(obj.getShort("elemDefault"))
                     .build());
         }
         return rtnDTO;
@@ -256,6 +262,12 @@ public class InventoryService {
                         .itemLevel(equip.getItemLevel())
                         .itemExp(equip.getItemExp())
                         .ringId(equip.getRingId())
+                        .incRMAF(equip.getIncRMAF())
+                        .incRMAS(equip.getIncRMAS())
+                        .incRMAI(equip.getIncRMAI())
+                        .incRMAL(equip.getIncRMAL())
+                        .incRMAH(equip.getIncRMAH())
+                        .elemDefault(equip.getElemDefault())
                         .build());
             }
             return rtnDTO;

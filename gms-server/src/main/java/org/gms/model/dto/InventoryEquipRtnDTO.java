@@ -106,4 +106,28 @@ public class InventoryEquipRtnDTO {
      * 戒指id，对应ringid
      */
     private Integer ringId;
+    /**
+     * 火属性魔攻倍率，对应incRMAF
+     */
+    private Short incRMAF;
+    /**
+     * 毒属性魔攻倍率，对应incRMAS
+     */
+    private Short incRMAS;
+    /**
+     * 冰属性魔攻倍率，对应incRMAI
+     */
+    private Short incRMAI;
+    /**
+     * 雷属性魔攻倍率，对应incRMAL
+     */
+    private Short incRMAL;
+    /**
+     * 圣属性魔攻倍率，对应incRMAH
+     */
+    private Short incRMAH;
+    /**
+     * 非匹配元素倍率，对应elemDefault
+     */
+    private Short elemDefault;
 }

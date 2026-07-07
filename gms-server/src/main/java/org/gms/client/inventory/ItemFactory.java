@@ -20,6 +20,7 @@
  */
 package org.gms.client.inventory;
 
+import org.gms.server.ItemInformationProvider;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.Pair;
 
@@ -52,6 +53,7 @@ public enum ItemFactory {
 
     private static final int lockCount = 400;
     private static final Lock[] locks = new Lock[lockCount];  // thanks Masterrulax for pointing out a bottleneck issue here
+    private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
     static {
         for (int i = 0; i < lockCount; i++) {
@@ -132,6 +134,7 @@ public enum ItemFactory {
         equip.setIncRMAL((short) rs.getInt("incRMAL"));
         equip.setIncRMAH((short) rs.getInt("incRMAH"));
         equip.setElemDefault((short) rs.getInt("elemDefault"));
+        ii.applyBaseElementalStatsIfMissing(equip);
 
         return equip;
     }
@@ -252,6 +255,7 @@ public enum ItemFactory {
                                 }
 
                                 Equip equip = (Equip) item;
+                                ii.applyBaseElementalStatsIfMissing(equip);
                                 psEquip.setInt(2, equip.getUpgradeSlots());
                                 psEquip.setInt(3, equip.getLevel());
                                 psEquip.setInt(4, equip.getStr());
@@ -412,6 +416,7 @@ public enum ItemFactory {
                         ps.setInt(1, genKey);
 
                         Equip equip = (Equip) item;
+                        ii.applyBaseElementalStatsIfMissing(equip);
                         ps.setInt(2, equip.getUpgradeSlots());
                         ps.setInt(3, equip.getLevel());
                         ps.setInt(4, equip.getStr());

@@ -177,11 +177,13 @@ class MonsterPoisonDotTest {
         stats.setEffectiveness(Element.FIRE, ElementalEffectiveness.STRONG);
         Monster monster = new Monster(100100, stats);
 
-        Runnable restoreFire = monster.applyTemporaryEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
+        Runnable restoreFire = monster.applyPoisonFireWeakness();
 
         assertEquals(ElementalEffectiveness.WEAK, monster.getElementalEffectiveness(Element.FIRE));
+        assertTrue(monster.hasPoisonFireWeakness());
         restoreFire.run();
         assertEquals(ElementalEffectiveness.STRONG, monster.getElementalEffectiveness(Element.FIRE));
+        assertFalse(monster.hasPoisonFireWeakness());
     }
 
     @Test
@@ -191,10 +193,11 @@ class MonsterPoisonDotTest {
         stats.setEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
         Monster monster = new Monster(100100, stats);
 
-        Runnable restoreFire = monster.applyTemporaryEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
+        Runnable restoreFire = monster.applyPoisonFireWeakness();
 
         assertNull(restoreFire);
         assertEquals(ElementalEffectiveness.WEAK, monster.getElementalEffectiveness(Element.FIRE));
+        assertFalse(monster.hasPoisonFireWeakness());
     }
 
     @Test

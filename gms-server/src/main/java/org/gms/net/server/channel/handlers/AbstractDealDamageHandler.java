@@ -92,6 +92,26 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         return false;
     }
 
+    private static boolean shouldApplyPoisonFireWeaknessDamageBonus(
+            Character chr, Monster monster, Set<Element> skillElements, boolean magic) {
+        if (!magic || chr == null || monster == null || skillElements.isEmpty()) {
+            return false;
+        }
+        return skillElements.contains(Element.FIRE) && monster.hasPoisonFireWeakness();
+    }
+
+    static int applyPoisonFireWeaknessDamageBonus(int damage) {
+        if (damage <= 0) {
+            return damage;
+        }
+
+        long adjusted = damage * 150L / 100L;
+        if (adjusted > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        return (int) adjusted;
+    }
+
     public static class AttackInfo {
 
         public int numAttacked, numDamage, numAttackedAndDamage, skill, skilllevel, stance, direction, rangedirection, charge, display;
@@ -937,9 +957,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
             }
 
+            Set<Element> skillElements = Set.of();
             if (ret.skill != 0) {
                 Skill skill = SkillFactory.getSkill(ret.skill);
-                Set<Element> skillElements = SkillElementResolver.getAttackElements(skill);
+                skillElements = SkillElementResolver.getAttackElements(skill);
                 if (!skillElements.isEmpty() && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
                     // The skill has an element effect, so we need to factor that in.
                     if (monster != null) {
@@ -985,8 +1006,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
             }
 
+            boolean poisonFireWeaknessDamageBonus =
+                    shouldApplyPoisonFireWeaknessDamageBonus(chr, monster, skillElements, magic);
             for (int j = 0; j < ret.numDamage; j++) {
                 int damage = p.readInt();
+                if (poisonFireWeaknessDamageBonus) {
+                    damage = applyPoisonFireWeaknessDamageBonus(damage);
+                }
                 long hitDmgMax = calcDmgMax;
                 if (ret.skill == Buccaneer.BARRAGE || ret.skill == ThunderBreaker.BARRAGE) {
                     if (j > 3) {

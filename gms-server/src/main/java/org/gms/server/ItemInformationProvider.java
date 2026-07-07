@@ -1203,6 +1203,34 @@ public class ItemInformationProvider {
         return getEquipById(equipId, -1);
     }
 
+    public void applyBaseElementalStatsIfMissing(Equip equip) {
+        if (equip == null || equip.hasAnyElementalWeaponStat()) {
+            return;
+        }
+
+        Map<String, Integer> stats = getEquipStats(equip.getItemId());
+        if (stats == null) {
+            return;
+        }
+
+        int fire = stats.getOrDefault("RMAF", 0);
+        int poison = stats.getOrDefault("RMAS", 0);
+        int ice = stats.getOrDefault("RMAI", 0);
+        int lightning = stats.getOrDefault("RMAL", 0);
+        int holy = stats.getOrDefault("RMAH", 0);
+        int elemDefault = stats.getOrDefault("elemDefault", 0);
+        if (fire == 0 && poison == 0 && ice == 0 && lightning == 0 && holy == 0 && elemDefault == 0) {
+            return;
+        }
+
+        equip.setIncRMAF((short) fire);
+        equip.setIncRMAS((short) poison);
+        equip.setIncRMAI((short) ice);
+        equip.setIncRMAL((short) lightning);
+        equip.setIncRMAH((short) holy);
+        equip.setElemDefault((short) elemDefault);
+    }
+
     private Item getEquipById(int equipId, int ringId) {
         Equip nEquip;
         nEquip = new Equip(equipId, (byte) 0, ringId);
@@ -1264,6 +1292,7 @@ public class ItemInformationProvider {
                 }
             }
         }
+        applyBaseElementalStatsIfMissing(nEquip);
         return nEquip.copy();
     }
 

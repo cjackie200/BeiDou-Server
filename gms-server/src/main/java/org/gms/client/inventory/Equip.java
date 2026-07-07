@@ -241,6 +241,15 @@ public class Equip extends Item {
         return elemDefault;
     }
 
+    public boolean hasAnyElementalWeaponStat() {
+        return incRMAF != 0
+                || incRMAS != 0
+                || incRMAI != 0
+                || incRMAL != 0
+                || incRMAH != 0
+                || elemDefault != 0;
+    }
+
     /**
      * Returns the elemental MATK bonus (in hundredths) for a given skill element.
      * 200 = +100%, 0 = no bonus.

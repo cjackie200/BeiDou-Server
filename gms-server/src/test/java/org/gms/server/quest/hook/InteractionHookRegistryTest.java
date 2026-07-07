@@ -13,6 +13,10 @@ import org.gms.client.inventory.Item;
 import org.gms.constants.id.NpcId;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
+import org.gms.server.life.NPC;
+import org.gms.server.life.NPCStats;
+import org.gms.server.maps.MapleMap;
+import org.gms.server.quest.Quest;
 import org.gms.service.ConfigService;
 import org.gms.util.PacketCreator;
 import org.junit.jupiter.api.BeforeAll;
@@ -280,6 +284,26 @@ class InteractionHookRegistryTest {
     }
 
     @Test
+    void lifeProofNpcTalkCompletionShowsCurrentStepBeforeContinuation() throws Exception {
+        Character chr = newLifeProofMage();
+        CapturingClient client = (CapturingClient) chr.getClient();
+        addNpc(chr, 1032001);
+        putQuest(chr, 5129, QuestStatus.Status.STARTED, "000");
+
+        InteractionHookContext context = new InteractionHookContext(client, 1, 5129,
+                1032001, InteractionHookAction.QUERY_COMPLETE);
+
+        LifeProofQuest.openHook(context);
+
+        String prompt = LifeProofQuest.completePrompt(chr, 5129);
+        assertTrue(prompt.contains("生命之证 I：拜访汉斯"), prompt);
+        assertFalse(prompt.contains("是否接受这一步试炼？"), prompt);
+        assertEquals(QuestStatus.Status.STARTED.getId(), chr.getQuestStatus(5129));
+        assertEquals(QuestStatus.Status.NOT_STARTED.getId(), chr.getQuestStatus(5130));
+        assertPacketEquals(PacketCreator.getNPCTalk(1032001, (byte) 1, prompt, "", (byte) 0), client.lastPacket);
+    }
+
+    @Test
     void nativeNextDialogReopensSwitchedElementalRewardStep() {
         Character chr = newElementalMage(70);
         CapturingClient client = (CapturingClient) chr.getClient();
@@ -441,6 +465,33 @@ class InteractionHookRegistryTest {
         chr.setLevel(level);
         chr.setJob(Job.FP_WIZARD);
         return chr;
+    }
+
+    private static Character newLifeProofMage() {
+        CapturingClient client = new CapturingClient();
+        Character chr = Character.getDefault(client);
+        client.setPlayer(chr);
+        chr.setId(10001);
+        chr.setLevel(180);
+        chr.setJob(Job.FP_ARCHMAGE);
+        return chr;
+    }
+
+    private static void addNpc(Character chr, int npcId) {
+        if (chr.getMap() == null) {
+            MapleMap map = new MapleMap(100000000, 0, 1, 100000000, 1.0f);
+            chr.setMap(map);
+            chr.setMap(100000000);
+        }
+        chr.getMap().addMapObject(new NPC(npcId, new NPCStats("test-npc-" + npcId)));
+    }
+
+    private static void putQuest(Character chr, int questId, QuestStatus.Status status, String progress) {
+        QuestStatus questStatus = new QuestStatus(Quest.getInstance(questId), status, 1032001);
+        if (progress != null) {
+            questStatus.setProgress(0, progress);
+        }
+        chr.getQuests().put((short) questId, questStatus);
     }
 
     private static MonsterBook monsterBookWithCompletedSets(int completedSets) {

@@ -122,6 +122,8 @@ public class Monster extends AbstractLoadedLife {
     private final Lock statiLock = new ReentrantLock();
     private final Lock animationLock = new ReentrantLock();
     private final Lock aggroUpdateLock = new ReentrantLock();
+    private int poisonFireWeaknessToken = 0;
+    private int nextPoisonFireWeaknessToken = 0;
 
     public Monster(int id, MonsterStats stats) {
         super(id);
@@ -1324,7 +1326,7 @@ public class Monster extends AbstractLoadedLife {
         }
 
         if (MonsterPoisonDot.grantsFireWeakness(status, playerPoisonDot)) {
-            poisonFireWeakCancelTask[0] = applyTemporaryEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
+            poisonFireWeakCancelTask[0] = applyPoisonFireWeakness();
         }
 
         statiLock.lock();
@@ -1786,6 +1788,44 @@ public class Monster extends AbstractLoadedLife {
 
         MobClearSkillService service = (MobClearSkillService) mmap.getChannelServer().getServiceAccess(ChannelServices.MOB_CLEAR_SKILL);
         service.registerMobClearSkillAction(mmap.getId(), restoreEffectiveness, milli);
+    }
+
+    public boolean hasPoisonFireWeakness() {
+        monsterLock.lock();
+        try {
+            return poisonFireWeaknessToken > 0 && stats.getEffectiveness(Element.FIRE) == ElementalEffectiveness.WEAK;
+        } finally {
+            monsterLock.unlock();
+        }
+    }
+
+    Runnable applyPoisonFireWeakness() {
+        Runnable restoreEffectiveness = applyTemporaryEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
+        if (restoreEffectiveness == null) {
+            return null;
+        }
+
+        final int token;
+        monsterLock.lock();
+        try {
+            token = ++nextPoisonFireWeaknessToken;
+            poisonFireWeaknessToken = token;
+        } finally {
+            monsterLock.unlock();
+        }
+
+        return () -> {
+            monsterLock.lock();
+            try {
+                if (poisonFireWeaknessToken != token) {
+                    return;
+                }
+                poisonFireWeaknessToken = 0;
+            } finally {
+                monsterLock.unlock();
+            }
+            restoreEffectiveness.run();
+        };
     }
 
     Runnable applyTemporaryEffectiveness(Element e, ElementalEffectiveness ee) {

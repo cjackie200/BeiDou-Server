@@ -302,10 +302,6 @@ public final class LifeProofQuest {
             return;
         }
         if (status == QuestStatus.Status.STARTED.getId()) {
-            if (isAutoCompleteNpcTalk(chr, meta.questId(), npcId)) {
-                completeFromHook(context, chr, meta, npcId);
-                return;
-            }
             String prompt = endPrompt(chr, meta.questId(), npcId);
             if (isReadyResult(prompt)) {
                 context.sendYesNo(resultMessage(prompt));
