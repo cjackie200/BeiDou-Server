@@ -8,8 +8,8 @@ import org.gms.constants.skills.ILMage;
 import java.util.Set;
 
 public final class SkillElementResolver {
-    private static final Set<Element> FIRE_POISON_ELEMENTS = Set.of(Element.FIRE, Element.POISON);
-    private static final Set<Element> ICE_LIGHTNING_ELEMENTS = Set.of(Element.ICE, Element.LIGHTING);
+    private static final Set<Element> FIRE_ELEMENT = Set.of(Element.FIRE);
+    private static final Set<Element> ICE_ELEMENT = Set.of(Element.ICE);
 
     private SkillElementResolver() {
     }
@@ -20,10 +20,18 @@ public final class SkillElementResolver {
         }
 
         return switch (skill.getId()) {
-            case FPMage.ELEMENT_COMPOSITION -> FIRE_POISON_ELEMENTS;
-            case ILMage.ELEMENT_COMPOSITION -> ICE_LIGHTNING_ELEMENTS;
+            case FPMage.ELEMENT_COMPOSITION -> FIRE_ELEMENT;
+            case ILMage.ELEMENT_COMPOSITION -> ICE_ELEMENT;
             default -> singleElement(skill.getElement());
         };
+    }
+
+    public static boolean hasPoisonDotElement(Skill skill) {
+        if (skill == null) {
+            return false;
+        }
+
+        return skill.getId() == FPMage.ELEMENT_COMPOSITION || hasAttackElement(skill, Element.POISON);
     }
 
     public static boolean hasAttackElement(Skill skill, Element element) {

@@ -108,12 +108,14 @@ class MonsterPoisonDotTest {
     }
 
     @Test
-    void firePoisonCompositionDotUsesPoisonElementRateFromDualElementMapping() {
+    void firePoisonCompositionDotUsesPoisonElementRateFromStatusElement() {
         Skill elementComposition = skill(2111006, Element.NEUTRAL);
         Equip poisonWeapon = weapon(FINAL_POISON_STAFF, 200);
         Equip fireWeapon = weapon(FINAL_POISON_STAFF, 0);
         fireWeapon.setIncRMAF((short) 200);
 
+        assertFalse(SkillElementResolver.hasAttackElement(elementComposition, Element.POISON));
+        assertTrue(SkillElementResolver.hasPoisonDotElement(elementComposition));
         assertEquals(200, MonsterPoisonDot.resolvePoisonElementRate(elementComposition, poisonWeapon));
         assertEquals(350, MonsterPoisonDot.applyPoisonElementRate(175,
                 MonsterPoisonDot.resolvePoisonElementRate(elementComposition, poisonWeapon)));

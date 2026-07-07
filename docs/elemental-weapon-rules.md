@@ -114,16 +114,15 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 服务端伤害校验从当前装备武器位 `-11` 的 `Equip` 实例字段读取对应 `incRMA*` 主属性倍率，用于放宽对应元素技能的最大伤害校验。非主属性技能不额外放宽；客户端如果因 `elemDefault` 发出较低伤害，仍低于服务端上限，不需要服务端单独乘惩罚倍率。
 这些元素字段和 `incMAD/incPAD` 一样属于装备实例属性，不按 `itemId` 从 WZ 基础配置重新取全服统一值。
 
-服务端额外修正 WZ 没有完整表达的双属性技能：`FPMage.ELEMENT_COMPOSITION` 按火 + 毒处理，
-`ILMage.ELEMENT_COMPOSITION` 按冰 + 雷处理。直伤校验只要匹配其中一个元素即可吃当前装备实例的
-对应 `incRMA*`，如果同一把装备同时存在两个匹配字段，取最高匹配倍率，不把两个元素倍率相乘。
-因此火毒合击可以被火杖或毒杖放宽上限，冰雷合击可以被冰杖或雷杖放宽上限。
-客户端 DLL 对这两个双属性技能采用同一规则修正实际发包伤害；没有匹配主属性字段时使用当前装备实例的
-`elemDefault`，没有 `elemDefault` 时保持 `100%`。
+服务端额外修正 WZ 没有完整表达的合击技能，但直伤只按一个主伤害属性处理：
+`FPMage.ELEMENT_COMPOSITION` 的直伤按火属性，`ILMage.ELEMENT_COMPOSITION` 的直伤按冰属性。
+直伤校验只读取主伤害属性对应的当前装备实例 `incRMA*`；不把名称中的两个元素拆分计算、不取两者最高值，
+也不把两个元素倍率相乘。没有匹配主属性字段时由客户端 DLL 使用当前装备实例的 `elemDefault`；没有
+`elemDefault` 时保持 `100%`。
 
-玩家来源的毒 DOT 也按同一主属性口径处理：只有攻击元素包含 `Element.POISON` 时，服务端按当前装备武器位
+玩家来源的毒 DOT 按毒状态口径处理：只有技能本身是毒属性，或火毒合击附带的中毒状态时，服务端按当前装备武器位
 `-11` 的装备实例字段 `incRMAS` 计算，并把中毒每跳基础伤害乘以 `incRMAS / 100`。无武器、装备实例
-没有 `incRMAS` 或 `incRMAS <= 0` 时按 `100%` 处理。火毒合击的持续毒伤只吃毒属性 `incRMAS`；
+没有 `incRMAS` 或 `incRMAS <= 0` 时按 `100%` 处理。火毒合击的直伤按火属性处理，但持续毒伤只吃毒属性 `incRMAS`；
 火属性但复用中毒状态的技能，例如 `FLAME_GEAR`，不吃 `incRMAS`。允许同一 `itemId` 的不同装备拥有
 不同 `incRMA*` 和 `elemDefault` 数值。
 

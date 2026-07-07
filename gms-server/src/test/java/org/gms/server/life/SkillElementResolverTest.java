@@ -25,21 +25,22 @@ class SkillElementResolverTest {
     }
 
     @Test
-    void elementCompositionSkillsUseServerSideDualElementMapping() {
+    void elementCompositionSkillsUseSinglePrimaryDamageElementMapping() {
         Skill firePoison = skill(FPMage.ELEMENT_COMPOSITION, Element.NEUTRAL);
         Skill iceLightning = skill(ILMage.ELEMENT_COMPOSITION, Element.NEUTRAL);
 
-        assertEquals(Set.of(Element.FIRE, Element.POISON), SkillElementResolver.getAttackElements(firePoison));
-        assertEquals(Set.of(Element.ICE, Element.LIGHTING), SkillElementResolver.getAttackElements(iceLightning));
-        assertTrue(SkillElementResolver.hasAttackElement(firePoison, Element.POISON));
-        assertTrue(SkillElementResolver.hasAttackElement(iceLightning, Element.LIGHTING));
+        assertEquals(Set.of(Element.FIRE), SkillElementResolver.getAttackElements(firePoison));
+        assertEquals(Set.of(Element.ICE), SkillElementResolver.getAttackElements(iceLightning));
+        assertFalse(SkillElementResolver.hasAttackElement(firePoison, Element.POISON));
+        assertFalse(SkillElementResolver.hasAttackElement(iceLightning, Element.LIGHTING));
+        assertTrue(SkillElementResolver.hasPoisonDotElement(firePoison));
     }
 
     @Test
-    void dualElementWeaponBonusUsesBestMatchingInstanceStatWithoutStacking() {
+    void elementCompositionWeaponBonusUsesPrimaryDamageElementOnly() {
         Equip weapon = weapon(180, 200, 170, 160);
 
-        assertEquals(200, SkillElementResolver.bestWeaponElementBonus(
+        assertEquals(180, SkillElementResolver.bestWeaponElementBonus(
                 weapon, skill(FPMage.ELEMENT_COMPOSITION, Element.NEUTRAL)));
         assertEquals(170, SkillElementResolver.bestWeaponElementBonus(
                 weapon, skill(ILMage.ELEMENT_COMPOSITION, Element.NEUTRAL)));
