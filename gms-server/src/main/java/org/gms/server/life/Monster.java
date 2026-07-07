@@ -1155,7 +1155,16 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public boolean applyStatus(Character from, final MonsterStatusEffect status, boolean poison, long duration, boolean venom) {
-        switch (getMonsterEffectiveness(status.getSkill().getElement())) {
+        if (from == null || status == null || status.getSkill() == null) {
+            return false;
+        }
+
+        boolean playerPoisonDot = MonsterPoisonDot.isPlayerPoisonDot(status, poison, venom);
+        Element skillElement = status.getSkill().getElement();
+        ElementalEffectiveness skillEffectiveness = skillElement != null
+                ? getMonsterEffectiveness(skillElement)
+                : ElementalEffectiveness.NORMAL;
+        switch (skillEffectiveness) {
             case IMMUNE:
             case STRONG:
             case NEUTRAL:
@@ -1164,14 +1173,18 @@ public class Monster extends AbstractLoadedLife {
             case WEAK:
                 break;
             default: {
-                log.warn("Unknown elemental effectiveness: {}", getMonsterEffectiveness(status.getSkill().getElement()));
+                log.warn("Unknown elemental effectiveness: {}", skillEffectiveness);
                 return false;
             }
         }
 
+        if (playerPoisonDot && MonsterPoisonDot.blocksPoisonDot(getMonsterEffectiveness(Element.POISON))) {
+            return false;
+        }
+
         if (status.getSkill().getId() == FPMage.ELEMENT_COMPOSITION) { // fp compo
             ElementalEffectiveness effectiveness = getMonsterEffectiveness(Element.POISON);
-            if (effectiveness == ElementalEffectiveness.IMMUNE || effectiveness == ElementalEffectiveness.STRONG) {
+            if (MonsterPoisonDot.blocksPoisonDot(effectiveness)) {
                 return false;
             }
         } else if (status.getSkill().getId() == ILMage.ELEMENT_COMPOSITION) { // il compo
@@ -1179,22 +1192,17 @@ public class Monster extends AbstractLoadedLife {
             if (effectiveness == ElementalEffectiveness.IMMUNE || effectiveness == ElementalEffectiveness.STRONG) {
                 return false;
             }
-        } else if (status.getSkill().getId() == NightLord.VENOMOUS_STAR || status.getSkill().getId() == Shadower.VENOMOUS_STAB || status.getSkill().getId() == NightWalker.VENOM) {// venom
-            if (getMonsterEffectiveness(Element.POISON) == ElementalEffectiveness.WEAK) {
-                return false;
-            }
         }
-        if (poison && hp.get() <= 1) {
+        if (playerPoisonDot && hp.get() <= 0) {
+            return false;
+        }
+        if (!playerPoisonDot && poison && hp.get() <= 1) {
             return false;
         }
 
         final Map<MonsterStatus, Integer> statis = status.getStati();
-        if (stats.isBoss()) {
-            if (!(statis.containsKey(MonsterStatus.SPEED)
-                    && statis.containsKey(MonsterStatus.NINJA_AMBUSH)
-                    && statis.containsKey(MonsterStatus.WATK))) {
-                return false;
-            }
+        if (stats.isBoss() && MonsterPoisonDot.rejectsBossStatus(statis, playerPoisonDot)) {
+            return false;
         }
 
         final Channel ch = map.getChannelServer();
@@ -1241,11 +1249,15 @@ public class Monster extends AbstractLoadedLife {
         int animationTime;
         if (poison) {
             int poisonLevel = from.getSkillLevel(status.getSkill());
-            int poisonDamage = Math.min(Short.MAX_VALUE, (int) (getMaxHp() / (70.0 - poisonLevel) + 0.999));
+            int poisonDamage = MonsterPoisonDot.calculateBasePoisonDamage(getMaxHp(), poisonLevel);
+            if (playerPoisonDot) {
+                poisonDamage = MonsterPoisonDot.applyPoisonElementRate(poisonDamage,
+                        MonsterPoisonDot.resolvePoisonElementRate(from, status.getSkill()));
+            }
             status.setValue(MonsterStatus.POISON, poisonDamage);
             animationTime = broadcastStatusEffect(status);
 
-            overtimeAction = new DamageTask(poisonDamage, from, status, 0);
+            overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot);
             overtimeDelay = 1000;
         } else if (venom) {
             if (from.getJob() == Job.NIGHTLORD || from.getJob() == Job.SHADOWER || from.getJob().isA(Job.NIGHTWALKER3)) {
@@ -1267,12 +1279,17 @@ public class Monster extends AbstractLoadedLife {
                 for (int i = 0; i < getVenomMulti(); i++) {
                     poisonDamage += (Randomizer.nextInt(gap) + minDmg);
                 }
-                poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
+                if (playerPoisonDot) {
+                    poisonDamage = MonsterPoisonDot.applyPoisonElementRate(poisonDamage,
+                            MonsterPoisonDot.resolvePoisonElementRate(from, status.getSkill()));
+                } else {
+                    poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
+                }
                 status.setValue(MonsterStatus.VENOMOUS_WEAPON, poisonDamage);
                 status.setValue(MonsterStatus.POISON, poisonDamage);
                 animationTime = broadcastStatusEffect(status);
 
-                overtimeAction = new DamageTask(poisonDamage, from, status, 0);
+                overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot);
                 overtimeDelay = 1000;
             } else {
                 return false;
@@ -1672,46 +1689,63 @@ public class Monster extends AbstractLoadedLife {
         private final MonsterStatusEffect status;
         private final int type;
         private final MapleMap map;
+        private final boolean lethal;
 
         private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type) {
+            this(dealDamage, chr, status, type, false);
+        }
+
+        private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type, boolean lethal) {
             this.dealDamage = dealDamage;
             this.chr = chr;
             this.status = status;
             this.type = type;
             this.map = chr.getMap();
+            this.lethal = lethal;
+        }
+
+        private void interruptStatus() {
+            MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
+            service.interruptMobStatus(map.getId(), status);
         }
 
         @Override
         public void run() {
             int curHp = hp.get();
-            if (curHp <= 1) {
-                MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
-                service.interruptMobStatus(map.getId(), status);
+            if (curHp <= 0 || (!lethal && curHp <= 1)) {
+                interruptStatus();
                 return;
             }
 
-            int damage = dealDamage;
-            if (damage >= curHp) {
-                damage = curHp - 1;
-                if (type == 1 || type == 2) {
-                    MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
-                    service.interruptMobStatus(map.getId(), status);
-                }
+            int damage = MonsterPoisonDot.damageForTick(curHp, dealDamage, lethal);
+            if (damage <= 0) {
+                return;
             }
-            if (damage > 0) {
-                lockMonster();
-                try {
-                    applyDamage(chr, damage, true, false);
-                } finally {
-                    unlockMonster();
-                }
 
-                if (type == 1) {
+            if (lethal) {
+                if (damage >= curHp) {
+                    interruptStatus();
+                }
+                map.damageMonster(chr, Monster.this, damage);
+                return;
+            }
+
+            if (dealDamage >= curHp && (type == 1 || type == 2)) {
+                interruptStatus();
+            }
+
+            lockMonster();
+            try {
+                applyDamage(chr, damage, true, false);
+            } finally {
+                unlockMonster();
+            }
+
+            if (type == 1) {
+                map.broadcastMessage(PacketCreator.damageMonster(getObjectId(), damage), getPosition());
+            } else if (type == 2) {
+                if (damage < dealDamage) {    // ninja ambush (type 2) is already displaying DOT to the caster
                     map.broadcastMessage(PacketCreator.damageMonster(getObjectId(), damage), getPosition());
-                } else if (type == 2) {
-                    if (damage < dealDamage) {    // ninja ambush (type 2) is already displaying DOT to the caster
-                        map.broadcastMessage(PacketCreator.damageMonster(getObjectId(), damage), getPosition());
-                    }
                 }
             }
         }

@@ -617,20 +617,19 @@ public class PacketCreator {
 
     public static Packet elementalWeaponConfig(org.gms.client.Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.ELEMENTAL_WEAPON_CONFIG);
-        Item weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
-        int itemId = weapon != null ? weapon.getItemId() : 0;
-
-        // Read element stats directly from WZ to bypass DB serialization issues
-        ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        Map<String, Integer> stats = ii.getEquipStats(itemId);
         short f = 0, s = 0, i = 0, l = 0, h = 0, ed = 0;
-        if (stats != null) {
-            f = stats.getOrDefault("RMAF", 0).shortValue();
-            s = stats.getOrDefault("RMAS", 0).shortValue();
-            i = stats.getOrDefault("RMAI", 0).shortValue();
-            l = stats.getOrDefault("RMAL", 0).shortValue();
-            h = stats.getOrDefault("RMAH", 0).shortValue();
-            ed = stats.getOrDefault("elemDefault", 0).shortValue();
+        int itemId = 0;
+        Item equippedWeapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
+        if (equippedWeapon instanceof Equip weapon) {
+            itemId = weapon.getItemId();
+            f = weapon.getIncRMAF();
+            s = weapon.getIncRMAS();
+            i = weapon.getIncRMAI();
+            l = weapon.getIncRMAL();
+            h = weapon.getIncRMAH();
+            ed = weapon.getElemDefault();
+        } else if (equippedWeapon != null) {
+            itemId = equippedWeapon.getItemId();
         }
         p.writeShort(f);
         p.writeShort(s);
