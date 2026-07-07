@@ -92,7 +92,7 @@ WSL 只负责调用 Windows 构建工具；不要因为 `where msbuild` 或 `dot
 本机不能编译。当前可用 BuildTools 路径是：
 
 ```bash
-powershell.exe -NoProfile -Command '& "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe" "D:\Game\BeiDou\BeiDou-ijl15\ezorsia.sln" /p:Configuration=Release /p:Platform=x86 /m:1'
+powershell.exe -NoProfile -Command '& "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\MSBuild.exe" "D:\Game\BeiDou\BeiDou-ijl15\ezorsia.sln" /p:Configuration=Release /p:Platform=x86 /m:1'
 ```
 
 solution 的 `Release|x86` 映射到项目 `Release|Win32`。产物输出到
