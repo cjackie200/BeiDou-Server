@@ -120,7 +120,10 @@ FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
 
 毒 DOT 仍保留单跳 `32767` 上限。毒免疫、毒强抗和毒中立怪不会被玩家毒 DOT 挂上状态；普通毒 DOT 与
 Venom 可以对 Boss 生效，并允许通过服务端正常怪物伤害/击杀流程击杀普通怪和 Boss。客户端显示、协议和
-`ijl15` DLL 不额外参与 DOT 倍率计算。
+`ijl15` DLL 不额外参与 DOT 倍率计算。火毒职业的毒 DOT（`POISON_BREATH`、`POISON_MIST`、
+`ELEMENT_COMPOSITION`）生效期间，服务端额外把目标的火属性有效性临时设为
+`ElementalEffectiveness.WEAK`；毒状态自然结束、被覆盖或被击杀流程打断时恢复目标原本火抗。怪物技能毒、
+飞侠 Venom、火属性但复用中毒状态的 `FIRE_DEMON` 不附加弱火。
 
 ## GM 验收指令
 

@@ -8,6 +8,8 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
+import org.gms.constants.skills.FPMage;
+import org.gms.constants.skills.FPWizard;
 
 import java.util.Map;
 
@@ -33,6 +35,22 @@ final class MonsterPoisonDot {
         return effectiveness == ElementalEffectiveness.IMMUNE
                 || effectiveness == ElementalEffectiveness.STRONG
                 || effectiveness == ElementalEffectiveness.NEUTRAL;
+    }
+
+    static boolean grantsFireWeakness(MonsterStatusEffect status, boolean playerPoisonDot) {
+        if (!playerPoisonDot || status == null || !status.getStati().containsKey(MonsterStatus.POISON)) {
+            return false;
+        }
+
+        Skill skill = status.getSkill();
+        if (skill == null) {
+            return false;
+        }
+
+        return switch (skill.getId()) {
+            case FPWizard.POISON_BREATH, FPMage.POISON_MIST, FPMage.ELEMENT_COMPOSITION -> true;
+            default -> false;
+        };
     }
 
     static boolean rejectsBossStatus(Map<MonsterStatus, Integer> statis, boolean playerPoisonDot) {

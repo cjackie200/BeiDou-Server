@@ -79,6 +79,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
@@ -1225,6 +1226,7 @@ public class Monster extends AbstractLoadedLife {
             }
         }
 
+        final Runnable[] poisonFireWeakCancelTask = new Runnable[1];
         final Runnable cancelTask = () -> {
             if (isAlive()) {
                 Packet packet = PacketCreator.cancelMonsterStatus(getObjectId(), status.getStati());
@@ -1238,6 +1240,10 @@ public class Monster extends AbstractLoadedLife {
                 }
             } finally {
                 statiLock.unlock();
+            }
+
+            if (poisonFireWeakCancelTask[0] != null) {
+                poisonFireWeakCancelTask[0].run();
             }
 
             setVenomMulti(0);
@@ -1315,6 +1321,10 @@ public class Monster extends AbstractLoadedLife {
             overtimeDelay = 1000;
         } else {
             animationTime = broadcastStatusEffect(status);
+        }
+
+        if (MonsterPoisonDot.grantsFireWeakness(status, playerPoisonDot)) {
+            poisonFireWeakCancelTask[0] = applyTemporaryEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
         }
 
         statiLock.lock();
@@ -1764,30 +1774,52 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public void setTempEffectiveness(Element e, ElementalEffectiveness ee, long milli) {
+        MapleMap mmap = this.getMap();
+        if (mmap == null) {
+            return;
+        }
+
+        Runnable restoreEffectiveness = applyTemporaryEffectiveness(e, ee);
+        if (restoreEffectiveness == null) {
+            return;
+        }
+
+        MobClearSkillService service = (MobClearSkillService) mmap.getChannelServer().getServiceAccess(ChannelServices.MOB_CLEAR_SKILL);
+        service.registerMobClearSkillAction(mmap.getId(), restoreEffectiveness, milli);
+    }
+
+    Runnable applyTemporaryEffectiveness(Element e, ElementalEffectiveness ee) {
+        if (e == null || ee == null) {
+            return null;
+        }
+
+        final ElementalEffectiveness previousEffectiveness;
         monsterLock.lock();
         try {
-            final Element fE = e;
-            final ElementalEffectiveness fEE = stats.getEffectiveness(e);
-            if (!fEE.equals(ElementalEffectiveness.WEAK)) {
-                stats.setEffectiveness(e, ee);
-
-                MapleMap mmap = this.getMap();
-                Runnable r = () -> {
-                    monsterLock.lock();
-                    try {
-                        stats.removeEffectiveness(fE);
-                        stats.setEffectiveness(fE, fEE);
-                    } finally {
-                        monsterLock.unlock();
-                    }
-                };
-
-                MobClearSkillService service = (MobClearSkillService) mmap.getChannelServer().getServiceAccess(ChannelServices.MOB_CLEAR_SKILL);
-                service.registerMobClearSkillAction(mmap.getId(), r, milli);
+            previousEffectiveness = stats.getEffectiveness(e);
+            if (previousEffectiveness.equals(ee)) {
+                return null;
             }
+
+            stats.setEffectiveness(e, ee);
         } finally {
             monsterLock.unlock();
         }
+
+        AtomicBoolean restored = new AtomicBoolean(false);
+        return () -> {
+            if (!restored.compareAndSet(false, true)) {
+                return;
+            }
+
+            monsterLock.lock();
+            try {
+                stats.removeEffectiveness(e);
+                stats.setEffectiveness(e, previousEffectiveness);
+            } finally {
+                monsterLock.unlock();
+            }
+        };
     }
 
     public Collection<MonsterStatus> alreadyBuffedStats() {

@@ -23,6 +23,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -126,6 +127,59 @@ class MonsterPoisonDotTest {
         assertTrue(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.NEUTRAL));
         assertFalse(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.NORMAL));
         assertFalse(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.WEAK));
+    }
+
+    @Test
+    void firePoisonClassPoisonDotGrantsTemporaryFireWeakness() {
+        MonsterStatusEffect poisonBreath = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2101005, Element.POISON), null, false);
+        MonsterStatusEffect poisonMist = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2111003, Element.POISON), null, false);
+        MonsterStatusEffect poisonComposition = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2111006, Element.POISON), null, false);
+        MonsterStatusEffect monsterPoison = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2101005, Element.POISON), null, true);
+        MonsterStatusEffect venom = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(4120005, Element.POISON), null, false);
+        MonsterStatusEffect fireDemon = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2121003, Element.FIRE), null, false);
+        MonsterStatusEffect slow = new MonsterStatusEffect(
+                Map.of(MonsterStatus.SPEED, 1), skill(2201003, Element.NEUTRAL), null, false);
+
+        assertTrue(MonsterPoisonDot.grantsFireWeakness(poisonBreath, true));
+        assertTrue(MonsterPoisonDot.grantsFireWeakness(poisonMist, true));
+        assertTrue(MonsterPoisonDot.grantsFireWeakness(poisonComposition, true));
+        assertFalse(MonsterPoisonDot.grantsFireWeakness(monsterPoison, false));
+        assertFalse(MonsterPoisonDot.grantsFireWeakness(venom, true));
+        assertFalse(MonsterPoisonDot.grantsFireWeakness(fireDemon, true));
+        assertFalse(MonsterPoisonDot.grantsFireWeakness(slow, false));
+    }
+
+    @Test
+    void temporaryFireWeaknessRestoresOriginalEffectiveness() {
+        MonsterStats stats = new MonsterStats();
+        stats.setHp(1000);
+        stats.setEffectiveness(Element.FIRE, ElementalEffectiveness.STRONG);
+        Monster monster = new Monster(100100, stats);
+
+        Runnable restoreFire = monster.applyTemporaryEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
+
+        assertEquals(ElementalEffectiveness.WEAK, monster.getElementalEffectiveness(Element.FIRE));
+        restoreFire.run();
+        assertEquals(ElementalEffectiveness.STRONG, monster.getElementalEffectiveness(Element.FIRE));
+    }
+
+    @Test
+    void temporaryFireWeaknessDoesNotOverrideNaturalFireWeakness() {
+        MonsterStats stats = new MonsterStats();
+        stats.setHp(1000);
+        stats.setEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
+        Monster monster = new Monster(100100, stats);
+
+        Runnable restoreFire = monster.applyTemporaryEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
+
+        assertNull(restoreFire);
+        assertEquals(ElementalEffectiveness.WEAK, monster.getElementalEffectiveness(Element.FIRE));
     }
 
     @Test
