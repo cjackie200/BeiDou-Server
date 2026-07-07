@@ -48,6 +48,7 @@ public final class InteractionHookProtocol {
     public static final int DIALOG_STATE_OPEN = 1;
     public static final int DIALOG_STATE_WAIT_SELECTION = 2;
     public static final int DIALOG_STATE_WAIT_CONFIRM = 3;
+    public static final int DIALOG_STATE_NEXT = 4;
 
     private InteractionHookProtocol() {
     }

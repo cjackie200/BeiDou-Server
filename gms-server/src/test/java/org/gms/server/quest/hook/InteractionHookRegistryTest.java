@@ -280,6 +280,46 @@ class InteractionHookRegistryTest {
     }
 
     @Test
+    void nativeNextDialogReopensSwitchedElementalRewardStep() {
+        Character chr = newElementalMage(70);
+        CapturingClient client = (CapturingClient) chr.getClient();
+        InteractionHookManager.dispose(client);
+
+        try {
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29950).success());
+            addItem(chr, 4033012, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29950).success());
+
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29951).success());
+            addItem(chr, 4033013, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29951).success());
+
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29952).success());
+            addItem(chr, 4033014, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29952).success());
+
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29953).success());
+            addItem(chr, 4000059, 100);
+            addItem(chr, 4000060, 100);
+            addItem(chr, 4000061, 100);
+            addItem(chr, 4021009, 1);
+            chr.setMeso(2_000_000);
+
+            assertTrue(InteractionHookManager.handleNativeQuestAction(client, 29953,
+                    ElementalResonanceQuest.NPC_ID, 2));
+            assertTrue(InteractionHookManager.handleNativeDialogSelection(client, (byte) 1, (byte) 0, 0));
+            assertEquals(QuestStatus.Status.COMPLETED.getId(), chr.getQuestStatus(29953));
+            assertEquals(QuestStatus.Status.STARTED.getId(), chr.getQuestStatus(29991));
+
+            assertTrue(InteractionHookManager.handleNativeDialogSelection(client, (byte) 1, (byte) 0, 0));
+            assertPacketEquals(PacketCreator.getNPCTalk(ElementalResonanceQuest.NPC_ID, (byte) 4,
+                    ElementalResonanceQuest.rewardSelectionPrompt(chr, 29991), "", (byte) 0), client.lastPacket);
+        } finally {
+            InteractionHookManager.dispose(client);
+        }
+    }
+
+    @Test
     void npcTalkAckUsesClientPredictableDialogNpcOnly() {
         CapturingClient client = new CapturingClient();
         InteractionHookContext instructorContext = new InteractionHookContext(client, 1, LifeProofQuest.FIRST_QUEST_ID,

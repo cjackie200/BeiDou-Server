@@ -15,9 +15,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.Point;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -25,6 +32,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -429,6 +437,80 @@ class ElementalResonanceQuestTest {
     }
 
     @Test
+    void elementalResonanceWzMatchesLinearQuestChain() throws Exception {
+        Path questDir = resolveQuestXml("wz-zh-CN/Quest.wz");
+        Document info = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(questDir.resolve("QuestInfo.img.xml").toFile());
+        Document check = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(questDir.resolve("Check.img.xml").toFile());
+        Document act = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(questDir.resolve("Act.img.xml").toFile());
+
+        int previousRewardQuestId = 0;
+        for (ElementalStageSpec stage : elementalStages()) {
+            int[] questIds = stage.questIds();
+            for (int index = 0; index < questIds.length; index++) {
+                int questId = questIds[index];
+                boolean finalStep = index == questIds.length - 1;
+
+                Element questInfo = topLevelImgDir(info, questId);
+                assertEquals(stage.parent(), childValue(questInfo, "string", "parent"),
+                        "elemental QuestInfo.parent must group stage " + questId + " in " + questDir);
+                assertEquals(Integer.toString(index + 1), childValue(questInfo, "int", "order"),
+                        "elemental QuestInfo.order must match stage order " + questId + " in " + questDir);
+                assertEquals("31", childValue(questInfo, "int", "area"),
+                        "elemental QuestInfo.area must stay in Legend Road " + questId + " in " + questDir);
+                assertFalse(childValue(questInfo, "string", "summary").isBlank(),
+                        "elemental summary must be visible for " + questId + " in " + questDir);
+                assertFalse(childValue(questInfo, "string", "demandSummary").isBlank(),
+                        "elemental demandSummary must be visible for " + questId + " in " + questDir);
+                assertEquals(1, countOccurrences(childValue(questInfo, "string", "1"),
+                                "@@BD_IH_PROGRESS:" + questId + "@@"),
+                        "elemental detail must contain exactly one progress marker for " + questId);
+                assertNoTechnicalQuestLabels(questInfo, questId);
+
+                Element questCheck = topLevelImgDir(check, questId);
+                Element start = childImgDir(questCheck, "0");
+                assertEquals(Integer.toString(ElementalResonanceQuest.NPC_ID), childValue(start, "int", "npc"),
+                        "elemental start npc must be Hans for " + questId + " in " + questDir);
+                assertEquals(Integer.toString(stage.requiredLevel()), childValue(start, "int", "lvmin"),
+                        "elemental lvmin must match stage level for " + questId + " in " + questDir);
+                assertEquals("elementalResonance", childValue(start, "string", "startscript"),
+                        "elemental startscript must use elementalResonance for " + questId);
+                assertElementalMageJobGate(start, questId);
+                if (index == 0) {
+                    if (previousRewardQuestId == 0) {
+                        assertNull(childImgDirOrNull(start, "quest"),
+                                "first elemental step must not require a previous quest in " + questDir);
+                    } else {
+                        assertSingleCompletedPrerequisite(start, questId, previousRewardQuestId);
+                    }
+                } else {
+                    assertSingleCompletedPrerequisite(start, questId, questIds[index - 1]);
+                }
+
+                Element complete = childImgDir(questCheck, "1");
+                assertEquals(Integer.toString(ElementalResonanceQuest.NPC_ID), childValue(complete, "int", "npc"),
+                        "elemental complete npc must be Hans for " + questId + " in " + questDir);
+                assertEquals("elementalResonance", childValue(complete, "string", "endscript"),
+                        "elemental endscript must use elementalResonance for " + questId);
+                assertEquals("001", childValue(complete, "infoex", "0", "string", "value"),
+                        "elemental completion must use ready progress gate for " + questId);
+
+                Element completeAct = childImgDir(topLevelImgDir(act, questId), "1");
+                if (finalStep) {
+                    assertEquals("", childValue(completeAct, "int", "nextQuest"),
+                            "elemental reward step must not define Act.nextQuest for " + questId);
+                } else {
+                    assertEquals(Integer.toString(questIds[index + 1]), childValue(completeAct, "int", "nextQuest"),
+                            "elemental Act.nextQuest must chain to the next step for " + questId);
+                }
+            }
+            previousRewardQuestId = questIds[questIds.length - 1];
+        }
+    }
+
+    @Test
     void questItemWithQuestIdUsesPersonalPickupOwnership() {
         Character owner = newMage(120);
         Character teammate = newMage(120);
@@ -535,6 +617,139 @@ class ElementalResonanceQuestTest {
         assertFalse(text.contains("完成方式："), text);
         assertFalse(text.contains("下一步："), text);
         assertFalse(text.contains("已完成步骤："), text);
+    }
+
+    private static List<ElementalStageSpec> elementalStages() {
+        return List.of(
+                new ElementalStageSpec("元素共鸣:初声", 70,
+                        new int[]{29950, 29951, 29952, 29953, 29991}),
+                new ElementalStageSpec("元素共鸣:回响", 100,
+                        new int[]{29954, 29955, 29956, 29957, 29992}),
+                new ElementalStageSpec("元素共鸣:裂隙", 130,
+                        new int[]{29958, 29959, 29960, 29961, 29993}),
+                new ElementalStageSpec("元素共鸣:风暴", 160,
+                        new int[]{29962, 29963, 29964, 29965, 29994}),
+                new ElementalStageSpec("元素共鸣:终章", 190,
+                        new int[]{29966, 29967, 29968, 29969, 29970, 29995})
+        );
+    }
+
+    private static void assertNoTechnicalQuestLabels(Element questInfo, int questId) {
+        assertQuestDialogStyle(childValue(questInfo, "string", "0"));
+        assertQuestDialogStyle(childValue(questInfo, "string", "1"));
+        assertQuestDialogStyle(childValue(questInfo, "string", "summary"));
+        assertQuestDialogStyle(childValue(questInfo, "string", "demandSummary"));
+        assertFalse(childValue(questInfo, "string", "2").startsWith("已完成："),
+                "elemental completion text must not use old completed prefix: " + questId);
+        assertFalse(childValue(questInfo, "string", "1").contains("@@DB_IH_PROGRESS:"),
+                "elemental detail must not use typo interaction hook marker: " + questId);
+        assertFalse(childValue(questInfo, "string", "1").contains("@@BD_LP_PROGRESS:"),
+                "elemental detail must not use life proof progress marker: " + questId);
+    }
+
+    private static void assertElementalMageJobGate(Element start, int questId) {
+        Element job = childImgDir(start, "job");
+        List<String> values = new ArrayList<>();
+        NodeList children = job.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child && "int".equals(child.getTagName())) {
+                values.add(child.getAttribute("value"));
+            }
+        }
+        assertEquals(List.of("210", "211", "212", "220", "221", "222", "230", "231", "232", "200"),
+                values, "elemental job gate must include every mage job for " + questId);
+    }
+
+    private static void assertSingleCompletedPrerequisite(Element start, int questId, int requiredQuestId) {
+        Element quest = childImgDir(start, "quest");
+        List<Element> prerequisites = childImgDirs(quest);
+        assertEquals(1, prerequisites.size(),
+                "elemental start must have exactly one completed prerequisite for " + questId);
+        Element prerequisite = prerequisites.get(0);
+        assertEquals(Integer.toString(requiredQuestId), childValue(prerequisite, "int", "id"),
+                "elemental start prerequisite id must chain linearly for " + questId);
+        assertEquals("2", childValue(prerequisite, "int", "state"),
+                "elemental start prerequisite must require completed state for " + questId);
+    }
+
+    private static Element topLevelImgDir(Document document, int questId) {
+        Element found = childImgDirOrNull(document.getDocumentElement(), Integer.toString(questId));
+        if (found == null) {
+            throw new AssertionError("missing elemental quest node: " + questId);
+        }
+        return found;
+    }
+
+    private static Element childImgDir(Element parent, String childName) {
+        Element found = childImgDirOrNull(parent, childName);
+        if (found == null) {
+            throw new AssertionError("missing imgdir " + childName + " under " + parent.getAttribute("name"));
+        }
+        return found;
+    }
+
+    private static Element childImgDirOrNull(Element parent, String childName) {
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child
+                    && "imgdir".equals(child.getTagName())
+                    && childName.equals(child.getAttribute("name"))) {
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private static List<Element> childImgDirs(Element parent) {
+        List<Element> result = new ArrayList<>();
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child && "imgdir".equals(child.getTagName())) {
+                result.add(child);
+            }
+        }
+        return result;
+    }
+
+    private static String childValue(Element parent, String tagName, String childName) {
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child
+                    && tagName.equals(child.getTagName())
+                    && childName.equals(child.getAttribute("name"))) {
+                return child.getAttribute("value");
+            }
+        }
+        return "";
+    }
+
+    private static String childValue(Element parent, String firstDirName, String secondDirName, String tagName,
+                                     String childName) {
+        return childValue(childImgDir(childImgDir(parent, firstDirName), secondDirName), tagName, childName);
+    }
+
+    private static int countOccurrences(String text, String needle) {
+        if (text == null || text.isEmpty() || needle == null || needle.isEmpty()) {
+            return 0;
+        }
+        int count = 0;
+        int index = 0;
+        while ((index = text.indexOf(needle, index)) >= 0) {
+            count++;
+            index += needle.length();
+        }
+        return count;
+    }
+
+    private static Path resolveQuestXml(String relativePath) {
+        Path modulePath = Path.of(relativePath);
+        if (Files.exists(modulePath)) {
+            return modulePath;
+        }
+        return Path.of("gms-server").resolve(relativePath);
+    }
+
+    private record ElementalStageSpec(String parent, int requiredLevel, int[] questIds) {
     }
 
     private static final class CapturingClient extends Client {

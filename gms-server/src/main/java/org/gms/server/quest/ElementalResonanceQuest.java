@@ -569,7 +569,21 @@ public final class ElementalResonanceQuest {
         }
 
         StepAdvanceResult result = advanceCurrentStep(chr, ref.questId);
-        context.sendOk(result.message());
+        // After completing a step, auto-start the next step and chain the dialog
+        Optional<Integer> nextQuestId = resolveCurrentQuestId(chr);
+        if (nextQuestId.isPresent()) {
+            StartResult startResult = startStage(chr, nextQuestId.get());
+            if (startResult.success()) {
+                String combinedMessage = result.message() + "\r\n\r\n" + startResult.message();
+                InteractionHookAction nextAction = resolveCurrentAction(chr, nextQuestId.get());
+                context.switchQuest(nextQuestId.get(), NPC_ID, nextAction);
+                context.sendNext(combinedMessage);
+            } else {
+                context.sendOk(result.message() + "\r\n\r\n" + startResult.message());
+            }
+        } else {
+            context.sendOk(result.message());
+        }
     }
 
     private static void openStartedHook(InteractionHookContext context, Character chr, StepRef ref) {

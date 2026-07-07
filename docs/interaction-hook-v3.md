@@ -177,6 +177,7 @@ enableAutoKeyDownFix
 - `1 OPEN`
 - `2 WAIT_SELECTION`
 - `3 WAIT_CONFIRM`
+- `4 NEXT`
 
 `resultCode`：
 
@@ -241,6 +242,8 @@ Hook 对话发包：
 - `InteractionHookContext` 发送 NPC 对话时必须和原生 `NPCConversationManager` 使用相同的
   `NPC_TALK` 布局。
 - `sendOk` 使用 `msgType=0` 和结尾字节 `00 00`。
+- `sendNext` 使用 `msgType=0` 和结尾字节 `00 01`；继续点击时服务端重新打开已切换的 Hook 任务，
+  不能把下一页点击当作确认动作提交。
 - `sendYesNo` 使用 `msgType=1` 和空结尾字节。
 - `sendSimple` 使用 `msgType=4` 和空结尾字节。
 - 不允许为了 Hook 对话额外补结尾字节，否则客户端窗口刷新行为会和普通 NPC 对话不一致，出现闪烁。
