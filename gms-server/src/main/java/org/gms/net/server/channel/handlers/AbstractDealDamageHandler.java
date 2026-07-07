@@ -53,6 +53,7 @@ import org.gms.server.life.Monster;
 import org.gms.server.life.MonsterStats;
 import org.gms.server.life.MonsterDropEntry;
 import org.gms.server.life.MonsterInformationProvider;
+import org.gms.server.life.SkillElementResolver;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
@@ -74,12 +75,21 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
     private static final long MOB_VAC_DISTANCE_GRACE_MS = 2500L;
 
-    private static short getWeaponElementBonus(Equip weapon, Element element) {
-        if (weapon == null || element == null) {
-            return 0;
+    private static short getWeaponElementBonus(Equip weapon, Skill skill) {
+        return SkillElementResolver.bestWeaponElementBonus(weapon, skill);
+    }
+
+    private static boolean hasElementalWeakness(Monster monster, Set<Element> elements) {
+        if (monster == null || elements.isEmpty()) {
+            return false;
         }
 
-        return weapon.getElementBonus(element);
+        for (Element element : elements) {
+            if (monster.getElementalEffectiveness(element) == ElementalEffectiveness.WEAK) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class AttackInfo {
@@ -929,14 +939,12 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
             if (ret.skill != 0) {
                 Skill skill = SkillFactory.getSkill(ret.skill);
-                if (skill.getElement() != Element.NEUTRAL && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
+                Set<Element> skillElements = SkillElementResolver.getAttackElements(skill);
+                if (!skillElements.isEmpty() && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
                     // The skill has an element effect, so we need to factor that in.
                     if (monster != null) {
-                        ElementalEffectiveness eff = monster.getElementalEffectiveness(skill.getElement());
-                        if (eff == ElementalEffectiveness.WEAK) {
+                        if (hasElementalWeakness(monster, skillElements)) {
                             calcDmgMax *= 1.5;
-                        } else if (eff == ElementalEffectiveness.STRONG) {
-                            //calcDmgMax *= 0.5;
                         }
                     } else {
                         // Since we already know the skill has an elemental attribute, but we dont know if the monster is weak or not, lets
@@ -945,11 +953,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     }
                 }
                 // Weapon elemental bonus for magic attacks
-                if (magic && skill.getElement() != Element.NEUTRAL && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
+                if (magic && !skillElements.isEmpty() && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
                     Equip weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11) instanceof Equip equip
                             ? equip
                             : null;
-                    short bonus = getWeaponElementBonus(weapon, skill.getElement());
+                    short bonus = getWeaponElementBonus(weapon, skill);
                     if (bonus > 0) {
                         calcDmgMax = calcDmgMax * bonus / 100;
                     }

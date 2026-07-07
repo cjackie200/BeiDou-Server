@@ -108,6 +108,19 @@ class MonsterPoisonDotTest {
     }
 
     @Test
+    void firePoisonCompositionDotUsesPoisonElementRateFromDualElementMapping() {
+        Skill elementComposition = skill(2111006, Element.NEUTRAL);
+        Equip poisonWeapon = weapon(FINAL_POISON_STAFF, 200);
+        Equip fireWeapon = weapon(FINAL_POISON_STAFF, 0);
+        fireWeapon.setIncRMAF((short) 200);
+
+        assertEquals(200, MonsterPoisonDot.resolvePoisonElementRate(elementComposition, poisonWeapon));
+        assertEquals(350, MonsterPoisonDot.applyPoisonElementRate(175,
+                MonsterPoisonDot.resolvePoisonElementRate(elementComposition, poisonWeapon)));
+        assertEquals(100, MonsterPoisonDot.resolvePoisonElementRate(elementComposition, fireWeapon));
+    }
+
+    @Test
     void bossStatusFilterOnlyAddsPlayerPoisonDotException() {
         MonsterStatusEffect playerPoison = new MonsterStatusEffect(
                 Map.of(MonsterStatus.POISON, 1), skill(2101005, Element.POISON), null, false);
@@ -136,7 +149,7 @@ class MonsterPoisonDotTest {
         MonsterStatusEffect poisonMist = new MonsterStatusEffect(
                 Map.of(MonsterStatus.POISON, 1), skill(2111003, Element.POISON), null, false);
         MonsterStatusEffect poisonComposition = new MonsterStatusEffect(
-                Map.of(MonsterStatus.POISON, 1), skill(2111006, Element.POISON), null, false);
+                Map.of(MonsterStatus.POISON, 1), skill(2111006, Element.NEUTRAL), null, false);
         MonsterStatusEffect monsterPoison = new MonsterStatusEffect(
                 Map.of(MonsterStatus.POISON, 1), skill(2101005, Element.POISON), null, true);
         MonsterStatusEffect venom = new MonsterStatusEffect(

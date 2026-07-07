@@ -90,7 +90,7 @@ final class MonsterPoisonDot {
     }
 
     static int resolvePoisonElementRate(Character from, Skill skill) {
-        if (skill == null || skill.getElement() != Element.POISON || from == null) {
+        if (skill == null || !SkillElementResolver.hasAttackElement(skill, Element.POISON) || from == null) {
             return DEFAULT_ELEMENT_RATE;
         }
 
@@ -108,7 +108,7 @@ final class MonsterPoisonDot {
     }
 
     static int resolvePoisonElementRate(Skill skill, Equip weapon) {
-        if (skill == null || skill.getElement() != Element.POISON || weapon == null) {
+        if (skill == null || !SkillElementResolver.hasAttackElement(skill, Element.POISON) || weapon == null) {
             return DEFAULT_ELEMENT_RATE;
         }
 
