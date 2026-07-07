@@ -15,6 +15,8 @@
     <int name="reqDEX" value="0"/>
     <int name="reqINT" value="0"/>
     <int name="reqLUK" value="0"/>
+    <int name="incSpeed" value="250"/>
+    <int name="incJump" value="200"/>
     <int name="cash" value="1"/>
   </imgdir>
 </imgdir>
