@@ -13,6 +13,7 @@
 /build/
 /dist/
 /deploy/
+/client-update/files/
 **/target/
 /nbproject/
 /.settings
