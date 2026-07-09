@@ -7,9 +7,11 @@ import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
+import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
 import org.gms.service.ConfigService;
+import org.gms.util.PacketCreator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -70,13 +72,15 @@ class MonsterPoisonDotTest {
     }
 
     @Test
-    void poisonDamageUsesRmasFromEquippedInstanceAndCapsAtShortMax() {
+    void poisonDamageUsesRmasFromEquippedInstanceAndCanExceedShortMax() {
         Skill poison = skill(2101005, Element.POISON);
         Equip weapon = weapon(FINAL_POISON_STAFF, 200);
 
         assertEquals(200, MonsterPoisonDot.resolvePoisonElementRate(poison, weapon));
         assertEquals(350, MonsterPoisonDot.applyPoisonElementRate(175, 200));
-        assertEquals(Short.MAX_VALUE, MonsterPoisonDot.applyPoisonElementRate(20000, 200));
+        assertEquals(40000, MonsterPoisonDot.applyPoisonElementRate(20000, 200));
+        assertEquals(Short.MAX_VALUE,
+                MonsterPoisonDot.statusDisplayValue(MonsterPoisonDot.applyPoisonElementRate(20000, 200)));
     }
 
     @Test
@@ -150,6 +154,10 @@ class MonsterPoisonDotTest {
         assertEquals(1, MonsterPoisonDot.applyPoisonEffectivenessRate(1, ElementalEffectiveness.STRONG));
         assertEquals(1, MonsterPoisonDot.applyPoisonEffectivenessRate(1, ElementalEffectiveness.NEUTRAL));
         assertEquals(2, MonsterPoisonDot.applyPoisonEffectivenessRate(1, ElementalEffectiveness.WEAK));
+        assertEquals(50000, MonsterPoisonDot.applyPoisonEffectivenessRate(100000, ElementalEffectiveness.STRONG));
+        assertEquals(75000, MonsterPoisonDot.applyPoisonEffectivenessRate(100000, ElementalEffectiveness.NEUTRAL));
+        assertEquals(100000, MonsterPoisonDot.applyPoisonEffectivenessRate(100000, ElementalEffectiveness.NORMAL));
+        assertEquals(150000, MonsterPoisonDot.applyPoisonEffectivenessRate(100000, ElementalEffectiveness.WEAK));
     }
 
     @Test
@@ -227,8 +235,10 @@ class MonsterPoisonDotTest {
     void poisonTickCanKillWhileOtherDotTicksStayNonLethal() {
         assertEquals(100, MonsterPoisonDot.damageForTick(100, 150, true));
         assertEquals(1, MonsterPoisonDot.damageForTick(1, 150, true));
+        assertEquals(50000, MonsterPoisonDot.damageForTick(50000, 100000, true));
         assertEquals(99, MonsterPoisonDot.damageForTick(100, 150, false));
         assertEquals(0, MonsterPoisonDot.damageForTick(1, 150, false));
+        assertEquals(49999, MonsterPoisonDot.damageForTick(50000, 100000, false));
     }
 
     @Test
@@ -265,6 +275,52 @@ class MonsterPoisonDotTest {
                 MonsterPoisonDot.resolvePoisonElementRate(skill(4120005, Element.NEUTRAL), weapon)));
     }
 
+    @Test
+    void highHpPoisonDotKeepsActualDamageSeparateFromStatusDisplayValue() {
+        Skill poison = skill(2101005, Element.POISON);
+        Equip weapon = weapon(FINAL_POISON_STAFF, 200);
+
+        int baseDamage = MonsterPoisonDot.calculateBasePoisonDamage(2_000_000, 30);
+        int actualDamage = MonsterPoisonDot.applyPoisonElementRate(baseDamage,
+                MonsterPoisonDot.resolvePoisonElementRate(poison, weapon));
+
+        assertEquals(50000, baseDamage);
+        assertEquals(100000, actualDamage);
+        assertEquals(Short.MAX_VALUE, MonsterPoisonDot.statusDisplayValue(actualDamage));
+    }
+
+    @Test
+    void poisonDotCapsActualDamageAtIntegerMax() {
+        assertEquals(Integer.MAX_VALUE, MonsterPoisonDot.calculateBasePoisonDamage(2_000_000, 70));
+        assertEquals(Integer.MAX_VALUE, MonsterPoisonDot.applyPoisonElementRate(Integer.MAX_VALUE, 200));
+        assertEquals(Integer.MAX_VALUE,
+                MonsterPoisonDot.applyPoisonEffectivenessRate(Integer.MAX_VALUE, ElementalEffectiveness.WEAK));
+    }
+
+    @Test
+    void legacyDotDamageStillUsesShortStatusCap() {
+        assertEquals(Short.MAX_VALUE, MonsterPoisonDot.legacyDotDamage(100000));
+        assertEquals(0, MonsterPoisonDot.legacyDotDamage(-1));
+    }
+
+    @Test
+    void serverDisplayedPoisonDotDisablesClientPoisonAutoDamageValue() {
+        assertEquals(0, MonsterPoisonDot.poisonStatusValue(100000, true));
+        assertEquals(Short.MAX_VALUE, MonsterPoisonDot.poisonStatusValue(100000, false));
+        assertEquals(25000, MonsterPoisonDot.poisonStatusValue(25000, false));
+    }
+
+    @Test
+    void damageMonsterPacketCarriesFullIntPoisonDamage() {
+        byte[] bytes = PacketCreator.damageMonster(123, 100000).getBytes();
+
+        assertEquals(19, bytes.length);
+        assertEquals(SendOpcode.DAMAGE_MONSTER.getValue(), readU16(bytes, 0));
+        assertEquals(123, readI32(bytes, 2));
+        assertEquals(0, bytes[6]);
+        assertEquals(100000, readI32(bytes, 7));
+    }
+
     private static Object bean(Map<Class<?>, Object> beans, Class<?> type) {
         return beans.computeIfAbsent(type, key -> mock(key, RETURNS_DEEP_STUBS));
     }
@@ -286,6 +342,17 @@ class MonsterPoisonDotTest {
         Character chr = Character.getDefault(client);
         client.setPlayer(chr);
         return chr;
+    }
+
+    private static int readU16(byte[] bytes, int offset) {
+        return (bytes[offset] & 0xFF) | ((bytes[offset + 1] & 0xFF) << 8);
+    }
+
+    private static int readI32(byte[] bytes, int offset) {
+        return (bytes[offset] & 0xFF)
+                | ((bytes[offset + 1] & 0xFF) << 8)
+                | ((bytes[offset + 2] & 0xFF) << 16)
+                | ((bytes[offset + 3] & 0xFF) << 24);
     }
 
     private static final class CapturingClient extends Client {

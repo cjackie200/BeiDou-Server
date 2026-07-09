@@ -14,7 +14,8 @@ import org.gms.constants.skills.FPWizard;
 import java.util.Map;
 
 final class MonsterPoisonDot {
-    static final int MAX_DOT_DAMAGE = Short.MAX_VALUE;
+    static final int MAX_DOT_DAMAGE = Integer.MAX_VALUE;
+    static final int MAX_STATUS_DISPLAY_VALUE = Short.MAX_VALUE;
     static final int DEFAULT_ELEMENT_RATE = 100;
     static final int DEFAULT_TICK_DELAY_MS = 1000;
     static final short WEAPON_SLOT = -11;
@@ -80,7 +81,7 @@ final class MonsterPoisonDot {
         }
 
         int effectiveRate = rate > 0 ? rate : DEFAULT_ELEMENT_RATE;
-        return capDotDamage((long) Math.ceil(baseDamage * (effectiveRate / 100.0)));
+        return capDotDamage(ceilMultiply(baseDamage, effectiveRate, 100));
     }
 
     static int applyPoisonEffectivenessRate(int baseDamage, ElementalEffectiveness effectiveness) {
@@ -90,11 +91,26 @@ final class MonsterPoisonDot {
 
         return switch (effectiveness) {
             case IMMUNE -> 0;
-            case STRONG -> capDotDamage((long) Math.ceil(baseDamage * 0.5));
-            case NEUTRAL -> capDotDamage((long) Math.ceil(baseDamage * 0.75));
+            case STRONG -> capDotDamage(ceilMultiply(baseDamage, 1, 2));
+            case NEUTRAL -> capDotDamage(ceilMultiply(baseDamage, 3, 4));
             case NORMAL -> baseDamage;
-            case WEAK -> capDotDamage((long) Math.ceil(baseDamage * 1.5));
+            case WEAK -> capDotDamage(ceilMultiply(baseDamage, 3, 2));
         };
+    }
+
+    static int statusDisplayValue(int actualDamage) {
+        return Math.min(MAX_STATUS_DISPLAY_VALUE, Math.max(0, actualDamage));
+    }
+
+    static int poisonStatusValue(int actualDamage, boolean serverDisplayedTickDamage) {
+        if (serverDisplayedTickDamage) {
+            return 0;
+        }
+        return statusDisplayValue(actualDamage);
+    }
+
+    static int legacyDotDamage(int actualDamage) {
+        return statusDisplayValue(actualDamage);
     }
 
     static int resolvePoisonElementRate(Character from, Skill skill) {
@@ -159,5 +175,9 @@ final class MonsterPoisonDot {
 
     private static int capDotDamage(long damage) {
         return (int) Math.min(MAX_DOT_DAMAGE, Math.max(0, damage));
+    }
+
+    private static long ceilMultiply(int value, int numerator, int denominator) {
+        return (value * (long) numerator + denominator - 1L) / denominator;
     }
 }

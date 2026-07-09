@@ -1267,11 +1267,13 @@ public class Monster extends AbstractLoadedLife {
                         MonsterPoisonDot.resolvePoisonElementRate(from, status.getSkill()));
                 poisonDamage = MonsterPoisonDot.applyPoisonEffectivenessRate(poisonDamage,
                         getMonsterEffectiveness(Element.POISON));
+            } else {
+                poisonDamage = MonsterPoisonDot.legacyDotDamage(poisonDamage);
             }
-            status.setValue(MonsterStatus.POISON, poisonDamage);
+            status.setValue(MonsterStatus.POISON, MonsterPoisonDot.poisonStatusValue(poisonDamage, playerPoisonDot));
             animationTime = broadcastStatusEffect(status);
 
-            overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot);
+            overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot, playerPoisonDot);
             overtimeDelay = MonsterPoisonDot.tickDelay(status, playerPoisonDot);
         } else if (venom) {
             if (from.getJob() == Job.NIGHTLORD || from.getJob() == Job.SHADOWER || from.getJob().isA(Job.NIGHTWALKER3)) {
@@ -1299,13 +1301,14 @@ public class Monster extends AbstractLoadedLife {
                     poisonDamage = MonsterPoisonDot.applyPoisonEffectivenessRate(poisonDamage,
                             getMonsterEffectiveness(Element.POISON));
                 } else {
-                    poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
+                    poisonDamage = MonsterPoisonDot.legacyDotDamage(poisonDamage);
                 }
-                status.setValue(MonsterStatus.VENOMOUS_WEAPON, poisonDamage);
-                status.setValue(MonsterStatus.POISON, poisonDamage);
+                int statusDisplayValue = MonsterPoisonDot.statusDisplayValue(poisonDamage);
+                status.setValue(MonsterStatus.VENOMOUS_WEAPON, statusDisplayValue);
+                status.setValue(MonsterStatus.POISON, MonsterPoisonDot.poisonStatusValue(poisonDamage, playerPoisonDot));
                 animationTime = broadcastStatusEffect(status);
 
-                overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot);
+                overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot, playerPoisonDot);
                 overtimeDelay = MonsterPoisonDot.tickDelay(status, playerPoisonDot);
             } else {
                 return false;
@@ -1710,18 +1713,25 @@ public class Monster extends AbstractLoadedLife {
         private final int type;
         private final MapleMap map;
         private final boolean lethal;
+        private final boolean broadcastTickDamage;
 
         private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type) {
             this(dealDamage, chr, status, type, false);
         }
 
         private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type, boolean lethal) {
+            this(dealDamage, chr, status, type, lethal, false);
+        }
+
+        private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type, boolean lethal,
+                           boolean broadcastTickDamage) {
             this.dealDamage = dealDamage;
             this.chr = chr;
             this.status = status;
             this.type = type;
             this.map = chr.getMap();
             this.lethal = lethal;
+            this.broadcastTickDamage = broadcastTickDamage;
         }
 
         private void interruptStatus() {
@@ -1743,6 +1753,9 @@ public class Monster extends AbstractLoadedLife {
             }
 
             if (lethal) {
+                if (broadcastTickDamage) {
+                    map.broadcastMessage(PacketCreator.damageMonster(getObjectId(), damage), getPosition());
+                }
                 if (damage >= curHp) {
                     interruptStatus();
                 }
