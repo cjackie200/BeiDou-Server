@@ -760,6 +760,20 @@ class LifeProofQuestTest {
     }
 
     @Test
+    void missingClientNpcResolvesFromCurrentMapForQuestStart() throws Exception {
+        Character chr = newLifeProofCharacter(Job.FP_ARCHMAGE);
+        int questId = LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE, 0);
+
+        assertEquals(0, LifeProofQuest.resolveInteractionNpcId(chr, questId, 0));
+
+        addNpc(chr, 1032001);
+
+        assertEquals(1032001, LifeProofQuest.resolveInteractionNpcId(chr, questId, 0));
+        assertEquals(1032001, LifeProofQuest.resolveInteractionNpcId(chr, questId, 1032001));
+        assertEquals(0, LifeProofQuest.resolveInteractionNpcId(chr, questId, 1012100));
+    }
+
+    @Test
     void fiveJobBranchesCanProgressThroughAllSevenStages() throws Exception {
         Quest.clearCache();
         int checked = 0;

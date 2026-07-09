@@ -24,7 +24,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -54,15 +58,25 @@ class InteractionHookRegistryTest {
         ServiceProperty serviceProperty = new ServiceProperty();
         MessageSource messageSource = mock(MessageSource.class);
         ConfigService configService = mock(ConfigService.class);
+        DataSource dataSource = mock(DataSource.class);
+        Connection connection = mock(Connection.class);
+        PreparedStatement statement = mock(PreparedStatement.class);
+        ResultSet resultSet = mock(ResultSet.class);
         Map<Class<?>, Object> beans = new HashMap<>();
 
         when(configService.loadGameConfigs()).thenReturn(List.of());
         when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeQuery()).thenReturn(resultSet);
+        when(statement.executeUpdate()).thenReturn(1);
+        when(resultSet.next()).thenReturn(false);
 
         beans.put(ServiceProperty.class, serviceProperty);
         beans.put(MessageSource.class, messageSource);
         beans.put(ConfigService.class, configService);
+        beans.put(DataSource.class, dataSource);
 
         doAnswer(invocation -> bean(beans, invocation.getArgument(0)))
                 .when(context).getBean(any(Class.class));
@@ -400,6 +414,45 @@ class InteractionHookRegistryTest {
         assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(noDialog, InteractionHookAction.QUERY_PROGRESS));
         assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(wrongEventType, InteractionHookAction.QUERY_PROGRESS));
         assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(valid, null));
+    }
+
+    @Test
+    void lifeProofStartEventResolvesMissingNpcOnlyAtExpectedInstructor() throws Exception {
+        Character chr = newLifeProofMage();
+        InteractionHookEvent missingNpc = event(1, InteractionHookProtocol.EVENT_QUEST_ACTION,
+                InteractionHookProtocol.TARGET_QUEST, 5125, 0, 0,
+                5125, -1, 4, InteractionHookProtocol.DIALOG_CONTEXT_QUEST);
+        InteractionHookEvent wrongNpc = event(2, InteractionHookProtocol.EVENT_QUEST_ACTION,
+                InteractionHookProtocol.TARGET_QUEST, 5125, 0, 1012100,
+                5125, -1, 4, InteractionHookProtocol.DIALOG_CONTEXT_QUEST);
+
+        assertFalse(InteractionHookManager.isValidLifeProofQuestEvent(
+                chr, missingNpc, 5125, InteractionHookAction.QUERY_START));
+
+        addNpc(chr, 1032001);
+
+        assertTrue(InteractionHookManager.isValidLifeProofQuestEvent(
+                chr, missingNpc, 5125, InteractionHookAction.QUERY_START));
+        assertFalse(InteractionHookManager.isValidLifeProofQuestEvent(
+                chr, wrongNpc, 5125, InteractionHookAction.QUERY_START));
+    }
+
+    @Test
+    void nativeLifeProofStartWithMissingNpcCompletesHookFlow() throws Exception {
+        Character chr = newLifeProofMage();
+        CapturingClient client = (CapturingClient) chr.getClient();
+        addNpc(chr, 1032001);
+        InteractionHookManager.dispose(client);
+
+        try {
+            assertTrue(InteractionHookManager.handleNativeQuestAction(client, 5125, 0, 4));
+            assertEquals(QuestStatus.Status.NOT_STARTED.getId(), chr.getQuestStatus(5125));
+
+            assertTrue(InteractionHookManager.handleNativeDialogSelection(client, (byte) 1, (byte) 0, 0));
+            assertEquals(QuestStatus.Status.STARTED.getId(), chr.getQuestStatus(5125));
+        } finally {
+            InteractionHookManager.dispose(client);
+        }
     }
 
     private static void assertRuleHeader(Packet packet, int scope, int batchId, int batchIndex, int batchCount,

@@ -70,9 +70,12 @@ public final class InteractionHookManager {
         }
 
         InteractionHookAction action = InteractionHookAction.fromQuestRawAction(rawAction);
-        if (LifeProofQuest.isVisibleQuestId(questId)
-                && !isValidNativeLifeProofQuestAction(client.getPlayer(), questId, npcId, action)) {
-            return false;
+        if (LifeProofQuest.isVisibleQuestId(questId)) {
+            int resolvedNpcId = resolveValidLifeProofQuestNpcId(client.getPlayer(), questId, npcId, action);
+            if (resolvedNpcId <= 0) {
+                return false;
+            }
+            npcId = resolvedNpcId;
         }
         if (questId <= 0 || action == null || !InteractionHookRegistry.hasQuestHook(client.getPlayer(), questId, action)) {
             return false;
@@ -250,11 +253,14 @@ public final class InteractionHookManager {
 
     private static boolean handleLifeProofQuestActionEvent(Client client, InteractionHookEvent event, int questId,
                                                            InteractionHookAction action) {
-        if (!isValidLifeProofQuestEvent(client.getPlayer(), event, questId, action)) {
+        if (!isLifeProofQuestEventSourceValid(event, action)) {
             return reject(client, event.requestId());
         }
 
-        int npcId = event.resolvedNpcId();
+        int npcId = resolveValidLifeProofQuestNpcId(client.getPlayer(), questId, event.resolvedNpcId(), action);
+        if (npcId <= 0) {
+            return reject(client, event.requestId());
+        }
         return open(client, event, questId, npcId, action, true);
     }
 
@@ -263,10 +269,7 @@ public final class InteractionHookManager {
         if (chr == null || questId <= 0 || !isLifeProofQuestEventSourceValid(event, action)) {
             return false;
         }
-        if (!LifeProofQuest.resolveCurrentQuestId(chr).filter(current -> current == questId).isPresent()) {
-            return false;
-        }
-        return LifeProofQuest.canOpenProgressAtNpc(questId, event.resolvedNpcId());
+        return resolveValidLifeProofQuestNpcId(chr, questId, event.resolvedNpcId(), action) > 0;
     }
 
     static boolean isLifeProofQuestEventSourceValid(InteractionHookEvent event, InteractionHookAction action) {
@@ -279,13 +282,18 @@ public final class InteractionHookManager {
 
     static boolean isValidNativeLifeProofQuestAction(Character chr, int questId, int npcId,
                                                      InteractionHookAction action) {
+        return resolveValidLifeProofQuestNpcId(chr, questId, npcId, action) > 0;
+    }
+
+    private static int resolveValidLifeProofQuestNpcId(Character chr, int questId, int npcId,
+                                                       InteractionHookAction action) {
         if (chr == null || questId <= 0 || action == null) {
-            return false;
+            return 0;
         }
         if (!LifeProofQuest.resolveCurrentQuestId(chr).filter(current -> current == questId).isPresent()) {
-            return false;
+            return 0;
         }
-        return LifeProofQuest.canOpenProgressAtNpc(questId, npcId);
+        return LifeProofQuest.resolveInteractionNpcId(chr, questId, npcId);
     }
 
     private static boolean open(Client client, InteractionHookEvent event, int questId, int npcId,
