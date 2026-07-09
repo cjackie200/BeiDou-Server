@@ -1,11 +1,20 @@
 package org.gms.server.hpchallenge;
 
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
@@ -99,13 +108,27 @@ class HpChallengeServiceTest {
         }
         String group = invoke(task, "group").toString();
         int expected = switch (group) {
-            case "MAIN_COMMON" -> 200;
-            case "MAIN_JOB" -> 500;
+            case "MAIN_COMMON" -> 100;
+            case "MAIN_JOB" -> 200;
             case "OPTIONAL" -> 999;
             default -> throw new AssertionError("unknown task group " + group);
         };
         assertEquals(expected, intValue(task, "requiredCount"),
                 "normalized KILL count for " + group + " task " + invoke(task, "key"));
+    }
+
+    @Test
+    void lifeProofKillTargetsUseFarmableMapSpawns() throws Exception {
+        Map<Integer, Integer> spawnCounts = lifeProofKillTargetSpawnCounts();
+
+        for (Object stage : stages().values()) {
+            assertKillTargetsHaveFarmableSpawns(listValue(stage, "commonTasks"), spawnCounts);
+            Map<?, ?> jobTasks = mapValue(stage, "jobTasks");
+            for (Object tasks : jobTasks.values()) {
+                assertKillTargetsHaveFarmableSpawns((List<?>) tasks, spawnCounts);
+            }
+            assertKillTargetsHaveFarmableSpawns(listValue(stage, "optionalTasks"), spawnCounts);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -139,5 +162,127 @@ class HpChallengeServiceTest {
         Method method = target.getClass().getDeclaredMethod(methodName);
         method.setAccessible(true);
         return method.invoke(target);
+    }
+
+    private static void assertKillTargetsHaveFarmableSpawns(List<?> tasks,
+                                                            Map<Integer, Integer> spawnCounts) throws Exception {
+        for (Object task : tasks) {
+            if (!"KILL".equals(invoke(task, "targetType").toString())) {
+                continue;
+            }
+            @SuppressWarnings("unchecked")
+            List<Integer> targetIds = (List<Integer>) invoke(task, "targetIds");
+            for (int targetId : targetIds) {
+                int maxSpawnCount = spawnCounts.getOrDefault(targetId, 0);
+                assertTrue(maxSpawnCount >= 3,
+                        "life proof KILL target must have at least 3 direct map spawns: "
+                                + targetId + " task=" + invoke(task, "key"));
+            }
+        }
+    }
+
+    private static Map<Integer, Integer> lifeProofKillTargetSpawnCounts() throws Exception {
+        Set<Integer> targetIds = new HashSet<>();
+        for (Object stage : stages().values()) {
+            collectKillTargetIds(listValue(stage, "commonTasks"), targetIds);
+            Map<?, ?> jobTasks = mapValue(stage, "jobTasks");
+            for (Object tasks : jobTasks.values()) {
+                collectKillTargetIds((List<?>) tasks, targetIds);
+            }
+            collectKillTargetIds(listValue(stage, "optionalTasks"), targetIds);
+        }
+
+        Map<Integer, Integer> maxSpawnByMob = new HashMap<>();
+        Path mapRoot = resolveWzPath("wz/Map.wz/Map");
+        try (var paths = Files.walk(mapRoot)) {
+            paths.filter(path -> path.getFileName().toString().endsWith(".img.xml"))
+                    .forEach(path -> collectMapSpawnCounts(path, targetIds, maxSpawnByMob));
+        }
+        return maxSpawnByMob;
+    }
+
+    private static void collectKillTargetIds(List<?> tasks, Set<Integer> targetIds) throws Exception {
+        for (Object task : tasks) {
+            if (!"KILL".equals(invoke(task, "targetType").toString())) {
+                continue;
+            }
+            @SuppressWarnings("unchecked")
+            List<Integer> ids = (List<Integer>) invoke(task, "targetIds");
+            targetIds.addAll(ids);
+        }
+    }
+
+    private static void collectMapSpawnCounts(Path path, Set<Integer> targetIds,
+                                              Map<Integer, Integer> maxSpawnByMob) {
+        try {
+            Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(path.toFile());
+            Element life = childImgDirOrNull(document.getDocumentElement(), "life");
+            if (life == null) {
+                return;
+            }
+            Map<Integer, Integer> mapCounts = new HashMap<>();
+            for (Element spawn : childImgDirs(life)) {
+                if (!"m".equals(childValue(spawn, "string", "type"))) {
+                    continue;
+                }
+                String idValue = childValue(spawn, "string", "id");
+                if (idValue.isBlank()) {
+                    continue;
+                }
+                int mobId = Integer.parseInt(idValue);
+                if (targetIds.contains(mobId)) {
+                    mapCounts.merge(mobId, 1, Integer::sum);
+                }
+            }
+            for (Map.Entry<Integer, Integer> entry : mapCounts.entrySet()) {
+                maxSpawnByMob.merge(entry.getKey(), entry.getValue(), Math::max);
+            }
+        } catch (Exception e) {
+            throw new AssertionError("failed to parse map XML " + path, e);
+        }
+    }
+
+    private static List<Element> childImgDirs(Element parent) {
+        java.util.ArrayList<Element> result = new java.util.ArrayList<>();
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child
+                    && "imgdir".equals(child.getTagName())) {
+                result.add(child);
+            }
+        }
+        return result;
+    }
+
+    private static Element childImgDirOrNull(Element parent, String childName) {
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child
+                    && "imgdir".equals(child.getTagName())
+                    && childName.equals(child.getAttribute("name"))) {
+                return child;
+            }
+        }
+        return null;
+    }
+
+    private static String childValue(Element parent, String tagName, String childName) {
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i) instanceof Element child
+                    && tagName.equals(child.getTagName())
+                    && childName.equals(child.getAttribute("name"))) {
+                return child.getAttribute("value");
+            }
+        }
+        return "";
+    }
+
+    private static Path resolveWzPath(String relativePath) {
+        Path modulePath = Path.of(relativePath);
+        if (Files.exists(modulePath)) {
+            return modulePath;
+        }
+        return Path.of("gms-server").resolve(relativePath);
     }
 }

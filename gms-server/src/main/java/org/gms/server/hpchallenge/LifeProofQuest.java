@@ -1748,7 +1748,7 @@ public final class LifeProofQuest {
         items.put("visit_ludi_maps", new ItemCollection(4033004, "玩具塔生命之证", 60, List.of(7140000, 8141100, 8140200, 8140300)));
         items.put("visit_expedition", new ItemCollection(4005004, "黑暗水晶", 30, List.of(8190003, 8190004, 8140500)));
         items.put("visit_deep_sea", new ItemCollection(4005002, "敏捷水晶", 30, List.of(8140600, 8141300, 8142100)));
-        items.put("visit_deep_sea_hidden", new ItemCollection(4033007, "暗流生命之证", 50, List.of(7130020, 8140600, 8150100, 8150101)));
+        items.put("visit_deep_sea_hidden", new ItemCollection(4033007, "暗流生命之证", 50, List.of(8140555, 8140600, 8150100, 8150101)));
         items.put("visit_temple", new ItemCollection(4005003, "幸运水晶", 30, List.of(8200005, 8200006, 8200009, 8200010)));
         items.put("visit_temple_maps", new ItemCollection(4033009, "回忆生命之证", 75, List.of(8200005, 8200006, 8200007, 8200008, 8200009, 8200010, 8200011, 8200012)));
         items.put("visit_final", new ItemCollection(4005004, "黑暗水晶", 30, List.of(8190004, 8200011, 8200012)));

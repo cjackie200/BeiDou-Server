@@ -3325,7 +3325,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o7130100# #r#a51061##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130100# x500" />
+        <string name="demandSummary" value="#o7130100# x200" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="7" />
         <int name="area" value="31" />
@@ -3336,7 +3336,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o7130101# #r#a51071##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130101# x500" />
+        <string name="demandSummary" value="#o7130101# x200" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="8" />
         <int name="area" value="31" />
@@ -3347,7 +3347,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o7130103# #r#a51081##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130103# x500" />
+        <string name="demandSummary" value="#o7130103# x200" />
         <string name="parent" value="生命之证 I（战士）" />
         <int name="order" value="9" />
         <int name="area" value="31" />
@@ -3515,7 +3515,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o6300100# #r#a51311##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o6300100# x500" />
+        <string name="demandSummary" value="#o6300100# x200" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="7" />
         <int name="area" value="31" />
@@ -3526,7 +3526,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o6400100# #r#a51321##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o6400100# x500" />
+        <string name="demandSummary" value="#o6400100# x200" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="8" />
         <int name="area" value="31" />
@@ -3537,7 +3537,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o7130300# #r#a51331##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130300# x500" />
+        <string name="demandSummary" value="#o7130300# x200" />
         <string name="parent" value="生命之证 I（法师）" />
         <int name="order" value="9" />
         <int name="area" value="31" />
@@ -3705,7 +3705,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140001# #r#a51561##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140001# x500" />
+        <string name="demandSummary" value="#o8140001# x200" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="7" />
         <int name="area" value="31" />
@@ -3716,7 +3716,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140002# #r#a51571##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140002# x500" />
+        <string name="demandSummary" value="#o8140002# x200" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="8" />
         <int name="area" value="31" />
@@ -3727,7 +3727,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o7130200# #r#a51581##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130200# x500" />
+        <string name="demandSummary" value="#o7130200# x200" />
         <string name="parent" value="生命之证 I（弓箭手）" />
         <int name="order" value="9" />
         <int name="area" value="31" />
@@ -3895,7 +3895,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o7130010# #r#a51811##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130010# x500" />
+        <string name="demandSummary" value="#o7130010# x200" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="7" />
         <int name="area" value="31" />
@@ -3906,7 +3906,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o6230400# #r#a51821##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o6230400# x500" />
+        <string name="demandSummary" value="#o6230400# x200" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="8" />
         <int name="area" value="31" />
@@ -3917,7 +3917,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o7140000# #r#a51831##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7140000# x500" />
+        <string name="demandSummary" value="#o7140000# x200" />
         <string name="parent" value="生命之证 I（飞侠）" />
         <int name="order" value="9" />
         <int name="area" value="31" />
@@ -4080,12 +4080,12 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5206">
-        <string name="name" value="生命之证 I：击杀刺鳍鱼" />
+        <string name="name" value="生命之证 I：击杀刺鳍鱼之屋" />
         <string name="0" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。 前往#p1090000#，接受下一项战斗试炼。" />
-        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7130020# #r#a52061##k" />
+        <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140555# #r#a52061##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130020# x500" />
+        <string name="demandSummary" value="#o8140555# x200" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="7" />
         <int name="area" value="31" />
@@ -4096,7 +4096,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140500# #r#a52071##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140500# x500" />
+        <string name="demandSummary" value="#o8140500# x200" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="8" />
         <int name="area" value="31" />
@@ -4107,7 +4107,7 @@
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7160000# #r#a52081##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7160000# x500" />
+        <string name="demandSummary" value="#o7160000# x200" />
         <string name="parent" value="生命之证 I（海盗）" />
         <int name="order" value="9" />
         <int name="area" value="31" />
@@ -4220,7 +4220,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8140101# #r#a52261##k\r\n#o8140102# #r#a52262##k\r\n#o8140103# #r#a52263##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140101# x200、#o8140102# x200、#o8140103# x200" />
+        <string name="demandSummary" value="#o8140101# x100、#o8140102# x100、#o8140103# x100" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -4242,7 +4242,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8150201# #r#a52281##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150201# x500" />
+        <string name="demandSummary" value="#o8150201# x200" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -4253,7 +4253,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8140110# #r#a52291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140110# x500" />
+        <string name="demandSummary" value="#o8140110# x200" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -4264,7 +4264,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8140703# #r#a52301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140703# x500" />
+        <string name="demandSummary" value="#o8140703# x200" />
         <string name="parent" value="生命之证 II（战士）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -4377,7 +4377,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8140101# #r#a52511##k\r\n#o8140102# #r#a52512##k\r\n#o8140103# #r#a52513##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140101# x200、#o8140102# x200、#o8140103# x200" />
+        <string name="demandSummary" value="#o8140101# x100、#o8140102# x100、#o8140103# x100" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -4399,7 +4399,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8150300# #r#a52531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150300# x500" />
+        <string name="demandSummary" value="#o8150300# x200" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -4410,7 +4410,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8150301# #r#a52541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150301# x500" />
+        <string name="demandSummary" value="#o8150301# x200" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -4421,7 +4421,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8150302# #r#a52551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150302# x500" />
+        <string name="demandSummary" value="#o8150302# x200" />
         <string name="parent" value="生命之证 II（法师）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -4534,7 +4534,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140101# #r#a52761##k\r\n#o8140102# #r#a52762##k\r\n#o8140103# #r#a52763##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140101# x200、#o8140102# x200、#o8140103# x200" />
+        <string name="demandSummary" value="#o8140101# x100、#o8140102# x100、#o8140103# x100" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -4556,7 +4556,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140001# #r#a52781##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140001# x500" />
+        <string name="demandSummary" value="#o8140001# x200" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -4567,7 +4567,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140002# #r#a52791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140002# x500" />
+        <string name="demandSummary" value="#o8140002# x200" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -4578,7 +4578,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140700# #r#a52801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140700# x500" />
+        <string name="demandSummary" value="#o8140700# x200" />
         <string name="parent" value="生命之证 II（弓箭手）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -4691,7 +4691,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8140101# #r#a53011##k\r\n#o8140102# #r#a53012##k\r\n#o8140103# #r#a53013##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140101# x200、#o8140102# x200、#o8140103# x200" />
+        <string name="demandSummary" value="#o8140101# x100、#o8140102# x100、#o8140103# x100" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -4713,7 +4713,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8150200# #r#a53031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150200# x500" />
+        <string name="demandSummary" value="#o8150200# x200" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -4724,18 +4724,18 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8190000# #r#a53041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190000# x500" />
+        <string name="demandSummary" value="#o8190000# x200" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5305">
-        <string name="name" value="生命之证 II：击杀巢穴魔像" />
+        <string name="name" value="生命之证 II：击杀龙巢泥人妖" />
         <string name="0" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。 前往#p1052001#，接受下一项战斗试炼。" />
-        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8190002# #r#a53051##k" />
+        <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8190005# #r#a53051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190002# x500" />
+        <string name="demandSummary" value="#o8190005# x200" />
         <string name="parent" value="生命之证 II（飞侠）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -4848,7 +4848,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140101# #r#a53261##k\r\n#o8140102# #r#a53262##k\r\n#o8140103# #r#a53263##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140101# x200、#o8140102# x200、#o8140103# x200" />
+        <string name="demandSummary" value="#o8140101# x100、#o8140102# x100、#o8140103# x100" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -4870,7 +4870,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140701# #r#a53281##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140701# x500" />
+        <string name="demandSummary" value="#o8140701# x200" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -4881,7 +4881,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140702# #r#a53291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140702# x500" />
+        <string name="demandSummary" value="#o8140702# x200" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -4892,7 +4892,7 @@
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8190005# #r#a53301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190005# x500" />
+        <string name="demandSummary" value="#o8190005# x200" />
         <string name="parent" value="生命之证 II（海盗）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -5005,7 +5005,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8140200# #r#a53511##k\r\n#o8140300# #r#a53512##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140200# x200、#o8140300# x200" />
+        <string name="demandSummary" value="#o8140200# x100、#o8140300# x100" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -5027,7 +5027,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8141100# #r#a53531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8141100# x500" />
+        <string name="demandSummary" value="#o8141100# x200" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -5038,7 +5038,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o7160000# #r#a53541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7160000# x500" />
+        <string name="demandSummary" value="#o7160000# x200" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -5049,7 +5049,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o7130300# #r#a53551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130300# x500" />
+        <string name="demandSummary" value="#o7130300# x200" />
         <string name="parent" value="生命之证 III（战士）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -5162,7 +5162,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8140200# #r#a53761##k\r\n#o8140300# #r#a53762##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140200# x200、#o8140300# x200" />
+        <string name="demandSummary" value="#o8140200# x100、#o8140300# x100" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -5184,7 +5184,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8142000# #r#a53781##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8142000# x500" />
+        <string name="demandSummary" value="#o8142000# x200" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -5195,7 +5195,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8143000# #r#a53791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8143000# x500" />
+        <string name="demandSummary" value="#o8143000# x200" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -5206,7 +5206,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o6230500# #r#a53801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o6230500# x500" />
+        <string name="demandSummary" value="#o6230500# x200" />
         <string name="parent" value="生命之证 III（法师）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -5319,7 +5319,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140200# #r#a54011##k\r\n#o8140300# #r#a54012##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140200# x200、#o8140300# x200" />
+        <string name="demandSummary" value="#o8140200# x100、#o8140300# x100" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -5336,34 +5336,34 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5403">
-        <string name="name" value="生命之证 III：击杀黄鬼怪王" />
+        <string name="name" value="生命之证 III：击杀双刀蓝帽海贼" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1012100#，接受下一项战斗试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o7130400# #r#a54031##k" />
+        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o7160000# #r#a54031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130400# x500" />
+        <string name="demandSummary" value="#o7160000# x200" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5404">
-        <string name="name" value="生命之证 III：击杀蓝鬼怪王" />
+        <string name="name" value="生命之证 III：击杀大海贼" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1012100#，接受下一项战斗试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o7130401# #r#a54041##k" />
+        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8141000# #r#a54041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130401# x500" />
+        <string name="demandSummary" value="#o8141000# x200" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5405">
-        <string name="name" value="生命之证 III：击杀绿鬼怪王" />
+        <string name="name" value="生命之证 III：击杀大海贼王" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1012100#，接受下一项战斗试炼。" />
-        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o7130402# #r#a54051##k" />
+        <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8141100# #r#a54051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130402# x500" />
+        <string name="demandSummary" value="#o8141100# x200" />
         <string name="parent" value="生命之证 III（弓箭手）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -5476,7 +5476,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8140200# #r#a54261##k\r\n#o8140300# #r#a54262##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140200# x200、#o8140300# x200" />
+        <string name="demandSummary" value="#o8140200# x100、#o8140300# x100" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -5498,7 +5498,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8141000# #r#a54281##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8141000# x500" />
+        <string name="demandSummary" value="#o8141000# x200" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -5509,7 +5509,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o7140000# #r#a54291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7140000# x500" />
+        <string name="demandSummary" value="#o7140000# x200" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -5520,7 +5520,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o7130501# #r#a54301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130501# x500" />
+        <string name="demandSummary" value="#o7130501# x200" />
         <string name="parent" value="生命之证 III（飞侠）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -5633,7 +5633,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140200# #r#a54511##k\r\n#o8140300# #r#a54512##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140200# x200、#o8140300# x200" />
+        <string name="demandSummary" value="#o8140200# x100、#o8140300# x100" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -5655,7 +5655,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7130500# #r#a54531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130500# x500" />
+        <string name="demandSummary" value="#o7130500# x200" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -5666,7 +5666,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7130600# #r#a54541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130600# x500" />
+        <string name="demandSummary" value="#o7130600# x200" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -5677,7 +5677,7 @@
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7130601# #r#a54551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o7130601# x500" />
+        <string name="demandSummary" value="#o7130601# x200" />
         <string name="parent" value="生命之证 III（海盗）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -5790,7 +5790,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8190003# #r#a54761##k\r\n#o8190004# #r#a54762##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190003# x200、#o8190004# x200" />
+        <string name="demandSummary" value="#o8190003# x100、#o8190004# x100" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -5812,7 +5812,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200001# #r#a54781##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200001# x500" />
+        <string name="demandSummary" value="#o8200001# x200" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -5823,7 +5823,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200002# #r#a54791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200002# x500" />
+        <string name="demandSummary" value="#o8200002# x200" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -5834,7 +5834,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200003# #r#a54801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200003# x500" />
+        <string name="demandSummary" value="#o8200003# x200" />
         <string name="parent" value="生命之证 IV（战士）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -5947,7 +5947,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8190003# #r#a55011##k\r\n#o8190004# #r#a55012##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190003# x200、#o8190004# x200" />
+        <string name="demandSummary" value="#o8190003# x100、#o8190004# x100" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -5969,7 +5969,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200005# #r#a55031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200005# x500" />
+        <string name="demandSummary" value="#o8200005# x200" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -5980,7 +5980,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200006# #r#a55041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200006# x500" />
+        <string name="demandSummary" value="#o8200006# x200" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -5991,7 +5991,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200007# #r#a55051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200007# x500" />
+        <string name="demandSummary" value="#o8200007# x200" />
         <string name="parent" value="生命之证 IV（法师）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -6104,7 +6104,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8190003# #r#a55261##k\r\n#o8190004# #r#a55262##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190003# x200、#o8190004# x200" />
+        <string name="demandSummary" value="#o8190003# x100、#o8190004# x100" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -6126,7 +6126,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140500# #r#a55281##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140500# x500" />
+        <string name="demandSummary" value="#o8140500# x200" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -6137,7 +6137,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140110# #r#a55291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140110# x500" />
+        <string name="demandSummary" value="#o8140110# x200" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -6148,7 +6148,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200000# #r#a55301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200000# x500" />
+        <string name="demandSummary" value="#o8200000# x200" />
         <string name="parent" value="生命之证 IV（弓箭手）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -6261,7 +6261,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8190003# #r#a55511##k\r\n#o8190004# #r#a55512##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190003# x200、#o8190004# x200" />
+        <string name="demandSummary" value="#o8190003# x100、#o8190004# x100" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -6283,7 +6283,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200008# #r#a55531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200008# x500" />
+        <string name="demandSummary" value="#o8200008# x200" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -6294,7 +6294,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200004# #r#a55541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200004# x500" />
+        <string name="demandSummary" value="#o8200004# x200" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -6305,7 +6305,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200009# #r#a55551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200009# x500" />
+        <string name="demandSummary" value="#o8200009# x200" />
         <string name="parent" value="生命之证 IV（飞侠）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -6418,7 +6418,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8190003# #r#a55761##k\r\n#o8190004# #r#a55762##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190003# x200、#o8190004# x200" />
+        <string name="demandSummary" value="#o8190003# x100、#o8190004# x100" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -6440,7 +6440,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150101# #r#a55781##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150101# x500" />
+        <string name="demandSummary" value="#o8150101# x200" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -6451,7 +6451,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150200# #r#a55791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150200# x500" />
+        <string name="demandSummary" value="#o8150200# x200" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -6462,7 +6462,7 @@
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150201# #r#a55801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150201# x500" />
+        <string name="demandSummary" value="#o8150201# x200" />
         <string name="parent" value="生命之证 IV（海盗）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -6575,7 +6575,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8140600# #r#a56011##k\r\n#o8141300# #r#a56012##k\r\n#o8142100# #r#a56013##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140600# x200、#o8141300# x200、#o8142100# x200" />
+        <string name="demandSummary" value="#o8140600# x100、#o8141300# x100、#o8142100# x100" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -6597,7 +6597,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200003# #r#a56031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200003# x500" />
+        <string name="demandSummary" value="#o8200003# x200" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -6608,7 +6608,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200004# #r#a56041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200004# x500" />
+        <string name="demandSummary" value="#o8200004# x200" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -6619,7 +6619,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200011# #r#a56051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200011# x500" />
+        <string name="demandSummary" value="#o8200011# x200" />
         <string name="parent" value="生命之证 V（战士）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -6732,7 +6732,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8140600# #r#a56261##k\r\n#o8141300# #r#a56262##k\r\n#o8142100# #r#a56263##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140600# x200、#o8141300# x200、#o8142100# x200" />
+        <string name="demandSummary" value="#o8140600# x100、#o8141300# x100、#o8142100# x100" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -6754,7 +6754,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200007# #r#a56281##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200007# x500" />
+        <string name="demandSummary" value="#o8200007# x200" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -6765,7 +6765,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200008# #r#a56291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200008# x500" />
+        <string name="demandSummary" value="#o8200008# x200" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -6776,7 +6776,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200010# #r#a56301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200010# x500" />
+        <string name="demandSummary" value="#o8200010# x200" />
         <string name="parent" value="生命之证 V（法师）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -6889,7 +6889,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140600# #r#a56511##k\r\n#o8141300# #r#a56512##k\r\n#o8142100# #r#a56513##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140600# x200、#o8141300# x200、#o8142100# x200" />
+        <string name="demandSummary" value="#o8140600# x100、#o8141300# x100、#o8142100# x100" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -6911,7 +6911,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200009# #r#a56531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200009# x500" />
+        <string name="demandSummary" value="#o8200009# x200" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -6922,7 +6922,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200012# #r#a56541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200012# x500" />
+        <string name="demandSummary" value="#o8200012# x200" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -6933,7 +6933,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200002# #r#a56551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200002# x500" />
+        <string name="demandSummary" value="#o8200002# x200" />
         <string name="parent" value="生命之证 V（弓箭手）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -7046,7 +7046,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8140600# #r#a56761##k\r\n#o8141300# #r#a56762##k\r\n#o8142100# #r#a56763##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140600# x200、#o8141300# x200、#o8142100# x200" />
+        <string name="demandSummary" value="#o8140600# x100、#o8141300# x100、#o8142100# x100" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -7068,7 +7068,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200000# #r#a56781##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200000# x500" />
+        <string name="demandSummary" value="#o8200000# x200" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -7079,7 +7079,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200001# #r#a56791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200001# x500" />
+        <string name="demandSummary" value="#o8200001# x200" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -7090,7 +7090,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200006# #r#a56801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200006# x500" />
+        <string name="demandSummary" value="#o8200006# x200" />
         <string name="parent" value="生命之证 V（飞侠）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -7203,7 +7203,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140600# #r#a57011##k\r\n#o8141300# #r#a57012##k\r\n#o8142100# #r#a57013##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140600# x200、#o8141300# x200、#o8142100# x200" />
+        <string name="demandSummary" value="#o8140600# x100、#o8141300# x100、#o8142100# x100" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -7225,7 +7225,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150100# #r#a57031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150100# x500" />
+        <string name="demandSummary" value="#o8150100# x200" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -7236,7 +7236,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150101# #r#a57041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150101# x500" />
+        <string name="demandSummary" value="#o8150101# x200" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -7247,7 +7247,7 @@
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140555# #r#a57051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140555# x500" />
+        <string name="demandSummary" value="#o8140555# x200" />
         <string name="parent" value="生命之证 V（海盗）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -7360,7 +7360,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200005# #r#a57261##k\r\n#o8200009# #r#a57262##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200005# x200、#o8200009# x200" />
+        <string name="demandSummary" value="#o8200005# x100、#o8200009# x100" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -7382,7 +7382,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200010# #r#a57281##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200010# x500" />
+        <string name="demandSummary" value="#o8200010# x200" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -7393,7 +7393,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200011# #r#a57291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200011# x500" />
+        <string name="demandSummary" value="#o8200011# x200" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -7404,7 +7404,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200012# #r#a57301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200012# x500" />
+        <string name="demandSummary" value="#o8200012# x200" />
         <string name="parent" value="生命之证 VI（战士）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -7517,7 +7517,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200005# #r#a57511##k\r\n#o8200009# #r#a57512##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200005# x200、#o8200009# x200" />
+        <string name="demandSummary" value="#o8200005# x100、#o8200009# x100" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -7539,7 +7539,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200002# #r#a57531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200002# x500" />
+        <string name="demandSummary" value="#o8200002# x200" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -7550,7 +7550,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200003# #r#a57541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200003# x500" />
+        <string name="demandSummary" value="#o8200003# x200" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -7561,7 +7561,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200004# #r#a57551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200004# x500" />
+        <string name="demandSummary" value="#o8200004# x200" />
         <string name="parent" value="生命之证 VI（法师）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -7674,7 +7674,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200005# #r#a57761##k\r\n#o8200009# #r#a57762##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200005# x200、#o8200009# x200" />
+        <string name="demandSummary" value="#o8200005# x100、#o8200009# x100" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -7696,7 +7696,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200006# #r#a57781##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200006# x500" />
+        <string name="demandSummary" value="#o8200006# x200" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -7707,7 +7707,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200007# #r#a57791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200007# x500" />
+        <string name="demandSummary" value="#o8200007# x200" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -7718,7 +7718,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200008# #r#a57801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200008# x500" />
+        <string name="demandSummary" value="#o8200008# x200" />
         <string name="parent" value="生命之证 VI（弓箭手）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -7831,7 +7831,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200005# #r#a58011##k\r\n#o8200009# #r#a58012##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200005# x200、#o8200009# x200" />
+        <string name="demandSummary" value="#o8200005# x100、#o8200009# x100" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -7848,23 +7848,23 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5803">
-        <string name="name" value="生命之证 VI：击杀守门人" />
+        <string name="name" value="生命之证 VI：击杀忘却的祭司" />
         <string name="0" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。 前往#p1052001#，接受下一项战斗试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8160000# #r#a58031##k" />
+        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200009# #r#a58031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8160000# x500" />
+        <string name="demandSummary" value="#o8200009# x200" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5804">
-        <string name="name" value="生命之证 VI：击杀死神" />
+        <string name="name" value="生命之证 VI：击杀忘却的神官" />
         <string name="0" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。 前往#p1052001#，接受下一项战斗试炼。" />
-        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8170000# #r#a58041##k" />
+        <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200010# #r#a58041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8170000# x500" />
+        <string name="demandSummary" value="#o8200010# x200" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -7875,7 +7875,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200000# #r#a58051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200000# x500" />
+        <string name="demandSummary" value="#o8200000# x200" />
         <string name="parent" value="生命之证 VI（飞侠）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -7988,7 +7988,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8200005# #r#a58261##k\r\n#o8200009# #r#a58262##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200005# x200、#o8200009# x200" />
+        <string name="demandSummary" value="#o8200005# x100、#o8200009# x100" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -8010,7 +8010,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150100# #r#a58281##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150100# x500" />
+        <string name="demandSummary" value="#o8150100# x200" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -8021,7 +8021,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150101# #r#a58291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150101# x500" />
+        <string name="demandSummary" value="#o8150101# x200" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -8032,7 +8032,7 @@
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140600# #r#a58301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140600# x500" />
+        <string name="demandSummary" value="#o8140600# x200" />
         <string name="parent" value="生命之证 VI（海盗）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -8145,7 +8145,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8190004# #r#a58511##k\r\n#o8200012# #r#a58512##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190004# x200、#o8200012# x200" />
+        <string name="demandSummary" value="#o8190004# x100、#o8200012# x100" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -8167,29 +8167,29 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8190003# #r#a58531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190003# x500" />
+        <string name="demandSummary" value="#o8190003# x200" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5854">
-        <string name="name" value="生命之证 VII：击杀守门人" />
+        <string name="name" value="生命之证 VII：击杀忘却的守护兵" />
         <string name="0" value="最后的印记只承认完成全部试炼的冒险家。 前往#p1022000#，接受下一项战斗试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8160000# #r#a58541##k" />
+        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200011# #r#a58541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8160000# x500" />
+        <string name="demandSummary" value="#o8200011# x200" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5855">
-        <string name="name" value="生命之证 VII：击杀死神" />
+        <string name="name" value="生命之证 VII：击杀忘却的守护队长" />
         <string name="0" value="最后的印记只承认完成全部试炼的冒险家。 前往#p1022000#，接受下一项战斗试炼。" />
-        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8170000# #r#a58551##k" />
+        <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200012# #r#a58551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8170000# x500" />
+        <string name="demandSummary" value="#o8200012# x200" />
         <string name="parent" value="生命之证 VII（战士）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -8302,7 +8302,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8190004# #r#a58761##k\r\n#o8200012# #r#a58762##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190004# x200、#o8200012# x200" />
+        <string name="demandSummary" value="#o8190004# x100、#o8200012# x100" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -8324,7 +8324,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200010# #r#a58781##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200010# x500" />
+        <string name="demandSummary" value="#o8200010# x200" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -8335,7 +8335,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200011# #r#a58791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200011# x500" />
+        <string name="demandSummary" value="#o8200011# x200" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -8346,7 +8346,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200007# #r#a58801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200007# x500" />
+        <string name="demandSummary" value="#o8200007# x200" />
         <string name="parent" value="生命之证 VII（法师）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -8459,7 +8459,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8190004# #r#a59011##k\r\n#o8200012# #r#a59012##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190004# x200、#o8200012# x200" />
+        <string name="demandSummary" value="#o8190004# x100、#o8200012# x100" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -8481,7 +8481,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140703# #r#a59031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140703# x500" />
+        <string name="demandSummary" value="#o8140703# x200" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -8492,7 +8492,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8141100# #r#a59041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8141100# x500" />
+        <string name="demandSummary" value="#o8141100# x200" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -8503,7 +8503,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200008# #r#a59051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200008# x500" />
+        <string name="demandSummary" value="#o8200008# x200" />
         <string name="parent" value="生命之证 VII（弓箭手）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -8616,7 +8616,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8190004# #r#a59261##k\r\n#o8200012# #r#a59262##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190004# x200、#o8200012# x200" />
+        <string name="demandSummary" value="#o8190004# x100、#o8200012# x100" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -8638,7 +8638,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200006# #r#a59281##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200006# x500" />
+        <string name="demandSummary" value="#o8200006# x200" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -8649,7 +8649,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200003# #r#a59291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200003# x500" />
+        <string name="demandSummary" value="#o8200003# x200" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -8660,7 +8660,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200004# #r#a59301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8200004# x500" />
+        <string name="demandSummary" value="#o8200004# x200" />
         <string name="parent" value="生命之证 VII（飞侠）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
@@ -8773,7 +8773,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8190004# #r#a59511##k\r\n#o8200012# #r#a59512##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8190004# x200、#o8200012# x200" />
+        <string name="demandSummary" value="#o8190004# x100、#o8200012# x100" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="2" />
         <int name="area" value="31" />
@@ -8795,7 +8795,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150100# #r#a59531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150100# x500" />
+        <string name="demandSummary" value="#o8150100# x200" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="4" />
         <int name="area" value="31" />
@@ -8806,7 +8806,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8150101# #r#a59541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8150101# x500" />
+        <string name="demandSummary" value="#o8150101# x200" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="5" />
         <int name="area" value="31" />
@@ -8817,7 +8817,7 @@
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140600# #r#a59551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
         <string name="summary" value="完成指定战斗试炼。" />
-        <string name="demandSummary" value="#o8140600# x500" />
+        <string name="demandSummary" value="#o8140600# x200" />
         <string name="parent" value="生命之证 VII（海盗）" />
         <int name="order" value="6" />
         <int name="area" value="31" />
