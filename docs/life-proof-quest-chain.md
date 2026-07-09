@@ -187,7 +187,7 @@ T1 拜访链的领取 NPC 由当前职业路线动态计算：第一个拜访任
 `正在进行` 和 `完成` 页签同时出现同一阶段的残留步骤。玩家数据修复以登录归一为主；SQL 只用于
 审计或明确的一次性预清理，不作为长期启动扫描。
 
-从旧 `infoex` 方案切回原生 `mob` 方案时，`V1.11.31__repair_life_proof_mob_progress.sql`
+从旧 `infoex` 方案切回原生 `mob` 方案时，`V1.11.41__repair_life_proof_mob_progress.sql`
 负责一次性迁移仍在进行中的主线 `KILL/BOSS` 任务进度：读取旧 `questprogress.progressid=0`
 和可能已经存在的 mob 进度，按新需求数量截断后写回对应 `mobId` 的 `progressid`，并移除旧虚拟
 进度行。该迁移由 Flyway 执行一次，不应在服务端启动流程里反复全服扫描。
