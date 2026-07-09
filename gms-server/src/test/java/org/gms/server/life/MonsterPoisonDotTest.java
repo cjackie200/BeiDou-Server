@@ -136,12 +136,35 @@ class MonsterPoisonDotTest {
     }
 
     @Test
-    void poisonEffectivenessBlocksImmuneStrongAndNeutralOnly() {
+    void poisonEffectivenessOnlyBlocksImmuneAndScalesResistanceAndWeaknessDamage() {
         assertTrue(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.IMMUNE));
-        assertTrue(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.STRONG));
-        assertTrue(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.NEUTRAL));
+        assertFalse(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.STRONG));
+        assertFalse(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.NEUTRAL));
         assertFalse(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.NORMAL));
         assertFalse(MonsterPoisonDot.blocksPoisonDot(ElementalEffectiveness.WEAK));
+        assertEquals(0, MonsterPoisonDot.applyPoisonEffectivenessRate(100, ElementalEffectiveness.IMMUNE));
+        assertEquals(50, MonsterPoisonDot.applyPoisonEffectivenessRate(100, ElementalEffectiveness.STRONG));
+        assertEquals(75, MonsterPoisonDot.applyPoisonEffectivenessRate(100, ElementalEffectiveness.NEUTRAL));
+        assertEquals(100, MonsterPoisonDot.applyPoisonEffectivenessRate(100, ElementalEffectiveness.NORMAL));
+        assertEquals(150, MonsterPoisonDot.applyPoisonEffectivenessRate(100, ElementalEffectiveness.WEAK));
+        assertEquals(1, MonsterPoisonDot.applyPoisonEffectivenessRate(1, ElementalEffectiveness.STRONG));
+        assertEquals(1, MonsterPoisonDot.applyPoisonEffectivenessRate(1, ElementalEffectiveness.NEUTRAL));
+        assertEquals(2, MonsterPoisonDot.applyPoisonEffectivenessRate(1, ElementalEffectiveness.WEAK));
+    }
+
+    @Test
+    void poisonResistanceAllowsPoisonElementDotButNotFireOnlyPoisonStatus() {
+        MonsterStatusEffect poisonBreath = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2101005, Element.POISON), null, false);
+        MonsterStatusEffect poisonComposition = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2111006, Element.NEUTRAL), null, false);
+        MonsterStatusEffect flameGear = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(12111005, Element.FIRE), null, false);
+
+        assertTrue(MonsterPoisonDot.allowsReducedPoisonDotOnResistance(poisonBreath, true));
+        assertTrue(MonsterPoisonDot.allowsReducedPoisonDotOnResistance(poisonComposition, true));
+        assertFalse(MonsterPoisonDot.allowsReducedPoisonDotOnResistance(flameGear, true));
+        assertFalse(MonsterPoisonDot.allowsReducedPoisonDotOnResistance(poisonBreath, false));
     }
 
     @Test
@@ -206,6 +229,30 @@ class MonsterPoisonDotTest {
         assertEquals(1, MonsterPoisonDot.damageForTick(1, 150, true));
         assertEquals(99, MonsterPoisonDot.damageForTick(100, 150, false));
         assertEquals(0, MonsterPoisonDot.damageForTick(1, 150, false));
+    }
+
+    @Test
+    void poisonDotUsesOneSecondTickWithoutDamageScaling() {
+        MonsterStatusEffect poisonBreath = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2101005, Element.POISON), null, false);
+        MonsterStatusEffect poisonMist = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2111003, Element.POISON), null, false);
+        MonsterStatusEffect poisonComposition = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(2111006, Element.NEUTRAL), null, false);
+        MonsterStatusEffect nightWalkerPoisonBomb = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(14111006, Element.POISON), null, false);
+        MonsterStatusEffect venom = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(4120005, Element.POISON), null, false);
+        MonsterStatusEffect flameGear = new MonsterStatusEffect(
+                Map.of(MonsterStatus.POISON, 1), skill(12111005, Element.FIRE), null, false);
+
+        assertEquals(1000, MonsterPoisonDot.tickDelay(poisonBreath, true));
+        assertEquals(1000, MonsterPoisonDot.tickDelay(poisonMist, true));
+        assertEquals(1000, MonsterPoisonDot.tickDelay(poisonComposition, true));
+        assertEquals(1000, MonsterPoisonDot.tickDelay(nightWalkerPoisonBomb, true));
+        assertEquals(1000, MonsterPoisonDot.tickDelay(venom, true));
+        assertEquals(1000, MonsterPoisonDot.tickDelay(flameGear, true));
+        assertEquals(1000, MonsterPoisonDot.tickDelay(poisonBreath, false));
     }
 
     @Test

@@ -1169,9 +1169,13 @@ public class Monster extends AbstractLoadedLife {
                 : ElementalEffectiveness.NORMAL;
         switch (skillEffectiveness) {
             case IMMUNE:
+                return false;
             case STRONG:
             case NEUTRAL:
-                return false;
+                if (!MonsterPoisonDot.allowsReducedPoisonDotOnResistance(status, playerPoisonDot)) {
+                    return false;
+                }
+                break;
             case NORMAL:
             case WEAK:
                 break;
@@ -1261,12 +1265,14 @@ public class Monster extends AbstractLoadedLife {
             if (playerPoisonDot) {
                 poisonDamage = MonsterPoisonDot.applyPoisonElementRate(poisonDamage,
                         MonsterPoisonDot.resolvePoisonElementRate(from, status.getSkill()));
+                poisonDamage = MonsterPoisonDot.applyPoisonEffectivenessRate(poisonDamage,
+                        getMonsterEffectiveness(Element.POISON));
             }
             status.setValue(MonsterStatus.POISON, poisonDamage);
             animationTime = broadcastStatusEffect(status);
 
             overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot);
-            overtimeDelay = 1000;
+            overtimeDelay = MonsterPoisonDot.tickDelay(status, playerPoisonDot);
         } else if (venom) {
             if (from.getJob() == Job.NIGHTLORD || from.getJob() == Job.SHADOWER || from.getJob().isA(Job.NIGHTWALKER3)) {
                 int poisonLevel, matk, jobid = from.getJob().getId();
@@ -1290,6 +1296,8 @@ public class Monster extends AbstractLoadedLife {
                 if (playerPoisonDot) {
                     poisonDamage = MonsterPoisonDot.applyPoisonElementRate(poisonDamage,
                             MonsterPoisonDot.resolvePoisonElementRate(from, status.getSkill()));
+                    poisonDamage = MonsterPoisonDot.applyPoisonEffectivenessRate(poisonDamage,
+                            getMonsterEffectiveness(Element.POISON));
                 } else {
                     poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
                 }
@@ -1298,7 +1306,7 @@ public class Monster extends AbstractLoadedLife {
                 animationTime = broadcastStatusEffect(status);
 
                 overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot);
-                overtimeDelay = 1000;
+                overtimeDelay = MonsterPoisonDot.tickDelay(status, playerPoisonDot);
             } else {
                 return false;
             }

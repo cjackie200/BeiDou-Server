@@ -16,6 +16,7 @@ import java.util.Map;
 final class MonsterPoisonDot {
     static final int MAX_DOT_DAMAGE = Short.MAX_VALUE;
     static final int DEFAULT_ELEMENT_RATE = 100;
+    static final int DEFAULT_TICK_DELAY_MS = 1000;
     static final short WEAPON_SLOT = -11;
 
     private MonsterPoisonDot() {
@@ -32,25 +33,18 @@ final class MonsterPoisonDot {
     }
 
     static boolean blocksPoisonDot(ElementalEffectiveness effectiveness) {
-        return effectiveness == ElementalEffectiveness.IMMUNE
-                || effectiveness == ElementalEffectiveness.STRONG
-                || effectiveness == ElementalEffectiveness.NEUTRAL;
+        return effectiveness == ElementalEffectiveness.IMMUNE;
+    }
+
+    static boolean allowsReducedPoisonDotOnResistance(MonsterStatusEffect status, boolean playerPoisonDot) {
+        return playerPoisonDot
+                && status != null
+                && status.getSkill() != null
+                && SkillElementResolver.hasPoisonDotElement(status.getSkill());
     }
 
     static boolean grantsFireWeakness(MonsterStatusEffect status, boolean playerPoisonDot) {
-        if (!playerPoisonDot || status == null || !status.getStati().containsKey(MonsterStatus.POISON)) {
-            return false;
-        }
-
-        Skill skill = status.getSkill();
-        if (skill == null) {
-            return false;
-        }
-
-        return switch (skill.getId()) {
-            case FPWizard.POISON_BREATH, FPMage.POISON_MIST, FPMage.ELEMENT_COMPOSITION -> true;
-            default -> false;
-        };
+        return isFirePoisonClassPoisonDot(status, playerPoisonDot);
     }
 
     static boolean rejectsBossStatus(Map<MonsterStatus, Integer> statis, boolean playerPoisonDot) {
@@ -87,6 +81,20 @@ final class MonsterPoisonDot {
 
         int effectiveRate = rate > 0 ? rate : DEFAULT_ELEMENT_RATE;
         return capDotDamage((long) Math.ceil(baseDamage * (effectiveRate / 100.0)));
+    }
+
+    static int applyPoisonEffectivenessRate(int baseDamage, ElementalEffectiveness effectiveness) {
+        if (baseDamage <= 0) {
+            return 0;
+        }
+
+        return switch (effectiveness) {
+            case IMMUNE -> 0;
+            case STRONG -> capDotDamage((long) Math.ceil(baseDamage * 0.5));
+            case NEUTRAL -> capDotDamage((long) Math.ceil(baseDamage * 0.75));
+            case NORMAL -> baseDamage;
+            case WEAK -> capDotDamage((long) Math.ceil(baseDamage * 1.5));
+        };
     }
 
     static int resolvePoisonElementRate(Character from, Skill skill) {
@@ -127,6 +135,26 @@ final class MonsterPoisonDot {
             return 0;
         }
         return Math.min(dealDamage, currentHp - 1);
+    }
+
+    static int tickDelay(MonsterStatusEffect status, boolean playerPoisonDot) {
+        return DEFAULT_TICK_DELAY_MS;
+    }
+
+    private static boolean isFirePoisonClassPoisonDot(MonsterStatusEffect status, boolean playerPoisonDot) {
+        if (!playerPoisonDot || status == null || !status.getStati().containsKey(MonsterStatus.POISON)) {
+            return false;
+        }
+
+        Skill skill = status.getSkill();
+        if (skill == null) {
+            return false;
+        }
+
+        return switch (skill.getId()) {
+            case FPWizard.POISON_BREATH, FPMage.POISON_MIST, FPMage.ELEMENT_COMPOSITION -> true;
+            default -> false;
+        };
     }
 
     private static int capDotDamage(long damage) {
