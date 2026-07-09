@@ -53041,6 +53041,30 @@
     <int name="nextQuest" value="29981"/>
   </imgdir>
 </imgdir>
+  <imgdir name="30005">
+  <imgdir name="0"/>
+  <imgdir name="1">
+    <int name="money" value="10000000"/>
+    <imgdir name="item">
+      <imgdir name="0">
+        <int name="id" value="2340000"/>
+        <int name="count" value="10"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
+  <imgdir name="4109">
+  <imgdir name="0"/>
+  <imgdir name="1">
+    <int name="exp" value="3500"/>
+    <imgdir name="item">
+      <imgdir name="0">
+        <int name="id" value="4000194"/>
+        <int name="count" value="-50"/>
+      </imgdir>
+    </imgdir>
+  </imgdir>
+</imgdir>
   <imgdir name="29981">
   <imgdir name="0"/>
   <imgdir name="1">

@@ -12,6 +12,7 @@ public final class PetItemIgnore {
     public static final int MESO = Integer.MAX_VALUE;
     public static final int HP_MP_CONSUMABLES = Integer.MAX_VALUE - 1;
     public static final int SCROLLS_EXCEPT_WHITE = Integer.MAX_VALUE - 2;
+    public static final int MAKER_STIMULANTS = Integer.MAX_VALUE - 3;
     @Deprecated
     public static final int SCROLLS_10_60 = SCROLLS_EXCEPT_WHITE;
     private static final int EQUIP_BELOW_LEVEL_BASE = Integer.MAX_VALUE - 1000;
@@ -34,12 +35,16 @@ public final class PetItemIgnore {
         if (ignoredItems.contains(SCROLLS_EXCEPT_WHITE) && isScrollExceptWhiteScroll(itemId)) {
             return true;
         }
+        if (ignoredItems.contains(MAKER_STIMULANTS) && isMakerStimulator(itemId)) {
+            return true;
+        }
         Integer equipLevelRule = getEquipBelowLevelRule(ignoredItems);
         return equipLevelRule != null && isEquipBelowLevel(itemId, equipLevelRule);
     }
 
     public static boolean isSpecialRule(int itemId) {
-        return itemId == MESO || itemId == HP_MP_CONSUMABLES || itemId == SCROLLS_EXCEPT_WHITE || isEquipBelowLevelRule(itemId);
+        return itemId == MESO || itemId == HP_MP_CONSUMABLES || itemId == SCROLLS_EXCEPT_WHITE
+                || itemId == MAKER_STIMULANTS || isEquipBelowLevelRule(itemId);
     }
 
     public static boolean isEquipBelowLevelRule(int itemId) {
@@ -89,6 +94,10 @@ public final class PetItemIgnore {
             return false;
         }
         return itemId / 10000 == 204;
+    }
+
+    private static boolean isMakerStimulator(int itemId) {
+        return itemId >= 4130000 && itemId <= 4130022;
     }
 
     private static boolean isEquipBelowLevel(int itemId, int level) {

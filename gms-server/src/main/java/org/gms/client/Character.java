@@ -255,8 +255,8 @@ public class Character extends AbstractCharacterObject {
     private long lastExpression = 0;
     @Setter
     private long jailExpiration = -1;
-    private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
-    private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
+    private transient int localstr, localdex, localluk, localint_, localmagic, localwatk, localspeed, localjump;
+    private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, equipspeed, equipjump, localchairhp, localchairmp;
     private int localchairrate;
     @Getter
     private boolean hidden;
@@ -7061,8 +7061,8 @@ public class Character extends AbstractCharacterObject {
             equipluk = 0;
             equipmagic = 0;
             equipwatk = 0;
-            //equipspeed = 0;
-            //equipjump = 0;
+            equipspeed = 0;
+            equipjump = 0;
 
             for (Item item : getInventory(InventoryType.EQUIPPED)) {
                 Equip equip = (Equip) item;
@@ -7074,8 +7074,8 @@ public class Character extends AbstractCharacterObject {
                 equipluk += equip.getLuk();
                 equipmagic += equip.getMatk() + equip.getInt();
                 equipwatk += equip.getWatk();
-                //equipspeed += equip.getSpeed();
-                //equipjump += equip.getJump();
+                equipspeed += equip.getSpeed();
+                equipjump += equip.getJump();
             }
 
             equipchanged = false;
@@ -7089,6 +7089,8 @@ public class Character extends AbstractCharacterObject {
         localluk += equipluk;
         localmagic += equipmagic;
         localwatk += equipwatk;
+        localspeed += equipspeed;
+        localjump += equipjump;
     }
 
     public void reapplyLocalStats() {
@@ -7104,6 +7106,8 @@ public class Character extends AbstractCharacterObject {
             localluk = getLuk();
             localmagic = localint_;
             localwatk = 0;
+            localspeed = 100;
+            localjump = 100;
             localchairrate = -1;
 
             recalcEquipStats();
@@ -7164,7 +7168,6 @@ public class Character extends AbstractCharacterObject {
                 localmagic += matkbuff;
             }
 
-            /*
             Integer speedbuff = getBuffedValue(BuffStat.SPEED);
             if (speedbuff != null) {
                 localspeed += speedbuff.intValue();
@@ -7173,7 +7176,6 @@ public class Character extends AbstractCharacterObject {
             if (jumpbuff != null) {
                 localjump += jumpbuff.intValue();
             }
-            */
 
             int blessing = getSkillLevel(10000000 * getJobType() + 12);
             if (blessing > 0) {

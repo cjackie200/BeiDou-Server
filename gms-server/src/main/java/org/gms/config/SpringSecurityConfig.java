@@ -69,6 +69,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/client-update/**").permitAll()
                         // 允许访问前端web
                         .requestMatchers("/", "/error", "/static/**", "/index.html", "/assets/**").permitAll()
                         .anyRequest().authenticated())

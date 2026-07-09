@@ -31612,6 +31612,23 @@
             </imgdir>
         </imgdir>
     </imgdir>
+    <imgdir name="30005">
+        <imgdir name="0">
+            <string name="0" value="冒险岛世界正被黑暗力量侵蚀，请帮忙消灭被污染的#o4230101#。"/>
+            <imgdir name="yes">
+                <string name="0" value="请消灭#r#o4230101# 200只#k。完成后可以直接领取奖励。"/>
+            </imgdir>
+            <imgdir name="no">
+                <string name="0" value="如果改变主意，请再来帮助我们。"/>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <string name="0" value="你已经消灭了#r#o4230101# 200只#k，冒险岛世界安全了一些。"/>
+            <imgdir name="yes">
+                <string name="0" value="这是给你的谢礼。"/>
+            </imgdir>
+        </imgdir>
+    </imgdir>
     <imgdir name="4109">
         <imgdir name="1">
             <string name="0" value="感谢你的协助。希望你可以尽力完成秘密任务。"/>
