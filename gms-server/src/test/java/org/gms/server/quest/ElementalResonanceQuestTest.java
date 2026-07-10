@@ -8,6 +8,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
+import org.gms.server.quest.hook.InteractionHookAction;
 import org.gms.server.quest.hook.InteractionHookProgressEntry;
 import org.gms.server.maps.MapItem;
 import org.gms.service.ConfigService;
@@ -240,16 +241,92 @@ class ElementalResonanceQuestTest {
     }
 
     @Test
-    void completionValidationRejectsEquippedPreviousStaff() {
-        Character chr = newMage(100);
-        addItem(chr, InventoryType.EQUIPPED, 1372035, 1);
-        putTierTwoReadyForReward(chr);
-        putQuest(chr, 29992, QuestStatus.Status.STARTED, "001");
+    void onlyRewardCompletionRequiresPreviousStaffInBagAcrossUpgradeStages() {
+        int[] firstBossQuestIds = {29954, 29958, 29962, 29966};
+        int[] rewardQuestIds = {29992, 29993, 29994, 29995};
+        int[] previousStaffIds = {1372035, 1382045, 1372039, 1382049};
 
-        var validation = ElementalResonanceQuest.validateCompletion(chr, 29992, 0);
+        for (int stageIndex = 2; stageIndex <= 5; stageIndex++) {
+            ElementalResonanceQuest.Stage stage = ElementalResonanceQuest.getStage(stageIndex);
+            int firstBossQuestId = firstBossQuestIds[stageIndex - 2];
+            int rewardQuestId = rewardQuestIds[stageIndex - 2];
+            int previousStaffId = previousStaffIds[stageIndex - 2];
 
-        assertFalse(validation.isOk());
-        assertTrue(validation.getMessage().contains("卸下"));
+            Character equipped = newMage(stage.getRequiredLevel());
+            addItem(equipped, InventoryType.EQUIPPED, previousStaffId, 1);
+            putStageReadyForReward(equipped, stage, firstBossQuestId);
+            putQuest(equipped, rewardQuestId, QuestStatus.Status.STARTED, "000");
+
+            var equippedValidation = ElementalResonanceQuest.validateCompletion(equipped, rewardQuestId, 0);
+            assertFalse(equippedValidation.isOk(),
+                    "equipped staff must block reward completion " + rewardQuestId);
+            assertTrue(equippedValidation.getMessage().contains("卸下"), equippedValidation.getMessage());
+
+            Character inBag = newMage(stage.getRequiredLevel());
+            addItem(inBag, previousStaffId, 1);
+            putStageReadyForReward(inBag, stage, firstBossQuestId);
+            putQuest(inBag, rewardQuestId, QuestStatus.Status.STARTED, "001");
+
+            assertTrue(ElementalResonanceQuest.validateCompletion(inBag, rewardQuestId, 0).isOk(),
+                    "staff in equip inventory must allow reward completion " + rewardQuestId);
+        }
+    }
+
+    @Test
+    void equippedPreviousStaffAllowsEveryBossAndMaterialTurnInAcrossUpgradeStages() {
+        int[] firstBossQuestIds = {29954, 29958, 29962, 29966};
+        int[] previousStaffIds = {1372035, 1382045, 1372039, 1382049};
+
+        for (int stageIndex = 2; stageIndex <= 5; stageIndex++) {
+            ElementalResonanceQuest.Stage stage = ElementalResonanceQuest.getStage(stageIndex);
+            int firstBossQuestId = firstBossQuestIds[stageIndex - 2];
+            int previousStaffId = previousStaffIds[stageIndex - 2];
+            List<Integer> bossTokenIds = stage.getBossTokenIds();
+
+            for (int bossIndex = 0; bossIndex < bossTokenIds.size(); bossIndex++) {
+                Character chr = newMage(stage.getRequiredLevel());
+                addItem(chr, InventoryType.EQUIPPED, previousStaffId, 1);
+                for (int completedIndex = 0; completedIndex < bossIndex; completedIndex++) {
+                    putQuest(chr, firstBossQuestId + completedIndex, QuestStatus.Status.COMPLETED, null);
+                }
+
+                int questId = firstBossQuestId + bossIndex;
+                assertTrue(ElementalResonanceQuest.startStage(chr, questId).success(),
+                        "equipped staff must allow starting boss step " + questId);
+                addItem(chr, bossTokenIds.get(bossIndex), 1);
+                ElementalResonanceQuest.syncQuestStateSilently(chr);
+
+                assertStartedProgress(chr, questId, "001");
+                assertTrue(ElementalResonanceQuest.validateStepAdvance(chr, questId).isOk(),
+                        "equipped staff must allow turning in boss step " + questId);
+                assertEquals(InteractionHookAction.QUERY_COMPLETE,
+                        ElementalResonanceQuest.resolveCurrentAction(chr, questId));
+                assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, questId).success(),
+                        "equipped staff must allow completing boss step " + questId);
+            }
+
+            Character chr = newMage(stage.getRequiredLevel());
+            addItem(chr, InventoryType.EQUIPPED, previousStaffId, 1);
+            for (int bossIndex = 0; bossIndex < bossTokenIds.size(); bossIndex++) {
+                putQuest(chr, firstBossQuestId + bossIndex, QuestStatus.Status.COMPLETED, null);
+            }
+            int materialQuestId = firstBossQuestId + bossTokenIds.size();
+            assertTrue(ElementalResonanceQuest.startStage(chr, materialQuestId).success(),
+                    "equipped staff must allow starting material step " + materialQuestId);
+            for (ElementalResonanceQuest.Requirement requirement : stage.getBaseRequirements()) {
+                addItem(chr, requirement.itemId(), requirement.count());
+            }
+            chr.setMeso(stage.getBaseMeso());
+            ElementalResonanceQuest.syncQuestStateSilently(chr);
+
+            assertStartedProgress(chr, materialQuestId, "001");
+            assertTrue(ElementalResonanceQuest.validateStepAdvance(chr, materialQuestId).isOk(),
+                    "equipped staff must allow turning in material step " + materialQuestId);
+            assertEquals(InteractionHookAction.QUERY_COMPLETE,
+                    ElementalResonanceQuest.resolveCurrentAction(chr, materialQuestId));
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, materialQuestId).success(),
+                    "equipped staff must allow completing material step " + materialQuestId);
+        }
     }
 
     @Test
@@ -558,10 +635,14 @@ class ElementalResonanceQuestTest {
     }
 
     private static void putTierTwoReadyForReward(Character chr) {
-        putQuest(chr, TIER_TWO_FIRST_BOSS_STEP, QuestStatus.Status.COMPLETED, null);
-        putQuest(chr, TIER_TWO_SECOND_BOSS_STEP, QuestStatus.Status.COMPLETED, null);
-        putQuest(chr, TIER_TWO_THIRD_BOSS_STEP, QuestStatus.Status.COMPLETED, null);
-        putQuest(chr, TIER_TWO_MATERIAL_STEP, QuestStatus.Status.COMPLETED, null);
+        putStageReadyForReward(chr, ElementalResonanceQuest.getStage(2), TIER_TWO_FIRST_BOSS_STEP);
+    }
+
+    private static void putStageReadyForReward(Character chr, ElementalResonanceQuest.Stage stage,
+                                               int firstBossQuestId) {
+        for (int stepIndex = 0; stepIndex <= stage.getBossTokenIds().size(); stepIndex++) {
+            putQuest(chr, firstBossQuestId + stepIndex, QuestStatus.Status.COMPLETED, null);
+        }
     }
 
     private static void addTierTwoBaseMaterials(Character chr) {

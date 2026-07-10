@@ -952,13 +952,6 @@ public final class ElementalResonanceQuest {
         if (current == null || current.stage() != stage.index - 1) {
             return StartValidation.fail("当前元素杖阶段不匹配。需要上一阶段任意元素杖。");
         }
-        if (current.equipped() > 0) {
-            return StartValidation.fail("请先卸下 #b#i" + current.itemId() + "##t" + current.itemId()
-                    + "##k，并把它放在装备栏背包内。");
-        }
-        if (current.inBag() <= 0) {
-            return StartValidation.fail("请把上一阶段元素杖放在装备栏背包内后再来升级。");
-        }
         return StartValidation.success();
     }
 
