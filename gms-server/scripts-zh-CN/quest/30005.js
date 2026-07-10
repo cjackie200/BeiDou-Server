@@ -25,6 +25,7 @@ var Quest = Java.type("org.gms.server.quest.Quest");
 
 var status = -1; 
 var text;
+var levelUpExp = 0;
 //Start
 function start(mode, type, selection)
 {
@@ -67,6 +68,7 @@ function start(mode, type, selection)
 			} else
 			{
 			    qm.forceStartQuest();
+				qm.getPlayer().flushDelayedUpdateQuests();
 				qm.warp(100040103);
                 qm.dispose();				
 			}
@@ -87,18 +89,22 @@ function end(mode, type, selection)
 				return;
 			}
 
-			var levelUpExp = ExpTable.getExpNeededForLevel(qm.getLevel());
+			levelUpExp = ExpTable.getExpNeededForLevel(qm.getLevel());
+			qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！\r\n\r\n获得经验值：#b" + levelUpExp + "#k（直接提升1级）\r\n获得金币：#b10000000#k\r\n获得道具：#b#i2340000# #t2340000# x10#k");
+	    }
+		else if (status == 1)
+		{
 			var quest = Quest.getInstance(qm.getQuest());
 			quest.complete(qm.getPlayer(), qm.getNpc());
 			if (qm.getQuestStatus(qm.getQuest()) != 2) {
+				qm.sendOk("奖励领取失败，请确认背包空间和金币上限后重试。");
 				qm.dispose();
 				return;
 			}
 
 			qm.getPlayer().gainExp(levelUpExp, true, true);
-            qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！\r\n\r\n获得经验值：#b" + levelUpExp + "#k（直接提升1级）\r\n获得金币：#b10000000#k\r\n获得道具：#b#i2340000# #t2340000# x10#k");
 			qm.dispose();
-	    }
+		}
 		else
 		{
 			//最后一层对话完继续循环至此，退出结束

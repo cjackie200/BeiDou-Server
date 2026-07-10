@@ -76571,13 +76571,17 @@
         </imgdir>
     </imgdir>
   <imgdir name="30005">
-  <imgdir name="0">
-    <int name="lvmin" value="40"/>
-    <int name="interval" value="1440"/>
-    <string name="startscript" value="30005"/>
-  </imgdir>
-  <imgdir name="1">
-    <string name="endscript" value="30005"/>
+    <imgdir name="0">
+      <int name="npc" value="9900000"/>
+      <int name="lvmin" value="40"/>
+      <int name="lvmax" value="250"/>
+      <int name="interval" value="1440"/>
+      <int name="normalAutoStart" value="1"/>
+      <string name="startscript" value="q30005s"/>
+    </imgdir>
+    <imgdir name="1">
+      <int name="npc" value="9900000"/>
+      <string name="endscript" value="q30005e"/>
     <imgdir name="mob">
       <imgdir name="0">
         <int name="id" value="4230101"/>

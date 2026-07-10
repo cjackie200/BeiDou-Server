@@ -1,7 +1,6 @@
 // 事件实例化变量
 var isPq = true; // 是否为PQ（Party Quest）类型事件。
 var minPlayers = 1, maxPlayers = 6; // 该事件实例允许的队伍成员数量范围。
-var minLevel = 25, maxLevel = 90;     // 合格队伍成员的等级范围。
 var entryMap = 701010323;               // 事件启动时玩家进入的初始地图。
 var exitMap = 701010320;                // 玩家未能完成事件时被传送至此地图。
 var recruitMap = 701010322;             // 玩家必须在此地图上才能开始此事件。
@@ -24,9 +23,6 @@ var BossDropChance = [0.4];                // 掉率
 
 const GameConfig = Java.type('org.gms.config.GameConfig');
 minPlayers = GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
-if(GameConfig.getServerBoolean("use_enable_party_level_limit_lift")) {  //如果解除远征队等级限制，则最低1级，最高999级。
-    minLevel = 1 , maxLevel = 999;
-}
 /**
  * 初始化事件，设置事件要求。
  */
@@ -53,13 +49,6 @@ function setEventRequirements() {
         reqStr += minPlayers + " ~ " + maxPlayers;
     } else {
         reqStr += minPlayers;
-    }
-
-    reqStr += "\r\n   等级要求: ";
-    if (maxLevel - minLevel >= 1) {
-        reqStr += minLevel + " ~ " + maxLevel;
-    } else {
-        reqStr += minLevel;
     }
 
     reqStr += "\r\n   时间限制: ";
@@ -108,7 +97,7 @@ function getEligibleParty(party) {
         for (var i = 0; i < party.size(); i++) {
             var ch = partyList[i];
 
-            if (ch.getMapId() == recruitMap && ch.getLevel() >= minLevel && ch.getLevel() <= maxLevel) {
+            if (ch.getMapId() == recruitMap) {
                 if (ch.isLeader()) {
                     hasLeader = true;
                 }

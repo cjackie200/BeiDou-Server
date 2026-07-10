@@ -24,6 +24,7 @@ function start(mode, type, selection) {
 
     if (status == 1) {
         qm.forceStartQuest();
+        qm.getPlayer().flushDelayedUpdateQuests();
         qm.sendOk("去击败扎昆吧。完成后可直接通过灯泡领取突破奖励。");
     }
     qm.dispose();

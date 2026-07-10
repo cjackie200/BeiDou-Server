@@ -3,6 +3,10 @@
 本文是 BeiDou 服务端补丁的标准流程，供后续 agent 直接复用。补丁工具源码在
 `tools/server-patch`，打包产物仍输出到 `deploy/`，不要提交产物。
 
+本文和打包工具中的开发机路径全部以仓库根目录为基准。仓库可以位于任意磁盘和目录，
+不依赖任何开发者电脑上的绝对工程路径。服务端安装目录及 IIS 静态目录属于部署配置，
+不受这条开发机产物路径规则影响。
+
 ## 适用范围
 
 服务端补丁用于同时更新这些内容：
@@ -48,6 +52,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/server-patch/Build-Bei
   -Dotnet <dotnet.exe>
 ```
 
+上面的相对命令从仓库根目录执行。脚本内部会根据自身所在的
+`tools/server-patch/Build-BeiDouServerPatch.ps1` 自动定位仓库根目录；从其他目录调用时，
+只需正确指向这个脚本文件，后续打包过程不依赖当前 PowerShell 工作目录。
+
 示例：
 
 ```powershell
@@ -63,6 +71,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/server-patch/Build-Bei
 
 - `deploy/BeiDou-Server-<FROM>-to-<TO>-patch.exe`
 - `deploy/BeiDou-Server-<FROM>-to-<TO>-patch.zip`
+
+以上都是相对于仓库根目录的路径。`-OutputDir` 也只接受仓库内相对路径，例如
+`deploy` 或 `artifacts/server-patch`；绝对路径及会通过 `..` 跳出仓库的路径会被拒绝。
+工具最终打印的 `Exe` 和 `Zip` 字段同样使用仓库相对路径，便于其他电脑复用日志和命令。
 
 zip 内只能有同名 exe，不能放备用脚本、payload 目录或散文件。
 

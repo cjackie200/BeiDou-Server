@@ -8,7 +8,6 @@ const isRepeat = true;	//true = 允许完成任务后重复进入。；false = �
 const mapID = 701010324;        //可怕的山丘
 const EventName = 'WuGongPQ';   //事件名称
 const EventLevel = 1;           //怪物HP倍率，提高此值可以成倍提高怪物血量。
-const LevelMin = 25 , LevelMax = 90;        //等级范围限制
 var em = null;     //事件实例
 
 function start() {
@@ -35,13 +34,7 @@ function levelEnter() {
     let msg;
     //4103和8512均为寻找赤珠的任务，似乎是不同版本的任务。
     if(!isRepeat && (cm.isQuestCompleted(4103) || cm.isQuestCompleted(8512))) {//完成了赤珠任务将传送到一个地图
-        let level = cm.getLevel();
-        if(level >= LevelMin && level <= LevelMax) {
-            cm.warp(mapID);
-        } else {
-            msg = '你目前无法执行这个#b秘密任务#k，因你不符合要求：\r\n\r\n';
-            msg += `等级要求：${LevelMin} ~ ${LevelMax}`;
-        }
+        cm.warp(mapID);
     } else {
         var eli = em.getEligibleParty(cm.getParty());
         if (eli.size() > 0) {
