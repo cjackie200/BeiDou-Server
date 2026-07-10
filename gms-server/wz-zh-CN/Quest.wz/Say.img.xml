@@ -31587,6 +31587,23 @@
             </imgdir>
         </imgdir>
     </imgdir>
+    <imgdir name="30006">
+        <imgdir name="0">
+            <string name="0" value="你已经可以进行突破试炼。击败扎昆后，可解锁本职业可突破技能的新上限。"/>
+            <imgdir name="yes">
+                <string name="0" value="请击败#r#o8800002##k 1次。完成后可直接领取突破奖励。"/>
+            </imgdir>
+            <imgdir name="no">
+                <string name="0" value="准备好后再来接受突破试炼。"/>
+            </imgdir>
+        </imgdir>
+        <imgdir name="1">
+            <string name="0" value="你已经击败扎昆，完成突破试炼。"/>
+            <imgdir name="yes">
+                <string name="0" value="这是属于你的突破奖励。"/>
+            </imgdir>
+        </imgdir>
+    </imgdir>
     <imgdir name="4109">
         <imgdir name="1">
             <string name="0" value="感谢你的协助。希望你可以尽力完成秘密任务。"/>

@@ -3426,6 +3426,16 @@
         <int name="autoPreComplete" value="1"/>
         <string name="type" value="[北斗冒险岛]"/>
     </imgdir>
+    <imgdir name="30006">
+        <string name="name" value="突破任务"/>
+        <string name="0" value="150级后，可以挑战扎昆来解锁本职业1-4转可突破技能的上限。"/>
+        <string name="1" value="击败#b#o8800002##k 1次。完成后会解锁本职业可突破技能上限，并赠送对应突破技能点。"/>
+        <string name="2" value="已经完成突破任务，可将本职业可突破技能提升到新的最高等级。"/>
+        <int name="area" value="30"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoPreComplete" value="1"/>
+        <string name="type" value="[北斗冒险岛]"/>
+    </imgdir>
     <imgdir name="5100">
         <string name="name" value="生命之证 I：拜访赫丽娜" />
         <string name="0" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。 前往#p1012100#，请对方留下确认。" />

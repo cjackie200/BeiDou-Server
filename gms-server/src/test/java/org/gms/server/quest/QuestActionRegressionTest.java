@@ -159,10 +159,18 @@ class QuestActionRegressionTest {
     @Test
     void disabledResourceQuestsFailClosedOnOldClientRequests() {
         Character chr = newCharacter(Job.BEGINNER, 200, 9000040);
-        for (int questId : List.of(4490, 8510, 8540, 29000, 30006)) {
+        for (int questId : List.of(4490, 8510, 8540, 29000)) {
             Quest.clearCache(questId);
             assertFalse(Quest.getInstance(questId).canStart(chr, 9000040), "quest " + questId);
         }
+    }
+
+    @Test
+    void completedBreakthroughResourceChainIsNotBlockedAsDisabled() {
+        Character chr = newCharacter(Job.HERO, 150, 9900000);
+        Quest.clearCache(30006);
+
+        assertTrue(Quest.getInstance(30006).canStart(chr, 9900000));
     }
 
     @Test

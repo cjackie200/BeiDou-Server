@@ -29,7 +29,7 @@ class QuestWzResourceTest {
             List.of(30002, 30003));
     private static final List<Integer> DISABLED_IDS = concat(
             range(8510, 8515),
-            List.of(4490, 8540, 8541, 29000, 30006));
+            List.of(4490, 8540, 8541, 29000));
 
     @Test
     void restoredQuestNodesAreCompleteAndDisabledGroupsAreAbsent() throws Exception {

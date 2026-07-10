@@ -32,6 +32,7 @@ import org.gms.server.hpchallenge.LifeProofQuest;
 import org.gms.server.life.NPC;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.Quest;
+import org.gms.server.quest.SkillBreakthroughService;
 import org.gms.server.quest.hook.InteractionHookManager;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
@@ -102,7 +103,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
     }
 
     static boolean isRemoteScriptQuest(short questId) {
-        return questId == DARK_WUKONG_HUNT_QUEST;
+        return questId == DARK_WUKONG_HUNT_QUEST || SkillBreakthroughService.isQuestId(questId);
     }
 
     private static boolean canUseQuestNpc(Client c, InPacket p, Character player, Quest quest, short questId, int npcId) {

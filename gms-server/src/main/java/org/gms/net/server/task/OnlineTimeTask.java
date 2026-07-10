@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class OnlineTimeTask implements Runnable {
     private static final int RESET_HOUR = 6;
-    private static final int UPDATE_INTERVAL_SECONDS = 5;
     private final AtomicReference<LocalDate> lastUpdated = new AtomicReference<>(getRewardCycleDate());
     private final AtomicBoolean running = new AtomicBoolean(false);
 
@@ -50,13 +49,8 @@ public class OnlineTimeTask implements Runnable {
         }
         try {
             int previousOnlineTime = chr.getCurrentOnlineTime();
-            int onlineTime = previousOnlineTime == -1
-                    ? getInitialOnlineTime(chr)
-                    : previousOnlineTime + UPDATE_INTERVAL_SECONDS;
-            if (isNextDay || onlineTime < 0) {
-                onlineTime = 0;
-            }
-            chr.setCurrentOnlineTime(onlineTime);
+            int initialOnlineTime = previousOnlineTime == -1 ? getInitialOnlineTime(chr) : previousOnlineTime;
+            int onlineTime = chr.updateCurrentOnlineTime(initialOnlineTime, isNextDay, System.currentTimeMillis());
             if (shouldPersistOnlineTime(previousOnlineTime, onlineTime, isNextDay)) {
                 chr.updateOnlineTime();
             }
