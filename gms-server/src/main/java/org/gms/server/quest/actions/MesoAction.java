@@ -52,15 +52,31 @@ public class MesoAction extends AbstractQuestAction {
         runAction(chr, mesos);
     }
 
-    public static void runAction(Character chr, int gain) {
-        if (gain < 0) {
-            chr.gainMeso(gain, true, false, true);
-        } else {
-            if (!GameConfig.getServerBoolean("use_quest_rate")) {
-                chr.gainMeso(NumberTool.floatToInt(gain * chr.getMesoRate()), true, false, true);
-            } else {
-                chr.gainMeso(NumberTool.floatToInt(gain * chr.getQuestMesoRate()), true, false, true);
-            }
+    @Override
+    public boolean check(Character chr, Integer extSelection) {
+        long nextMeso = (long) chr.getMeso() + effectiveGain(chr, mesos);
+        if (nextMeso >= 0 && nextMeso <= Integer.MAX_VALUE) {
+            return true;
         }
+        if (nextMeso < 0) {
+            chr.dropMessage(5, "You don't have enough mesos to start or complete this quest.");
+        } else {
+            chr.dropMessage(5, "You must spend some mesos before receiving this quest reward.");
+        }
+        return false;
     }
-} 
+
+    public static void runAction(Character chr, int gain) {
+        chr.gainMeso(effectiveGain(chr, gain), true, false, true);
+    }
+
+    private static int effectiveGain(Character chr, int gain) {
+        if (gain <= 0) {
+            return gain;
+        }
+        float rate = GameConfig.getServerBoolean("use_quest_rate")
+                ? chr.getQuestMesoRate()
+                : chr.getMesoRate();
+        return NumberTool.floatToInt(gain * rate);
+    }
+}

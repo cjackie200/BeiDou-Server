@@ -133,6 +133,15 @@ public final class MonsterBook {
         }
     }
 
+    public int getCardLevel(int cardId) {
+        lock.lock();
+        try {
+            return cards.getOrDefault(cardId, 0);
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public int fillCompletedCardSetsForTesting(Client c, int requiredSets) {
         if (requiredSets <= 0) {
             return 0;

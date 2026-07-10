@@ -35,12 +35,11 @@ import java.util.List;
  */
 public class InfoExRequirement extends AbstractQuestRequirement {
     private final List<String> infoExpected = new ArrayList<>();
-    private final int questID;
+    private final List<Integer> comparisons = new ArrayList<>();
 
 
     public InfoExRequirement(Quest quest, Data data) {
         super(QuestRequirementType.INFO_EX);
-        questID = quest.getId();
         processData(data);
     }
 
@@ -49,7 +48,10 @@ public class InfoExRequirement extends AbstractQuestRequirement {
         // Because we have to...
         for (Data infoEx : data.getChildren()) {
             Data value = infoEx.getChildByPath("value");
-            infoExpected.add(DataTool.getString(value, ""));
+            infoExpected.add(value == null
+                    ? DataTool.getString(infoEx, "")
+                    : DataTool.getString(value, ""));
+            comparisons.add(value == null ? 0 : DataTool.getInt("cond", infoEx, 0));
         }
     }
 
@@ -61,5 +63,28 @@ public class InfoExRequirement extends AbstractQuestRequirement {
 
     public List<String> getInfo() {
         return infoExpected;
+    }
+
+    public boolean matches(int index, String progress) {
+        if (index < 0 || index >= infoExpected.size() || progress == null) {
+            return false;
+        }
+
+        String expected = infoExpected.get(index);
+        int comparison = comparisons.get(index);
+        if (comparison == 0) {
+            return progress.contentEquals(expected);
+        }
+        if (comparison != 1 && comparison != 2) {
+            return false;
+        }
+
+        try {
+            long actualValue = Long.parseLong(progress);
+            long expectedValue = Long.parseLong(expected);
+            return comparison == 1 ? actualValue >= expectedValue : actualValue <= expectedValue;
+        } catch (NumberFormatException ignored) {
+            return false;
+        }
     }
 }

@@ -27,11 +27,14 @@ import org.gms.provider.DataTool;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Tyler (Twdtwd)
  */
 public class FieldEnterRequirement extends AbstractQuestRequirement {
-    private int mapId = -1;
+    private final List<Integer> mapIds = new ArrayList<>();
 
 
     public FieldEnterRequirement(Quest quest, Data data) {
@@ -41,15 +44,17 @@ public class FieldEnterRequirement extends AbstractQuestRequirement {
 
     @Override
     public void processData(Data data) {
-        Data zeroField = data.getChildByPath("0");
-        if (zeroField != null) {
-            mapId = DataTool.getInt(zeroField);
+        for (Data field : data.getChildren()) {
+            int mapId = DataTool.getInt(field, -1);
+            if (mapId >= 0) {
+                mapIds.add(mapId);
+            }
         }
     }
 
 
     @Override
     public boolean check(Character chr, Integer npcid) {
-        return mapId == chr.getMapId();
+        return !mapIds.isEmpty() && mapIds.contains(chr.getMapId());
     }
 }

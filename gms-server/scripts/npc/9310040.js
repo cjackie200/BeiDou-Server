@@ -74,7 +74,6 @@ function action(mode, type, selection) {
         if (flow == "complete8538") {
             Quest.getInstance(QUEST_FIND_SENIOR_1).complete(player, npcId);
             if (cm.isQuestCompleted(QUEST_FIND_SENIOR_1)) {
-                cm.removeItem(ITEM_LETTER_TO_SENIOR, 1);
                 cm.sendOk("Thank you very much. I've been out so long that my junior must have been quite worried. Come find me again later.");
             } else {
                 cm.sendOk("Unable to complete the quest at this time. (Please ensure you have the required item and sufficient inventory space.)");
@@ -86,7 +85,6 @@ function action(mode, type, selection) {
         if (flow == "start8539") {
             Quest.getInstance(QUEST_FIND_SENIOR_2).start(player, npcId);
             if (cm.isQuestStarted(QUEST_FIND_SENIOR_2)) {
-                cm.gainItem(ITEM_LETTER_FROM_SENIOR, 1);
                 cm.sendOk("Thank you kindly.");
             } else {
                 cm.sendOk("Unable to start the quest at this time. (Please check level/job requirements and ensure you have inventory space.)");

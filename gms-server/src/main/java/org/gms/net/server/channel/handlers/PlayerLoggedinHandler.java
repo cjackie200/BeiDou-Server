@@ -276,6 +276,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             KeyBinding autompPot = player.getKeymap().get(92);
             player.sendPacket(PacketCreator.sendAutoMpPot(autompPot != null ? autompPot.getAction() : 0));
 
+            // Finish the Hook session reset before addPlayer() emits NPC spawn packets. This
+            // preserves the objectId -> npcId cache ordering for older compatible DLLs too.
+            InteractionHookPackets.sendInitialRules(c);
             player.getMap().addPlayer(player);
             player.visitMap(player.getMap());
 
@@ -468,7 +471,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (GameConfig.getServerBoolean("use_npcs_scriptable")) {
                 c.sendPacket(PacketCreator.setNPCScriptable(MonsterCardRingQuest.getScriptableNpcIds(player)));
             }
-            InteractionHookPackets.sendInitialRules(c);
 
             if (newcomer) {
                 player.setLoginTime(System.currentTimeMillis());

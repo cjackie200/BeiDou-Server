@@ -24,6 +24,7 @@ package org.gms.server.quest;
 import org.gms.client.Character;
 import org.gms.client.QuestStatus;
 import org.gms.client.QuestStatus.Status;
+import org.gms.client.inventory.Pet;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.slf4j.Logger;
@@ -50,7 +51,10 @@ import org.gms.server.quest.requirements.AbstractQuestRequirement;
 import org.gms.server.quest.requirements.BuffExceptRequirement;
 import org.gms.server.quest.requirements.BuffRequirement;
 import org.gms.server.quest.requirements.CompletedQuestRequirement;
+import org.gms.server.quest.requirements.DayByDayRequirement;
 import org.gms.server.quest.requirements.EndDateRequirement;
+import org.gms.server.quest.requirements.EquippedItemRequirement;
+import org.gms.server.quest.requirements.FameRequirement;
 import org.gms.server.quest.requirements.FieldEnterRequirement;
 import org.gms.server.quest.requirements.InfoExRequirement;
 import org.gms.server.quest.requirements.InfoNumberRequirement;
@@ -60,13 +64,22 @@ import org.gms.server.quest.requirements.JobRequirement;
 import org.gms.server.quest.requirements.MaxLevelRequirement;
 import org.gms.server.quest.requirements.MesoRequirement;
 import org.gms.server.quest.requirements.MinLevelRequirement;
+import org.gms.server.quest.requirements.MinMountLevelRequirement;
 import org.gms.server.quest.requirements.MinTamenessRequirement;
 import org.gms.server.quest.requirements.MobRequirement;
+import org.gms.server.quest.requirements.MonsterBookCardRequirement;
 import org.gms.server.quest.requirements.MonsterBookCountRequirement;
+import org.gms.server.quest.requirements.MorphRequirement;
 import org.gms.server.quest.requirements.NpcRequirement;
+import org.gms.server.quest.requirements.PetAttributeLimitRequirement;
 import org.gms.server.quest.requirements.PetRequirement;
+import org.gms.server.quest.requirements.PartyQuestSRequirement;
 import org.gms.server.quest.requirements.QuestRequirement;
 import org.gms.server.quest.requirements.ScriptRequirement;
+import org.gms.server.quest.requirements.SkillRequirement;
+import org.gms.server.quest.requirements.StartDateRequirement;
+import org.gms.server.quest.requirements.UnsupportedUserInteractionRequirement;
+import org.gms.server.quest.requirements.WorldRequirement;
 import org.gms.util.PacketCreator;
 import org.gms.util.StringUtil;
 
@@ -91,6 +104,11 @@ public class Quest {
     private static final short DARK_WUKONG_HUNT_QUEST = 30005;
     private static final int DARK_WUKONG_HUNT_MOB = 4230101;
     private static final int DARK_WUKONG_HUNT_REQUIRED_KILLS = 200;
+    private static final Set<Integer> DISABLED_QUEST_IDS = Set.of(
+            4490,
+            8510, 8511, 8512, 8513, 8514, 8515,
+            8540, 8541,
+            29000);
 
     private static final Logger log = LoggerFactory.getLogger(Quest.class);
     private static volatile Map<Integer, Quest> quests = new HashMap<>();
@@ -125,6 +143,7 @@ public class Quest {
     private boolean autoStart;
     private boolean autoPreComplete, autoComplete;
     private boolean repeatable = false;
+    private boolean requirementDataLoaded;
     private String name = "", parent = "";
     private final static DataProvider questData = DataProviderFactory.getDataProvider(WZFiles.QUEST);
     private final static Data questInfo = questData.getData("QuestInfo.img");
@@ -156,9 +175,12 @@ public class Quest {
         }
 
         Data reqData = questReq.getChildByPath(String.valueOf(id));
-        if (reqData == null) {//most likely infoEx
+        if (reqData == null) {
+            // Native start/complete must fail closed without authoritative Check data.
+            // Explicit internal flows can still use forceStart/forceComplete.
             return;
         }
+        requirementDataLoaded = true;
 
         Data startReqData = reqData.getChildByPath("0");
         if (startReqData != null) {
@@ -166,6 +188,7 @@ public class Quest {
                 QuestRequirementType type = QuestRequirementType.getByWZName(startReq.getName());
                 switch (type) {
                 case INTERVAL:
+                case DAY_BY_DAY:
                     repeatable = true;
                     break;
                 case MOB:
@@ -264,9 +287,13 @@ public class Quest {
         if (!repeatable) {
             return false;
         }
+        if (startReqs.containsKey(QuestRequirementType.DAY_BY_DAY)) {
+            return true;
+        }
 
         IntervalRequirement ir = (IntervalRequirement) startReqs.get(QuestRequirementType.INTERVAL);
-        return ir.getInterval() < HOURS.toMillis(GameConfig.getServerLong("quest_point_repeatable_interval"));
+        return ir != null
+                && ir.getInterval() < HOURS.toMillis(GameConfig.getServerLong("quest_point_repeatable_interval"));
     }
 
     public boolean canStartQuestByStatus(Character chr) {
@@ -274,9 +301,55 @@ public class Quest {
         return !(!mqs.getStatus().equals(Status.NOT_STARTED) && !(mqs.getStatus().equals(Status.COMPLETED) && repeatable));
     }
 
+    public Pet getMatchedPet(Character chr) {
+        boolean checkEnd = chr.getQuest(this).getStatus().equals(Status.STARTED);
+        return getMatchedPet(chr, checkEnd);
+    }
+
+    public Pet getMatchedPet(Character chr, boolean checkEnd) {
+        Map<QuestRequirementType, AbstractQuestRequirement> requirements = checkEnd
+                ? completeReqs
+                : startReqs;
+        AbstractQuestRequirement requirement = requirements.get(QuestRequirementType.PET);
+        PetRequirement petRequirement = requirement instanceof PetRequirement petReq ? petReq : null;
+        Pet[] candidates = petRequirement == null ? new Pet[]{chr.getPet(0)} : chr.getPets();
+        for (Pet pet : candidates) {
+            if (pet == null || petRequirement != null && !petRequirement.matches(pet)) {
+                continue;
+            }
+            if (!matchesPetRequirement(requirements, QuestRequirementType.MIN_PET_TAMENESS, pet)) {
+                continue;
+            }
+            if (!matchesPetRequirement(requirements, QuestRequirementType.PET_RECALL_LIMIT, pet)) {
+                continue;
+            }
+            if (matchesPetRequirement(requirements, QuestRequirementType.PET_AUTO_SPEAKING_LIMIT, pet)) {
+                return pet;
+            }
+        }
+        return null;
+    }
+
+    private boolean matchesPetRequirement(Map<QuestRequirementType, AbstractQuestRequirement> requirements,
+                                          QuestRequirementType type, Pet pet) {
+        AbstractQuestRequirement requirement = requirements.get(type);
+        if (requirement instanceof MinTamenessRequirement minTamenessRequirement) {
+            return minTamenessRequirement.matches(pet);
+        }
+        if (requirement instanceof PetAttributeLimitRequirement petAttributeLimitRequirement) {
+            return petAttributeLimitRequirement.matches(pet);
+        }
+        return true;
+    }
+
     public boolean canQuestByInfoProgress(Character chr) {
         QuestStatus mqs = chr.getQuest(this);
-        List<String> ix = mqs.getInfoEx();
+        InfoExRequirement infoRequirement = getInfoExRequirement(mqs.getStatus());
+        if (infoRequirement == null) {
+            return true;
+        }
+
+        List<String> ix = infoRequirement.getInfo();
         if (!ix.isEmpty()) {
             short questid = mqs.getQuestID();
             short infoNumber = mqs.getInfoNumber();
@@ -287,9 +360,7 @@ public class Quest {
             int ixSize = ix.size();
             for (int i = 0; i < ixSize; i++) {
                 String progress = chr.getAbstractPlayerInteraction().getQuestProgress(infoNumber, i);
-                String ixProgress = ix.get(i);
-
-                if (!progress.contentEquals(ixProgress)) {
+                if (!infoRequirement.matches(i, progress)) {
                     return false;
                 }
             }
@@ -299,6 +370,9 @@ public class Quest {
     }
 
     public boolean canStart(Character chr, int npcid) {
+        if (!requirementDataLoaded || DISABLED_QUEST_IDS.contains((int) id)) {
+            return false;
+        }
         if (!canStartQuestByStatus(chr)) {
             return false;
         }
@@ -313,6 +387,9 @@ public class Quest {
     }
 
     public boolean canComplete(Character chr, Integer npcid) {
+        if (!requirementDataLoaded || DISABLED_QUEST_IDS.contains((int) id)) {
+            return false;
+        }
         QuestStatus mqs = chr.getQuest(this);
         if (!mqs.getStatus().equals(Status.STARTED)) {
             return false;
@@ -337,7 +414,7 @@ public class Quest {
     }
 
     public void start(Character chr, int npc) {
-        if (autoStart || canStart(chr, npc)) {
+        if (canStart(chr, npc)) {
             Collection<AbstractQuestAction> acts = startActs.values();
             for (AbstractQuestAction a : acts) {
                 if (!a.check(chr, null)) { // would null be good ?
@@ -356,7 +433,7 @@ public class Quest {
     }
 
     public void complete(Character chr, int npc, Integer selection) {
-        if (autoPreComplete || canComplete(chr, npc)) {
+        if (canComplete(chr, npc)) {
             Collection<AbstractQuestAction> acts = completeActs.values();
             for (AbstractQuestAction a : acts) {
                 if (!a.check(chr, selection)) {
@@ -517,11 +594,8 @@ public class Quest {
     }
 
     public String getInfoEx(Status qs, int index) {
-        boolean checkEnd = qs.equals(Status.STARTED);
-        Map<QuestRequirementType, AbstractQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
         try {
-            AbstractQuestRequirement req = reqs.get(QuestRequirementType.INFO_EX);
-            InfoExRequirement ixReq = (InfoExRequirement) req;
+            InfoExRequirement ixReq = getInfoExRequirement(qs);
             return ixReq.getInfo().get(index);
         } catch (Exception e) {
             return "";
@@ -529,15 +603,16 @@ public class Quest {
     }
 
     public List<String> getInfoEx(Status qs) {
-        boolean checkEnd = qs.equals(Status.STARTED);
-        Map<QuestRequirementType, AbstractQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
-        try {
-            AbstractQuestRequirement req = reqs.get(QuestRequirementType.INFO_EX);
-            InfoExRequirement ixReq = (InfoExRequirement) req;
-            return ixReq.getInfo();
-        } catch (Exception e) {
-            return new LinkedList<>();
-        }
+        InfoExRequirement ixReq = getInfoExRequirement(qs);
+        return ixReq == null ? new LinkedList<>() : ixReq.getInfo();
+    }
+
+    private InfoExRequirement getInfoExRequirement(Status status) {
+        Map<QuestRequirementType, AbstractQuestRequirement> requirements = status.equals(Status.STARTED)
+                ? completeReqs
+                : startReqs;
+        AbstractQuestRequirement requirement = requirements.get(QuestRequirementType.INFO_EX);
+        return requirement instanceof InfoExRequirement infoExRequirement ? infoExRequirement : null;
     }
 
     public int getTimeLimit() {
@@ -615,8 +690,55 @@ public class Quest {
             case SCRIPT:
                 ret = new ScriptRequirement(this, data);
                 break;
-            case NORMAL_AUTO_START:
+            case SKILL:
+                ret = new SkillRequirement(this, data);
+                break;
+            case MONSTER_BOOK_CARD:
+                ret = new MonsterBookCardRequirement(this, data);
+                break;
+            case FAME:
+                ret = new FameRequirement(this, data);
+                break;
+            case MIN_MOUNT_LEVEL:
+                ret = new MinMountLevelRequirement(this, data);
+                break;
+            case EQUIP_ALL:
+                ret = new EquippedItemRequirement(QuestRequirementType.EQUIP_ALL, data, true);
+                break;
+            case EQUIP_ANY:
+                ret = new EquippedItemRequirement(QuestRequirementType.EQUIP_ANY, data, false);
+                break;
+            case MORPH:
+                ret = new MorphRequirement(this, data);
+                break;
+            case PET_RECALL_LIMIT:
+                ret = new PetAttributeLimitRequirement(this, QuestRequirementType.PET_RECALL_LIMIT, data,
+                        org.gms.client.inventory.Pet.PetAttribute.RECALL);
+                break;
+            case PET_AUTO_SPEAKING_LIMIT:
+                ret = new PetAttributeLimitRequirement(this, QuestRequirementType.PET_AUTO_SPEAKING_LIMIT, data,
+                        org.gms.client.inventory.Pet.PetAttribute.AUTO_SPEAKING);
+                break;
             case START:
+                ret = new StartDateRequirement(this, data);
+                break;
+            case DAY_BY_DAY:
+                ret = new DayByDayRequirement(this, data);
+                break;
+            case PARTY_QUEST_S:
+                ret = new PartyQuestSRequirement(this, data);
+                break;
+            case WORLD_MIN:
+            case WORLD_MAX:
+                ret = new WorldRequirement(type, data);
+                break;
+            case USER_INTERACT:
+                // The v83 client completes this condition through a dedicated
+                // player-interaction flow. No matching server packet/state
+                // exists here, so fail closed instead of granting completion.
+                ret = new UnsupportedUserInteractionRequirement(this);
+                break;
+            case NORMAL_AUTO_START:
             case END:
                 break;
             default:

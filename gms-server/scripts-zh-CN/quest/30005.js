@@ -21,6 +21,7 @@ AllowFunction-could use directly
 
 
 var ExpTable = Java.type("org.gms.constants.game.ExpTable");
+var Quest = Java.type("org.gms.server.quest.Quest");
 
 var status = -1; 
 var text;
@@ -80,13 +81,23 @@ function end(mode, type, selection)
 	{
 	    if (status == 0)
 	    {
-			//第一层对话
+			if (!qm.canHold(2340000, 10)) {
+				qm.sendOk("请先在消耗栏留出足够空间，再来领取#b#i2340000# #t2340000# x10#k。");
+				qm.dispose();
+				return;
+			}
+
 			var levelUpExp = ExpTable.getExpNeededForLevel(qm.getLevel());
-            qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！\r\n\r\n获得经验值：#b" + levelUpExp + "#k（直接提升1级）\r\n获得金币：#b10000000#k\r\n获得道具：#b#i2340000# #t2340000# x10#k");
+			var quest = Quest.getInstance(qm.getQuest());
+			quest.complete(qm.getPlayer(), qm.getNpc());
+			if (qm.getQuestStatus(qm.getQuest()) != 2) {
+				qm.dispose();
+				return;
+			}
+
 			qm.getPlayer().gainExp(levelUpExp, true, true);
-			qm.gainMeso(10000000);
-			qm.gainItem(2340000, 10);
-			qm.forceCompleteQuest();
+            qm.sendOk("天呐您这么快就消灭了200只，冒险岛世界有救了！谢谢您~！\r\n\r\n获得经验值：#b" + levelUpExp + "#k（直接提升1级）\r\n获得金币：#b10000000#k\r\n获得道具：#b#i2340000# #t2340000# x10#k");
+			qm.dispose();
 	    }
 		else
 		{

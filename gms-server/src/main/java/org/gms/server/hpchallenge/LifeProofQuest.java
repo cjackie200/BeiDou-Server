@@ -2426,9 +2426,10 @@ public final class LifeProofQuest {
         if (chr == null || selector == null || selector.selectorNo() <= 0) {
             return List.of();
         }
-        int expectedBridge = selector.selectorNo() == 1 ? 0 :
-                questId(selector.stage(), selector.branch(), BRIDGE_SLOT_START + selector.selectorNo() - 2);
-        if (expectedBridge > 0 && chr.getQuestStatus(expectedBridge) != QuestStatus.Status.COMPLETED.getId()) {
+        int previousOptionQuestId = selector.selectorNo() == 1 ? 0 :
+                questId(selector.stage(), selector.branch(), OPTION_SLOT_START + selector.selectorNo() - 2);
+        if (previousOptionQuestId > 0
+                && chr.getQuestStatus(previousOptionQuestId) != QuestStatus.Status.COMPLETED.getId()) {
             return List.of();
         }
         return HpChallengeService.stage(selector.stage()).optionalTasks().stream()

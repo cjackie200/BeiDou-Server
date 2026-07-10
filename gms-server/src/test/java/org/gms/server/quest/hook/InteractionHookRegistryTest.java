@@ -75,17 +75,29 @@ class InteractionHookRegistryTest {
     }
 
     @Test
-    void rulesIncludeLifeProofAndMonsterCardRingQuestActions() {
+    void rulesIncludeOnlyCharacterSpecificQuestActions() {
         Map<Integer, InteractionHookRule> questRules = InteractionHookRegistry.characterRules(null).stream()
                 .filter(rule -> rule.eventMask() == InteractionHookProtocol.EVENT_MASK_QUEST_ACTION)
                 .collect(Collectors.toMap(InteractionHookRule::questId, rule -> rule));
 
         assertFalse(questRules.containsKey(LifeProofQuest.FIRST_QUEST_ID));
-        assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) MonsterCardRingQuest.CLAIM_QUEST_ID).actionMask());
-        assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) MonsterCardRingQuest.LAST_QUEST_ID).actionMask());
+        assertFalse(questRules.containsKey((int) MonsterCardRingQuest.CLAIM_QUEST_ID));
+        assertFalse(questRules.containsKey((int) MonsterCardRingQuest.LAST_QUEST_ID));
         assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) ElementalResonanceQuest.FIRST_QUEST_ID).actionMask());
         assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) ElementalResonanceQuest.LAST_QUEST_ID).actionMask());
         assertFalse(questRules.containsKey(1000));
+    }
+
+    @Test
+    void monsterCardRingRulesOnlyIncludeCurrentInteractiveQuest() {
+        Character claimCharacter = newCharacter(Job.HERO, 0);
+        assertEquals(List.of((int) MonsterCardRingQuest.CLAIM_QUEST_ID),
+                MonsterCardRingQuest.getHookQuestIds(claimCharacter));
+
+        Character upgradeCharacter = newCharacter(Job.HERO, 0);
+        addRing(upgradeCharacter, 3);
+        assertEquals(List.of((int) MonsterCardRingQuest.getUpgradeQuestId(4)),
+                MonsterCardRingQuest.getHookQuestIds(upgradeCharacter));
     }
 
     @Test
@@ -240,7 +252,8 @@ class InteractionHookRegistryTest {
         assertEquals(2, ringEntry.conditions().size());
         assertTrue(ringEntry.conditions().get(0).text().contains("怪物卡收集进度："));
         assertTrue(ringEntry.conditions().get(1).text().contains("材料收集进度："));
-        assertFalse(ringEntry.conditions().get(0).text().contains("@@"), ringEntry.conditions().get(0).text());
+        assertFalse(ringEntry.conditions().get(0).text().contains("#"), ringEntry.conditions().get(0).text());
+        assertFalse(ringEntry.conditions().get(1).text().contains("#"), ringEntry.conditions().get(1).text());
     }
 
     @Test
@@ -344,6 +357,41 @@ class InteractionHookRegistryTest {
     }
 
     @Test
+    void cancellingNativeNextDialogClosesSwitchedElementalRewardContext() {
+        Character chr = newElementalMage(70);
+        CapturingClient client = (CapturingClient) chr.getClient();
+        InteractionHookManager.dispose(client);
+
+        try {
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29950).success());
+            addItem(chr, 4033012, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29950).success());
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29951).success());
+            addItem(chr, 4033013, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29951).success());
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29952).success());
+            addItem(chr, 4033014, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29952).success());
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29953).success());
+            addItem(chr, 4000059, 100);
+            addItem(chr, 4000060, 100);
+            addItem(chr, 4000061, 100);
+            addItem(chr, 4021009, 1);
+            chr.setMeso(2_000_000);
+
+            assertTrue(InteractionHookManager.handleNativeQuestAction(client, 29953,
+                    ElementalResonanceQuest.NPC_ID, 2));
+            assertTrue(InteractionHookManager.handleNativeDialogSelection(client, (byte) 1, (byte) 0, 0));
+            assertTrue(InteractionHookManager.hasContext(client));
+
+            assertTrue(InteractionHookManager.handleNativeDialogSelection(client, (byte) -1, (byte) 0, 0));
+            assertFalse(InteractionHookManager.hasContext(client));
+        } finally {
+            InteractionHookManager.dispose(client);
+        }
+    }
+
+    @Test
     void npcTalkAckUsesClientPredictableDialogNpcOnly() {
         CapturingClient client = new CapturingClient();
         InteractionHookContext instructorContext = new InteractionHookContext(client, 1, LifeProofQuest.FIRST_QUEST_ID,
@@ -400,6 +448,26 @@ class InteractionHookRegistryTest {
         assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(noDialog, InteractionHookAction.QUERY_PROGRESS));
         assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(wrongEventType, InteractionHookAction.QUERY_PROGRESS));
         assertFalse(InteractionHookManager.isLifeProofQuestEventSourceValid(valid, null));
+    }
+
+    @Test
+    void fallbackReplayTokenOnlyBypassesTheMatchingNativeInteraction() {
+        CapturingClient client = new CapturingClient();
+        InteractionHookEvent questEvent = event(1, InteractionHookProtocol.EVENT_QUEST_ACTION,
+                InteractionHookProtocol.TARGET_QUEST, 29953, 0, 9010000,
+                29953, -1, 5, InteractionHookProtocol.DIALOG_CONTEXT_QUEST);
+        InteractionHookManager.rememberFallbackReplay(client, questEvent);
+
+        assertFalse(InteractionHookManager.consumeFallbackQuestReplay(client, 29952, 9010000, 5));
+        assertFalse(InteractionHookManager.consumeFallbackQuestReplay(client, 29953, 9010001, 5));
+        assertTrue(InteractionHookManager.consumeFallbackQuestReplay(client, 29953, 9010000, 5));
+        assertFalse(InteractionHookManager.consumeFallbackQuestReplay(client, 29953, 9010000, 5));
+
+        InteractionHookEvent dialogEvent = event(2, InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION,
+                InteractionHookProtocol.TARGET_DIALOG_SELECTION, 7, 0, 9010000,
+                0, 7, 0xFF, InteractionHookProtocol.DIALOG_CONTEXT_INTERACTION_HOOK);
+        InteractionHookManager.rememberFallbackReplay(client, dialogEvent);
+        assertTrue(InteractionHookManager.consumeFallbackDialogReplay(client, (byte) -1, 7));
     }
 
     private static void assertRuleHeader(Packet packet, int scope, int batchId, int batchIndex, int batchCount,

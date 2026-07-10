@@ -55,7 +55,9 @@ public class Pet extends Item {
     private int petAttribute = 0;
 
     public enum PetAttribute {
-        OWNER_SPEED(0x01);
+        OWNER_SPEED(0x01),
+        RECALL(0x80),
+        AUTO_SPEAKING(0x100);
 
         private final int i;
 
@@ -65,6 +67,14 @@ public class Pet extends Item {
 
         public int getValue() {
             return i;
+        }
+
+        public static PetAttribute fromQuestSkill(int value) {
+            return switch (value) {
+                case 128 -> RECALL;
+                case 256 -> AUTO_SPEAKING;
+                default -> null;
+            };
         }
     }
 

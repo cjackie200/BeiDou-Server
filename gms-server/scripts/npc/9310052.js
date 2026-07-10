@@ -79,7 +79,6 @@ function action(mode, type, selection) {
         if (flow == "complete8539") {
             Quest.getInstance(QUEST_FIND_SENIOR_2).complete(player, npcId);
             if (cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
-                cm.removeItem(ITEM_LETTER_FROM_SENIOR, 1);
                 cm.sendOk("I have little to offer, but please accept these humble gifts.");
             } else {
                 cm.sendOk("Unable to complete the quest at this time. (Please ensure you have my senior's letter and sufficient inventory space.)");
@@ -96,7 +95,6 @@ function action(mode, type, selection) {
         if (flow == "start8538") {
             Quest.getInstance(QUEST_FIND_SENIOR_1).start(player, npcId);
             if (cm.isQuestStarted(QUEST_FIND_SENIOR_1)) {
-                cm.gainItem(ITEM_LETTER_TO_SENIOR, 1);
                 cm.sendOk("My senior brother's dharma name is #b#p9310040##k. Please help me find him.");
             } else {
                 cm.sendOk("Unable to start the quest at this time. (Please check level/job requirements and ensure you have inventory space.)");

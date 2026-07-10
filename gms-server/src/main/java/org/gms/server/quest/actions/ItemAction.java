@@ -22,7 +22,6 @@
 package org.gms.server.quest.actions;
 
 import org.gms.client.Character;
-import org.gms.client.Client;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
@@ -41,8 +40,10 @@ import org.gms.util.Randomizer;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -65,6 +66,10 @@ public class ItemAction extends AbstractQuestAction {
         for (Data iEntry : data.getChildren()) {
             int id = DataTool.getInt(iEntry.getChildByPath("id"));
             int count = DataTool.getInt(iEntry.getChildByPath("count"), 1);
+            if (count == 0) {
+                log.warn("Ignored zero-quantity item action for item {} in quest {}", id, questID);
+                continue;
+            }
             int period = DataTool.getInt(iEntry.getChildByPath("period"), 0);
 
             Integer prop = null;
@@ -96,7 +101,16 @@ public class ItemAction extends AbstractQuestAction {
 
         int props = 0, rndProps = 0, accProps = 0;
         for (ItemData item : items) {
-            if (item.getProp() != null && item.getProp() != -1 && canGetItem(item, chr)) {
+            if (!canGetItem(item, chr) || item.getProp() == null) {
+                continue;
+            }
+            if (item.getProp() < -1) {
+                log.error("Rejected invalid item action prop {} for item {} in quest {}",
+                        item.getProp(), item.getId(), questID);
+                chr.sendPacket(PacketCreator.enableActions());
+                return;
+            }
+            if (item.getProp() > 0) {
                 props += item.getProp();
             }
         }
@@ -112,10 +126,10 @@ public class ItemAction extends AbstractQuestAction {
 
             if (iEntry.getProp() != null) {
                 if (iEntry.getProp() == -1) {
-                    if (extSelection != extNum++) {
+                    if (extSelection == null || extSelection != extNum++) {
                         continue;
                     }
-                } else {
+                } else if (iEntry.getProp() > 0) {
                     accProps += iEntry.getProp();
 
                     if (accProps <= rndProps) {
@@ -123,6 +137,8 @@ public class ItemAction extends AbstractQuestAction {
                     } else {
                         accProps = Integer.MIN_VALUE;
                     }
+                } else {
+                    continue;
                 }
             }
 
@@ -137,20 +153,9 @@ public class ItemAction extends AbstractQuestAction {
 
         for (ItemData iEntry : takeItem) {
             int itemid = iEntry.getId(), count = iEntry.getCount();
-
-            InventoryType type = ItemConstants.getInventoryType(itemid);
             int quantity = count * -1; // Invert
-            if (type.equals(InventoryType.EQUIP)) {
-                if (chr.getInventory(type).countById(itemid) < quantity) {
-                    // Not enough in the equip inventoty, so check Equipped...
-                    if (chr.getInventory(InventoryType.EQUIPPED).countById(itemid) > quantity) {
-                        // Found it equipped, so change the type to equipped.
-                        type = InventoryType.EQUIPPED;
-                    }
-                }
-            }
 
-            InventoryManipulator.removeById(chr.getClient(), type, itemid, quantity, true, false);
+            removeItem(chr, itemid, quantity);
             chr.sendPacket(PacketCreator.getShowItemGain(itemid, (short) count, true));
         }
 
@@ -168,11 +173,6 @@ public class ItemAction extends AbstractQuestAction {
         List<Pair<Item, InventoryType>> selectList = new LinkedList<>();
         List<Pair<Item, InventoryType>> randomList = new LinkedList<>();
 
-        List<Integer> allSlotUsed = new ArrayList(5);
-        for (byte i = 0; i < 5; i++) {
-            allSlotUsed.add(0);
-        }
-
         for (ItemData item : items) {
             if (!canGetItem(item, chr)) {
                 continue;
@@ -182,9 +182,15 @@ public class ItemAction extends AbstractQuestAction {
             if (item.getProp() != null) {
                 Item toItem = new Item(item.getId(), (short) 0, (short) item.getCount());
 
-                if (item.getProp() < 0) {
+                if (item.getProp() < -1) {
+                    log.error("Rejected invalid item action prop {} for item {} in quest {}",
+                            item.getProp(), item.getId(), questID);
+                    chr.sendPacket(PacketCreator.enableActions());
+                    return false;
+                }
+                if (item.getProp() == -1) {
                     selectList.add(new Pair<>(toItem, type));
-                } else {
+                } else if (item.getProp() > 0) {
                     randomList.add(new Pair<>(toItem, type));
                 }
 
@@ -192,64 +198,105 @@ public class ItemAction extends AbstractQuestAction {
                 // Make sure they can hold the item.
                 Item toItem = new Item(item.getId(), (short) 0, (short) item.getCount());
                 gainList.add(new Pair<>(toItem, type));
-
-                if (item.getCount() < 0) {
-                    // Make sure they actually have the item.
-                    int quantity = item.getCount() * -1;
-
-                    int freeSlotCount = chr.getInventory(type).freeSlotCountById(item.getId(), quantity);
-                    if (freeSlotCount == -1) {
-                        if (type.equals(InventoryType.EQUIP) && chr.getInventory(InventoryType.EQUIPPED).countById(item.getId()) > quantity) {
-                            continue;
-                        }
-
-                        announceInventoryLimit(Collections.singletonList(item.getId()), chr);
-                        return false;
-                    } else {
-                        int idx = type.getType() - 1;   // more slots available from the given items!
-                        allSlotUsed.set(idx, allSlotUsed.get(idx) - freeSlotCount);
-                    }
-                }
-            }
-        }
-
-        if (!randomList.isEmpty()) {
-            int result;
-            Client c = chr.getClient();
-
-            List<Integer> rndUsed = new ArrayList(5);
-            for (byte i = 0; i < 5; i++) {
-                rndUsed.add(allSlotUsed.get(i));
-            }
-
-            for (Pair<Item, InventoryType> it : randomList) {
-                int idx = it.getRight().getType() - 1;
-
-                result = InventoryManipulator.checkSpaceProgressively(c, it.getLeft().getItemId(), it.getLeft().getQuantity(), "", rndUsed.get(idx), false);
-                if (result % 2 == 0) {
-                    announceInventoryLimit(Collections.singletonList(it.getLeft().getItemId()), chr);
-                    return false;
-                }
-
-                allSlotUsed.set(idx, Math.max(allSlotUsed.get(idx), result >> 1));
             }
         }
 
         if (!selectList.isEmpty()) {
+            if (extSelection == null || extSelection < 0 || extSelection >= selectList.size()) {
+                log.warn("Rejected invalid item reward selection {} for quest {} and character {}; option count is {}",
+                        extSelection, questID, chr.getId(), selectList.size());
+                chr.sendPacket(PacketCreator.enableActions());
+                return false;
+            }
             Pair<Item, InventoryType> selected = selectList.get(extSelection);
             gainList.add(selected);
         }
 
-        if (!canHold(chr, gainList)) {
-            List<Integer> gainItemids = new LinkedList<>();
-            for (Pair<Item, InventoryType> it : gainList) {
-                gainItemids.add(it.getLeft().getItemId());
-            }
+        if (randomList.isEmpty()) {
+            return canExecuteBranch(chr, gainList);
+        }
 
-            announceInventoryLimit(gainItemids, chr);
-            return false;
+        for (Pair<Item, InventoryType> randomItem : randomList) {
+            List<Pair<Item, InventoryType>> possibleReward = new ArrayList<>(gainList);
+            possibleReward.add(randomItem);
+            if (!canExecuteBranch(chr, possibleReward)) {
+                return false;
+            }
         }
         return true;
+    }
+
+    private boolean canExecuteBranch(Character chr, List<Pair<Item, InventoryType>> actions) {
+        if (!hasRequiredItems(chr, actions)) {
+            return false;
+        }
+
+        if (!canHold(chr, actions)) {
+            announceInventoryLimit(itemIds(actions), chr);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean hasRequiredItems(Character chr, List<Pair<Item, InventoryType>> actions) {
+        Map<Integer, Integer> requiredByItemId = new LinkedHashMap<>();
+        for (Pair<Item, InventoryType> action : actions) {
+            Item item = action.getLeft();
+            if (item.getQuantity() < 0) {
+                requiredByItemId.merge(item.getItemId(), -((int) item.getQuantity()), Integer::sum);
+            }
+        }
+
+        for (Map.Entry<Integer, Integer> required : requiredByItemId.entrySet()) {
+            int itemId = required.getKey();
+            int quantity = required.getValue();
+            InventoryType type = ItemConstants.getInventoryType(itemId);
+            boolean hasEnough;
+            if (type == InventoryType.EQUIP) {
+                int carried = chr.getInventory(InventoryType.EQUIP).countById(itemId);
+                int equipped = chr.getInventory(InventoryType.EQUIPPED).countById(itemId);
+                hasEnough = carried + equipped >= quantity;
+            } else {
+                hasEnough = chr.getInventory(type).freeSlotCountById(itemId, quantity) != -1;
+            }
+
+            if (!hasEnough) {
+                announceInventoryLimit(Collections.singletonList(itemId), chr);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private List<Integer> itemIds(List<Pair<Item, InventoryType>> actions) {
+        List<Integer> itemIds = new LinkedList<>();
+        for (Pair<Item, InventoryType> action : actions) {
+            if (action.getLeft().getQuantity() > 0) {
+                itemIds.add(action.getLeft().getItemId());
+            }
+        }
+        return itemIds;
+    }
+
+    private void removeItem(Character chr, int itemId, int quantity) {
+        InventoryType type = ItemConstants.getInventoryType(itemId);
+        if (type != InventoryType.EQUIP) {
+            InventoryManipulator.removeById(chr.getClient(), type, itemId, quantity, true, false);
+            return;
+        }
+
+        int carried = chr.getInventory(InventoryType.EQUIP).countById(itemId);
+        int removeCarried = Math.min(carried, quantity);
+        if (removeCarried > 0) {
+            InventoryManipulator.removeById(chr.getClient(), InventoryType.EQUIP, itemId, removeCarried, true, false);
+        }
+
+        int removeEquipped = quantity - removeCarried;
+        if (removeEquipped > 0) {
+            InventoryManipulator.removeById(chr.getClient(), InventoryType.EQUIPPED, itemId, removeEquipped, true, false);
+        }
     }
 
     private void announceInventoryLimit(List<Integer> itemids, Character chr) {
@@ -275,7 +322,7 @@ public class ItemAction extends AbstractQuestAction {
             if (it.getQuantity() > 0) {
                 toAddItemids.add(it.getItemId());
                 toAddQuantity.add((int) it.getQuantity());
-            } else {
+            } else if (it.getQuantity() < 0) {
                 toRemoveItemids.add(it.getItemId());
                 toRemoveQuantity.add(-1 * ((int) it.getQuantity()));
             }

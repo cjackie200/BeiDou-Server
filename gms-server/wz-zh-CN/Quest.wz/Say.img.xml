@@ -17324,31 +17324,6 @@
             </imgdir>
         </imgdir>
     </imgdir>
-    <imgdir name="29000">
-        <imgdir name="0">
-            <string name="0" value="#v1142001# #e#b#t1142001##k\n\n - 5个组队任务的成绩达到S级\n\n#n，就能获得本勋章，不想挑战一下试试吗？"/>
-            <imgdir name="stop">
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="祝你好运。本挑战没有任何特殊限制，只要自认为实力足够，任何时候都欢迎来找我进行资格审查。另外，请注意，在没有完成本挑战或尚未放弃本挑战的情况下，不能进行其它挑战。"/>
-            </imgdir>
-            <imgdir name="no">
-                <string name="0" value="请你准备好了再来吧。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="恭喜你，完成了5个成绩达到S级的组队任务！你真了不起。"/>
-            <string name="1" value="请接受勋章。"/>
-            <imgdir name="yes">
-                <string name="0" value="我勋章老人将代表名誉之神向世人宣告，你已经成为这个勋章的主人！随时欢迎你来找我，挑战新的荣誉。"/>
-            </imgdir>
-            <imgdir name="stop">
-                <imgdir name="npc">
-                    <string name="0" value="要获得组队任务狂人勋章，必须完成5个成绩达到S级的组队任务。如果没有信心，可以放弃，要不要试试其它荣誉的挑战？"/>
-                </imgdir>
-            </imgdir>
-        </imgdir>
-    </imgdir>
     <imgdir name="29001">
         <imgdir name="0">
             <string name="0" value="#v1142002# #e#b#t1142002##k\n\n - 完成800个任务(活动任务除外)\n\n#n就能获得本勋章，不想挑战一下试试吗？"/>
@@ -31609,23 +31584,6 @@
                 <imgdir name="item">
                     <string name="0" value="#b#t4000188# 100个#k应该够了。"/>
                 </imgdir>
-            </imgdir>
-        </imgdir>
-    </imgdir>
-    <imgdir name="30005">
-        <imgdir name="0">
-            <string name="0" value="冒险岛世界正被黑暗力量侵蚀，请帮忙消灭被污染的#o4230101#。"/>
-            <imgdir name="yes">
-                <string name="0" value="请消灭#r#o4230101# 200只#k。完成后可以直接领取奖励。"/>
-            </imgdir>
-            <imgdir name="no">
-                <string name="0" value="如果改变主意，请再来帮助我们。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="你已经消灭了#r#o4230101# 200只#k，冒险岛世界安全了一些。"/>
-            <imgdir name="yes">
-                <string name="0" value="这是给你的谢礼。"/>
             </imgdir>
         </imgdir>
     </imgdir>
@@ -61080,17 +61038,6 @@
             </imgdir>
         </imgdir>
     </imgdir>
-    <imgdir name="4490">
-        <imgdir name="0">
-        </imgdir>
-        <imgdir name="1">
-            <imgdir name="stop">
-                <imgdir name="info">
-                    <string name="0" value="你还找不到枫叶人吗？我再告诉你一次，枫叶人的名字是#b#Q4451##k。这次可不要忘记了！"/>
-                </imgdir>
-            </imgdir>
-        </imgdir>
-    </imgdir>
     <imgdir name="2421">
         <imgdir name="1">
             <string name="0" value="辛苦了。很好，你修炼得非常努力，我来帮你升级。"/>
@@ -67692,157 +67639,6 @@
             </imgdir>
         </imgdir>
     </imgdir>
-    <imgdir name="8510">
-        <imgdir name="0">
-            <string name="0" value="最近这附近村落的牲口都变成怪物了。几个月前一个怪物抢走我们村落的宝物后就出现了这种情况。。。看起来你也有点本事啊？怎么样？你可以帮助我们吗？"/>
-            <imgdir name="no">
-                <string name="0" value="是吗？。。。好啊。你也有你的事儿吧？但我们现在真的需要像你这样的强人帮忙。你以后改变想法，就再来帮我吧。"/>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="好！谢谢你了。但这事件的背后有很危险的怪物，就是抢走宝物的那个怪物。我们担心你也会百他杀死。为避免这样的情况发生，你要先通过我的测试。你打退这附近的山羊后收集#b100个山羊角和60个黑山羊角#k来吧。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="最近牲口突然变成了怪物。这怎么回事！？"/>
-            <imgdir name="lost">
-                <string name="0" value="你弄丢了介绍信吗？真是的。。。"/>
-                <imgdir name="yes">
-                    <string name="0" value="你再给你一个介绍信。以后千万不要再弄丢啊！"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="stop">
-                <imgdir name="item">
-                    <string name="0" value="你还没收集完了我说的东西吧。我已经说过这件事情是很危险的，如果不能证明你的能力，我不能完全相信你啊。"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="你都收集好了？真了不起。其实最近上海警察正在调查这个事件。我给你一张介绍信。你拿这介绍信给上海警察处长吧。"/>
-            </imgdir>
-        </imgdir>
-    </imgdir>
-    <imgdir name="8511">
-        <imgdir name="0">
-            <string name="0" value="嗯。。。杨先生就推荐了你？果然是。。。但我还不能100%相信你。我还没看过你的能力，怎么能只听别人说就相信你呢？如果你能帮助我，我也会相信你，可以拜托更重要的事情吧。怎么样？你会帮我吗？"/>
-            <imgdir name="no">
-                <string name="0" value="是吗？但你不协助我们，我们也不可能相信你。以后改变想法就再来找我吧。"/>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="其实，要调查最近发生的牲口的造反事件，我们警察派遣了大部分人员，所以最近往往发生怪物攻击旅行者和居民的事情。所以我想拜托你去打退在这附近最厉害的牛类怪物。你打退#r牛和犁杖牛#k后收集#b鼻环和犁杖各100个#k来吧。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="我主要负责这附近的治安，你需要什么帮助？"/>
-            <imgdir name="stop">
-                <imgdir name="item">
-                    <string name="0" value="你还没收集完我说的物品吧。虽然你说把牛都打退了，但没有证据我怎么会相信你？你收集完我说的物品的话，我就相信你。"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="哟。。。你真的打退了牛类怪物吧。好。。。现在我可以相信你了。你稍等后再来吧。我有点东西想给你。"/>
-            </imgdir>
-        </imgdir>
-    </imgdir>
-    <imgdir name="8512">
-        <imgdir name="0">
-            <string name="0" value="我给你写一张证明书。怎么样？你准备好了吗？"/>
-            <imgdir name="no">
-                <string name="0" value="是吗。。。我现在才可以相信你了。。。以后你改变想法的话，就再来找我吧。"/>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="好。那么你拿这张证明书去见我的手下吧。给他们看这张证明，他们就会帮助你。如果你成功打退犯人，找回这件事情的原因赤珠来吧。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="哼。。。差不多找到了这个事件的犯人嘛。。。"/>
-            <imgdir name="lost">
-                <string name="0" value="哎呀。。。你弄丢了证明书吗？你一定要注意啊。"/>
-                <imgdir name="yes">
-                    <string name="0" value="我再给你写证明书吧。你不要再弄丢了。"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="stop">
-                <imgdir name="item">
-                    <string name="0" value="你还没找到了赤珠吧？你快点打退犯人后找回赤珠来吧。"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="哦。你真的找回了赤珠啊！对你的功劳我的手下们已经报告我了。真是非常感谢你。这是那犯人的悬赏金。虽然找回了这珠子，不过怪物还不能恢复成牲口，但我们现在可以研究原因。我再想表示感谢。"/>
-            </imgdir>
-        </imgdir>
-    </imgdir>
-    <imgdir name="8513">
-        <imgdir name="0">
-            <string name="0" value="你好。我姓赵，在这里拍照坚持生活。我现在有一个问题。怎么样？你能帮我吗？"/>
-            <imgdir name="no">
-                <string name="0" value="是吗？你好像也很忙吧。。。那没办法。。。但如果你接受我的拜托，我当然也会有东西给你。。。你以后改变想法，就再来找我。"/>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="好。谢谢。其实我从家里出来，忘记带三角架了。所以拍照的时候经常觉得不方便，请你替我去我的老家拿三角架来吧。我现在太忙啊。。。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="好。你站在那边吧。这里的背景很漂亮嘛。你不想拍照吗？"/>
-            <imgdir name="stop">
-                <imgdir name="item">
-                    <string name="0" value="你还没拿来三脚架。去徐州我老家附近找我姐姐。跟她说一下，她就会给你我的三脚架吧。"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="啊。你真的拿三角架回来了。谢谢你。以后我也能更方便地拍照了~啊。我以后有空就回家跟我姐姐打个招呼。。。这是在我家传下来的东西。我就给吧。"/>
-            </imgdir>
-        </imgdir>
-    </imgdir>
-    <imgdir name="8514">
-        <imgdir name="0">
-            <string name="0" value="啊。什么？我弟弟让你拿三角架啊？这个小子一句话不说，突然就跑去上海了！"/>
-            <string name="1" value="如果你想拿三角架去，你就去收集羊毛来吧。怎么样？你想接受我的拜托吗？"/>
-            <imgdir name="no">
-                <string name="0" value="是吗。。。你不帮我，我也不给你三脚架。"/>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="好的。其实最近这附近的牲口都变成了怪物，所以现在很难取得羊毛，你帮我去收集羊毛来吧。需要的是100个羊毛。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="最近牲口突然变得很凶暴，羊毛收集工作太难。。。"/>
-            <imgdir name="lost">
-                <string name="0" value="你弄丢了三脚架?! 幸亏我们村落的一位先生从上海过来的时候拣到了我弟弟的三脚架。我这就给你啊。"/>
-                <imgdir name="yes">
-                    <string name="0" value="这东西对我弟弟来说是很重要的！你不要再弄丢了！"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="stop">
-                <imgdir name="item">
-                    <string name="0" value="你还没收集齐了羊毛吧！没有羊毛我也不会给你三脚架。"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="哟。。。你真的都收集齐了。真谢谢你。请你原谅我的无礼~这是我弟弟的三脚架。啊。请你转告我弟弟，我已经原谅他了。他以后有空一定回家。那拜托你。"/>
-            </imgdir>
-        </imgdir>
-    </imgdir>
-    <imgdir name="8515">
-        <imgdir name="0">
-            <string name="0" value="我是在这里销售小吃的。但最近销售不太好。我想要卖点别的。怎么样？你能帮我吗？"/>
-            <imgdir name="no">
-                <string name="0" value="是吗？这生意你也不吃亏啊。。。可惜啊。。。"/>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="好的。如果你收集#b50个鸡爪和50个鸭蛋#k来，我就给你#r玉米和糖葫芦各30个#k。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="我是在这里卖小吃的。。。最近生意太难做了。。。"/>
-            <imgdir name="stop">
-                <imgdir name="item">
-                    <string name="0" value="你还没收集齐了#b鸡爪和鸭蛋各50个#k吧。这对你也不算很麻烦啊。"/>
-                </imgdir>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="谢谢你。我就给你我的玉米和糖葫芦。这些小吃对你也很有用的吧。"/>
-            </imgdir>
-        </imgdir>
-    </imgdir>
     <imgdir name="8530">
         <imgdir name="0">
             <string name="0" value="施主想要进少林寺参观啊，最近山路上多了许多怪物和剪径的强人，如果你能清除他们并带来我要的东西，就让你进#b大雄宝殿#k。"/>
@@ -68022,44 +67818,6 @@
             <imgdir name="stop">
                 <imgdir name="npc">
                     <string name="0" value="请施主早日将书信送与我那小师弟，免得他挂念，于修行不利。"/>
-                </imgdir>
-            </imgdir>
-        </imgdir>
-    </imgdir>
-    <imgdir name="8540">
-        <imgdir name="0">
-            <string name="0" value="阿弥陀佛，施主帮助那#b#p9310049##k之事老衲已知。当下却有另一件要事，不知施主能否担当这个？"/>
-            <imgdir name="no">
-                <string name="0" value="事关重大，还请施主三思..."/>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="如此便拜托施主了。保存在我少林的镇妖法宝：108颗灭魔佛珠，最近无故失踪。虽经寺中僧众合力查询，终究未能全部找回。佛门至宝流落在外，若被有心人甚或怪物得去，后果不堪设想。纤细情况请施主询问一下#b#p9310051#。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="此事关系重大，待贫僧细细讲来。"/>
-            <imgdir name="stop">
-                <imgdir name="npc">
-                    <string name="0" value="此事关系重大，请施主小心行事。"/>
-                </imgdir>
-            </imgdir>
-        </imgdir>
-    </imgdir>
-    <imgdir name="8541">
-        <imgdir name="0">
-            <string name="0" value="目下只找回了8颗佛珠，都是在寺内外的妖孽身上发现。剩余的100颗，应该也是被这些妖孽藏匿了。施主若是寻到了这100颗佛门至宝，还请交给山门知客，少林定有重谢。"/>
-            <imgdir name="no">
-                <string name="0" value="施主既有要事在身，此事贫僧另想他法吧。"/>
-            </imgdir>
-            <imgdir name="yes">
-                <string name="0" value="如此多谢施主，请速速寻回那100颗玉佛珠。"/>
-            </imgdir>
-        </imgdir>
-        <imgdir name="1">
-            <string name="0" value="果然是灭魔佛珠啊，贫僧稍待便送与方丈。多谢施主，一些小小的礼物，请施主收下。"/>
-            <imgdir name="stop">
-                <imgdir name="item">
-                    <string name="0" value="施主还未找到那佛门至宝的下落吗？"/>
                 </imgdir>
             </imgdir>
         </imgdir>

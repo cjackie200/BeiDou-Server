@@ -17,7 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class InteractionHookManager {
     private static final Logger log = LoggerFactory.getLogger(InteractionHookManager.class);
+    private static final long FALLBACK_REPLAY_TIMEOUT_MILLIS = 5_000;
     private static final Map<Client, InteractionHookContext> CONTEXTS = new ConcurrentHashMap<>();
+    private static final Map<Client, FallbackReplay> FALLBACK_REPLAYS = new ConcurrentHashMap<>();
 
     private InteractionHookManager() {
     }
@@ -48,7 +50,10 @@ public final class InteractionHookManager {
     }
 
     public static boolean handleNativeNpcClick(Client client, int objectId, int fallbackNpcId) {
-        if (client == null || client.getPlayer() == null || client.consumeSkipNextNativeInteractionHook()) {
+        if (client == null || client.getPlayer() == null) {
+            return false;
+        }
+        if (consumeFallbackNpcReplay(client, objectId, fallbackNpcId)) {
             return false;
         }
 
@@ -65,7 +70,10 @@ public final class InteractionHookManager {
     }
 
     public static boolean handleNativeQuestAction(Client client, int questId, int npcId, int rawAction) {
-        if (client == null || client.getPlayer() == null || client.consumeSkipNextNativeInteractionHook()) {
+        if (client == null || client.getPlayer() == null) {
+            return false;
+        }
+        if (consumeFallbackQuestReplay(client, questId, npcId, rawAction)) {
             return false;
         }
 
@@ -81,12 +89,19 @@ public final class InteractionHookManager {
     }
 
     public static boolean handleNativeDialogSelection(Client client, byte mode, byte lastMessage, int selection) {
-        if (client == null || client.getPlayer() == null || client.consumeSkipNextNativeInteractionHook()) {
+        if (client == null || client.getPlayer() == null) {
+            return false;
+        }
+        if (consumeFallbackDialogReplay(client, mode, selection)) {
             return false;
         }
 
         InteractionHookContext context = CONTEXTS.get(client);
         if (context != null) {
+            if (mode < 0) {
+                context.close();
+                return true;
+            }
             if (context.dialogState() == InteractionHookProtocol.DIALOG_STATE_OPEN) {
                 context.close();
                 return true;
@@ -135,6 +150,7 @@ public final class InteractionHookManager {
             return;
         }
         CONTEXTS.remove(client);
+        FALLBACK_REPLAYS.remove(client);
         InteractionHookPackets.sendCharacterQuestRules(client);
         InteractionHookPackets.sendProgress(client);
         InteractionHookPackets.clearDialogTempRules(client);
@@ -149,25 +165,25 @@ public final class InteractionHookManager {
             case InteractionHookProtocol.EVENT_NPC_CLICK -> handleNpcClickEvent(client, event);
             case InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION -> handleDialogSelectionEvent(client, event);
             case InteractionHookProtocol.EVENT_QUEST_ACTION -> handleQuestActionEvent(client, event);
-            default -> fallbackOriginal(client, event.requestId());
+            default -> fallbackOriginal(client, event);
         };
     }
 
     private static boolean handleNpcClickEvent(Client client, InteractionHookEvent event) {
         Optional<Integer> serverNpcId = resolveServerNpcId(client, event.objectId(), event.resolvedNpcId());
         if (serverNpcId.isEmpty()) {
-            return fallbackOriginal(client, event.requestId());
+            return fallbackOriginal(client, event);
         }
 
         int npcId = serverNpcId.get();
         InteractionHookTarget target = InteractionHookRegistry.resolveNpcHook(client.getPlayer(), npcId);
         if (target == null) {
-            return fallbackOriginal(client, event.requestId());
+            return fallbackOriginal(client, event);
         }
 
         InteractionHookProvider provider = InteractionHookRegistry.provider(target.questId());
         if (provider != null && provider.shouldFallbackNpcClick(client.getPlayer(), npcId)) {
-            return fallbackOriginal(client, event.requestId());
+            return fallbackOriginal(client, event);
         }
         return open(client, event, target.questId(), npcId, target.action(), true);
     }
@@ -175,6 +191,11 @@ public final class InteractionHookManager {
     private static boolean handleDialogSelectionEvent(Client client, InteractionHookEvent event) {
         InteractionHookContext context = CONTEXTS.get(client);
         if (context != null) {
+            if (isDialogCancel(event.rawAction())) {
+                context.close();
+                sendHandledUpdate(client, event);
+                return true;
+            }
             if (context.dialogState() == InteractionHookProtocol.DIALOG_STATE_OPEN) {
                 context.close();
                 sendHandledUpdate(client, event);
@@ -228,9 +249,13 @@ public final class InteractionHookManager {
         }
         InteractionHookTarget target = InteractionHookRegistry.resolveSelectionHook(client.getPlayer(), npcId, event.selection());
         if (target == null) {
-            return fallbackOriginal(client, event.requestId());
+            return fallbackOriginal(client, event);
         }
         return open(client, event, target.questId(), npcId, target.action(), true);
+    }
+
+    private static boolean isDialogCancel(int rawAction) {
+        return rawAction < 0 || (rawAction & 0xFF) == 0xFF;
     }
 
     private static boolean handleQuestActionEvent(Client client, InteractionHookEvent event) {
@@ -241,7 +266,7 @@ public final class InteractionHookManager {
         }
 
         if (questId <= 0 || action == null || !InteractionHookRegistry.hasQuestHook(client.getPlayer(), questId, action)) {
-            return fallbackOriginal(client, event.requestId());
+            return fallbackOriginal(client, event);
         }
 
         int npcId = event.resolvedNpcId();
@@ -320,11 +345,70 @@ public final class InteractionHookManager {
         }
     }
 
-    private static boolean fallbackOriginal(Client client, int requestId) {
-        client.markSkipNextNativeInteractionHook();
+    private static boolean fallbackOriginal(Client client, InteractionHookEvent event) {
+        rememberFallbackReplay(client, event);
         InteractionHookPackets.clearDialogTempRules(client);
-        sendResult(client, requestId, InteractionHookResultCode.FALLBACK_ORIGINAL);
+        sendResult(client, event.requestId(), InteractionHookResultCode.FALLBACK_ORIGINAL);
         return true;
+    }
+
+    static void rememberFallbackReplay(Client client, InteractionHookEvent event) {
+        if (client == null || event == null) {
+            return;
+        }
+        FALLBACK_REPLAYS.put(client, new FallbackReplay(
+                event.eventType(),
+                event.objectId(),
+                event.resolvedNpcId(),
+                event.resolvedQuestId(),
+                event.rawAction(),
+                event.selection(),
+                System.currentTimeMillis() + FALLBACK_REPLAY_TIMEOUT_MILLIS));
+    }
+
+    static boolean consumeFallbackNpcReplay(Client client, int objectId, int npcId) {
+        return consumeFallbackReplay(client,
+                replay -> replay.eventType() == InteractionHookProtocol.EVENT_NPC_CLICK
+                        && (replay.objectId() > 0 ? replay.objectId() == objectId : replay.npcId() == npcId));
+    }
+
+    static boolean consumeFallbackQuestReplay(Client client, int questId, int npcId, int rawAction) {
+        return consumeFallbackReplay(client,
+                replay -> replay.eventType() == InteractionHookProtocol.EVENT_QUEST_ACTION
+                        && replay.questId() == questId
+                        && replay.npcId() == npcId
+                        && normalizedAction(replay.rawAction()) == normalizedAction(rawAction));
+    }
+
+    static boolean consumeFallbackDialogReplay(Client client, byte mode, int selection) {
+        return consumeFallbackReplay(client,
+                replay -> replay.eventType() == InteractionHookProtocol.EVENT_NPC_DIALOG_SELECTION
+                        && normalizedAction(replay.rawAction()) == normalizedAction(mode)
+                        && replay.selection() == selection);
+    }
+
+    private static boolean consumeFallbackReplay(Client client,
+                                                   java.util.function.Predicate<FallbackReplay> matcher) {
+        FallbackReplay replay = FALLBACK_REPLAYS.get(client);
+        if (replay == null) {
+            return false;
+        }
+        if (replay.expiresAt() < System.currentTimeMillis()) {
+            FALLBACK_REPLAYS.remove(client, replay);
+            return false;
+        }
+        if (!matcher.test(replay)) {
+            return false;
+        }
+        return FALLBACK_REPLAYS.remove(client, replay);
+    }
+
+    private static int normalizedAction(int action) {
+        return action & 0xFF;
+    }
+
+    private record FallbackReplay(int eventType, int objectId, int npcId, int questId,
+                                  int rawAction, int selection, long expiresAt) {
     }
 
     private static boolean reject(Client client, int requestId) {

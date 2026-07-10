@@ -74,7 +74,6 @@ function action(mode, type, selection) {
         if (flow == "complete8538") {
             Quest.getInstance(QUEST_FIND_SENIOR_1).complete(player, npcId);
             if (cm.isQuestCompleted(QUEST_FIND_SENIOR_1)) {
-                cm.removeItem(ITEM_LETTER_TO_SENIOR, 1);
                 cm.sendOk("太谢谢你了，出来这么久让师弟担心了啊~等会再来找我。");
             } else {
                 cm.sendOk("似乎暂时无法完成任务（请确认携带了要交付的物品，并确保背包空间充足）。");
@@ -86,7 +85,6 @@ function action(mode, type, selection) {
         if (flow == "start8539") {
             Quest.getInstance(QUEST_FIND_SENIOR_2).start(player, npcId);
             if (cm.isQuestStarted(QUEST_FIND_SENIOR_2)) {
-                cm.gainItem(ITEM_LETTER_FROM_SENIOR, 1);
                 cm.sendOk("如此多谢施主了。");
             } else {
                 cm.sendOk("似乎暂时无法接取任务（请确认等级/职业条件，并确保背包有空位）。");

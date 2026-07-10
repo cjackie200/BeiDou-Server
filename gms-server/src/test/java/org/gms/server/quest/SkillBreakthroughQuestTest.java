@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -22,6 +23,11 @@ class SkillBreakthroughQuestTest {
         assertEquals("9900000", attr(child(start, "npc"), "value"));
         assertEquals("150", attr(child(start, "lvmin"), "value"));
         assertEquals("250", attr(child(start, "lvmax"), "value"));
+        Element jobs = child(start, "job");
+        List<Integer> expectedJobs = List.of(112, 122, 132, 212, 222, 232, 312, 322, 412, 422, 512, 522);
+        for (int i = 0; i < expectedJobs.size(); i++) {
+            assertEquals(String.valueOf(expectedJobs.get(i)), attr(child(jobs, String.valueOf(i)), "value"));
+        }
         assertEquals("1", attr(child(start, "normalAutoStart"), "value"));
         assertEquals("q30006s", attr(child(start, "startscript"), "value"));
 

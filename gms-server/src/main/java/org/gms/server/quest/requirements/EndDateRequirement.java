@@ -27,12 +27,20 @@ import org.gms.provider.DataTool;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestRequirementType;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 /**
  * @author Tyler (Twdtwd)
  */
 public class EndDateRequirement extends AbstractQuestRequirement {
+    private static final long HISTORICAL_DATA_CUTOFF = 1732027571809L;
+    private static final DateTimeFormatter QUEST_TIME_FORMAT = DateTimeFormatter
+            .ofPattern("uuuuMMddHH")
+            .withResolverStyle(ResolverStyle.STRICT);
     private String timeStr;
 
 
@@ -52,13 +60,28 @@ public class EndDateRequirement extends AbstractQuestRequirement {
 
     @Override
     public boolean check(Character chr, Integer npcid) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Integer.parseInt(timeStr.substring(0, 4)), Integer.parseInt(timeStr.substring(4, 6)), Integer.parseInt(timeStr.substring(6, 8)), Integer.parseInt(timeStr.substring(8, 10)), 0);
-        long endTime = cal.getTimeInMillis();
+        long endTime = parseTimeMillis(timeStr);
+        if (endTime < 0) {
+            return false;
+        }
         // 如果结束时间小于2024-11-19 22:46:11，则认为是历史数据，结束时间无效
-        if (endTime < 1732027571809L) {
+        if (endTime < HISTORICAL_DATA_CUTOFF) {
             return true;
         }
         return endTime >= System.currentTimeMillis();
+    }
+
+    static long parseTimeMillis(String value) {
+        if (value == null || value.length() != 10) {
+            return -1;
+        }
+        try {
+            return LocalDateTime.parse(value, QUEST_TIME_FORMAT)
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli();
+        } catch (DateTimeParseException ignored) {
+            return -1;
+        }
     }
 }

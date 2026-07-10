@@ -12,6 +12,7 @@ import org.gms.property.ServiceProperty;
 import org.gms.server.life.NPC;
 import org.gms.server.life.NPCStats;
 import org.gms.server.maps.MapleMap;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.Quest;
 import org.gms.service.ConfigService;
@@ -173,6 +174,21 @@ class LifeProofQuestTest {
     @Test
     void lifeProofHookRulesDoNotFallBackToFullQuestListWithoutCurrentCharacter() {
         assertTrue(LifeProofQuest.getHookQuestIds(null).isEmpty());
+    }
+
+    @Test
+    void secondOptionalSelectorUsesCompletedVisibleSlotInsteadOfHiddenBridge() {
+        Character chr = newLifeProofCharacter(Job.FP_ARCHMAGE);
+        int firstOptionQuestId = LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE,
+                LifeProofQuest.OPTION_SLOT_START);
+        int firstBridgeQuestId = LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE,
+                LifeProofQuest.BRIDGE_SLOT_START);
+        int secondSelectorQuestId = LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE,
+                LifeProofQuest.SELECTOR_SLOT_START + 1);
+        putQuest(chr, firstOptionQuestId, QuestStatus.Status.COMPLETED, "001");
+
+        assertQuestStatus(chr, firstBridgeQuestId, QuestStatus.Status.NOT_STARTED);
+        assertFalse(LifeProofQuest.selectionMenu(chr, secondSelectorQuestId).contains("暂无可选择的试炼"));
     }
 
     @Test
@@ -479,6 +495,40 @@ class LifeProofQuestTest {
         assertNoCustomQuestSeries(resolveQuestXml("wz/Quest.wz/QuestInfo.img.xml"));
         assertNoCustomQuestSeries(resolveQuestXml("wz/Quest.wz/Check.img.xml"));
         assertNoCustomQuestSeries(resolveQuestXml("wz/Quest.wz/Act.img.xml"));
+    }
+
+    @Test
+    void ordinaryQuestInfoDoesNotContainCustomProgressMarkers() throws Exception {
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(resolveQuestXml("wz-zh-CN/Quest.wz/QuestInfo.img.xml").toFile());
+
+        for (Element quest : topLevelImgDirs(document)) {
+            String name = quest.getAttribute("name");
+            if (!name.matches("\\d+")) {
+                continue;
+            }
+            int questId = Integer.parseInt(name);
+            if (isCustomProgressQuest(questId)) {
+                continue;
+            }
+
+            NodeList strings = quest.getElementsByTagName("string");
+            for (int i = 0; i < strings.getLength(); i++) {
+                Element text = (Element) strings.item(i);
+                String value = text.getAttribute("value");
+                assertFalse(value.contains("@@BD_LP_PROGRESS:")
+                                || value.contains("@@BD_IH_PROGRESS:")
+                                || value.contains("@@DB_IH_PROGRESS:"),
+                        "ordinary QuestInfo must not contain custom progress marker: " + questId);
+            }
+        }
+    }
+
+    private static boolean isCustomProgressQuest(int questId) {
+        return LifeProofQuest.isQuestId(questId)
+                || MonsterCardRingQuest.isQuestId(questId)
+                || ElementalResonanceQuest.isHiddenBridgeQuestId(questId)
+                || ElementalResonanceQuest.isQuestId(questId);
     }
 
     private static void assertLifeProofQuestInfoClientSafe(Path path) throws Exception {

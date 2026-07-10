@@ -167,9 +167,10 @@ class MonsterCardRingQuestTest {
 
         var conditions = MonsterCardRingQuest.progressEntry(chr).orElseThrow().conditions();
         assertEquals(2, conditions.size());
-        assertTrue(conditions.get(0).text().contains("#b30#k/30 套"));
-        assertTrue(conditions.get(1).text().contains("#i4021000# #t4021000# #b0#k/10"));
+        assertTrue(conditions.get(0).text().contains("30/30 套"));
+        assertTrue(conditions.get(1).text().contains("0/10"));
         assertQProgressTextSafe(conditions.get(0).text());
+        assertQProgressTextSafe(conditions.get(1).text());
     }
 
     @Test
@@ -189,8 +190,10 @@ class MonsterCardRingQuestTest {
         assertEquals(60, entry.conditions().get(0).required());
         assertEquals(10, entry.conditions().get(1).current());
         assertEquals(10, entry.conditions().get(1).required());
-        assertTrue(entry.conditions().get(0).text().contains("#b60#k/60 套"));
-        assertTrue(entry.conditions().get(1).text().contains("#i4021001# #t4021001# #b10#k/10"));
+        assertTrue(entry.conditions().get(0).text().contains("60/60 套"));
+        assertTrue(entry.conditions().get(1).text().contains("10/10"));
+        assertQProgressTextSafe(entry.conditions().get(0).text());
+        assertQProgressTextSafe(entry.conditions().get(1).text());
     }
 
     @Test
@@ -208,7 +211,8 @@ class MonsterCardRingQuestTest {
         assertEquals(1, entries.size());
         assertEquals(29982, entries.getFirst().questId());
         assertEquals(2, entries.getFirst().conditions().size());
-        assertTrue(entries.getFirst().conditions().get(1).text().contains("#t4021001#"));
+        assertTrue(entries.getFirst().conditions().get(1).text().contains("10/10"));
+        assertQProgressTextSafe(entries.getFirst().conditions().get(1).text());
     }
 
     @Test
@@ -219,8 +223,10 @@ class MonsterCardRingQuestTest {
 
         var conditions = MonsterCardRingQuest.progressEntry(chr).orElseThrow().conditions();
         assertEquals(2, conditions.size());
-        assertTrue(conditions.get(0).text().contains("#b29#k/30 套"));
-        assertTrue(conditions.get(1).text().contains("#i4021000# #t4021000# #b10#k/10"));
+        assertTrue(conditions.get(0).text().contains("29/30 套"));
+        assertTrue(conditions.get(1).text().contains("10/10"));
+        assertQProgressTextSafe(conditions.get(0).text());
+        assertQProgressTextSafe(conditions.get(1).text());
     }
 
     @Test
@@ -231,8 +237,10 @@ class MonsterCardRingQuestTest {
 
         var conditions = MonsterCardRingQuest.progressEntry(chr).orElseThrow().conditions();
         assertEquals(2, conditions.size());
-        assertTrue(conditions.get(0).text().contains("#b30#k/60 套"));
-        assertTrue(conditions.get(1).text().contains("#i4021001# #t4021001# #b10#k/10"));
+        assertTrue(conditions.get(0).text().contains("30/60 套"));
+        assertTrue(conditions.get(1).text().contains("10/10"));
+        assertQProgressTextSafe(conditions.get(0).text());
+        assertQProgressTextSafe(conditions.get(1).text());
     }
 
     @Test
@@ -243,8 +251,10 @@ class MonsterCardRingQuestTest {
 
         var conditions = MonsterCardRingQuest.progressEntry(chr).orElseThrow().conditions();
         assertEquals(2, conditions.size());
-        assertTrue(conditions.get(0).text().contains("#b30#k/30 套"));
-        assertTrue(conditions.get(1).text().contains("#i4021000# #t4021000# #b10#k/10"));
+        assertTrue(conditions.get(0).text().contains("30/30 套"));
+        assertTrue(conditions.get(1).text().contains("10/10"));
+        assertQProgressTextSafe(conditions.get(0).text());
+        assertQProgressTextSafe(conditions.get(1).text());
     }
 
     @Test
@@ -300,8 +310,7 @@ class MonsterCardRingQuestTest {
     }
 
     private static void assertQProgressTextSafe(String text) {
-        // #b, #k, #i, #t, #r, #e, #n macros are now allowed for old-style formatting.
-        // Only reject unresolved markers and placeholder text.
+        assertFalse(text.contains("#"), text);
         assertFalse(text.contains("@@"), text);
         assertFalse(text.contains("..."), text);
         assertFalse(text.contains("进度正在同步"), text);

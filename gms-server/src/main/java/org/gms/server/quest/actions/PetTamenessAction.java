@@ -31,10 +31,12 @@ import org.gms.server.quest.QuestActionType;
  * @author Ronan
  */
 public class PetTamenessAction extends AbstractQuestAction {
+    private final Quest quest;
     int tameness;
 
     public PetTamenessAction(Quest quest, Data data) {
         super(QuestActionType.PETTAMENESS, quest);
+        this.quest = quest;
         questID = quest.getId();
         processData(data);
     }
@@ -46,14 +48,18 @@ public class PetTamenessAction extends AbstractQuestAction {
     }
 
     @Override
-    public void run(Character chr, Integer extSelection) {
-        Client c = chr.getClient();
+    public boolean check(Character chr, Integer extSelection) {
+        return quest.getMatchedPet(chr, true) != null;
+    }
 
-        Pet pet = chr.getPet(0);   // assuming here only the pet leader will gain tameness
+    @Override
+    public void run(Character chr, Integer extSelection) {
+        Pet pet = quest.getMatchedPet(chr, true);
         if (pet == null) {
             return;
         }
 
+        Client c = chr.getClient();
         c.lockClient();
         try {
             pet.gainTamenessFullness(chr, tameness, 0, 0);

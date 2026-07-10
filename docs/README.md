@@ -17,6 +17,7 @@
 - [客户端自动更新方案](client-update.md)
 - [个人任务掉落机制](personal-quest-drops.md)
 - [元素武器规则](elemental-weapon-rules.md)
+- [任务完整性与资源一致性](quest-integrity.md)
 
 ## 规约
 

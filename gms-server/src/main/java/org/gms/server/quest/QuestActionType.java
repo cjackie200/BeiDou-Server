@@ -63,6 +63,9 @@ public enum QuestActionType {
             return SKILL;
         case "nextQuest":
             return NEXTQUEST;
+        case "quest":
+            return QUEST;
+        case "fame":
         case "pop":
             return FAME;
         case "buffItemID":
