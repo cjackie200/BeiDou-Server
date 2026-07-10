@@ -31,6 +31,7 @@ import org.gms.scripting.AbstractScriptManager;
 import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.Quest;
+import org.gms.server.quest.SkillBreakthroughService;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -123,7 +124,7 @@ public class QuestScriptManager extends AbstractScriptManager {
         Quest quest = Quest.getInstance(questid);
         boolean lifeProofProgress = LifeProofQuest.isVisibleQuestId(questid)
                 && c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED);
-        boolean remoteScriptQuest = questid == DARK_WUKONG_HUNT_QUEST;
+        boolean remoteScriptQuest = questid == DARK_WUKONG_HUNT_QUEST || SkillBreakthroughService.isQuestId(questid);
         if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED)
                 || (!lifeProofProgress && !remoteScriptQuest && !c.getPlayer().getMap().containsNPC(npc)
                 && !quest.isAutoComplete())) {

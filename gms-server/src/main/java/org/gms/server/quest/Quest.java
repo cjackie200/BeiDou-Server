@@ -322,6 +322,10 @@ public class Quest {
             return getQuestProgress(mqs, DARK_WUKONG_HUNT_MOB) >= DARK_WUKONG_HUNT_REQUIRED_KILLS
                     && canQuestByInfoProgress(chr);
         }
+        if (SkillBreakthroughService.isQuestId(id)) {
+            return getQuestProgress(mqs, SkillBreakthroughService.ZAKUM_MOB_ID) >= SkillBreakthroughService.REQUIRED_ZAKUM_KILLS
+                    && canQuestByInfoProgress(chr);
+        }
 
         for (AbstractQuestRequirement r : completeReqs.values()) {
             if (!r.check(chr, npcid)) {
@@ -447,6 +451,9 @@ public class Quest {
         if (id == DARK_WUKONG_HUNT_QUEST) {
             return List.of(DARK_WUKONG_HUNT_MOB);
         }
+        if (SkillBreakthroughService.isQuestId(id)) {
+            return List.of(SkillBreakthroughService.ZAKUM_MOB_ID);
+        }
         return relevantMobs;
     }
 
@@ -473,6 +480,9 @@ public class Quest {
     public int getMobAmountNeeded(int mid) {
         if (id == DARK_WUKONG_HUNT_QUEST && mid == DARK_WUKONG_HUNT_MOB) {
             return DARK_WUKONG_HUNT_REQUIRED_KILLS;
+        }
+        if (SkillBreakthroughService.isQuestMob(id, mid)) {
+            return SkillBreakthroughService.getRequiredMobKills(id, mid);
         }
 
         AbstractQuestRequirement req = completeReqs.get(QuestRequirementType.MOB);
