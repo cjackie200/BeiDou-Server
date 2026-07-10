@@ -22,6 +22,7 @@
 package org.gms.client;
 
 import org.gms.server.quest.Quest;
+import org.gms.server.quest.SkillBreakthroughService;
 import org.gms.util.StringUtil;
 
 import java.util.Collections;
@@ -140,6 +141,9 @@ public class QuestStatus {
         if (questID == DARK_WUKONG_HUNT_QUEST) {
             progress.putIfAbsent(DARK_WUKONG_HUNT_MOB, "000");
         }
+        if (SkillBreakthroughService.isQuestId(questID)) {
+            progress.putIfAbsent(SkillBreakthroughService.ZAKUM_MOB_ID, "000");
+        }
         //this.setUpdated();
     }
 
@@ -163,7 +167,8 @@ public class QuestStatus {
     public boolean progress(int id) {
         String currentStr = progress.get(id);
         if (currentStr == null) {
-            if (questID == DARK_WUKONG_HUNT_QUEST && id == DARK_WUKONG_HUNT_MOB) {
+            if ((questID == DARK_WUKONG_HUNT_QUEST && id == DARK_WUKONG_HUNT_MOB)
+                    || SkillBreakthroughService.isQuestMob(questID, id)) {
                 currentStr = "000";
                 progress.put(id, currentStr);
             } else {

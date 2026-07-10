@@ -10132,14 +10132,33 @@ public class Character extends AbstractCharacterObject {
     /////////////////////////////////////////////////////////////////////////////////
     //module: 角色在线时间
     private int m_iCurrentOnlineTime = -1;//-1用于服务器重启时角色初始变量时间
+    private long m_lCurrentOnlineTimeUpdatedAt = -1L;
     private AtomicBoolean timeUpdating = new AtomicBoolean(false);
 
-    public int getCurrentOnlineTime() {
+    public synchronized int getCurrentOnlineTime() {
         return this.m_iCurrentOnlineTime;
     }
 
-    public void setCurrentOnlineTime(final int iTime) {
+    public synchronized void setCurrentOnlineTime(final int iTime) {
         this.m_iCurrentOnlineTime = iTime;
+        this.m_lCurrentOnlineTimeUpdatedAt = System.currentTimeMillis();
+    }
+
+    public synchronized int updateCurrentOnlineTime(final int initialTime, final boolean resetCycle, final long now) {
+        int onlineTime = resetCycle ? 0 : (m_iCurrentOnlineTime == -1 ? Math.max(0, initialTime) : m_iCurrentOnlineTime);
+        long lastUpdatedAt = m_lCurrentOnlineTimeUpdatedAt;
+        if (lastUpdatedAt <= 0 && loginTime > 0) {
+            lastUpdatedAt = loginTime;
+        }
+        if (!resetCycle && lastUpdatedAt > 0 && now > lastUpdatedAt) {
+            long elapsedSeconds = (now - lastUpdatedAt) / 1000;
+            if (elapsedSeconds > 0) {
+                onlineTime = (int) Math.min(Integer.MAX_VALUE, onlineTime + elapsedSeconds);
+            }
+        }
+        this.m_iCurrentOnlineTime = Math.max(0, onlineTime);
+        this.m_lCurrentOnlineTimeUpdatedAt = now;
+        return this.m_iCurrentOnlineTime;
     }
 
     public void updateOnlineTime() {
