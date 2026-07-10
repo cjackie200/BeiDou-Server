@@ -417,27 +417,6 @@ public final class LifeProofQuest {
         return canOpenStartedQuestAtNpc(meta, npcId);
     }
 
-    public static int resolveInteractionNpcId(Character chr, int questId, int clientNpcId) {
-        QuestMeta meta = QUESTS.get(questId);
-        if (chr == null || meta == null || !meta.isVisible()) {
-            return 0;
-        }
-
-        byte status = chr.getQuestStatus(questId);
-        if (status == QuestStatus.Status.NOT_STARTED.getId()) {
-            int expectedNpcId = startNpcId(meta);
-            if (clientNpcId > 0 && clientNpcId != expectedNpcId) {
-                return 0;
-            }
-            return canUseNpc(chr, expectedNpcId) ? expectedNpcId : 0;
-        }
-
-        if (status != QuestStatus.Status.STARTED.getId()) {
-            return 0;
-        }
-        return canOpenStartedQuestAtNpc(meta, clientNpcId) ? clientNpcId : 0;
-    }
-
     static Collection<QuestMeta> allVisibleQuests() {
         return QUESTS.values().stream()
                 .filter(QuestMeta::isVisible)
