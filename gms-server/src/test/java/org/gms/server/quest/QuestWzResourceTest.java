@@ -62,6 +62,7 @@ class QuestWzResourceTest {
 
     @Test
     void customizedBeginnerQuestNodesWereNotReplacedByMasterData() throws Exception {
+        Document questInfo = parse("QuestInfo.img.xml");
         Document check = parse("Check.img.xml");
         Document act = parse("Act.img.xml");
 
@@ -69,10 +70,17 @@ class QuestWzResourceTest {
         assertCustomizedMobCheck(check, 30003, 9409000);
 
         Element quest30005Check = topLevelQuest(check, 30005);
+        assertEquals("9900000", value(child(quest30005Check, "imgdir", "0"), "int", "npc"));
         assertEquals("40", value(child(quest30005Check, "imgdir", "0"), "int", "lvmin"));
+        assertEquals("250", value(child(quest30005Check, "imgdir", "0"), "int", "lvmax"));
         assertEquals("1440", value(child(quest30005Check, "imgdir", "0"), "int", "interval"));
-        assertEquals("30005", value(child(quest30005Check, "imgdir", "0"), "string", "startscript"));
-        assertEquals("30005", value(child(quest30005Check, "imgdir", "1"), "string", "endscript"));
+        assertEquals("1", value(child(quest30005Check, "imgdir", "0"), "int", "normalAutoStart"));
+        assertEquals("q30005s", value(child(quest30005Check, "imgdir", "0"), "string", "startscript"));
+        assertEquals("9900000", value(child(quest30005Check, "imgdir", "1"), "int", "npc"));
+        assertEquals("q30005e", value(child(quest30005Check, "imgdir", "1"), "string", "endscript"));
+        Element quest30005Info = topLevelQuest(questInfo, 30005);
+        assertEquals("1", value(quest30005Info, "int", "autoStart"));
+        assertEquals("1", value(quest30005Info, "int", "autoPreComplete"));
 
         Element quest29508Check = topLevelQuest(check, 29508);
         assertEquals("q29508s", value(child(quest29508Check, "imgdir", "0"), "string", "startscript"));
@@ -108,6 +116,12 @@ class QuestWzResourceTest {
         String darkWukongQuest = Files.readString(resolveQuestScript("scripts-zh-CN", "30005.js"));
         assertTrue(darkWukongQuest.contains("qm.canHold(2340000, 10)"));
         assertTrue(darkWukongQuest.contains("quest.complete(qm.getPlayer(), qm.getNpc())"));
+        assertTrue(darkWukongQuest.indexOf("qm.forceStartQuest()")
+                < darkWukongQuest.indexOf("qm.getPlayer().flushDelayedUpdateQuests()"));
+        assertTrue(darkWukongQuest.indexOf("qm.getPlayer().flushDelayedUpdateQuests()")
+                < darkWukongQuest.indexOf("qm.warp(100040103)"));
+        assertTrue(darkWukongQuest.indexOf("qm.sendOk(\"天呐")
+                < darkWukongQuest.indexOf("quest.complete(qm.getPlayer(), qm.getNpc())"));
         assertFalse(darkWukongQuest.contains("qm.gainItem("));
         assertFalse(darkWukongQuest.contains("qm.gainMeso("));
         assertFalse(darkWukongQuest.contains("qm.forceCompleteQuest("));

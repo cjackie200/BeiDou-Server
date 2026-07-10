@@ -84,6 +84,15 @@ class SkillBreakthroughQuestTest {
         assertEquals(1, SkillBreakthroughService.getRequiredMobKills(30006, 8800002));
     }
 
+    @Test
+    void breakthroughStartFlushesQuestStateBeforeShowingConfirmation() throws Exception {
+        String script = Files.readString(Path.of("scripts-zh-CN/quest/30006.js"));
+        assertTrue(script.indexOf("qm.forceStartQuest()")
+                < script.indexOf("qm.getPlayer().flushDelayedUpdateQuests()"));
+        assertTrue(script.indexOf("qm.getPlayer().flushDelayedUpdateQuests()")
+                < script.indexOf("qm.sendOk(\"去击败扎昆吧"));
+    }
+
     private static void assertSkillLevelValue(int skillId, int level, String field, String value) throws Exception {
         Element levelNode = child(child(child(img("wz/Skill.wz/" + (skillId / 10000) + ".img.xml"),
                 "skill"), String.valueOf(skillId)), "level");

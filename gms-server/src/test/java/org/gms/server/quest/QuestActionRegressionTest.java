@@ -357,18 +357,18 @@ class QuestActionRegressionTest {
         Quest.clearCache(30005);
         Quest quest = Quest.getInstance(30005);
 
-        assertFalse(quest.canStart(chr, 0));
+        assertFalse(quest.canStart(chr, 9900000));
 
         chr.setLevel(40);
-        assertTrue(quest.canStart(chr, 0));
+        assertTrue(quest.canStart(chr, 9900000));
 
         QuestStatus completed = new QuestStatus(quest, QuestStatus.Status.COMPLETED, 0);
         completed.setCompletionTime(System.currentTimeMillis());
         chr.getQuests().put((short) 30005, completed);
-        assertFalse(quest.canStart(chr, 0));
+        assertFalse(quest.canStart(chr, 9900000));
 
         completed.setCompletionTime(System.currentTimeMillis() - java.util.concurrent.TimeUnit.DAYS.toMillis(1));
-        assertTrue(quest.canStart(chr, 0));
+        assertTrue(quest.canStart(chr, 9900000));
     }
 
     @Test
