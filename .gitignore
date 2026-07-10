@@ -20,6 +20,7 @@
 /out
 tools/**/bin/
 tools/**/obj/
+tools/server-patch/Installer/Resources/patch-data.zip
 *.onetoc2
 
 # Eclipse m2e generated files
@@ -39,4 +40,3 @@ database/docker-pg-db-data
 main/resources/static/
 src/main/resources/static/
 .claude/settings.local.json
-tools
