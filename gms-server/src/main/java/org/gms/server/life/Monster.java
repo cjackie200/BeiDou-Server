@@ -57,7 +57,6 @@ import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.StatEffect;
 import org.gms.server.TimerManager;
-import org.gms.server.hpchallenge.HpChallengeService;
 import org.gms.server.life.LifeFactory.BanishInfo;
 import org.gms.server.loot.LootManager;
 import org.gms.server.maps.AbstractAnimatedMapObject;
@@ -80,6 +79,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
@@ -122,6 +122,8 @@ public class Monster extends AbstractLoadedLife {
     private final Lock statiLock = new ReentrantLock();
     private final Lock animationLock = new ReentrantLock();
     private final Lock aggroUpdateLock = new ReentrantLock();
+    private int poisonFireWeaknessToken = 0;
+    private int nextPoisonFireWeaknessToken = 0;
 
     public Monster(int id, MonsterStats stats) {
         super(id);
@@ -620,14 +622,6 @@ public class Monster extends AbstractLoadedLife {
         Map<Character, Long> soloExpDist = new HashMap<>();
 
         Map<Integer, Character> mapPlayers = map.getMapAllPlayers();
-        Set<Integer> challengeParticipants = new HashSet<>();
-        for (Integer characterId : takenDamage.keySet()) {
-            Character chr = mapPlayers.get(characterId);
-            if (chr != null && challengeParticipants.add(chr.getId())) {
-                HpChallengeService.onMonsterKilled(chr, getId());
-            }
-        }
-
         int totalEntries = 0;   // counts "participant parties", players who no longer are available in the map is an "independent party"
         for (Entry<Integer, AtomicLong> e : takenDamage.entrySet()) {
             Character chr = mapPlayers.get(e.getKey());
@@ -1164,23 +1158,40 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public boolean applyStatus(Character from, final MonsterStatusEffect status, boolean poison, long duration, boolean venom) {
-        switch (getMonsterEffectiveness(status.getSkill().getElement())) {
+        if (from == null || status == null || status.getSkill() == null) {
+            return false;
+        }
+
+        boolean playerPoisonDot = MonsterPoisonDot.isPlayerPoisonDot(status, poison, venom);
+        Element skillElement = status.getSkill().getElement();
+        ElementalEffectiveness skillEffectiveness = skillElement != null
+                ? getMonsterEffectiveness(skillElement)
+                : ElementalEffectiveness.NORMAL;
+        switch (skillEffectiveness) {
             case IMMUNE:
+                return false;
             case STRONG:
             case NEUTRAL:
-                return false;
+                if (!MonsterPoisonDot.allowsReducedPoisonDotOnResistance(status, playerPoisonDot)) {
+                    return false;
+                }
+                break;
             case NORMAL:
             case WEAK:
                 break;
             default: {
-                log.warn("Unknown elemental effectiveness: {}", getMonsterEffectiveness(status.getSkill().getElement()));
+                log.warn("Unknown elemental effectiveness: {}", skillEffectiveness);
                 return false;
             }
         }
 
+        if (playerPoisonDot && MonsterPoisonDot.blocksPoisonDot(getMonsterEffectiveness(Element.POISON))) {
+            return false;
+        }
+
         if (status.getSkill().getId() == FPMage.ELEMENT_COMPOSITION) { // fp compo
             ElementalEffectiveness effectiveness = getMonsterEffectiveness(Element.POISON);
-            if (effectiveness == ElementalEffectiveness.IMMUNE || effectiveness == ElementalEffectiveness.STRONG) {
+            if (MonsterPoisonDot.blocksPoisonDot(effectiveness)) {
                 return false;
             }
         } else if (status.getSkill().getId() == ILMage.ELEMENT_COMPOSITION) { // il compo
@@ -1188,22 +1199,17 @@ public class Monster extends AbstractLoadedLife {
             if (effectiveness == ElementalEffectiveness.IMMUNE || effectiveness == ElementalEffectiveness.STRONG) {
                 return false;
             }
-        } else if (status.getSkill().getId() == NightLord.VENOMOUS_STAR || status.getSkill().getId() == Shadower.VENOMOUS_STAB || status.getSkill().getId() == NightWalker.VENOM) {// venom
-            if (getMonsterEffectiveness(Element.POISON) == ElementalEffectiveness.WEAK) {
-                return false;
-            }
         }
-        if (poison && hp.get() <= 1) {
+        if (playerPoisonDot && hp.get() <= 0) {
+            return false;
+        }
+        if (!playerPoisonDot && poison && hp.get() <= 1) {
             return false;
         }
 
         final Map<MonsterStatus, Integer> statis = status.getStati();
-        if (stats.isBoss()) {
-            if (!(statis.containsKey(MonsterStatus.SPEED)
-                    && statis.containsKey(MonsterStatus.NINJA_AMBUSH)
-                    && statis.containsKey(MonsterStatus.WATK))) {
-                return false;
-            }
+        if (stats.isBoss() && MonsterPoisonDot.rejectsBossStatus(statis, playerPoisonDot)) {
+            return false;
         }
 
         final Channel ch = map.getChannelServer();
@@ -1226,6 +1232,7 @@ public class Monster extends AbstractLoadedLife {
             }
         }
 
+        final Runnable[] poisonFireWeakCancelTask = new Runnable[1];
         final Runnable cancelTask = () -> {
             if (isAlive()) {
                 Packet packet = PacketCreator.cancelMonsterStatus(getObjectId(), status.getStati());
@@ -1241,6 +1248,10 @@ public class Monster extends AbstractLoadedLife {
                 statiLock.unlock();
             }
 
+            if (poisonFireWeakCancelTask[0] != null) {
+                poisonFireWeakCancelTask[0].run();
+            }
+
             setVenomMulti(0);
         };
 
@@ -1250,12 +1261,20 @@ public class Monster extends AbstractLoadedLife {
         int animationTime;
         if (poison) {
             int poisonLevel = from.getSkillLevel(status.getSkill());
-            int poisonDamage = Math.min(Short.MAX_VALUE, (int) (getMaxHp() / (70.0 - poisonLevel) + 0.999));
-            status.setValue(MonsterStatus.POISON, poisonDamage);
+            int poisonDamage = MonsterPoisonDot.calculateBasePoisonDamage(getMaxHp(), poisonLevel);
+            if (playerPoisonDot) {
+                poisonDamage = MonsterPoisonDot.applyPoisonElementRate(poisonDamage,
+                        MonsterPoisonDot.resolvePoisonElementRate(from, status.getSkill()));
+                poisonDamage = MonsterPoisonDot.applyPoisonEffectivenessRate(poisonDamage,
+                        getMonsterEffectiveness(Element.POISON));
+            } else {
+                poisonDamage = MonsterPoisonDot.legacyDotDamage(poisonDamage);
+            }
+            status.setValue(MonsterStatus.POISON, MonsterPoisonDot.poisonStatusValue(poisonDamage, playerPoisonDot));
             animationTime = broadcastStatusEffect(status);
 
-            overtimeAction = new DamageTask(poisonDamage, from, status, 0);
-            overtimeDelay = 1000;
+            overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot, playerPoisonDot);
+            overtimeDelay = MonsterPoisonDot.tickDelay(status, playerPoisonDot);
         } else if (venom) {
             if (from.getJob() == Job.NIGHTLORD || from.getJob() == Job.SHADOWER || from.getJob().isA(Job.NIGHTWALKER3)) {
                 int poisonLevel, matk, jobid = from.getJob().getId();
@@ -1276,13 +1295,21 @@ public class Monster extends AbstractLoadedLife {
                 for (int i = 0; i < getVenomMulti(); i++) {
                     poisonDamage += (Randomizer.nextInt(gap) + minDmg);
                 }
-                poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
-                status.setValue(MonsterStatus.VENOMOUS_WEAPON, poisonDamage);
-                status.setValue(MonsterStatus.POISON, poisonDamage);
+                if (playerPoisonDot) {
+                    poisonDamage = MonsterPoisonDot.applyPoisonElementRate(poisonDamage,
+                            MonsterPoisonDot.resolvePoisonElementRate(from, status.getSkill()));
+                    poisonDamage = MonsterPoisonDot.applyPoisonEffectivenessRate(poisonDamage,
+                            getMonsterEffectiveness(Element.POISON));
+                } else {
+                    poisonDamage = MonsterPoisonDot.legacyDotDamage(poisonDamage);
+                }
+                int statusDisplayValue = MonsterPoisonDot.statusDisplayValue(poisonDamage);
+                status.setValue(MonsterStatus.VENOMOUS_WEAPON, statusDisplayValue);
+                status.setValue(MonsterStatus.POISON, MonsterPoisonDot.poisonStatusValue(poisonDamage, playerPoisonDot));
                 animationTime = broadcastStatusEffect(status);
 
-                overtimeAction = new DamageTask(poisonDamage, from, status, 0);
-                overtimeDelay = 1000;
+                overtimeAction = new DamageTask(poisonDamage, from, status, 0, playerPoisonDot, playerPoisonDot);
+                overtimeDelay = MonsterPoisonDot.tickDelay(status, playerPoisonDot);
             } else {
                 return false;
             }
@@ -1307,6 +1334,10 @@ public class Monster extends AbstractLoadedLife {
             overtimeDelay = 1000;
         } else {
             animationTime = broadcastStatusEffect(status);
+        }
+
+        if (MonsterPoisonDot.grantsFireWeakness(status, playerPoisonDot)) {
+            poisonFireWeakCancelTask[0] = applyPoisonFireWeakness();
         }
 
         statiLock.lock();
@@ -1681,46 +1712,73 @@ public class Monster extends AbstractLoadedLife {
         private final MonsterStatusEffect status;
         private final int type;
         private final MapleMap map;
+        private final boolean lethal;
+        private final boolean broadcastTickDamage;
 
         private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type) {
+            this(dealDamage, chr, status, type, false);
+        }
+
+        private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type, boolean lethal) {
+            this(dealDamage, chr, status, type, lethal, false);
+        }
+
+        private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type, boolean lethal,
+                           boolean broadcastTickDamage) {
             this.dealDamage = dealDamage;
             this.chr = chr;
             this.status = status;
             this.type = type;
             this.map = chr.getMap();
+            this.lethal = lethal;
+            this.broadcastTickDamage = broadcastTickDamage;
+        }
+
+        private void interruptStatus() {
+            MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
+            service.interruptMobStatus(map.getId(), status);
         }
 
         @Override
         public void run() {
             int curHp = hp.get();
-            if (curHp <= 1) {
-                MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
-                service.interruptMobStatus(map.getId(), status);
+            if (curHp <= 0 || (!lethal && curHp <= 1)) {
+                interruptStatus();
                 return;
             }
 
-            int damage = dealDamage;
-            if (damage >= curHp) {
-                damage = curHp - 1;
-                if (type == 1 || type == 2) {
-                    MobStatusService service = (MobStatusService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_STATUS);
-                    service.interruptMobStatus(map.getId(), status);
-                }
+            int damage = MonsterPoisonDot.damageForTick(curHp, dealDamage, lethal);
+            if (damage <= 0) {
+                return;
             }
-            if (damage > 0) {
-                lockMonster();
-                try {
-                    applyDamage(chr, damage, true, false);
-                } finally {
-                    unlockMonster();
-                }
 
-                if (type == 1) {
+            if (lethal) {
+                if (broadcastTickDamage) {
                     map.broadcastMessage(PacketCreator.damageMonster(getObjectId(), damage), getPosition());
-                } else if (type == 2) {
-                    if (damage < dealDamage) {    // ninja ambush (type 2) is already displaying DOT to the caster
-                        map.broadcastMessage(PacketCreator.damageMonster(getObjectId(), damage), getPosition());
-                    }
+                }
+                if (damage >= curHp) {
+                    interruptStatus();
+                }
+                map.damageMonster(chr, Monster.this, damage);
+                return;
+            }
+
+            if (dealDamage >= curHp && (type == 1 || type == 2)) {
+                interruptStatus();
+            }
+
+            lockMonster();
+            try {
+                applyDamage(chr, damage, true, false);
+            } finally {
+                unlockMonster();
+            }
+
+            if (type == 1) {
+                map.broadcastMessage(PacketCreator.damageMonster(getObjectId(), damage), getPosition());
+            } else if (type == 2) {
+                if (damage < dealDamage) {    // ninja ambush (type 2) is already displaying DOT to the caster
+                    map.broadcastMessage(PacketCreator.damageMonster(getObjectId(), damage), getPosition());
                 }
             }
         }
@@ -1739,30 +1797,90 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public void setTempEffectiveness(Element e, ElementalEffectiveness ee, long milli) {
+        MapleMap mmap = this.getMap();
+        if (mmap == null) {
+            return;
+        }
+
+        Runnable restoreEffectiveness = applyTemporaryEffectiveness(e, ee);
+        if (restoreEffectiveness == null) {
+            return;
+        }
+
+        MobClearSkillService service = (MobClearSkillService) mmap.getChannelServer().getServiceAccess(ChannelServices.MOB_CLEAR_SKILL);
+        service.registerMobClearSkillAction(mmap.getId(), restoreEffectiveness, milli);
+    }
+
+    public boolean hasPoisonFireWeakness() {
         monsterLock.lock();
         try {
-            final Element fE = e;
-            final ElementalEffectiveness fEE = stats.getEffectiveness(e);
-            if (!fEE.equals(ElementalEffectiveness.WEAK)) {
-                stats.setEffectiveness(e, ee);
-
-                MapleMap mmap = this.getMap();
-                Runnable r = () -> {
-                    monsterLock.lock();
-                    try {
-                        stats.removeEffectiveness(fE);
-                        stats.setEffectiveness(fE, fEE);
-                    } finally {
-                        monsterLock.unlock();
-                    }
-                };
-
-                MobClearSkillService service = (MobClearSkillService) mmap.getChannelServer().getServiceAccess(ChannelServices.MOB_CLEAR_SKILL);
-                service.registerMobClearSkillAction(mmap.getId(), r, milli);
-            }
+            return poisonFireWeaknessToken > 0 && stats.getEffectiveness(Element.FIRE) == ElementalEffectiveness.WEAK;
         } finally {
             monsterLock.unlock();
         }
+    }
+
+    Runnable applyPoisonFireWeakness() {
+        Runnable restoreEffectiveness = applyTemporaryEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK);
+        if (restoreEffectiveness == null) {
+            return null;
+        }
+
+        final int token;
+        monsterLock.lock();
+        try {
+            token = ++nextPoisonFireWeaknessToken;
+            poisonFireWeaknessToken = token;
+        } finally {
+            monsterLock.unlock();
+        }
+
+        return () -> {
+            monsterLock.lock();
+            try {
+                if (poisonFireWeaknessToken != token) {
+                    return;
+                }
+                poisonFireWeaknessToken = 0;
+            } finally {
+                monsterLock.unlock();
+            }
+            restoreEffectiveness.run();
+        };
+    }
+
+    Runnable applyTemporaryEffectiveness(Element e, ElementalEffectiveness ee) {
+        if (e == null || ee == null) {
+            return null;
+        }
+
+        final ElementalEffectiveness previousEffectiveness;
+        monsterLock.lock();
+        try {
+            previousEffectiveness = stats.getEffectiveness(e);
+            if (previousEffectiveness.equals(ee)) {
+                return null;
+            }
+
+            stats.setEffectiveness(e, ee);
+        } finally {
+            monsterLock.unlock();
+        }
+
+        AtomicBoolean restored = new AtomicBoolean(false);
+        return () -> {
+            if (!restored.compareAndSet(false, true)) {
+                return;
+            }
+
+            monsterLock.lock();
+            try {
+                stats.removeEffectiveness(e);
+                stats.setEffectiveness(e, previousEffectiveness);
+            } finally {
+                monsterLock.unlock();
+            }
+        };
     }
 
     public Collection<MonsterStatus> alreadyBuffedStats() {

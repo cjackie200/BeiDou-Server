@@ -19361,27 +19361,35 @@
             </imgdir>
             <imgdir name="1372035">
                 <string name="name" value="火灵珠短杖" />
+                <string name="desc" value="火灵珠在杖尖微微发热。" />
             </imgdir>
             <imgdir name="1372036">
                 <string name="name" value="毒灵珠短杖" />
+                <string name="desc" value="毒灵珠散出淡紫色雾气。" />
             </imgdir>
             <imgdir name="1372037">
                 <string name="name" value="冰灵珠短杖" />
+                <string name="desc" value="冰灵珠映着清冷霜光。" />
             </imgdir>
             <imgdir name="1372038">
                 <string name="name" value="雷灵珠短杖" />
+                <string name="desc" value="雷灵珠跳动着细小电弧。" />
             </imgdir>
             <imgdir name="1372039">
                 <string name="name" value="爆炎短杖" />
+                <string name="desc" value="灼热火焰在杖身翻涌。" />
             </imgdir>
             <imgdir name="1372040">
                 <string name="name" value="剧毒短杖" />
+                <string name="desc" value="幽毒之息沿杖尖蔓延。" />
             </imgdir>
             <imgdir name="1372041">
                 <string name="name" value="寒冰短杖" />
+                <string name="desc" value="寒霜在杖身凝成纹路。" />
             </imgdir>
             <imgdir name="1372042">
                 <string name="name" value="狂雷短杖" />
+                <string name="desc" value="奔雷在短杖中低鸣。" />
             </imgdir>
             <imgdir name="1372043">
                 <string name="name" value="初级魔法师的杖" />
@@ -19396,6 +19404,14 @@
             </imgdir>
             <imgdir name="1372046">
                 <string name="name" value="圣诞六翼天使武器(短杖)" />
+            </imgdir>
+            <imgdir name="1372047">
+                <string name="name" value="圣灵珠短杖" />
+                <string name="desc" value="圣灵珠散发柔和白光。" />
+            </imgdir>
+            <imgdir name="1372048">
+                <string name="name" value="圣光短杖" />
+                <string name="desc" value="圣光在短杖上静静流淌。" />
             </imgdir>
             <imgdir name="1372049">
                 <string name="name" value="扎昆的树枝" />
@@ -19416,6 +19432,26 @@
             <imgdir name="1372058">
                 <string name="name" value="地狱大公短杖" />
                 <string name="desc" value="#c你能够感受到地狱大公的暗黑能量。#" />
+            </imgdir>
+            <imgdir name="1372059">
+                <string name="name" value="赤曜星焰短杖" />
+                <string name="desc" value="星焰在赤曜杖心永恒燃烧。" />
+            </imgdir>
+            <imgdir name="1372060">
+                <string name="name" value="紫藤幽梦短杖" />
+                <string name="desc" value="紫藤般的梦雾缠绕杖心。" />
+            </imgdir>
+            <imgdir name="1372061">
+                <string name="name" value="霜月流光短杖" />
+                <string name="desc" value="霜月流光映在杖心之上。" />
+            </imgdir>
+            <imgdir name="1372062">
+                <string name="name" value="金霆星律短杖" />
+                <string name="desc" value="金色星雷随杖心律动。" />
+            </imgdir>
+            <imgdir name="1372063">
+                <string name="name" value="白曜祈星短杖" />
+                <string name="desc" value="白曜星辉回应法师祈愿。" />
             </imgdir>
             <imgdir name="1382000">
                 <string name="name" value="木制长杖" />
@@ -19553,27 +19589,35 @@
             </imgdir>
             <imgdir name="1382045">
                 <string name="name" value="火灵珠长杖" />
+                <string name="desc" value="长杖顶端燃着不熄火光。" />
             </imgdir>
             <imgdir name="1382046">
                 <string name="name" value="毒灵珠长杖" />
+                <string name="desc" value="长杖缠绕着幽紫毒雾。" />
             </imgdir>
             <imgdir name="1382047">
                 <string name="name" value="冰灵珠长杖" />
+                <string name="desc" value="长杖覆着薄薄冰晶。" />
             </imgdir>
             <imgdir name="1382048">
                 <string name="name" value="雷灵珠长杖" />
+                <string name="desc" value="长杖鸣响着金色雷息。" />
             </imgdir>
             <imgdir name="1382049">
                 <string name="name" value="爆炎长杖" />
+                <string name="desc" value="赤色火环环绕长杖顶端。" />
             </imgdir>
             <imgdir name="1382050">
                 <string name="name" value="剧毒长杖" />
+                <string name="desc" value="紫色魔雾随长杖呼吸。" />
             </imgdir>
             <imgdir name="1382051">
                 <string name="name" value="寒冰长杖" />
+                <string name="desc" value="冰蓝光芒凝在长杖深处。" />
             </imgdir>
             <imgdir name="1382052">
                 <string name="name" value="狂雷长杖" />
+                <string name="desc" value="雷鸣在长杖中回荡。" />
             </imgdir>
             <imgdir name="1382053">
                 <string name="name" value="天杖" />
@@ -19602,8 +19646,16 @@
             <imgdir name="1382060">
                 <string name="name" value="绯红巨炮" />
             </imgdir>
+            <imgdir name="1382061">
+                <string name="name" value="圣灵珠长杖" />
+                <string name="desc" value="长杖流转着洁白祈光。" />
+            </imgdir>
             <imgdir name="1382062">
                 <string name="name" value="圣诞六翼天使武器(长杖)" />
+            </imgdir>
+            <imgdir name="1382063">
+                <string name="name" value="圣光长杖" />
+                <string name="desc" value="纯白光辉照亮长杖纹路。" />
             </imgdir>
             <imgdir name="1382066">
                 <string name="name" value="蝙蝠怪的魔灵之魂" />

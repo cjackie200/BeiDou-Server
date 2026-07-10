@@ -4,8 +4,14 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Job;
 import org.gms.client.QuestStatus;
+import org.gms.client.inventory.InventoryType;
+import org.gms.client.inventory.Item;
+import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
+import org.gms.server.life.NPC;
+import org.gms.server.life.NPCStats;
+import org.gms.server.maps.MapleMap;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.server.quest.Quest;
 import org.gms.service.ConfigService;
@@ -24,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,6 +62,7 @@ class LifeProofQuestTest {
         DataSource dataSource = mock(DataSource.class);
         Connection connection = mock(Connection.class);
         PreparedStatement statement = mock(PreparedStatement.class);
+        ResultSet resultSet = mock(ResultSet.class);
         Map<Class<?>, Object> beans = new HashMap<>();
 
         when(configService.loadGameConfigs()).thenReturn(List.of());
@@ -62,7 +70,9 @@ class LifeProofQuestTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
         when(dataSource.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeQuery()).thenReturn(resultSet);
         when(statement.executeUpdate()).thenReturn(1);
+        when(resultSet.next()).thenReturn(false);
 
         beans.put(ServiceProperty.class, serviceProperty);
         beans.put(MessageSource.class, messageSource);
@@ -312,11 +322,50 @@ class LifeProofQuestTest {
         for (LifeProofQuest.QuestMeta meta : LifeProofQuest.allVisibleQuests()) {
             String detail = childValue(topLevelImgDir(info, meta.questId()), "string", "1");
             assertLifeProofQuestDetailComplete(detail, meta);
-            // All quest types now use the minimal field 1 format with progress marker.
+            if (usesNativeMobProgress(meta)) {
+                assertMobProgressMacros(check, detail, meta);
+                continue;
+            }
             assertLifeProofProgressMarker(detail, meta.questId());
-            // No #a macros in WZ — client-side kill tracking replaced by server-generated conditions.
-            assertFalse(Pattern.compile("#a").matcher(detail).find(),
-                    "life proof quest detail must not use client #a macro: " + meta.questId());
+        }
+    }
+
+    @Test
+    void lifeProofNpcDialogsUseOriginalStepStyleText() throws Exception {
+        DataSource dataSource = mock(DataSource.class);
+        Connection connection = mock(Connection.class);
+        PreparedStatement statement = mock(PreparedStatement.class);
+        ResultSet resultSet = mock(ResultSet.class);
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeQuery()).thenReturn(resultSet);
+        when(statement.executeUpdate()).thenReturn(1);
+        when(resultSet.next()).thenReturn(false);
+
+        installApplicationContext(dataSource);
+        try {
+            Character chr = newLifeProofCharacter(Job.HERO);
+            addNpc(chr, 1012100);
+            String start = LifeProofQuest.startPrompt(chr, 5100);
+            assertLifeProofDisplayTextHasNoTemplateLabels(start, 5100);
+            assertTrue(start.contains("导师要你先确认五大职业的意志"), start);
+            assertFalse(start.contains("拜访赫丽娜。"), start);
+
+            putQuest(chr, 5100, QuestStatus.Status.STARTED, "000");
+            String progress = LifeProofQuest.resultMessage(LifeProofQuest.endPrompt(chr, 5100, 1022000));
+            assertLifeProofDisplayTextHasNoTemplateLabels(progress, 5100);
+            assertTrue(progress.contains("去见#p1012100#"), progress);
+            assertTrue(progress.contains("与#p1012100#确认 #b0#k/#r1#k"), progress);
+
+            assertTrue(LifeProofQuest.isAutoCompleteNpcTalk(chr, 5100, 1012100));
+
+            String result = LifeProofQuest.complete(chr, 5100, 1012100);
+            assertTrue(LifeProofQuest.isOkResult(result), result);
+            assertTrue(LifeProofQuest.resultMessage(result).contains("已经记录"), result);
+            Quest.getInstance(5100).forceComplete(chr, 1012100);
+            assertEquals(5101, LifeProofQuest.nextContinuationQuestIdAtNpc(chr, 5100, 1012100));
+        } finally {
+            setUpApplicationContext();
         }
     }
 
@@ -349,11 +398,7 @@ class LifeProofQuestTest {
             Element complete = childImgDir(topLevelImgDir(document, meta.questId()), "1");
             if (requiresInfoExCompletionGate(meta)) {
                 gated++;
-                boolean isKillOrBoss = meta.objective().type() == LifeProofQuest.ObjectiveType.KILL
-                        || meta.objective().type() == LifeProofQuest.ObjectiveType.BOSS;
-                String expected = isKillOrBoss ? "001"
-                        : String.format("%03d", meta.objective().requiredCount());
-                assertEquals(expected,
+                assertEquals(String.format("%03d", meta.objective().requiredCount()),
                         childValue(complete, "infoex", "0", "string", "value"),
                         "life proof custom progress quest must require progress before completion: "
                                 + meta.questId());
@@ -361,6 +406,13 @@ class LifeProofQuestTest {
                         childValue(complete, "int", "infoNumber"),
                         "life proof custom progress quest should use its own quest progress by default: "
                                 + meta.questId());
+                continue;
+            }
+
+            if (usesNativeMobProgress(meta)) {
+                assertMobGate(complete, meta);
+                assertNull(childImgDirOrNull(complete, "infoex"),
+                        "native mob life proof quest must not keep legacy infoex gate: " + meta.questId());
                 continue;
             }
 
@@ -377,7 +429,49 @@ class LifeProofQuestTest {
             }
         }
 
-        assertEquals(380, gated, "life proof custom progress completion gate count");
+        long expectedGated = LifeProofQuest.allVisibleQuests().stream()
+                .filter(LifeProofQuestTest::requiresInfoExCompletionGate)
+                .count();
+        assertEquals(expectedGated, gated, "life proof custom progress completion gate count");
+    }
+
+    @Test
+    void completedOptionalSlotSyncsInfoexGateForNpcCompletion() throws Exception {
+        DataSource dataSource = mock(DataSource.class);
+        Connection connection = mock(Connection.class);
+        PreparedStatement statement = mock(PreparedStatement.class);
+        ResultSet resultSet = mock(ResultSet.class);
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, false);
+        when(resultSet.getString("task_key")).thenReturn("optional_6");
+        when(resultSet.getInt("current_count")).thenReturn(999);
+        when(resultSet.getInt("required_count")).thenReturn(999);
+        when(resultSet.getBoolean("active")).thenReturn(false);
+        when(resultSet.getBoolean("completed")).thenReturn(true);
+        when(resultSet.getInt("task_order")).thenReturn(1);
+
+        installApplicationContext(dataSource);
+        try {
+            Character chr = newLifeProofCharacter(Job.FP_ARCHMAGE);
+            int questId = LifeProofQuest.questId(1, HpChallengeService.JobBranch.MAGE,
+                    LifeProofQuest.OPTION_SLOT_START);
+            Quest quest = Quest.getInstance(questId);
+            QuestStatus status = new QuestStatus(quest, QuestStatus.Status.STARTED,
+                    LifeProofQuest.branchInfo(HpChallengeService.JobBranch.MAGE).instructorNpcId());
+            status.setProgress(PROGRESS_KEY, "000");
+            chr.getQuests().put((short) questId, status);
+
+            assertFalse(quest.canComplete(chr, status.getNpc()));
+
+            LifeProofQuest.syncActiveObjectiveProgress(chr);
+
+            assertEquals("001", chr.getQuest(quest).getProgress(PROGRESS_KEY));
+            assertTrue(quest.canComplete(chr, status.getNpc()));
+        } finally {
+            setUpApplicationContext();
+        }
     }
 
     @Test
@@ -414,6 +508,23 @@ class LifeProofQuestTest {
                     "visible life proof QuestInfo.order must follow metadata for quest " + questId + " in " + path);
             assertEquals("31", childValue(quest, "int", "area"),
                     "life proof QuestInfo.area must stay in Legend Road for quest " + questId + " in " + path);
+            String questName = childValue(quest, "string", "name");
+            String summary = childValue(quest, "string", "summary");
+            String demandSummary = childValue(quest, "string", "demandSummary");
+            assertFalse(summary.isBlank(),
+                    "visible life proof QuestInfo.summary must be present for quest " + questId + " in " + path);
+            assertFalse(summary.equals(questName),
+                    "visible life proof QuestInfo.summary must not repeat quest title for quest " + questId + " in "
+                            + path);
+            assertFalse(demandSummary.isBlank(),
+                    "visible life proof QuestInfo.demandSummary must be present for quest " + questId + " in "
+                            + path);
+            assertLifeProofDisplayTextHasNoTemplateLabels(childValue(quest, "string", "0"), questId);
+            assertLifeProofDisplayTextHasNoTemplateLabels(childValue(quest, "string", "1"), questId);
+            assertLifeProofDisplayTextHasNoTemplateLabels(summary, questId);
+            assertLifeProofDisplayTextHasNoTemplateLabels(demandSummary, questId);
+            assertFalse(childValue(quest, "string", "2").startsWith("已完成："),
+                    "life proof completion text must not use old completed prefix: " + questId + " in " + path);
         }
 
         assertEquals(470, count, "visible life proof quest count in " + path);
@@ -648,6 +759,74 @@ class LifeProofQuestTest {
         }
     }
 
+    @Test
+    void fiveJobBranchesCanProgressThroughAllSevenStages() throws Exception {
+        Quest.clearCache();
+        int checked = 0;
+
+        for (Job job : List.of(Job.HERO, Job.FP_ARCHMAGE, Job.BOWMASTER, Job.NIGHTLORD, Job.CORSAIR)) {
+            Character chr = newLifeProofCharacter(job);
+            addInstructorNpcs(chr);
+            HpChallengeService.JobBranch branch = HpChallengeService.branch(job);
+
+            for (int stage = 1; stage <= 7; stage++) {
+                List<LifeProofQuest.QuestMeta> visible = LifeProofQuest.stageBranchVisibleQuests(stage, branch);
+                List<LifeProofQuest.QuestMeta> quests = stageBranchFlowQuests(stage, branch);
+                assertEquals(stage == 1 ? 16 : 13, quests.size(),
+                        "visible quest count for " + branch + " stage " + stage);
+                assertEquals(visible.size(), quests.size(),
+                        "flow quest count must match visible quest count for " + branch + " stage " + stage);
+
+                for (int index = 0; index < quests.size(); index++) {
+                    LifeProofQuest.QuestMeta meta = quests.get(index);
+                    Quest quest = Quest.getInstance(meta.questId());
+                    int startNpc = LifeProofQuest.startNpcId(meta);
+                    int completeNpc = LifeProofQuest.completeNpcId(meta);
+
+                    assertTrue(quest.canStart(chr, startNpc),
+                            "cannot start " + branch + " stage " + stage + " quest " + meta.questId());
+                    quest.forceStart(chr, startNpc);
+
+                    if (meta.objective().type() == LifeProofQuest.ObjectiveType.NPC_TALK) {
+                        assertTrue(LifeProofQuest.isAutoCompleteNpcTalk(chr, meta.questId(), completeNpc),
+                                "NPC_TALK should auto-complete at target NPC: " + meta.questId());
+                    }
+
+                    satisfyQuestRequirement(chr, meta);
+                    assertTrue(quest.canComplete(chr, completeNpc),
+                            "cannot complete " + branch + " stage " + stage + " quest " + meta.questId()
+                                    + " (" + meta.name() + ")");
+                    quest.forceComplete(chr, completeNpc);
+                    checked++;
+
+                    if (meta.objective().type() == LifeProofQuest.ObjectiveType.NPC_TALK
+                            && index + 1 < quests.size()
+                            && LifeProofQuest.startNpcId(quests.get(index + 1)) == completeNpc) {
+                        assertEquals(quests.get(index + 1).questId(),
+                                LifeProofQuest.nextContinuationQuestIdAtNpc(chr, meta.questId(), completeNpc),
+                                "NPC_TALK completion should expose next step at same target NPC: "
+                                        + meta.questId());
+                    }
+
+                    if (index + 1 < quests.size()) {
+                        LifeProofQuest.QuestMeta next = quests.get(index + 1);
+                        assertTrue(Quest.getInstance(next.questId()).canStart(chr, LifeProofQuest.startNpcId(next)),
+                                "next quest not unlocked after " + meta.questId() + ": " + next.questId());
+                    } else if (stage < 7) {
+                        LifeProofQuest.QuestMeta nextStage = LifeProofQuest.stageBranchVisibleQuests(stage + 1, branch)
+                                .getFirst();
+                        assertTrue(Quest.getInstance(nextStage.questId()).canStart(chr,
+                                        LifeProofQuest.startNpcId(nextStage)),
+                                "next stage not unlocked after reward " + meta.questId() + ": "
+                                        + nextStage.questId());
+                    }
+                }
+            }
+        }
+
+        assertEquals(470, checked, "all visible life proof quests must be traversed");
+    }
+
     private static void assertJobRequirement(Element start, LifeProofQuest.QuestMeta meta) {
         Element job = childImgDir(start, "job");
         List<Integer> jobIds = LifeProofQuest.branchInfo(meta.branch()).jobIds();
@@ -699,9 +878,11 @@ class LifeProofQuestTest {
     private static void assertCompletionGate(Element complete, LifeProofQuest.QuestMeta meta) {
         LifeProofQuest.Objective objective = meta.objective();
         switch (objective.type()) {
-            case KILL, BOSS -> assertEquals("001",
-                    childValue(complete, "infoex", "0", "string", "value"),
-                    "KILL/BOSS must use infoex completion gate: " + meta.questId());
+            case KILL, BOSS -> {
+                assertMobGate(complete, meta);
+                assertNull(childImgDirOrNull(complete, "infoex"),
+                        "KILL/BOSS must use native mob completion gate: " + meta.questId());
+            }
             case ITEM -> assertItemGate(complete, meta);
             case MESO -> assertEquals(Integer.toString(objective.mesoCost()), childValue(complete, "int", "money"),
                     "meso completion gate must match metadata: " + meta.questId());
@@ -762,12 +943,18 @@ class LifeProofQuestTest {
     }
 
     private static void assertLifeProofQuestDetailComplete(String detail, LifeProofQuest.QuestMeta meta) {
-        assertTrue(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
-                "life proof quest detail must contain hook progress marker: " + meta.questId());
-        assertFalse(detail.contains("#a"),
-                "life proof quest detail must not use client #a macro: " + meta.questId());
+        if (usesNativeMobProgress(meta)) {
+            assertFalse(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
+                    "native mob life proof quest detail must not use hook progress marker: " + meta.questId());
+        } else {
+            assertTrue(detail.contains("@@BD_LP_PROGRESS:" + meta.questId() + "@@"),
+                    "life proof quest detail must contain hook progress marker: " + meta.questId());
+            assertFalse(detail.contains("#a"),
+                    "non-mob life proof quest detail must not use client #a macro: " + meta.questId());
+        }
         assertFalse(detail.contains("..."),
                 "quest detail must not rely on placeholder ellipsis for quest " + meta.questId());
+        assertLifeProofDisplayTextHasNoTemplateLabels(detail, meta.questId());
     }
 
     private static void assertLifeProofProgressMarker(String detail, int questId) {
@@ -775,6 +962,26 @@ class LifeProofQuestTest {
                 "quest detail must contain hook progress marker for quest " + questId);
         assertFalse(Pattern.compile("#a" + questId + "\\d#").matcher(detail).find(),
                 "non-mob life proof quest detail must not use client #a macro: " + questId);
+    }
+
+    private static void assertLifeProofDisplayTextHasNoTemplateLabels(String text, int questId) {
+        String[] forbidden = {
+                "任务目标：",
+                "目标：",
+                "当前目标：",
+                "当前进度：",
+                "完成方式：",
+                "下一步：",
+                "任务列表",
+                "完成书本",
+                "接下「",
+                "这一步是「",
+                "完成了「"
+        };
+        for (String word : forbidden) {
+            assertFalse(text.contains(word), "life proof text must not use old template label " + word
+                    + " for quest " + questId + ": " + text);
+        }
     }
 
     @Test
@@ -791,6 +998,21 @@ class LifeProofQuestTest {
     }
 
     private static void assertItemGate(Element complete, LifeProofQuest.QuestMeta meta) {
+        List<LifeProofQuest.ItemCollection> multi = LifeProofQuest.multiItemCollections(meta);
+        if (multi != null) {
+            Element item = childImgDir(complete, "item");
+            List<Element> gates = childImgDirs(item);
+            assertEquals(multi.size(), gates.size(),
+                    "multi-item gate count must match metadata: " + meta.questId());
+            for (int i = 0; i < multi.size(); i++) {
+                assertEquals(Integer.toString(multi.get(i).itemId()), childValue(gates.get(i), "int", "id"),
+                        "multi-item gate id must match metadata: " + meta.questId());
+                assertEquals(Integer.toString(multi.get(i).requiredCount()),
+                        childValue(gates.get(i), "int", "count"),
+                        "multi-item gate count must match metadata: " + meta.questId());
+            }
+            return;
+        }
         assertEquals(Integer.toString(meta.objective().itemId()),
                 childValue(complete, "item", "0", "int", "id"),
                 "item gate id must match metadata: " + meta.questId());
@@ -803,6 +1025,33 @@ class LifeProofQuestTest {
         return beans.computeIfAbsent(type, key -> mock(key));
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static void installApplicationContext(DataSource dataSource) throws Exception {
+        ApplicationContext context = mock(ApplicationContext.class);
+        ServiceProperty serviceProperty = new ServiceProperty();
+        MessageSource messageSource = mock(MessageSource.class);
+        ConfigService configService = mock(ConfigService.class);
+        Map<Class<?>, Object> beans = new HashMap<>();
+
+        when(configService.loadGameConfigs()).thenReturn(List.of());
+        when(messageSource.getMessage(anyString(), any(Object[].class), any(Locale.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        beans.put(ServiceProperty.class, serviceProperty);
+        beans.put(MessageSource.class, messageSource);
+        beans.put(ConfigService.class, configService);
+        beans.put(DataSource.class, dataSource);
+
+        doAnswer(invocation -> bean(beans, invocation.getArgument(0)))
+                .when(context).getBean(any(Class.class));
+        doAnswer(invocation -> bean(beans, invocation.getArgument(1)))
+                .when(context).getBean(anyString(), any(Class.class));
+
+        Field field = org.gms.manager.ServerManager.class.getDeclaredField("applicationContext");
+        field.setAccessible(true);
+        field.set(null, context);
+    }
+
     private static Character newLifeProofCharacter(Job job) {
         Client client = new CapturingClient();
         Character chr = Character.getDefault(client);
@@ -811,6 +1060,61 @@ class LifeProofQuestTest {
         chr.setLevel(180);
         chr.setJob(job);
         return chr;
+    }
+
+    private static void addNpc(Character chr, int npcId) throws Exception {
+        if (chr.getMap() == null) {
+            MapleMap map = new MapleMap(100000000, 0, 1, 100000000, 1.0f);
+            chr.setMap(map);
+            chr.setMap(100000000);
+        }
+        chr.getMap().addMapObject(new NPC(npcId, new NPCStats("test-npc-" + npcId)));
+    }
+
+    private static void addInstructorNpcs(Character chr) throws Exception {
+        for (int npcId : List.of(1022000, 1032001, 1012100, 1052001, 1090000)) {
+            addNpc(chr, npcId);
+        }
+    }
+
+    private static void satisfyQuestRequirement(Character chr, LifeProofQuest.QuestMeta meta) {
+        LifeProofQuest.Objective objective = meta.objective();
+        QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
+        switch (objective.type()) {
+            case KILL, BOSS -> {
+                for (int mobId : objective.targetIds()) {
+                    status.setProgress(mobId, paddedProgress(objective.requiredCount()));
+                }
+            }
+            case ITEM -> {
+                List<LifeProofQuest.ItemCollection> multi = LifeProofQuest.multiItemCollections(meta);
+                if (multi != null) {
+                    for (LifeProofQuest.ItemCollection item : multi) {
+                        addItem(chr, item.itemId(), item.requiredCount());
+                    }
+                    return;
+                }
+                addItem(chr, objective.itemId(), objective.requiredCount());
+            }
+            case MESO -> chr.setMeso(Math.max(chr.getMeso(), objective.mesoCost()));
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, NPC_TALK, JUMP_MANUAL,
+                 SELECT_OPTION, OPTION_SLOT -> status.setProgress(PROGRESS_KEY,
+                    paddedProgress(objective.requiredCount()));
+            case REWARD -> {
+            }
+        }
+    }
+
+    private static void addItem(Character chr, int itemId, int count) {
+        assertTrue(itemId > 0, "invalid item id");
+        InventoryType type = ItemConstants.getInventoryType(itemId);
+        assertTrue(type != InventoryType.UNDEFINED, "undefined inventory type for item " + itemId);
+        assertTrue(chr.getInventory(type).addItem(new Item(itemId, (short) 0, (short) count)) > 0,
+                "failed to add item " + itemId + " x" + count);
+    }
+
+    private static String paddedProgress(int count) {
+        return String.format("%03d", count);
     }
 
     private static void putQuest(Character chr, int questId, QuestStatus.Status status, String progress) {
@@ -837,6 +1141,35 @@ class LifeProofQuestTest {
 
     private static List<LifeProofQuest.QuestMeta> stageBranchVisibleQuests(LifeProofQuest.QuestMeta meta) {
         return LifeProofQuest.stageBranchVisibleQuests(meta.stage(), meta.branch());
+    }
+
+    private static List<LifeProofQuest.QuestMeta> stageBranchFlowQuests(int stage,
+                                                                        HpChallengeService.JobBranch branch) {
+        List<LifeProofQuest.QuestMeta> visible = LifeProofQuest.stageBranchVisibleQuests(stage, branch);
+        List<LifeProofQuest.QuestMeta> flow = new java.util.ArrayList<>();
+        visible.stream()
+                .filter(meta -> meta.kind() == LifeProofQuest.QuestKind.MAIN)
+                .forEach(flow::add);
+        for (int selectorNo = 1; selectorNo <= LifeProofQuest.OPTIONAL_REQUIRED_COUNT; selectorNo++) {
+            int selectorQuestId = LifeProofQuest.questId(stage, branch,
+                    LifeProofQuest.SELECTOR_SLOT_START + selectorNo - 1);
+            int optionQuestId = LifeProofQuest.questId(stage, branch,
+                    LifeProofQuest.OPTION_SLOT_START + selectorNo - 1);
+            flow.add(visible.stream()
+                    .filter(meta -> meta.questId() == selectorQuestId)
+                    .findFirst()
+                    .orElseThrow());
+            flow.add(visible.stream()
+                    .filter(meta -> meta.questId() == optionQuestId)
+                    .findFirst()
+                    .orElseThrow());
+        }
+        int rewardQuestId = LifeProofQuest.questId(stage, branch, LifeProofQuest.REWARD_SLOT);
+        flow.add(visible.stream()
+                .filter(meta -> meta.questId() == rewardQuestId)
+                .findFirst()
+                .orElseThrow());
+        return flow;
     }
 
     private static LifeProofQuest.QuestMeta previousVisibleQuest(LifeProofQuest.QuestMeta meta) {
@@ -987,10 +1320,16 @@ class LifeProofQuestTest {
 
     private static boolean requiresInfoExCompletionGate(LifeProofQuest.QuestMeta meta) {
         return switch (meta.objective().type()) {
-            case KILL, BOSS, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL,
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL,
                  SELECT_OPTION, OPTION_SLOT -> true;
             default -> false;
         };
+    }
+
+    private static boolean usesNativeMobProgress(LifeProofQuest.QuestMeta meta) {
+        return meta.kind() == LifeProofQuest.QuestKind.MAIN
+                && (meta.objective().type() == LifeProofQuest.ObjectiveType.KILL
+                || meta.objective().type() == LifeProofQuest.ObjectiveType.BOSS);
     }
 
     private static Element childImgDirOrNull(Element parent, String childName) {

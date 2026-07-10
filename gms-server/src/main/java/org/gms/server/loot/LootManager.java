@@ -22,6 +22,7 @@ package org.gms.server.loot;
 import org.gms.client.Character;
 import org.gms.server.life.MonsterDropEntry;
 import org.gms.server.life.MonsterInformationProvider;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.Quest;
 
 import java.util.LinkedList;
@@ -32,7 +33,7 @@ import java.util.List;
  */
 public class LootManager {
 
-    private static boolean isRelevantDrop(MonsterDropEntry dropEntry, List<Character> players, List<LootInventory> playersInv) {
+    private static boolean isRelevantDrop(int monsterId, MonsterDropEntry dropEntry, List<Character> players, List<LootInventory> playersInv) {
         if (dropEntry.questid <= 0) {
             return true;
         }
@@ -46,10 +47,15 @@ public class LootManager {
 
         //boolean restricted = ItemInformationProvider.getInstance().isPickupRestricted(dropEntry.itemId);
         for (int i = 0; i < players.size(); i++) {
+            Character chr = players.get(i);
             LootInventory chrInv = playersInv.get(i);
 
             if (dropEntry.questid > 0) {
-                int qItemAmount, chrQuestStatus = players.get(i).getQuestStatus(dropEntry.questid);
+                if (!ElementalResonanceQuest.isAllowedBossTokenDrop(chr, monsterId, dropEntry.itemId, dropEntry.questid)) {
+                    continue;
+                }
+
+                int qItemAmount, chrQuestStatus = chr.getQuestStatus(dropEntry.questid);
                 if (chrQuestStatus == 0) {
                     qItemAmount = qStartAmount;
                 } else if (chrQuestStatus != 1) {
@@ -90,7 +96,7 @@ public class LootManager {
 
         List<MonsterDropEntry> effectiveLoot = new LinkedList<>();
         for (MonsterDropEntry mde : loots) {
-            if (isRelevantDrop(mde, players, playersInv)) {
+            if (isRelevantDrop(monsterId, mde, players, playersInv)) {
                 effectiveLoot.add(mde);
             }
         }

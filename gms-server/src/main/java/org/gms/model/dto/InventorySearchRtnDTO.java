@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Item;
+import org.gms.server.ItemInformationProvider;
 
 import java.util.Optional;
 
@@ -109,6 +110,13 @@ public class InventorySearchRtnDTO {
             equip.setItemLevel(Optional.ofNullable(getInventoryEquipment().getItemLevel()).orElse((byte) 0));
             equip.setItemExp(Optional.ofNullable(getInventoryEquipment().getItemExp()).orElse(0));
             equip.setRingId(Optional.ofNullable(getInventoryEquipment().getRingId()).orElse(0));
+            equip.setIncRMAF(Optional.ofNullable(getInventoryEquipment().getIncRMAF()).orElse((short) 0));
+            equip.setIncRMAS(Optional.ofNullable(getInventoryEquipment().getIncRMAS()).orElse((short) 0));
+            equip.setIncRMAI(Optional.ofNullable(getInventoryEquipment().getIncRMAI()).orElse((short) 0));
+            equip.setIncRMAL(Optional.ofNullable(getInventoryEquipment().getIncRMAL()).orElse((short) 0));
+            equip.setIncRMAH(Optional.ofNullable(getInventoryEquipment().getIncRMAH()).orElse((short) 0));
+            equip.setElemDefault(Optional.ofNullable(getInventoryEquipment().getElemDefault()).orElse((short) 0));
+            ItemInformationProvider.getInstance().applyBaseElementalStatsIfMissing(equip);
             item = equip;
         } else {
             item = new Item(getItemId(), getPosition(), getQuantity(), getPetId());

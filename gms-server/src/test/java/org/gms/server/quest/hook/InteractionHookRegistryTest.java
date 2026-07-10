@@ -1,16 +1,22 @@
 package org.gms.server.quest.hook;
 
 import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Job;
 import org.gms.client.MonsterBook;
+import org.gms.client.QuestStatus;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.constants.id.NpcId;
 import org.gms.net.packet.Packet;
 import org.gms.property.ServiceProperty;
+import org.gms.server.life.NPC;
+import org.gms.server.life.NPCStats;
+import org.gms.server.maps.MapleMap;
+import org.gms.server.quest.Quest;
 import org.gms.service.ConfigService;
 import org.gms.util.PacketCreator;
 import org.junit.jupiter.api.BeforeAll;
@@ -77,6 +83,8 @@ class InteractionHookRegistryTest {
         assertFalse(questRules.containsKey(LifeProofQuest.FIRST_QUEST_ID));
         assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) MonsterCardRingQuest.CLAIM_QUEST_ID).actionMask());
         assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) MonsterCardRingQuest.LAST_QUEST_ID).actionMask());
+        assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) ElementalResonanceQuest.FIRST_QUEST_ID).actionMask());
+        assertEquals(InteractionHookAction.ALL_MASK, questRules.get((int) ElementalResonanceQuest.LAST_QUEST_ID).actionMask());
         assertFalse(questRules.containsKey(1000));
     }
 
@@ -112,6 +120,30 @@ class InteractionHookRegistryTest {
         assertNull(InteractionHookAction.fromQuestRawAction(0));
         assertTrue((InteractionHookAction.ALL_MASK & InteractionHookAction.QUERY_START.mask()) != 0);
         assertTrue((InteractionHookAction.ALL_MASK & InteractionHookAction.CONFIRM_COMPLETE.mask()) != 0);
+    }
+
+    @Test
+    void elementalResonanceHookProgressShowsCurrentStep() {
+        Character chr = newElementalMage(70);
+        assertTrue(ElementalResonanceQuest.startStage(chr, 29950).success());
+
+        ElementalResonanceInteractionHookProvider provider = new ElementalResonanceInteractionHookProvider();
+        assertTrue(provider.mapNpcRules(chr, Set.of(ElementalResonanceQuest.NPC_ID)).stream()
+                .anyMatch(rule -> rule.eventMask() == InteractionHookProtocol.EVENT_MASK_NPC_CLICK
+                        && rule.targetId() == ElementalResonanceQuest.NPC_ID
+                        && rule.questId() == 29950));
+
+        InteractionHookProgressEntry entry = InteractionHookPackets.progressEntries(chr).stream()
+                .filter(progress -> progress.questId() == 29950)
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(QuestStatus.Status.STARTED.getId(), entry.state());
+        assertTrue(entry.conditions().stream().anyMatch(condition ->
+                condition.text().contains("#o2220000#")
+                        && condition.text().contains("#i4033012#")
+                        && condition.text().contains("#t4033012#")
+                        && !condition.text().contains("目标：")));
     }
 
     @Test
@@ -252,6 +284,66 @@ class InteractionHookRegistryTest {
     }
 
     @Test
+    void lifeProofNpcTalkCompletionShowsCurrentStepBeforeContinuation() throws Exception {
+        Character chr = newLifeProofMage();
+        CapturingClient client = (CapturingClient) chr.getClient();
+        addNpc(chr, 1032001);
+        putQuest(chr, 5129, QuestStatus.Status.STARTED, "000");
+
+        InteractionHookContext context = new InteractionHookContext(client, 1, 5129,
+                1032001, InteractionHookAction.QUERY_COMPLETE);
+
+        LifeProofQuest.openHook(context);
+
+        String prompt = LifeProofQuest.completePrompt(chr, 5129);
+        assertTrue(prompt.contains("生命之证 I：拜访汉斯"), prompt);
+        assertFalse(prompt.contains("是否接受这一步试炼？"), prompt);
+        assertEquals(QuestStatus.Status.STARTED.getId(), chr.getQuestStatus(5129));
+        assertEquals(QuestStatus.Status.NOT_STARTED.getId(), chr.getQuestStatus(5130));
+        assertPacketEquals(PacketCreator.getNPCTalk(1032001, (byte) 1, prompt, "", (byte) 0), client.lastPacket);
+    }
+
+    @Test
+    void nativeNextDialogReopensSwitchedElementalRewardStep() {
+        Character chr = newElementalMage(70);
+        CapturingClient client = (CapturingClient) chr.getClient();
+        InteractionHookManager.dispose(client);
+
+        try {
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29950).success());
+            addItem(chr, 4033012, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29950).success());
+
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29951).success());
+            addItem(chr, 4033013, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29951).success());
+
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29952).success());
+            addItem(chr, 4033014, 1);
+            assertTrue(ElementalResonanceQuest.advanceCurrentStep(chr, 29952).success());
+
+            assertTrue(ElementalResonanceQuest.startStage(chr, 29953).success());
+            addItem(chr, 4000059, 100);
+            addItem(chr, 4000060, 100);
+            addItem(chr, 4000061, 100);
+            addItem(chr, 4021009, 1);
+            chr.setMeso(2_000_000);
+
+            assertTrue(InteractionHookManager.handleNativeQuestAction(client, 29953,
+                    ElementalResonanceQuest.NPC_ID, 2));
+            assertTrue(InteractionHookManager.handleNativeDialogSelection(client, (byte) 1, (byte) 0, 0));
+            assertEquals(QuestStatus.Status.COMPLETED.getId(), chr.getQuestStatus(29953));
+            assertEquals(QuestStatus.Status.STARTED.getId(), chr.getQuestStatus(29991));
+
+            assertTrue(InteractionHookManager.handleNativeDialogSelection(client, (byte) 1, (byte) 0, 0));
+            assertPacketEquals(PacketCreator.getNPCTalk(ElementalResonanceQuest.NPC_ID, (byte) 4,
+                    ElementalResonanceQuest.rewardSelectionPrompt(chr, 29991), "", (byte) 0), client.lastPacket);
+        } finally {
+            InteractionHookManager.dispose(client);
+        }
+    }
+
+    @Test
     void npcTalkAckUsesClientPredictableDialogNpcOnly() {
         CapturingClient client = new CapturingClient();
         InteractionHookContext instructorContext = new InteractionHookContext(client, 1, LifeProofQuest.FIRST_QUEST_ID,
@@ -364,6 +456,42 @@ class InteractionHookRegistryTest {
         chr.setJob(job);
         chr.setMonsterBook(monsterBookWithCompletedSets(completedSets));
         return chr;
+    }
+
+    private static Character newElementalMage(int level) {
+        CapturingClient client = new CapturingClient();
+        Character chr = Character.getDefault(client);
+        client.setPlayer(chr);
+        chr.setLevel(level);
+        chr.setJob(Job.FP_WIZARD);
+        return chr;
+    }
+
+    private static Character newLifeProofMage() {
+        CapturingClient client = new CapturingClient();
+        Character chr = Character.getDefault(client);
+        client.setPlayer(chr);
+        chr.setId(10001);
+        chr.setLevel(180);
+        chr.setJob(Job.FP_ARCHMAGE);
+        return chr;
+    }
+
+    private static void addNpc(Character chr, int npcId) {
+        if (chr.getMap() == null) {
+            MapleMap map = new MapleMap(100000000, 0, 1, 100000000, 1.0f);
+            chr.setMap(map);
+            chr.setMap(100000000);
+        }
+        chr.getMap().addMapObject(new NPC(npcId, new NPCStats("test-npc-" + npcId)));
+    }
+
+    private static void putQuest(Character chr, int questId, QuestStatus.Status status, String progress) {
+        QuestStatus questStatus = new QuestStatus(Quest.getInstance(questId), status, 1032001);
+        if (progress != null) {
+            questStatus.setProgress(0, progress);
+        }
+        chr.getQuests().put((short) questId, questStatus);
     }
 
     private static MonsterBook monsterBookWithCompletedSets(int completedSets) {

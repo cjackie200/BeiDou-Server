@@ -23,6 +23,7 @@ package org.gms.server.maps;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Item;
+import org.gms.server.ItemInformationProvider;
 import org.gms.util.PacketCreator;
 
 import java.awt.*;
@@ -133,6 +134,10 @@ public class MapItem extends AbstractMapObject {
     }
 
     public final boolean canBePickedBy(Character chr) {
+        if (isPersonalQuestDrop()) {
+            return chr != null && chr.getId() == character_ownerid;
+        }
+
         if (character_ownerid <= 0 || isFFADrop()) {
             return true;
         }
@@ -154,6 +159,20 @@ public class MapItem extends AbstractMapObject {
         }
 
         return hasExpiredOwnershipTime();
+    }
+
+    public final boolean isVisibleTo(Character chr) {
+        if (chr == null) {
+            return false;
+        }
+        if (isPersonalQuestDrop() && chr.getId() != character_ownerid) {
+            return false;
+        }
+        return chr.needQuestItem(questid, getItemId());
+    }
+
+    public final boolean isPersonalQuestDrop() {
+        return item != null && questid > 0 && ItemInformationProvider.getInstance().isQuestItem(item.getItemId());
     }
 
     public final Client getOwnerClient() {
@@ -205,7 +224,7 @@ public class MapItem extends AbstractMapObject {
     public void sendSpawnData(final Client client) {
         Character chr = client.getPlayer();
 
-        if (chr.needQuestItem(questid, getItemId())) {
+        if (isVisibleTo(chr)) {
             this.lockItem();
             try {
                 client.sendPacket(PacketCreator.dropItemFromMapObject(chr, this, null, getPosition(), (byte) 2));

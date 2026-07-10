@@ -10,7 +10,9 @@ import org.gms.net.packet.Packet;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.server.hpchallenge.LifeProofQuest;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
+import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,16 @@ public final class InteractionHookPackets {
             return;
         }
         sendClientRuntimeConfig(client);
+        // Send weapon elemental bonus config to client DLL
+        client.sendPacket(PacketCreator.elementalWeaponConfig(client.getPlayer()));
         clearAllRules(client);
+        sendCurrentState(client);
+    }
+
+    public static void sendCurrentState(Client client) {
+        if (!canSendRules(client)) {
+            return;
+        }
         sendCharacterQuestRules(client);
         sendMapNpcRules(client);
         sendProgress(client);
@@ -216,6 +227,7 @@ public final class InteractionHookPackets {
         List<InteractionHookProgressEntry> entries = new ArrayList<>();
         entries.addAll(LifeProofQuest.progressEntries(chr));
         entries.addAll(MonsterCardRingQuest.progressEntries(chr));
+        entries.addAll(ElementalResonanceQuest.progressEntries(chr));
         return entries;
     }
 

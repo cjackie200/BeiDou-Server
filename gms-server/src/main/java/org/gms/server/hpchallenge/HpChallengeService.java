@@ -35,6 +35,9 @@ public final class HpChallengeService {
 
     static final int MIN_LEVEL = 120;
     static final int MAX_STAT = 30000;
+    static final int MAIN_COMMON_KILL_REQUIRED = 100;
+    static final int MAIN_JOB_KILL_REQUIRED = 200;
+    static final int OPTIONAL_KILL_REQUIRED = 999;
     private static final int OPTIONAL_REQUIRED_COUNT = 3;
     private static final Set<Integer> INSTRUCTOR_IDS = Set.of(1022000, 1032001, 1012100, 1052001, 1090000);
     private static final Map<Integer, StageConfig> STAGES = buildStages();
@@ -957,18 +960,30 @@ public final class HpChallengeService {
     }
 
     private static Task t(String key, TaskGroup group, TargetType type, int required, String description, int... ids) {
-        return new Task(key, group, type, required, description,
+        return new Task(key, group, type, normalizedRequired(group, type, required), description,
                 Arrays.stream(ids).boxed().collect(Collectors.toList()), 0, 0, false);
     }
 
     private static Task tPerMob(String key, TaskGroup group, TargetType type, int required, String description, int... ids) {
-        return new Task(key, group, type, required, description,
+        return new Task(key, group, type, normalizedRequired(group, type, required), description,
                 Arrays.stream(ids).boxed().collect(Collectors.toList()), 0, 0, true);
     }
 
     private static Task opt(int optionNo, TargetType type, int required, String description, int... ids) {
-        return new Task("optional_" + optionNo, TaskGroup.OPTIONAL, type, required, description,
+        return new Task("optional_" + optionNo, TaskGroup.OPTIONAL, type,
+                normalizedRequired(TaskGroup.OPTIONAL, type, required), description,
                 Arrays.stream(ids).boxed().collect(Collectors.toList()), optionNo, 0, false);
+    }
+
+    private static int normalizedRequired(TaskGroup group, TargetType type, int required) {
+        if (type != TargetType.KILL) {
+            return required;
+        }
+        return switch (group) {
+            case MAIN_COMMON -> MAIN_COMMON_KILL_REQUIRED;
+            case MAIN_JOB -> MAIN_JOB_KILL_REQUIRED;
+            case OPTIONAL -> OPTIONAL_KILL_REQUIRED;
+        };
     }
 
     private static Task mesoOpt(int optionNo, int meso) {
@@ -1007,7 +1022,7 @@ public final class HpChallengeService {
                         List.of(t("mage_buffoon", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀时之鬼兵", 6300100), t("mage_deep_buffoon", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀时之鬼将", 6400100), t("mage_master_death_teddy", TaskGroup.MAIN_JOB, TargetType.KILL, 500, "击杀强化死灵", 7130300)),
                         List.of(t("bowman_harp", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀哈维", 8140001), t("bowman_blood_harp", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀血腥哈维", 8140002), t("bowman_werewolf", TaskGroup.MAIN_JOB, TargetType.KILL, 500, "击杀狼人", 7130200)),
                         List.of(t("thief_death_teddy", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀死灵", 7130010), t("thief_soul_teddy", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀恶灵附身的娃娃", 6230400), t("thief_ghost_pirate", TaskGroup.MAIN_JOB, TargetType.KILL, 500, "击杀蓝帽海贼", 7140000)),
-                        List.of(t("pirate_goby", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀刺鳍鱼", 7130020), t("pirate_bain", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀火焰猎犬", 8140500), t("pirate_dual_ghost_pirate", TaskGroup.MAIN_JOB, TargetType.KILL, 500, "击杀双刀蓝帽海贼", 7160000))
+                        List.of(t("pirate_goby_house", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀刺鳍鱼之屋", 8140555), t("pirate_bain", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀火焰猎犬", 8140500), t("pirate_dual_ghost_pirate", TaskGroup.MAIN_JOB, TargetType.KILL, 500, "击杀双刀蓝帽海贼", 7160000))
                 ),
                 List.of(opt(1, TargetType.SCROLL_100, 30, "使用任意 100% 卷轴"), opt(2, TargetType.BOSS, 3, "参与击杀蝙蝠魔", 8150000), opt(3, TargetType.PQ_ANY, 5, "完成任意组队任务"), opt(4, TargetType.MAP, 10, "在隐藏地图击杀怪物收集初醒隐秘生命之证", 100000005, 101000100, 102000100, 103000100, 105040300, 220020300, 230040400, 240040510, 270030500, 261020401), mesoOpt(5, 100000000), opt(6, TargetType.KILL, 1200, "击杀黄小丑", 6130200), opt(7, TargetType.KILL, 1200, "击杀恶灵附身的娃娃", 6230400), opt(8, TargetType.JUMP_MANUAL, 3, "完成任意跳跳任务"))
         ));
@@ -1017,7 +1032,7 @@ public final class HpChallengeService {
                         List.of(t("warrior_dark_cornian", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀邪恶双刀蜥蜴", 8150201), t("warrior_birk", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀短刃蜥蜴", 8140110), t("warrior_brexton", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀犀牛龙怪", 8140703)),
                         List.of(t("mage_red_wyvern", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀红飞龙", 8150300), t("mage_blue_wyvern", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀蓝飞龙", 8150301), t("mage_dark_wyvern", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀黑飞龙", 8150302)),
                         List.of(t("bowman_harp", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀哈维", 8140001), t("bowman_blood_harp", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀血腥哈维", 8140002), t("bowman_blue_dragon_turtle", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀蓝海龟龙", 8140700)),
-                        List.of(t("thief_green_cornian", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀邪恶短刃蜥蜴", 8150200), t("thief_jr_newtie", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀幼年纽特", 8190000), t("thief_nest_golem", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀巢穴魔像", 8190002)),
+                        List.of(t("thief_green_cornian", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀邪恶短刃蜥蜴", 8150200), t("thief_jr_newtie", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀幼年纽特", 8190000), t("thief_nest_golem", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀龙巢泥人妖", 8190005)),
                         List.of(t("pirate_red_dragon_turtle", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀红海龟龙", 8140701), t("pirate_rexton", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀犀牛龙", 8140702), t("pirate_nest_golem", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀龙巢魔像", 8190005))
                 ),
                 List.of(opt(1, TargetType.BOSS, 2, "参与击杀火焰龙", 8180000), opt(2, TargetType.BOSS, 2, "参与击杀天鹰", 8180001), opt(3, TargetType.KILL, 1000, "击杀犀牛龙", 8140702), opt(4, TargetType.KILL, 1000, "击杀犀牛龙怪", 8140703), opt(5, TargetType.MAP, 8, "在神木村龙族地图击杀龙族怪物收集龙巢生命之证", 240030000, 240030100, 240030200, 240040000, 240040100, 240040200, 240040300, 240040400), opt(6, TargetType.KILL, 2500, "击杀任意神木村怪物", 8140101, 8140102, 8140103, 8150200, 8150201, 8140001, 8140002, 8140700, 8140701, 8140702, 8140703), mesoOpt(7, 150000000), opt(8, TargetType.PQ_ANY, 8, "完成任意组队任务"))
@@ -1027,7 +1042,7 @@ public final class HpChallengeService {
                 jobs(
                         List.of(t("warrior_gigantic_viking", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀大海贼王", 8141100), t("warrior_dual_ghost_pirate", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀双刀蓝帽海贼", 7160000), t("warrior_master_death_teddy", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀强化死灵", 7130300)),
                         List.of(t("mage_phantom_watch", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀时之鬼爵", 8142000), t("mage_grim_phantom_watch", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀时之鬼王", 8143000), t("mage_master_soul_teddy", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀强化恶灵娃娃", 6230500)),
-                        List.of(t("bowman_yellow_king_goblin", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀黄鬼怪王", 7130400), t("bowman_blue_king_goblin", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀蓝鬼怪王", 7130401), t("bowman_green_king_goblin", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀绿鬼怪王", 7130402)),
+                        List.of(t("bowman_dual_ghost_pirate", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀双刀蓝帽海贼", 7160000), t("bowman_spirit_viking", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀大海贼", 8141000), t("bowman_gigantic_viking", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀大海贼王", 8141100)),
                         List.of(t("thief_spirit_viking", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀大海贼", 8141000), t("thief_ghost_pirate", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀蓝帽海贼", 7140000), t("thief_dark_rash", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀暗黑拉什", 7130501)),
                         List.of(t("pirate_rash", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀拉什", 7130500), t("pirate_hobi", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀霍比", 7130600), t("pirate_green_hobi", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀绿霍比", 7130601))
                 ),
@@ -1053,7 +1068,7 @@ public final class HpChallengeService {
                         List.of(t("thief_eye_of_time", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀时间之眼", 8200000), t("thief_memory_monk", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀记忆的祭司", 8200001), t("thief_qualm_monk_trainee", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀后悔的神官", 8200006)),
                         List.of(t("pirate_shark", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀鲨鱼", 8150100), t("pirate_cold_shark", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀尖鼻鲨鱼", 8150101), t("pirate_bombing_fish_house", TaskGroup.MAIN_JOB, TargetType.KILL, 1000, "击杀炸弹鱼屋", 8140555))
                 ),
-                List.of(opt(1, TargetType.BOSS, 5, "参与击杀皮亚奴斯", 8510000, 8520000), opt(2, TargetType.PQ_PIRATE, 10, "完成海盗船组队任务"), opt(3, TargetType.BOSS, 5, "参与击杀老海盗", 9300119), opt(4, TargetType.KILL, 2000, "击杀骨骸鱼", 8140600), opt(5, TargetType.KILL, 3000, "击杀鲨鱼或尖鼻鲨鱼", 8150100, 8150101), opt(6, TargetType.MAP, 10, "在水下世界隐藏地图击杀怪物收集暗流生命之证", 230040000, 230040100, 230040200, 230040300, 230040400, 230040410, 230040420, 230040430, 230040500, 230040600), opt(7, TargetType.KILL, 4000, "击杀任意深海怪物", 7130020, 8140600, 8141300, 8142100, 8150100, 8150101), mesoOpt(8, 400000000))
+                List.of(opt(1, TargetType.BOSS, 5, "参与击杀皮亚奴斯", 8510000, 8520000), opt(2, TargetType.PQ_PIRATE, 10, "完成海盗船组队任务"), opt(3, TargetType.BOSS, 5, "参与击杀老海盗", 9300119), opt(4, TargetType.KILL, 2000, "击杀骨骸鱼", 8140600), opt(5, TargetType.KILL, 3000, "击杀鲨鱼或尖鼻鲨鱼", 8150100, 8150101), opt(6, TargetType.MAP, 10, "在水下世界隐藏地图击杀怪物收集暗流生命之证", 230040000, 230040100, 230040200, 230040300, 230040400, 230040410, 230040420, 230040430, 230040500, 230040600), opt(7, TargetType.KILL, 4000, "击杀任意深海怪物", 8140555, 8140600, 8141300, 8142100, 8150100, 8150101), mesoOpt(8, 400000000))
         ));
         stages.put(6, new StageConfig(6, 170, 3000, 30000, 23450, 19875, 10550,
                 List.of(t("visit_temple", TaskGroup.MAIN_COMMON, TargetType.MAP, 7, "收集幸运水晶", 270010100, 270010200, 270030100, 270030200), tPerMob("kill_temple_priests", TaskGroup.MAIN_COMMON, TargetType.KILL, 600, "击杀后悔的祭司和忘却的祭司", 8200005, 8200009), t("kill_temple_boss", TaskGroup.MAIN_COMMON, TargetType.BOSS, 1, "参与击杀多多、玄冰独角兽或雷卡", 8220004, 8220005, 8220006)),
@@ -1061,7 +1076,7 @@ public final class HpChallengeService {
                         List.of(t("warrior_oblivion_monk_trainee", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀忘却的神官", 8200010), t("warrior_oblivion_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀忘却的守护兵", 8200011), t("warrior_chief_oblivion_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀忘却的守护队长", 8200012)),
                         List.of(t("mage_memory_monk_trainee", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀记忆的神官", 8200002), t("mage_memory_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀记忆的守护兵", 8200003), t("mage_chief_memory_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀记忆的守护队长", 8200004)),
                         List.of(t("bowman_qualm_monk_trainee", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀后悔的神官", 8200006), t("bowman_qualm_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀后悔的守护兵", 8200007), t("bowman_chief_qualm_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀后悔的守护队长", 8200008)),
-                        List.of(t("thief_gatekeeper", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀守门人", 8160000), t("thief_thanatos", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀死神", 8170000), t("thief_eye_of_time", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀时间之眼", 8200000)),
+                        List.of(t("thief_oblivion_monk", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀忘却的祭司", 8200009), t("thief_oblivion_monk_trainee", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀忘却的神官", 8200010), t("thief_eye_of_time", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀时间之眼", 8200000)),
                         List.of(t("pirate_shark", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀鲨鱼", 8150100), t("pirate_cold_shark", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀尖鼻鲨鱼", 8150101), t("pirate_bone_fish", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀骨骸鱼", 8140600))
                 ),
                 List.of(opt(1, TargetType.BOSS, 3, "参与击杀多多", 8220004), opt(2, TargetType.BOSS, 3, "参与击杀玄冰独角兽", 8220005), opt(3, TargetType.BOSS, 3, "参与击杀雷卡", 8220006), opt(4, TargetType.BOSS, 1, "参与击杀暗黑龙王的灵魂", 8810018), opt(5, TargetType.KILL, 1800, "击杀忘却的守护兵", 8200011), opt(6, TargetType.KILL, 1800, "击杀忘却的守护队长", 8200012), opt(7, TargetType.MAP, 15, "在时间神殿击杀怪物收集回忆生命之证", 270000000, 270010000, 270010100, 270010200, 270010300, 270010400, 270020000, 270020100, 270020200, 270020300, 270020400, 270030000, 270030100, 270030200, 270030300), mesoOpt(8, 500000000))
@@ -1069,7 +1084,7 @@ public final class HpChallengeService {
         stages.put(7, new StageConfig(7, 180, 3400, 30000, 27000, 22500, 12000,
                 List.of(t("visit_final", TaskGroup.MAIN_COMMON, TargetType.MAP, 5, "收集五种水晶各10个", 240040510, 240040511, 240040600), tPerMob("kill_final_common", TaskGroup.MAIN_COMMON, TargetType.KILL, 1200, "击杀老骷髅龙和忘却的守护队长", 8190004, 8200012), t("kill_mid_boss_final", TaskGroup.MAIN_COMMON, TargetType.BOSS, 5, "完成任意中阶 Boss 参与击杀", 8800002, 8500002, 8510000, 8520000, 9420549, 9420544)),
                 jobs(
-                        List.of(t("warrior_skelegon", TaskGroup.MAIN_JOB, TargetType.KILL, 2000, "击杀骷髅龙", 8190003), t("warrior_gatekeeper", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀守门人", 8160000), t("warrior_thanatos", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀死神", 8170000)),
+                        List.of(t("warrior_skelegon", TaskGroup.MAIN_JOB, TargetType.KILL, 2000, "击杀骷髅龙", 8190003), t("warrior_oblivion_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀忘却的守护兵", 8200011), t("warrior_chief_oblivion_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀忘却的守护队长", 8200012)),
                         List.of(t("mage_oblivion_monk_trainee", TaskGroup.MAIN_JOB, TargetType.KILL, 2000, "击杀忘却的神官", 8200010), t("mage_oblivion_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀忘却的守护兵", 8200011), t("mage_qualm_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀后悔的守护兵", 8200007)),
                         List.of(t("bowman_brexton", TaskGroup.MAIN_JOB, TargetType.KILL, 2000, "击杀犀牛龙怪", 8140703), t("bowman_gigantic_viking", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀大海贼王", 8141100), t("bowman_chief_qualm_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀后悔的守护队长", 8200008)),
                         List.of(t("thief_qualm_monk_trainee", TaskGroup.MAIN_JOB, TargetType.KILL, 2000, "击杀后悔的神官", 8200006), t("thief_memory_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀记忆的守护兵", 8200003), t("thief_chief_memory_guardian", TaskGroup.MAIN_JOB, TargetType.KILL, 1500, "击杀记忆的守护队长", 8200004)),

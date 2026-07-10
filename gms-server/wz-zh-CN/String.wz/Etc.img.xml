@@ -9526,5 +9526,69 @@
             <string name="name" value="试炼完成印记"/>
             <string name="desc" value="完成人工核验试炼后获得的证明。"/>
         </imgdir>
+        <imgdir name="4033012">
+            <string name="name" value="红蜗牛王共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033013">
+            <string name="name" value="树妖王共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033014">
+            <string name="name" value="蘑菇王共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033015">
+            <string name="name" value="巨型蜈蚣共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033016">
+            <string name="name" value="提莫共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033017">
+            <string name="name" value="多尔共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033018">
+            <string name="name" value="朱诺共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033019">
+            <string name="name" value="九尾狐共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033020">
+            <string name="name" value="妖怪禅师共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033021">
+            <string name="name" value="火焰龙共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033022">
+            <string name="name" value="格瑞芬多共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033023">
+            <string name="name" value="帕普拉图斯共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033024">
+            <string name="name" value="皮亚奴斯共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033025">
+            <string name="name" value="扎昆共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033026">
+            <string name="name" value="暗黑龙王共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
+        <imgdir name="4033027">
+            <string name="name" value="品克缤共鸣印记"/>
+            <string name="desc" value="元素共鸣任务中获得的 Boss 凭证。"/>
+        </imgdir>
     </imgdir>
 </imgdir>

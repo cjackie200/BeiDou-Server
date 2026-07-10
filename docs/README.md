@@ -15,6 +15,8 @@
 - [InteractionHook v4 分组与分批规则下发方案](interaction-hook-v4-rule-batching.md)
 - [背包栏位与物品堆叠策略](inventory-slot-policy.md)
 - [客户端自动更新方案](client-update.md)
+- [个人任务掉落机制](personal-quest-drops.md)
+- [元素武器规则](elemental-weapon-rules.md)
 
 ## 规约
 

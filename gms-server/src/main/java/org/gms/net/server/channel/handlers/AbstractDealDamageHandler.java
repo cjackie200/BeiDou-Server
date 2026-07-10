@@ -27,6 +27,8 @@ import org.gms.client.Job;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.client.autoban.AutobanFactory;
+import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.InventoryType;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.GameConfig;
@@ -51,6 +53,7 @@ import org.gms.server.life.Monster;
 import org.gms.server.life.MonsterStats;
 import org.gms.server.life.MonsterDropEntry;
 import org.gms.server.life.MonsterInformationProvider;
+import org.gms.server.life.SkillElementResolver;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
@@ -71,6 +74,43 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ItemPickupHandler.class);
     private static final long MOB_VAC_DISTANCE_GRACE_MS = 2500L;
+
+    private static short getWeaponElementBonus(Equip weapon, Skill skill) {
+        return SkillElementResolver.bestWeaponElementBonus(weapon, skill);
+    }
+
+    private static boolean hasElementalWeakness(Monster monster, Set<Element> elements) {
+        if (monster == null || elements.isEmpty()) {
+            return false;
+        }
+
+        for (Element element : elements) {
+            if (monster.getElementalEffectiveness(element) == ElementalEffectiveness.WEAK) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean shouldApplyPoisonFireWeaknessDamageBonus(
+            Character chr, Monster monster, Set<Element> skillElements, boolean magic) {
+        if (!magic || chr == null || monster == null || skillElements.isEmpty()) {
+            return false;
+        }
+        return skillElements.contains(Element.FIRE) && monster.hasPoisonFireWeakness();
+    }
+
+    static int applyPoisonFireWeaknessDamageBonus(int damage) {
+        if (damage <= 0) {
+            return damage;
+        }
+
+        long adjusted = damage * 150L / 100L;
+        if (adjusted > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        return (int) adjusted;
+    }
 
     public static class AttackInfo {
 
@@ -917,21 +957,30 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
             }
 
+            Set<Element> skillElements = Set.of();
             if (ret.skill != 0) {
                 Skill skill = SkillFactory.getSkill(ret.skill);
-                if (skill.getElement() != Element.NEUTRAL && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
+                skillElements = SkillElementResolver.getAttackElements(skill);
+                if (!skillElements.isEmpty() && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
                     // The skill has an element effect, so we need to factor that in.
                     if (monster != null) {
-                        ElementalEffectiveness eff = monster.getElementalEffectiveness(skill.getElement());
-                        if (eff == ElementalEffectiveness.WEAK) {
+                        if (hasElementalWeakness(monster, skillElements)) {
                             calcDmgMax *= 1.5;
-                        } else if (eff == ElementalEffectiveness.STRONG) {
-                            //calcDmgMax *= 0.5;
                         }
                     } else {
                         // Since we already know the skill has an elemental attribute, but we dont know if the monster is weak or not, lets
                         // take the safe approach and just assume they are weak.
                         calcDmgMax *= 1.5;
+                    }
+                }
+                // Weapon elemental bonus for magic attacks
+                if (magic && !skillElements.isEmpty() && chr.getBuffedValue(BuffStat.ELEMENTAL_RESET) == null) {
+                    Equip weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11) instanceof Equip equip
+                            ? equip
+                            : null;
+                    short bonus = getWeaponElementBonus(weapon, skill);
+                    if (bonus > 0) {
+                        calcDmgMax = calcDmgMax * bonus / 100;
                     }
                 }
                 if (ret.skill == FPWizard.POISON_BREATH || ret.skill == FPMage.POISON_MIST || ret.skill == FPArchMage.FIRE_DEMON || ret.skill == ILArchMage.ICE_DEMON) {
@@ -957,8 +1006,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
             }
 
+            boolean poisonFireWeaknessDamageBonus =
+                    shouldApplyPoisonFireWeaknessDamageBonus(chr, monster, skillElements, magic);
             for (int j = 0; j < ret.numDamage; j++) {
                 int damage = p.readInt();
+                if (poisonFireWeaknessDamageBonus) {
+                    damage = applyPoisonFireWeaknessDamageBonus(damage);
+                }
                 long hitDmgMax = calcDmgMax;
                 if (ret.skill == Buccaneer.BARRAGE || ret.skill == ThunderBreaker.BARRAGE) {
                     if (j > 3) {

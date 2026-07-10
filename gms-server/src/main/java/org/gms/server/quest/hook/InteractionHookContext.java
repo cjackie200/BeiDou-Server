@@ -20,6 +20,7 @@ public final class InteractionHookContext {
     private final int rawAction;
     private int dialogState = InteractionHookProtocol.DIALOG_STATE_NONE;
     private boolean visibleDialogSent;
+    private int selectedOption = -1;
 
     InteractionHookContext(Client client, int requestId, int questId, int sourceNpcId, InteractionHookAction action) {
         this(client, requestId, questId, sourceNpcId, action, null);
@@ -91,6 +92,14 @@ public final class InteractionHookContext {
         return visibleDialogSent;
     }
 
+    public int selectedOption() {
+        return selectedOption;
+    }
+
+    public void setSelectedOption(int selectedOption) {
+        this.selectedOption = selectedOption;
+    }
+
     public void resetVisibleDialogSent() {
         visibleDialogSent = false;
     }
@@ -106,6 +115,12 @@ public final class InteractionHookContext {
         dialogState = InteractionHookProtocol.DIALOG_STATE_OPEN;
         visibleDialogSent = true;
         client.sendPacket(PacketCreator.getNPCTalk(displayNpcId, (byte) 0, text, "00 00", (byte) 0));
+    }
+
+    public void sendNext(String text) {
+        dialogState = InteractionHookProtocol.DIALOG_STATE_NEXT;
+        visibleDialogSent = true;
+        client.sendPacket(PacketCreator.getNPCTalk(displayNpcId, (byte) 0, text, "00 01", (byte) 0));
     }
 
     public void sendYesNo(String text) {

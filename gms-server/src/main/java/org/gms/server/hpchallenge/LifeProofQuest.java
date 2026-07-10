@@ -56,6 +56,7 @@ public final class LifeProofQuest {
         if (questId.isEmpty()) return 0;
         QuestMeta meta = QUESTS.get(questId.get());
         if (meta == null || !meta.isVisible()) return 0;
+        if (multiItemCollections(meta) != null) return 0;
         Objective objective = effectiveObjective(chr, meta);
         if (objective == null || objective.type() != ObjectiveType.ITEM) return 0;
         return objective.itemId();
@@ -120,8 +121,7 @@ public final class LifeProofQuest {
                      int mesoCost, boolean perMob) {
         boolean isCustomProgress() {
             return switch (type) {
-                case KILL, BOSS, PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL,
-                     OPTION_SLOT -> true;
+                case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, MESO, SCROLL_100, NPC_TALK, JUMP_MANUAL, OPTION_SLOT -> true;
                 default -> false;
             };
         }
@@ -520,7 +520,6 @@ public final class LifeProofQuest {
             if (status == null) {
                 return List.of();
             }
-            // Per-mob tracking: show individual progress per monster type
             if (objective.perMob()) {
                 List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
                 for (int targetId : objective.targetIds()) {
@@ -528,11 +527,10 @@ public final class LifeProofQuest {
                     String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(targetId);
                     conditions.add(new InteractionHookProgressEntry.Condition(
                             mobProgress, objective.requiredCount(),
-                            mobName + " 进度：#b" + mobProgress + "#k/#r" + objective.requiredCount() + "#k"));
+                            mobName + " #b" + mobProgress + "#k/#r" + objective.requiredCount() + "#k"));
                 }
                 return conditions;
             }
-            // Shared progress: show one combined line for all target monsters
             int progress = mobProgress(chr, meta);
             StringBuilder mobNames = new StringBuilder();
             for (int i = 0; i < objective.targetIds().size(); i++) {
@@ -541,11 +539,10 @@ public final class LifeProofQuest {
             }
             return List.of(new InteractionHookProgressEntry.Condition(
                     progress, objective.requiredCount(),
-                    mobNames + " 进度：#b" + progress + "#k/#r" + objective.requiredCount() + "#k"));
+                    mobNames + " #b" + progress + "#k/#r" + objective.requiredCount() + "#k"));
         }
 
         ProgressValue progress = questProgressValue(chr, meta);
-        // Multi-item collections return one condition per item type
         if (type == ObjectiveType.ITEM) {
             List<ItemCollection> multi = multiItemCollections(meta);
             if (multi != null) {
@@ -571,12 +568,12 @@ public final class LifeProofQuest {
         String text = switch (type) {
             case KILL, BOSS -> throw new IllegalStateException("unreachable");
             case ITEM -> "#i" + objective.itemId() + "# #t" + objective.itemId()
-                    + "# 收集：#b" + progress.current() + "#k/#r" + progress.required() + "#k"
+                    + "# #b" + progress.current() + "#k/#r" + progress.required() + "#k"
                     + dropperText(objective.targetIds());
             case MESO -> "金币：#b" + progress.current() + "#k/#r" + progress.required() + "#k";
             case NPC_TALK -> {
                 int npcId = objective.targetIds().isEmpty() ? 0 : objective.targetIds().getFirst();
-                yield "拜访 #p" + npcId + "#：#b" + progress.current() + "#k/1";
+                yield "与#p" + npcId + "#确认 #b" + progress.current() + "#k/1";
             }
             case PQ_ANY -> "组队任务：#b" + progress.current() + "#k/#r" + progress.required() + "#k 次";
             case PQ_PIRATE ->
@@ -629,7 +626,10 @@ public final class LifeProofQuest {
         if (objective.type() == ObjectiveType.NPC_TALK) {
             sb.append(mentorStartLine(meta)).append("\r\n\r\n");
         }
-        sb.append("目标：").append(objective.description()).append("\r\n");
+        String startText = startObjectiveText(meta, objective);
+        if (!startText.isBlank()) {
+            sb.append(startText).append("\r\n");
+        }
         appendObjectiveHint(sb, meta, objective);
         sb.append("\r\n是否接受这一步试炼？");
         return sb.toString();
@@ -646,7 +646,7 @@ public final class LifeProofQuest {
         if (meta.kind() == QuestKind.OPTION_SLOT && selectedOptional(chr, meta) == null) {
             return error("请先通过附加试炼选择任务选择本轮目标。");
         }
-        return ok("已接受：" + meta.name());
+        return ok("这一步生命之证已经开始。");
     }
 
     public static void onStarted(Character chr, int questId) {
@@ -720,7 +720,7 @@ public final class LifeProofQuest {
             return error("该试炼当前不能选择。");
         }
         int slotQuestId = questId(selector.stage(), selector.branch(), OPTION_SLOT_START + selector.selectorNo() - 1);
-        return OK_PREFIX + slotQuestId + "|" + "已选择：" + objective(selector.stage(), selected).description();
+        return OK_PREFIX + slotQuestId + "|" + "已选定：" + objective(selector.stage(), selected).description();
     }
 
     public static boolean isOkResult(String result) {
@@ -733,6 +733,24 @@ public final class LifeProofQuest {
 
     public static boolean isReadyResult(String result) {
         return result != null && result.startsWith(READY_PREFIX);
+    }
+
+    public static boolean isAutoCompleteNpcTalk(Character chr, int questId, int npcId) {
+        QuestMeta meta = QUESTS.get(questId);
+        if (chr == null || meta == null || !meta.isVisible()
+                || meta.objective().type() != ObjectiveType.NPC_TALK) {
+            return false;
+        }
+        if (chr.getQuestStatus(questId) != QuestStatus.Status.STARTED.getId()) {
+            return false;
+        }
+        return canUseNpc(chr, npcId) && npcId == completeNpcId(meta);
+    }
+
+    public static int nextContinuationQuestIdAtNpc(Character chr, int questId, int npcId) {
+        QuestMeta completed = QUESTS.get(questId);
+        QuestMeta next = nextContinuationAtNpc(chr, completed, npcId);
+        return next == null ? 0 : next.questId();
     }
 
     public static String resultMessage(String result) {
@@ -988,8 +1006,8 @@ public final class LifeProofQuest {
             sb.append("确认由#p").append(npcId).append("#记录这一步生命之证？");
             return sb.toString();
         }
-        sb.append("确认提交这一步试炼？\r\n\r\n");
-        sb.append("目标：").append(objective.description());
+        sb.append("这一步试炼已经达成。确认提交吗？\r\n\r\n");
+        sb.append(completionReviewText(objective));
         appendObjectiveHint(sb, meta, objective);
         return sb.toString();
     }
@@ -1069,7 +1087,7 @@ public final class LifeProofQuest {
             completeNextBridgeSilently(chr, meta);
         }
         chr.yellowMessage("生命之证：" + meta.name() + "完成。");
-        return ok("已完成：" + meta.name());
+        return ok("这一步生命之证已经记录。");
     }
 
     public static String afterNativeComplete(Character chr, int questId, int npcId) {
@@ -1089,9 +1107,9 @@ public final class LifeProofQuest {
 
         int startNpcId = startNpcId(next);
         if (startNpcId == npcId) {
-            return "\r\n\r\n下一步仍在#p" + startNpcId + "#，请重新点击该 NPC 头上的生命之证任务入口。";
+            return "\r\n\r\n继续找#p" + startNpcId + "#，点击该 NPC 头上的生命之证任务入口。";
         }
-        return "\r\n\r\n下一步请前往#p" + startNpcId + "#，点击生命之证任务入口。";
+        return "\r\n\r\n前往#p" + startNpcId + "#，点击生命之证任务入口。";
     }
 
     private static String progressPrompt(Character chr, QuestMeta meta, int npcId) {
@@ -1099,9 +1117,9 @@ public final class LifeProofQuest {
         Objective objective = effectiveObjective(chr, meta);
         sb.append("#e").append(meta.name()).append("#n\r\n\r\n");
         sb.append(stageStory(meta.stage())).append("\r\n\r\n");
-        sb.append("当前目标：").append(objective.description()).append("\r\n");
+        sb.append(progressLeadText(meta, objective, npcId)).append("\r\n");
         sb.append(progressText(chr, meta, npcId)).append("\r\n\r\n");
-        sb.append("下一步：").append(nextStepText(chr, meta, npcId));
+        sb.append(nextStepText(chr, meta, npcId));
         return sb.toString();
     }
 
@@ -1113,7 +1131,7 @@ public final class LifeProofQuest {
             }
             return "请前往#p" + completeNpcId + "#提交这一步生命之证试炼。";
         }
-        return "#r当前目标还没有完成。#k\r\n\r\n" + progressPrompt(chr, meta, npcId);
+        return "#r这一步试炼还没有完成。#k\r\n\r\n" + progressPrompt(chr, meta, npcId);
     }
 
     private static String progressText(Character chr, QuestMeta meta, int npcId) {
@@ -1156,8 +1174,8 @@ public final class LifeProofQuest {
             }
             case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL -> "#b" + customProgress(chr, meta)
                     + "#k/#r" + objective.requiredCount() + "#k";
-            case MESO -> "当前金币 #b" + chr.getMeso() + "#k / 需要 #r" + objective.mesoCost() + "#k";
-            case NPC_TALK -> "目标 NPC：#p" + targetNpcId(meta, objective) + "#，#b"
+            case MESO -> "金币 #b" + chr.getMeso() + "#k / #r" + objective.mesoCost() + "#k";
+            case NPC_TALK -> "与#p" + targetNpcId(meta, objective) + "#确认 #b"
                     + customProgress(chr, meta) + "#k/#r" + objective.requiredCount() + "#k";
             case SELECT_OPTION -> "等待选择 1 项附加试炼";
             case OPTION_SLOT -> "等待选择后的附加试炼目标";
@@ -1208,6 +1226,56 @@ public final class LifeProofQuest {
         };
     }
 
+    private static String startObjectiveText(QuestMeta meta, Objective objective) {
+        int completeNpcId = completeNpcId(meta);
+        return switch (objective.type()) {
+            case NPC_TALK -> "";
+            case ITEM -> "把需要的证明物带回#p" + completeNpcId + "#。";
+            case KILL -> "按导师指定的战斗试炼证明自己。";
+            case BOSS -> "参与首领战，把胜利记录进生命之证。";
+            case MESO -> "准备这一步试炼所需的金币。";
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE -> "完成指定次数的协作试炼。";
+            case SCROLL_100 -> "用稳定的强化结果证明自己。";
+            case JUMP_MANUAL -> "完成指定的跳跃试炼。";
+            case SELECT_OPTION -> "从剩余的附加试炼中选定一个方向。";
+            case OPTION_SLOT -> "继续完成已经选定的附加试炼。";
+            case REWARD -> "领取本阶段生命之证奖励。";
+        };
+    }
+
+    private static String completionReviewText(Objective objective) {
+        return switch (objective.type()) {
+            case NPC_TALK -> "请导师留下确认。";
+            case ITEM -> "把收集到的证明物交给导师。";
+            case KILL, BOSS -> "把战斗记录写入生命之证。";
+            case MESO -> "缴纳准备好的金币。";
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE -> "记录这项协作试炼。";
+            case SCROLL_100 -> "记录这次强化试炼。";
+            case JUMP_MANUAL -> "记录这次跳跃试炼。";
+            case SELECT_OPTION -> "记录这次附加试炼选择。";
+            case OPTION_SLOT -> "记录已经完成的附加试炼。";
+            case REWARD -> "领取本阶段生命之证奖励。";
+        };
+    }
+
+    private static String progressLeadText(QuestMeta meta, Objective objective, int npcId) {
+        int completeNpcId = completeNpcId(meta);
+        return switch (objective.type()) {
+            case NPC_TALK -> npcId == completeNpcId
+                    ? "#p" + completeNpcId + "#会确认这一步生命之证。"
+                    : "去见#p" + completeNpcId + "#，让对方确认这一步生命之证。";
+            case ITEM -> "把需要的物品收齐后，回#p" + completeNpcId + "#提交。";
+            case KILL -> "完成指定击杀后，回#p" + completeNpcId + "#提交。";
+            case BOSS -> "完成首领战记录后，回#p" + completeNpcId + "#提交。";
+            case MESO -> "准备足够金币后，回#p" + completeNpcId + "#提交。";
+            case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
+                    "完成这项试炼后，回#p" + completeNpcId + "#提交。";
+            case SELECT_OPTION -> "从剩余的附加试炼中选定一个方向。";
+            case OPTION_SLOT -> "完成已经选定的附加试炼。";
+            case REWARD -> "本阶段试炼已经收束，回#p" + completeNpcId + "#领取生命之证奖励。";
+        };
+    }
+
     private static String nextStepText(Character chr, QuestMeta meta, int npcId) {
         int completeNpcId = completeNpcId(meta);
         Objective objective = effectiveObjective(chr, meta);
@@ -1219,8 +1287,10 @@ public final class LifeProofQuest {
         }
         if (!objectiveSatisfied(chr, meta, npcId)) {
             return switch (objective.type()) {
-                case ITEM -> "继续收集#t" + objective.itemId() + "#。";
-                case KILL, BOSS -> "继续完成目标怪物击杀。";
+                case ITEM -> multiItemCollections(meta) != null
+                        ? "继续收集五种水晶。"
+                        : "继续收集#t" + objective.itemId() + "#。";
+                case KILL, BOSS -> "继续完成指定击杀。";
                 case MESO -> "准备足够金币后回#p" + completeNpcId + "#提交。";
                 case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
                         "继续完成试炼进度，然后回#p" + completeNpcId + "#提交。";
@@ -1335,17 +1405,20 @@ public final class LifeProofQuest {
             return false;
         }
         if (meta.objective().type() == ObjectiveType.NPC_TALK) {
-            return quest.canComplete(chr, npcId);
+            return true;
         }
         return objectiveSatisfied(chr, meta, npcId) && quest.canComplete(chr, npcId);
     }
 
     private static boolean canSubmitAtNpc(Character chr, Quest quest, int npcId) {
         QuestMeta meta = QUESTS.get((int) quest.getId());
-        return meta != null
-                && canUseNpc(chr, npcId)
-                && npcId == completeNpcId(meta)
-                && objectiveSatisfied(chr, meta, npcId)
+        if (meta == null || !canUseNpc(chr, npcId) || npcId != completeNpcId(meta)) {
+            return false;
+        }
+        if (meta.objective().type() == ObjectiveType.NPC_TALK) {
+            return objectiveSatisfied(chr, meta, npcId);
+        }
+        return objectiveSatisfied(chr, meta, npcId)
                 && quest.canComplete(chr, npcId);
     }
 
@@ -1473,46 +1546,9 @@ public final class LifeProofQuest {
         }
 
         QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
-        if (objective.perMob()) {
-            String mobStr = status.getProgress(mobId);
-            int current = parseProgress(mobStr);
-            int next = Math.min(objective.requiredCount(), current + 1);
-            status.setProgress(mobId, StringUtil.getLeftPaddedStr(Integer.toString(next), '0', 3));
-            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
-            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-            String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(mobId);
-            chr.yellowMessage("生命之证：" + mobName + " " + next
-                    + "/" + objective.requiredCount());
-            boolean allDone = mobProgress(chr, active) >= objective.requiredCount();
-            if (allDone) {
-                setCustomProgressComplete(chr, active);
-            }
-            if (current < objective.requiredCount() && next >= objective.requiredCount() || allDone) {
-                refreshQuestRules(chr);
-            } else {
-                refreshQuestProgress(chr);
-            }
-        } else {
-            int current = 0;
-            for (int targetId : objective.targetIds()) {
-                current = Math.max(current, parseProgress(status.getProgress(targetId)));
-            }
-            int nextProgress = Math.min(objective.requiredCount(), current + 1);
-            String progress = StringUtil.getLeftPaddedStr(Integer.toString(nextProgress), '0', 3);
-            for (int targetId : objective.targetIds()) {
-                status.setProgress(targetId, progress);
-            }
-            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
-            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-            chr.yellowMessage("生命之证：" + objective.description() + " " + nextProgress
-                    + "/" + objective.requiredCount());
-            if (current < objective.requiredCount() && nextProgress >= objective.requiredCount()) {
-                setCustomProgressComplete(chr, active);
-                refreshQuestRules(chr);
-            } else {
-                refreshQuestProgress(chr);
-            }
-        }
+        boolean changed = migrateLegacyMainMobProgress(status, objective);
+        changed = syncSharedMainMobProgress(status, objective) || changed;
+        refreshMainMobProgress(chr, active, status, changed);
     }
 
     public static boolean shouldSkipGenericMobProgress(Character chr, QuestStatus status, int mobId) {
@@ -1523,10 +1559,74 @@ public final class LifeProofQuest {
         if (meta == null || meta != currentStartedVisibleQuest(chr)) {
             return false;
         }
+        if (meta.kind() != QuestKind.OPTION_SLOT) {
+            return false;
+        }
         Objective objective = effectiveObjective(chr, meta);
         return objective != null
                 && (objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS)
                 && objective.targetIds().contains(mobId);
+    }
+
+    private static boolean migrateLegacyMainMobProgress(QuestStatus status, Objective objective) {
+        if (status == null || objective == null
+                || objective.type() != ObjectiveType.KILL && objective.type() != ObjectiveType.BOSS) {
+            return false;
+        }
+        boolean changed = false;
+        int legacyProgress = parseProgress(status.getProgress(CUSTOM_PROGRESS_KEY));
+        if (legacyProgress > 0) {
+            int migratedCount = Math.min(legacyProgress, objective.requiredCount());
+            String migratedProgress = paddedProgress(migratedCount);
+            for (int targetId : objective.targetIds()) {
+                if (parseProgress(status.getProgress(targetId)) < migratedCount) {
+                    status.setProgress(targetId, migratedProgress);
+                    changed = true;
+                }
+            }
+        }
+        if (status.removeProgress(CUSTOM_PROGRESS_KEY)) {
+            changed = true;
+        }
+        return changed;
+    }
+
+    private static boolean syncSharedMainMobProgress(QuestStatus status, Objective objective) {
+        if (status == null || objective == null || objective.perMob()
+                || objective.type() != ObjectiveType.KILL && objective.type() != ObjectiveType.BOSS) {
+            return false;
+        }
+        int progress = 0;
+        for (int targetId : objective.targetIds()) {
+            progress = Math.max(progress, parseProgress(status.getProgress(targetId)));
+        }
+        progress = Math.min(objective.requiredCount(), progress);
+        String value = paddedProgress(progress);
+        boolean changed = false;
+        for (int targetId : objective.targetIds()) {
+            if (!value.equals(status.getProgress(targetId))) {
+                status.setProgress(targetId, value);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    private static void refreshMainMobProgress(Character chr, QuestMeta meta, QuestStatus status, boolean changed) {
+        if (changed) {
+            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+        }
+        Quest quest = Quest.getInstance(meta.questId());
+        if (quest.canComplete(chr, completeNpcId(meta))) {
+            refreshQuestRules(chr);
+            return;
+        }
+        refreshQuestProgress(chr);
+    }
+
+    private static String paddedProgress(int progress) {
+        return StringUtil.getLeftPaddedStr(Integer.toString(Math.max(0, progress)), '0', 3);
     }
 
     public static void syncActiveMesoProgress(Character chr) {
@@ -1648,7 +1748,7 @@ public final class LifeProofQuest {
         items.put("visit_ludi_maps", new ItemCollection(4033004, "玩具塔生命之证", 60, List.of(7140000, 8141100, 8140200, 8140300)));
         items.put("visit_expedition", new ItemCollection(4005004, "黑暗水晶", 30, List.of(8190003, 8190004, 8140500)));
         items.put("visit_deep_sea", new ItemCollection(4005002, "敏捷水晶", 30, List.of(8140600, 8141300, 8142100)));
-        items.put("visit_deep_sea_hidden", new ItemCollection(4033007, "暗流生命之证", 50, List.of(7130020, 8140600, 8150100, 8150101)));
+        items.put("visit_deep_sea_hidden", new ItemCollection(4033007, "暗流生命之证", 50, List.of(8140555, 8140600, 8150100, 8150101)));
         items.put("visit_temple", new ItemCollection(4005003, "幸运水晶", 30, List.of(8200005, 8200006, 8200009, 8200010)));
         items.put("visit_temple_maps", new ItemCollection(4033009, "回忆生命之证", 75, List.of(8200005, 8200006, 8200007, 8200008, 8200009, 8200010, 8200011, 8200012)));
         items.put("visit_final", new ItemCollection(4005004, "黑暗水晶", 30, List.of(8190004, 8200011, 8200012)));
@@ -1777,7 +1877,7 @@ public final class LifeProofQuest {
                 List<Integer> allDroppers = multi.stream()
                         .flatMap(c -> c.droppers().stream()).distinct().toList();
                 return new Objective(ObjectiveType.ITEM, total,
-                        task.description(), allDroppers, PROOF_ITEM_ID, 0, false);
+                        task.description(), allDroppers, 0, 0, false);
             }
         }
         ItemCollection collection = collectionForTask(stage, task);
@@ -2038,7 +2138,6 @@ public final class LifeProofQuest {
         }
         chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
         chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-        setCustomProgressComplete(chr, meta);
         chr.yellowMessage("生命之证：" + meta.name() + " " + objective.requiredCount()
                 + "/" + objective.requiredCount());
     }
@@ -2164,15 +2263,6 @@ public final class LifeProofQuest {
         refreshQuestProgress(chr);
     }
 
-    /** 所有 KILL/BOSS 任务用 infoex 完成条件，达标时写自定义进度 001 */
-    private static void setCustomProgressComplete(Character chr, QuestMeta meta) {
-        if (chr == null || meta == null) return;
-        QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
-        status.setProgress(CUSTOM_PROGRESS_KEY, "001");
-        chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
-        chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
-    }
-
     public static void syncActiveObjectiveProgress(Character chr) {
         QuestMeta active = currentStartedVisibleQuest(chr);
         if (active == null) {
@@ -2182,7 +2272,15 @@ public final class LifeProofQuest {
             syncOptionSlotProgress(chr, active);
             return;
         }
-        if (effectiveObjective(chr, active).type() == ObjectiveType.MESO) {
+        Objective objective = effectiveObjective(chr, active);
+        if (objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS) {
+            QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
+            boolean changed = migrateLegacyMainMobProgress(status, objective);
+            changed = syncSharedMainMobProgress(status, objective) || changed;
+            refreshMainMobProgress(chr, active, status, changed);
+            return;
+        }
+        if (objective.type() == ObjectiveType.MESO) {
             syncMesoProgress(chr, active);
         }
     }
@@ -2190,13 +2288,14 @@ public final class LifeProofQuest {
     private static void syncOptionSlotProgress(Character chr, QuestMeta meta) {
         HpChallengeService.LifeProofOptionalProgress selected = selectedOptional(chr, meta);
         if (chr == null || meta == null || selected == null
-                || selected.completed()
                 || chr.getQuestStatus(meta.questId()) != QuestStatus.Status.STARTED.getId()) {
             return;
         }
         Objective objective = objective(meta.stage(), selected.task());
         int progress = selected.currentCount();
-        if (objective.type() == ObjectiveType.ITEM) {
+        if (selected.completed()) {
+            progress = objective.requiredCount();
+        } else if (objective.type() == ObjectiveType.ITEM) {
             progress = Math.min(objective.requiredCount(), itemCount(chr, objective.itemId()));
             HpChallengeService.setLifeProofOptionalProgress(chr, meta.stage(), meta.selectorNo(), progress);
         } else if (objective.type() == ObjectiveType.MESO) {
@@ -2211,7 +2310,11 @@ public final class LifeProofQuest {
         QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
         String before = status.getProgress(CUSTOM_PROGRESS_KEY);
         if (value.equals(before)) {
-            refreshQuestProgress(chr);
+            if ("001".equals(value)) {
+                refreshQuestRules(chr);
+            } else {
+                refreshQuestProgress(chr);
+            }
             return;
         }
         status.setProgress(CUSTOM_PROGRESS_KEY, value);
@@ -2440,8 +2543,8 @@ public final class LifeProofQuest {
                 }
             }
             case MESO -> sb.append("\r\n需要缴纳金币：").append(objective.mesoCost());
-            case NPC_TALK -> sb.append("\r\n前往#p").append(targetNpcId(meta, objective))
-                    .append("#，点击任务完成图标，由对方确认这一步生命之证。");
+            case NPC_TALK -> {
+            }
             case PQ_ANY, PQ_PIRATE, PQ_TOY_OR_PIRATE, SCROLL_100, JUMP_MANUAL ->
                     sb.append("\r\n进度达成后回一转教官提交。");
             default -> {

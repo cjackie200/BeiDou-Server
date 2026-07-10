@@ -361,6 +361,7 @@ public enum SendOpcode implements Opcode {
     INTERACTION_HOOK_RESULT(0x1002), // 通用交互 Hook 处理结果
     INTERACTION_HOOK_PROGRESS(0x1004), // 通用交互 Hook 进度文本
     CLIENT_RUNTIME_CONFIG(0x1005), // ijl15 客户端运行时配置
+    ELEMENTAL_WEAPON_CONFIG(0x1006), // 武器元素加成配置
     ;
     private int code = -2;
 

@@ -110,6 +110,7 @@ import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -605,6 +606,39 @@ public class PacketCreator {
      */
     public static Packet getPing() {
         return OutPacket.create(SendOpcode.PING);
+    }
+
+    /**
+     * Sends the equipped weapon's elemental bonus configuration to the client DLL.
+     * Opcode 0x1006 — values are in hundredths (200 = +100%).
+     * Sequence: FIRE, POISON, ICE, LIGHTNING, HOLY, elemDefault
+     */
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PacketCreator.class);
+
+    public static Packet elementalWeaponConfig(org.gms.client.Character chr) {
+        OutPacket p = OutPacket.create(SendOpcode.ELEMENTAL_WEAPON_CONFIG);
+        short f = 0, s = 0, i = 0, l = 0, h = 0, ed = 0;
+        int itemId = 0;
+        Item equippedWeapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
+        if (equippedWeapon instanceof Equip weapon) {
+            itemId = weapon.getItemId();
+            f = weapon.getIncRMAF();
+            s = weapon.getIncRMAS();
+            i = weapon.getIncRMAI();
+            l = weapon.getIncRMAL();
+            h = weapon.getIncRMAH();
+            ed = weapon.getElemDefault();
+        } else if (equippedWeapon != null) {
+            itemId = equippedWeapon.getItemId();
+        }
+        p.writeShort(f);
+        p.writeShort(s);
+        p.writeShort(i);
+        p.writeShort(l);
+        p.writeShort(h);
+        p.writeShort(ed);
+        log.info("ElementalWeaponConfig itemId={} F={} S={} I={} L={} H={} elemDefault={}", itemId, f, s, i, l, h, ed);
+        return p;
     }
 
     /**

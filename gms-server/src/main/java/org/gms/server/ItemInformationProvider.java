@@ -574,6 +574,7 @@ public class ItemInformationProvider {
         ret.put("cursed", DataTool.getInt("cursed", info, 0));
         ret.put("success", DataTool.getInt("success", info, 0));
         ret.put("fs", DataTool.getInt("fs", info, 0));
+        ret.put("elemDefault", DataTool.getInt("elemDefault", info, 0));
 
         equipStatsCache.put(itemId, ret);
         return ret;
@@ -1202,6 +1203,34 @@ public class ItemInformationProvider {
         return getEquipById(equipId, -1);
     }
 
+    public void applyBaseElementalStatsIfMissing(Equip equip) {
+        if (equip == null || equip.hasAnyElementalWeaponStat()) {
+            return;
+        }
+
+        Map<String, Integer> stats = getEquipStats(equip.getItemId());
+        if (stats == null) {
+            return;
+        }
+
+        int fire = stats.getOrDefault("RMAF", 0);
+        int poison = stats.getOrDefault("RMAS", 0);
+        int ice = stats.getOrDefault("RMAI", 0);
+        int lightning = stats.getOrDefault("RMAL", 0);
+        int holy = stats.getOrDefault("RMAH", 0);
+        int elemDefault = stats.getOrDefault("elemDefault", 0);
+        if (fire == 0 && poison == 0 && ice == 0 && lightning == 0 && holy == 0 && elemDefault == 0) {
+            return;
+        }
+
+        equip.setIncRMAF((short) fire);
+        equip.setIncRMAS((short) poison);
+        equip.setIncRMAI((short) ice);
+        equip.setIncRMAL((short) lightning);
+        equip.setIncRMAH((short) holy);
+        equip.setElemDefault((short) elemDefault);
+    }
+
     private Item getEquipById(int equipId, int ringId) {
         Equip nEquip;
         nEquip = new Equip(equipId, (byte) 0, ringId);
@@ -1239,6 +1268,18 @@ public class ItemInformationProvider {
                     nEquip.setMp((short) stat.getValue().intValue());
                 } else if (stat.getKey().equals("tuc")) {
                     nEquip.setUpgradeSlots((byte) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAF")) {
+                    nEquip.setIncRMAF((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAS")) {
+                    nEquip.setIncRMAS((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAI")) {
+                    nEquip.setIncRMAI((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAL")) {
+                    nEquip.setIncRMAL((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("RMAH")) {
+                    nEquip.setIncRMAH((short) stat.getValue().intValue());
+                } else if (stat.getKey().equals("elemDefault")) {
+                    nEquip.setElemDefault((short) stat.getValue().intValue());
                 } else if (isUntradeableRestricted(equipId)) {  // thanks Hyun & Thora for showing an issue with more than only "Untradeable" items being flagged as such here
                     short flag = nEquip.getFlag();
                     flag |= ItemConstants.UNTRADEABLE;
@@ -1251,6 +1292,7 @@ public class ItemInformationProvider {
                 }
             }
         }
+        applyBaseElementalStatsIfMissing(nEquip);
         return nEquip.copy();
     }
 

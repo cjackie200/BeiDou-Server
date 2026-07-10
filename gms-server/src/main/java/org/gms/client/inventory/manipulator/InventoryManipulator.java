@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.maps.MapleMap;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.MonsterCardRingQuest;
 import org.gms.util.PacketCreator;
 
@@ -54,6 +55,15 @@ import java.util.List;
  */
 public class InventoryManipulator {
     private static final Logger log = LoggerFactory.getLogger(InventoryManipulator.class);
+
+    private static void syncQuestStateIfRelevant(Character chr, int itemId) {
+        MonsterCardRingQuest.syncQuestStateIfRelevant(chr, itemId);
+        ElementalResonanceQuest.syncQuestStateIfRelevant(chr, itemId);
+    }
+
+    private static boolean isEquipmentQuestStateItem(int itemId) {
+        return MonsterCardRingQuest.isRingItem(itemId) || ElementalResonanceQuest.isElementalWeapon(itemId);
+    }
 
     public static boolean addById(Client c, int itemId, short quantity) {
         return addById(c, itemId, quantity, null, -1, -1);
@@ -84,7 +94,7 @@ public class InventoryManipulator {
             inv.unlockInventory();
         }
         if (added) {
-            MonsterCardRingQuest.syncQuestStateIfRelevant(chr, itemId);
+            syncQuestStateIfRelevant(chr, itemId);
         }
         return added;
     }
@@ -198,7 +208,7 @@ public class InventoryManipulator {
             inv.unlockInventory();
         }
         if (added) {
-            MonsterCardRingQuest.syncQuestStateIfRelevant(chr, item.getItemId());
+            syncQuestStateIfRelevant(chr, item.getItemId());
         }
         return added;
     }
@@ -458,7 +468,7 @@ public class InventoryManipulator {
             }
         }
         if (type != InventoryType.CANHOLD) {
-            MonsterCardRingQuest.syncQuestStateIfRelevant(chr, itemId);
+            syncQuestStateIfRelevant(chr, itemId);
         }
     }
 
@@ -688,8 +698,9 @@ public class InventoryManipulator {
         mods.add(new ModifyInventory(2, source, src));
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
         chr.equipChanged();
-        if (MonsterCardRingQuest.isRingItem(source.getItemId()) || target != null && MonsterCardRingQuest.isRingItem(target.getItemId())) {
+        if (isEquipmentQuestStateItem(source.getItemId()) || target != null && isEquipmentQuestStateItem(target.getItemId())) {
             MonsterCardRingQuest.syncQuestState(chr);
+            ElementalResonanceQuest.syncQuestState(chr);
         }
     }
 
@@ -742,8 +753,9 @@ public class InventoryManipulator {
         
         c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(2, source, src))));
         chr.equipChanged();
-        if (MonsterCardRingQuest.isRingItem(source.getItemId()) || target != null && MonsterCardRingQuest.isRingItem(target.getItemId())) {
+        if (isEquipmentQuestStateItem(source.getItemId()) || target != null && isEquipmentQuestStateItem(target.getItemId())) {
             MonsterCardRingQuest.syncQuestState(chr);
+            ElementalResonanceQuest.syncQuestState(chr);
         }
     }
 
@@ -866,7 +878,7 @@ public class InventoryManipulator {
         } else if (itemId == ItemId.ARPQ_SPIRIT_JEWEL) {
             chr.updateAriantScore(quantityNow);
         }
-        MonsterCardRingQuest.syncQuestStateIfRelevant(chr, itemId);
+        syncQuestStateIfRelevant(chr, itemId);
     }
 
     private static boolean isDroppedItemRestricted(Item it) {

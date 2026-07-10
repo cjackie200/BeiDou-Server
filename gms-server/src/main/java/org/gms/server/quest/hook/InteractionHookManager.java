@@ -91,6 +91,24 @@ public final class InteractionHookManager {
                 context.close();
                 return true;
             }
+            if (context.dialogState() == InteractionHookProtocol.DIALOG_STATE_NEXT) {
+                InteractionHookProvider nextProvider = InteractionHookRegistry.provider(context.questId());
+                if (nextProvider == null) {
+                    dispose(client);
+                    return false;
+                }
+                try {
+                    context.resetVisibleDialogSent();
+                    nextProvider.open(context);
+                } catch (RuntimeException e) {
+                    log.error("原生交互 Hook Next 对话继续执行失败: questId={}, npcId={}, action={}",
+                            context.questId(), context.sourceNpcId(), context.action(), e);
+                    if (!context.hasVisibleDialogSent()) {
+                        dispose(client);
+                    }
+                }
+                return true;
+            }
             InteractionHookProvider provider = InteractionHookRegistry.provider(context.questId());
             if (provider == null) {
                 dispose(client);
@@ -160,6 +178,27 @@ public final class InteractionHookManager {
             if (context.dialogState() == InteractionHookProtocol.DIALOG_STATE_OPEN) {
                 context.close();
                 sendHandledUpdate(client, event);
+                return true;
+            }
+            if (context.dialogState() == InteractionHookProtocol.DIALOG_STATE_NEXT) {
+                InteractionHookProvider nextProvider = InteractionHookRegistry.provider(context.questId());
+                if (nextProvider == null) {
+                    sendResult(client, event.requestId(), InteractionHookResultCode.ERROR);
+                    dispose(client);
+                    return true;
+                }
+                boolean nextPreAckSent = sendPreDialogResultIfNeeded(client, event, context, true);
+                try {
+                    context.resetVisibleDialogSent();
+                    nextProvider.open(context);
+                    sendPostDialogResultIfNeeded(client, event, context, true, nextPreAckSent);
+                } catch (RuntimeException e) {
+                    log.error("交互 Hook Next 对话继续执行失败: questId={}, npcId={}, action={}",
+                            context.questId(), context.sourceNpcId(), context.action(), e);
+                    if (!nextPreAckSent && !context.hasVisibleDialogSent()) {
+                        sendResult(client, event.requestId(), InteractionHookResultCode.ERROR);
+                    }
+                }
                 return true;
             }
             InteractionHookProvider provider = InteractionHookRegistry.provider(context.questId());

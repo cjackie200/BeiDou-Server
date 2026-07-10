@@ -46,6 +46,7 @@ public class JobCommand extends Command {
             }
 
             player.changeJob(Job.getById(jobid));
+            player.resetStats();
             player.equipChanged();
         } else if (params.length == 2) {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
@@ -60,7 +61,8 @@ public class JobCommand extends Command {
                 }
 
                 victim.changeJob(Job.getById(jobid));
-                player.equipChanged();
+                victim.resetStats();
+                victim.equipChanged();
             } else {
                 player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
             }

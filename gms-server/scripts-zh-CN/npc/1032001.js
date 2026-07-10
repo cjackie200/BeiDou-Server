@@ -34,6 +34,10 @@ spawnPnpc = false;
 spawnPnpcFee = 7000000;
 jobType = 2;
 function start() {
+    startDefault();
+}
+
+function startDefault() {
     const GameConstants = Java.type('org.gms.constants.game.GameConstants');
     if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {
         spawnPnpc = true;
@@ -84,9 +88,11 @@ function action(mode, type, selection) {
     }
 
     if (status == -1) {
-        start();
+        startDefault();
         return;
-    } else {
+    }
+
+    {
         if (spawnPnpc) {
             if (mode > 0) {
                 if (cm.getMeso() < spawnPnpcFee) {

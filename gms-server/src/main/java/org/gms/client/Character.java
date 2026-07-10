@@ -84,6 +84,7 @@ import org.gms.server.partyquest.AriantColiseum;
 import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
+import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.Quest;
 import org.gms.service.*;
 import org.gms.util.*;
@@ -2691,6 +2692,10 @@ public class Character extends AbstractCharacterObject {
         if (getMessenger() != null) {
             getWorldServer().updateMessenger(getMessenger(), getName(), getWorld(), client.getChannel());
         }
+        // Notify client DLL of weapon elemental bonuses
+        if (client != null) {
+            client.sendPacket(PacketCreator.elementalWeaponConfig(this));
+        }
     }
 
     public void cancelDiseaseExpireTask() {
@@ -3107,6 +3112,7 @@ public class Character extends AbstractCharacterObject {
                 sendPacket(PacketCreator.getShowMesoGain(gain, inChat));
             }
             LifeProofQuest.syncActiveMesoProgress(this);
+            ElementalResonanceQuest.syncQuestStateIfMesoRelevant(this);
         } else {
             enableActions();
         }
@@ -5465,6 +5471,10 @@ public class Character extends AbstractCharacterObject {
             return true;
         }
 
+        if (ElementalResonanceQuest.isBossTokenItem(itemid)) {
+            return ElementalResonanceQuest.needBossToken(this, itemid, questid);
+        }
+
         int amountNeeded, questStatus = this.getQuestStatus(questid);
         if (questStatus == 0) {
             amountNeeded = Quest.getInstance(questid).getStartItemAmountNeeded(itemid);
@@ -6844,14 +6854,18 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void raiseQuestMobCount(int id) {
+        raiseQuestMobCount(id, true);
+    }
+
+    private void raiseQuestMobCount(int id, boolean notifyLifeProof) {
         // It seems nexon uses monsters that don't exist in the WZ (except string) to merge multiple mobs together for these 3 monsters.
         // We also want to run mobKilled for both since there are some quest that don't use the updated ID...
         if (id == MobId.GREEN_MUSHROOM || id == MobId.DEJECTED_GREEN_MUSHROOM) {
-            raiseQuestMobCount(MobId.GREEN_MUSHROOM_QUEST);
+            raiseQuestMobCount(MobId.GREEN_MUSHROOM_QUEST, false);
         } else if (id == MobId.ZOMBIE_MUSHROOM || id == MobId.ANNOYED_ZOMBIE_MUSHROOM) {
-            raiseQuestMobCount(MobId.ZOMBIE_MUSHROOM_QUEST);
+            raiseQuestMobCount(MobId.ZOMBIE_MUSHROOM_QUEST, false);
         } else if (id == MobId.GHOST_STUMP || id == MobId.SMIRKING_GHOST_STUMP) {
-            raiseQuestMobCount(MobId.GHOST_STUMP_QUEST);
+            raiseQuestMobCount(MobId.GHOST_STUMP_QUEST, false);
         }
 
         int lastQuestProcessed = 0;
@@ -6876,6 +6890,9 @@ public class Character extends AbstractCharacterObject {
             }
         } catch (Exception e) {
             log.warn("Character.mobKilled. chrId {}, last quest processed: {}", this.id, lastQuestProcessed, e);
+        }
+        if (notifyLifeProof) {
+            HpChallengeService.onMonsterKilled(this, id);
         }
     }
 
@@ -7350,7 +7367,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public synchronized void resetStats() {
-        if (!GameConfig.getServerBoolean("use_auto_assign_starters_ap")) {
+        boolean enabled = GameConfig.getServerBoolean("use_auto_assign_starters_ap");
+        log.info("resetStats called enabled={} remainingAp={} str={} dex={} int={} luk={} lv={} job={}",
+            enabled, remainingAp, attrStr, attrDex, attrInt, attrLuk, getLevel(), job.getId());
+        if (!enabled) {
             return;
         }
 
