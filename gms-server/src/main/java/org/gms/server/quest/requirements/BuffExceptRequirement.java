@@ -32,7 +32,7 @@ public class BuffExceptRequirement extends AbstractQuestRequirement {
     private int buffId = -1;
 
     public BuffExceptRequirement(Quest quest, Data data) {
-        super(QuestRequirementType.BUFF);
+        super(QuestRequirementType.EXCEPT_BUFF);
         processData(data);
     }
 

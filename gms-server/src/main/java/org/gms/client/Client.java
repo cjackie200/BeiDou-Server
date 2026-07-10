@@ -149,7 +149,6 @@ public class Client extends ChannelInboundHandlerAdapter {
     private int voteTime = -1;
     private int visibleWorlds;
     private long lastNpcClick;
-    private boolean skipNextNativeInteractionHook;
     private final AtomicInteger interactionHookRuleBatchId = new AtomicInteger();
     private long lastPacket = System.currentTimeMillis();
     private int lang = FIXED_LANGUAGE;
@@ -1591,16 +1590,6 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     public void removeClickedNPC() {
         lastNpcClick = 0;
-    }
-
-    public void markSkipNextNativeInteractionHook() {
-        skipNextNativeInteractionHook = true;
-    }
-
-    public boolean consumeSkipNextNativeInteractionHook() {
-        boolean skip = skipNextNativeInteractionHook;
-        skipNextNativeInteractionHook = false;
-        return skip;
     }
 
     public int nextInteractionHookRuleBatchId() {

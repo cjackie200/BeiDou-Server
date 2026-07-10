@@ -97,21 +97,9 @@ public final class MonsterCardRingQuest {
 
     public static List<Integer> getHookQuestIds(Character chr) {
         if (chr == null) {
-            return getAllQuestIds();
+            return List.of();
         }
-        syncQuestStateSilently(chr);
-        List<Integer> questIds = new ArrayList<>();
-        for (short questId = CLAIM_QUEST_ID; questId <= LAST_QUEST_ID; questId++) {
-            if (chr.getQuestStatus(questId) != QuestStatus.Status.NOT_STARTED.getId()) {
-                questIds.add((int) questId);
-            }
-        }
-        resolveCurrentQuestId(chr).ifPresent(questId -> {
-            if (!questIds.contains(questId)) {
-                questIds.add(questId);
-            }
-        });
-        return questIds;
+        return resolveCurrentQuestId(chr).map(List::of).orElseGet(List::of);
     }
 
     public static List<Integer> getHookNpcIds(Character chr) {
@@ -181,11 +169,10 @@ public final class MonsterCardRingQuest {
         List<InteractionHookProgressEntry.Condition> conditions = new ArrayList<>();
         conditions.add(new InteractionHookProgressEntry.Condition(
                 completedSets, requiredSets,
-                "怪物卡收集进度：" + "#b" + completedSets + "#k/" + requiredSets + " 套"));
+                "怪物卡收集进度：" + completedSets + "/" + requiredSets + " 套"));
         conditions.add(new InteractionHookProgressEntry.Condition(
                 materialCount, MATERIAL_QTY,
-                "材料收集进度：" + "#i" + material + "# #t" + material + "# "
-                        + "#b" + materialCount + "#k/" + MATERIAL_QTY));
+                "材料收集进度：" + itemName(material) + " " + materialCount + "/" + MATERIAL_QTY));
 
         return new InteractionHookProgressEntry(
                 questId,

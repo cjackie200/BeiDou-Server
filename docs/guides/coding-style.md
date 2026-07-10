@@ -18,6 +18,8 @@
 - 基础 `gms-server/scripts` 保留原生内容。
 - 任务脚本中的玩家可见文案必须与对应设计文档保持一致。
 - 复杂任务逻辑优先放在 Java 服务端权威实现，脚本只负责入口和确认流程。
+- 脚本调用 `Quest.start/complete` 时，任务物品和奖励以 `Act.img` 为唯一执行源；不得再用
+  `gainItem/removeItem` 重复发放或扣除同一物品。
 
 ## WZ 和客户端资源
 
@@ -25,6 +27,18 @@
 - 客户端资源同步到 `Data/Quest`、`Data/Etc`、`Data/String`。
 - 基础 `gms-server/wz` 不承载中文服自定义任务节点。
 - 改动任务节点时必须确认 `Check.img`、`QuestInfo.img`、`Act.img` 三者完整，避免客户端按 `Q` 打开任务列表崩溃。
+- 中文客户端存在的可见 `Check/Act` 顶层任务必须在服务端 `wz-zh-CN` 有同名节点；服务端按语言目录
+  整体选择 Quest WZ，不会用基础 `wz` 自动补齐缺失节点。只在服务端存在的内部状态任务必须明确
+  标记并保持客户端不可见。
+- `@@BD_LP_PROGRESS`、`@@BD_IH_PROGRESS` 等自定义进度 marker 只能写入对应自定义任务；同步或合并
+  `QuestInfo.img` 时必须校验普通原版任务没有被批量替换或注入 marker。
+- 新增 Act 字段时必须同步校验 `QuestActionType` 映射和执行类；WZ 中存在但 loader 返回
+  `UNDEFINED` 的状态动作会静默跳过，造成后续任务和图标滞留。
+- 原生任务缺少服务端 `Check.img` 节点时必须拒绝 `start/complete`；客户端 `autoStart`、
+  `autoPreComplete` 等展示元数据不得跳过服务端条件。需要无条件迁移状态时只能由明确的内部流程调用
+  `forceStart/forceComplete`。
+- 无法实现的任务条件不得按 `true` 放行。选择 fail-closed 或禁用时，必须同步处理服务端四个 Quest
+  XML、客户端四个 Quest IMG，并保留旧客户端请求的服务端拒绝。
 
 ## C++ DLL
 

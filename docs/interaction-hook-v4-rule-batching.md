@@ -12,11 +12,11 @@
 
 ## 协议
 
-`S2C_INTERACTION_HOOK_RULES(0x1001)` 使用 `version=4`：
+本文的 v4 指分组、分批和 scope 语义；当前线上 wire format 已随统一协议升级为 `version=5`：
 
 ```text
 subCommand = 0x1003
-version = 4
+version = 5
 scope
 batchId
 batchIndex
@@ -85,7 +85,7 @@ selectionId
 
 发送时机：
 
-- 登录/进频道后调用 `sendInitialRules(Client)`。
+- 登录/进频道后调用 `sendInitialRules(Client)`，并保证它早于 `addPlayer()` 发送当前地图 NPC spawn。
 - `PlayerMapTransitionHandler` 中 `chr.setMapTransitionComplete()` 后调用 `sendMapNpcRules(Client)`。
 - Hook 对话关闭、任务状态变化、怪物卡戒指状态同步后调用 `sendCharacterQuestRules(Client)`。
 - Hook 对话关闭或 fallback 时调用 `clearDialogTempRules(Client)`。
@@ -108,10 +108,13 @@ selectionId
 - `ShouldIntercept` 按三个 active scope 依次扫描。
 - 收到 `REPLACE_SCOPE` 时暂存 `scope + batchId` 批次，全部收齐后按 `batchIndex` 拼接并原子替换该 scope。
 - 收到普通 scope 的 `CLEAR_SCOPE` 时立即清空对应 scope，不进入 pending batch。
-- 收到 `CLEAR_SCOPE ALL_RULES` 时立即清空全部 active rules、pending batches、active pending、NPC 映射和当前 Hook 对话上下文。
+- 收到 `CLEAR_SCOPE ALL_RULES` 时立即清空全部 active rules、pending batches、active pending 和当前
+  Hook 对话上下文；不清 NPC 映射。NPC 映射只由 `SET_FIELD`、spawn 和 remove 包维护。
 - 5 秒未收齐的 pending batch 丢弃，继续使用旧 active rules。
 - v4 普通 scope 替换不清 active pending。
 - `SET_FIELD` 只清空旧地图 `objectId -> npcId` 映射，不清角色任务规则。
+- NPC 点击的 `objectId -> npcId` 无法解析时直接放行原生包，不允许用“存在任意 NPC rule”作为全图
+  catch-all。
 - 客户端普通 NPC 对话关闭后进入一次性抑制状态；抑制状态不因 `STAT_CHANGED enableActions` 清除，
   只在放行一条匹配的尾随 `QUEST_ACTION` 或匹配忽略超时后清除。
 - 本地任务条目点击必须先按 active rules 判断 `QUEST_ACTION` Hook。命中

@@ -79,7 +79,6 @@ function action(mode, type, selection) {
         if (flow == "complete8539") {
             Quest.getInstance(QUEST_FIND_SENIOR_2).complete(player, npcId);
             if (cm.isQuestCompleted(QUEST_FIND_SENIOR_2)) {
-                cm.removeItem(ITEM_LETTER_FROM_SENIOR, 1);
                 cm.sendOk("小僧无以为报，些许物件，还请施主笑纳。");
             } else {
                 cm.sendOk("似乎暂时无法完成任务（请确认携带了师兄的信，并确保背包有空位）。");
@@ -96,7 +95,6 @@ function action(mode, type, selection) {
         if (flow == "start8538") {
             Quest.getInstance(QUEST_FIND_SENIOR_1).start(player, npcId);
             if (cm.isQuestStarted(QUEST_FIND_SENIOR_1)) {
-                cm.gainItem(ITEM_LETTER_TO_SENIOR, 1);
                 cm.sendOk("小僧的师兄法号#b#p9310040##k，还请施主代为寻找。");
             } else {
                 cm.sendOk("似乎暂时无法接取任务（请确认等级/职业条件，并确保背包有空位）。");

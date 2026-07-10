@@ -32,11 +32,13 @@ import org.gms.server.quest.QuestRequirementType;
  * @author Tyler (Twdtwd)
  */
 public class MinTamenessRequirement extends AbstractQuestRequirement {
+    private final Quest quest;
     private int minTameness;
 
 
     public MinTamenessRequirement(Quest quest, Data data) {
         super(QuestRequirementType.MIN_PET_TAMENESS);
+        this.quest = quest;
         processData(data);
     }
 
@@ -51,18 +53,10 @@ public class MinTamenessRequirement extends AbstractQuestRequirement {
 
     @Override
     public boolean check(Character chr, Integer npcid) {
-        int curTameness = 0;
+        return quest.getMatchedPet(chr) != null;
+    }
 
-        for (Pet pet : chr.getPets()) {
-            if (pet == null) {
-                continue;
-            }
-
-            if (pet.getTameness() > curTameness) {
-                curTameness = pet.getTameness();
-            }
-        }
-
-        return curTameness >= minTameness;
+    public boolean matches(Pet pet) {
+        return pet != null && pet.getTameness() >= minTameness;
     }
 }

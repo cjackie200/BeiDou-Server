@@ -22,8 +22,8 @@
 package org.gms.server.quest.actions;
 
 import org.gms.client.Character;
-import org.gms.client.QuestStatus;
-import org.gms.constants.inventory.ItemConstants;
+import org.gms.client.Client;
+import org.gms.client.inventory.Pet;
 import org.gms.provider.Data;
 import org.gms.provider.DataTool;
 import org.gms.server.quest.Quest;
@@ -33,10 +33,12 @@ import org.gms.server.quest.QuestActionType;
  * @author Tyler (Twdtwd)
  */
 public class PetSkillAction extends AbstractQuestAction {
+    private final Quest quest;
     int flag;
 
     public PetSkillAction(Quest quest, Data data) {
         super(QuestActionType.PETSKILL, quest);
+        this.quest = quest;
         questID = quest.getId();
         processData(data);
     }
@@ -44,21 +46,33 @@ public class PetSkillAction extends AbstractQuestAction {
 
     @Override
     public void processData(Data data) {
-        flag = DataTool.getInt("petskill", data);
+        flag = DataTool.getInt(data);
     }
 
     @Override
     public boolean check(Character chr, Integer extSelection) {
-        QuestStatus status = chr.getQuest(Quest.getInstance(questID));
-        if (!(status.getStatus() == QuestStatus.Status.NOT_STARTED && status.getForfeited() > 0)) {
+        Pet pet = quest.getMatchedPet(chr, true);
+        Pet.PetAttribute attribute = Pet.PetAttribute.fromQuestSkill(flag);
+        if (pet == null || attribute == null) {
             return false;
         }
-
-        return chr.getPet(0) != null;
+        return (pet.getPetAttribute() & attribute.getValue()) == 0;
     }
 
     @Override
     public void run(Character chr, Integer extSelection) {
-        chr.getPet(0).setFlag((byte) ItemConstants.getFlagByInt(flag));
+        Pet pet = quest.getMatchedPet(chr, true);
+        Pet.PetAttribute attribute = Pet.PetAttribute.fromQuestSkill(flag);
+        if (pet == null || attribute == null) {
+            return;
+        }
+
+        Client client = chr.getClient();
+        client.lockClient();
+        try {
+            pet.addPetAttribute(chr, attribute);
+        } finally {
+            client.unlockClient();
+        }
     }
-} 
+}

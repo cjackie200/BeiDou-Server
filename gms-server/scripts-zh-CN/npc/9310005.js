@@ -78,7 +78,11 @@ function levelQuest2(){
 	cm.sendYesNoLevel('Quest2_no','Quest2_yes','哦...刚刚接到信息。您是特别行动小组的人啊。看来是位了不起的人啊，如果您帮我个小忙的话，我就让您通过。您可以帮我吗？');
 }
 function levelQuest2_yes(){
-	cm.startQuest(QuestID);
+	if (quest == null || !quest.canStart(cm.getPlayer(), cm.getNpc())) {
+		cm.sendOkLevel('','你目前还不符合进入禁区的任务条件。请确认等级和前置任务后再来。');
+		return;
+	}
+	quest.start(cm.getPlayer(), cm.getNpc());
 	leveldispose();
 }
 function levelQuest2_no(){

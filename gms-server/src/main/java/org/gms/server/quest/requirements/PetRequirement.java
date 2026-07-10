@@ -35,7 +35,7 @@ import java.util.List;
  * @author Tyler (Twdtwd)
  */
 public class PetRequirement extends AbstractQuestRequirement {
-    List<Integer> petIDs = new ArrayList<>();
+    private final List<Integer> petIDs = new ArrayList<>();
 
 
     public PetRequirement(Quest quest, Data data) {
@@ -54,16 +54,20 @@ public class PetRequirement extends AbstractQuestRequirement {
 
     @Override
     public boolean check(Character chr, Integer npcid) {
-        for (Pet pet : chr.getPets()) {
-            if (pet == null) {
-                continue;   // thanks Arufonsu for showing a NPE occurring here
-            }
+        return getMatchingPet(chr) != null;
+    }
 
-            if (petIDs.contains(pet.getItemId())) {
-                return true;
+    public Pet getMatchingPet(Character chr) {
+        for (Pet pet : chr.getPets()) {
+            if (matches(pet)) {
+                return pet;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    public boolean matches(Pet pet) {
+        return pet != null && petIDs.contains(pet.getItemId());
     }
 }

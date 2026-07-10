@@ -219,6 +219,8 @@ enableAutoKeyDownFix
   `QUEST_ACTION` 判断。
 
 `NPC_TALK_MORE lastMsg=2` 的文本输入不进入 Hook，默认走原逻辑。
+`objectId -> npcId` 尚未建立时，`NPC_TALK` 不得因为地图上存在任意 NPC rule 而兜底拦截；客户端
+直接放行原包，由服务端 native handler 使用当前地图对象做权威解析。
 
 接收拦截维护：
 
@@ -228,7 +230,8 @@ enableAutoKeyDownFix
 - `SPAWN_NPC_REQUEST_CONTROLLER(0x0103)`：`mode=1` 写入，`mode=0` 删除。
 - `S2C_INTERACTION_HOOK_RULES(0x1001)`：按 v4 `scope + batchId` 分批接收，收齐后原子替换对应
   scope。普通 scope 替换不清 pending；`CLEAR_SCOPE ALL_RULES` 才清全部 active rules、pending 和
-  Hook 对话上下文。
+  Hook 对话上下文。规则清理不清 `objectId -> npcId`；该映射只随 `SET_FIELD` 和 NPC spawn/remove
+  生命周期变化。
 - `S2C_INTERACTION_HOOK_RESULT(0x1002)`：处理 pending 请求。
 - `S2C_INTERACTION_HOOK_PROGRESS(0x1004)`：替换本地通用 Hook 进度缓存。Q 任务详情构造文本时，
   `ijl15` 把 `@@BD_IH_PROGRESS:{questId}@@`、兼容的 `@@BD_LP_PROGRESS:{questId}@@` 或误写的
@@ -256,6 +259,11 @@ Hook 对话发包：
 - `QUEST_ACTION` 上报 `npcId <= 0` 时，客户端和服务端统一使用 `9010000` 作为 fallback 显示
   NPC。`NPC_CLICK` 和 `NPC_DIALOG_SELECTION` 只有客户端已知 NPC ID 且与服务端显示 NPC 一致时，
   才允许使用 `NPC_TALK` ACK。
+- Hook 对话是否能继续以当前 `NPC_TALK` 的实际 `prev/next` 尾标志为准。客户端在发送
+  `NPC_TALK_MORE` Hook event 前，以同一把状态锁完成“旧页快照 + 状态转移”，并保存 1.5 秒的同 NPC
+  continuation 期望；下一页即使同步从另一线程到达，也不得被旧页的后置清理误删。
+- `NPC_TALK_MORE mode=-1/0xFF` 是取消路径；处于 `DIALOG_STATE_NEXT` 时也必须关闭上下文，不能重新
+  打开下一步。
 
 pending 行为：
 
@@ -265,7 +273,12 @@ pending 行为：
   不再创建第二个请求。
 - active pending 记录本次期望的 `NPC_TALK.npcId`。收到匹配的 `NPC_TALK` 后立即清理 pending，
   不等待额外 result 包。
-- `FALLBACK_ORIGINAL` 时带重放标记重新发送原始包，或重放原始本地点击函数，避免客户端再次 Hook。
+- `FALLBACK_ORIGINAL` 时带发送层和本地点击层重放标记重新发送原始包，或重放原始本地点击函数，
+  避免重放再次进入 Hook。本地点击重放前必须重新读取并核对 `questId/npcId/rawAction/questState`，
+  UI 对象已释放、字段变化或访问异常时放弃重放。
+- 服务端只为该 fallback 的原事件保存 5 秒精确匹配令牌（事件类型及 NPC/任务/action/selection），
+  不使用“跳过下一次任意 Hook”的全局布尔值。无关操作不会消耗令牌；DLL 重放失败时，玩家重试同一
+  操作会安全回到一次原生路径。
 - `HANDLED_DIALOG/HANDLED_UPDATE` 时丢弃 pending；正常可见 Hook 对话不应再依赖
   `HANDLED_DIALOG`。
 - `HANDLED_UPDATE` 后如果服务端继续发送匹配的 `NPC_TALK`，客户端必须把该对话标记为
@@ -277,8 +290,12 @@ pending 行为：
 生命周期：
 
 - 换图清空旧 `objectId -> npcId`，再根据新地图 spawn 包重建。
-- 登录、进频道或重登先下发 `CLEAR_SCOPE ALL_RULES` 清空全部 Hook 运行态。
-- 登录或进频道后重新接收 rules，再根据 NPC spawn 包重建映射。
+- `SET_FIELD` 同时丢弃包含旧 UI 对象指针的本地任务 pending，禁止在新地图重放旧 Q 窗口点击。
+- 登录、进频道或重登先下发 `CLEAR_SCOPE ALL_RULES` 清空全部 Hook 规则和 pending；服务端必须在
+  `addPlayer()` 发送当前地图 NPC spawn 包之前完成这次初始化。
+- 登录或进频道后重新接收 rules，并根据随后到达的 NPC spawn 包重建映射。
+- 本地任务条目的状态只读，用来生成 `rawAction/questState`；DLL 不得为了修正图标写入客户端任务
+  对象。完成门、进度和图标统一由服务端任务状态包与 WZ 条件驱动。
 
 ## 服务端行为
 

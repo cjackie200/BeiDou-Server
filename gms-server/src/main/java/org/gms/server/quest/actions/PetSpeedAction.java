@@ -30,9 +30,11 @@ import org.gms.server.quest.QuestActionType;
  * @author Ronan
  */
 public class PetSpeedAction extends AbstractQuestAction {
+    private final Quest quest;
 
     public PetSpeedAction(Quest quest, Data data) {
-        super(QuestActionType.PETTAMENESS, quest);
+        super(QuestActionType.PETSPEED, quest);
+        this.quest = quest;
         questID = quest.getId();
     }
 
@@ -41,17 +43,21 @@ public class PetSpeedAction extends AbstractQuestAction {
     public void processData(Data data) {}
 
     @Override
-    public void run(Character chr, Integer extSelection) {
-        Client c = chr.getClient();
+    public boolean check(Character chr, Integer extSelection) {
+        return quest.getMatchedPet(chr, true) != null;
+    }
 
-        Pet pet = chr.getPet(0);   // assuming here only the pet leader will gain owner speed
+    @Override
+    public void run(Character chr, Integer extSelection) {
+        Pet pet = quest.getMatchedPet(chr, true);
         if (pet == null) {
             return;
         }
 
+        Client c = chr.getClient();
         c.lockClient();
         try {
-            pet.addPetAttribute(c.getPlayer(), Pet.PetAttribute.OWNER_SPEED);
+            pet.addPetAttribute(chr, Pet.PetAttribute.OWNER_SPEED);
         } finally {
             c.unlockClient();
         }

@@ -116,6 +116,32 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         return false;
     }
 
+    private static boolean startQuestScriptIfPresent(Client c, short questId, int npcId) {
+        QuestScriptManager scripts = QuestScriptManager.getInstance();
+        if (!scripts.checkFunctionExists(c, questId, npcId, "start")) {
+            return false;
+        }
+        scripts.start(c, questId, npcId);
+        return true;
+    }
+
+    private static boolean endQuestScriptIfPresent(Client c, short questId, int npcId) {
+        QuestScriptManager scripts = QuestScriptManager.getInstance();
+        if (!scripts.checkFunctionExists(c, questId, npcId, "end")) {
+            return false;
+        }
+        scripts.end(c, questId, npcId);
+        return true;
+    }
+
+    private static void completeQuestNatively(InPacket p, Character player, Quest quest, int npcId) {
+        if (p.available() >= 2) {
+            quest.complete(player, npcId, (int) p.readShort());
+            return;
+        }
+        quest.complete(player, npcId);
+    }
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte action = p.readByte();
@@ -141,14 +167,16 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 if (!canUseQuestNpc(c, p, player, quest, questid, npc)) {
                     return;
                 }
-                if (quest.canStart(player, npc) || isRemoteScriptQuest(questid)) {
-                    boolean success = QuestScriptManager.getInstance().checkFunctionExists(c, questid, npc, "start");
-                    boolean hasScriptRequirement = quest.hasScriptRequirement(false);
-                    if (success && (hasScriptRequirement || isRemoteScriptQuest(questid) || quest.isAutoStart())) {
-                        QuestScriptManager.getInstance().start(c, questid, npc);
-                    } else {
-                        quest.start(player, npc);
-                    }
+                if (!quest.canStart(player, npc)) {
+                    c.sendPacket(PacketCreator.enableActions());
+                    break;
+                }
+                boolean success = QuestScriptManager.getInstance().checkFunctionExists(c, questid, npc, "start");
+                boolean hasScriptRequirement = quest.hasScriptRequirement(false);
+                if (success && (hasScriptRequirement || isRemoteScriptQuest(questid) || quest.isAutoStart())) {
+                    QuestScriptManager.getInstance().start(c, questid, npc);
+                } else {
+                    quest.start(player, npc);
                 }
                 break;
             }
@@ -170,12 +198,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                     if (success && (hasScriptRequirement || isRemoteScriptQuest(questid) || quest.isAutoStart())) {
                         QuestScriptManager.getInstance().end(c, questid, scriptNpc);
                     } else {
-                        if (p.available() >= 2) {
-                            int selection = p.readShort();
-                            quest.complete(player, scriptNpc, selection);
-                        } else {
-                            quest.complete(player, scriptNpc);
-                        }
+                        completeQuestNatively(p, player, quest, scriptNpc);
                     }
                 } else if (shouldOpenLifeProofEndScript(player, quest, questid)) {
                     QuestScriptManager.getInstance().end(c, questid, scriptNpc);
@@ -199,8 +222,12 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 if (!canUseQuestNpc(c, p, player, quest, questid, npc)) {
                     return;
                 }
-                if (quest.canStart(player, npc) || isRemoteScriptQuest(questid)) {
-                    QuestScriptManager.getInstance().start(c, questid, npc);
+                if (!quest.canStart(player, npc)) {
+                    c.sendPacket(PacketCreator.enableActions());
+                    break;
+                }
+                if (!startQuestScriptIfPresent(c, questid, npc)) {
+                    quest.start(player, npc);
                 }
                 break;
             }
@@ -216,10 +243,17 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                     return;
                 }
                 int scriptNpc = npcNearby ? npc : 0;
-                if (quest.canComplete(player, scriptNpc) || lifeProofProgress) {
-                    QuestScriptManager.getInstance().end(c, questid, scriptNpc);
-                } else {
+                boolean canComplete = quest.canComplete(player, scriptNpc);
+                if (!canComplete && !lifeProofProgress) {
                     c.sendPacket(PacketCreator.enableActions());
+                    break;
+                }
+                if (!endQuestScriptIfPresent(c, questid, scriptNpc)) {
+                    if (canComplete) {
+                        completeQuestNatively(p, player, quest, scriptNpc);
+                    } else {
+                        c.sendPacket(PacketCreator.enableActions());
+                    }
                 }
                 break;
             }
