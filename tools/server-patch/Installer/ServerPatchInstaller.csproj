@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>BeiDou-Server-Patch</AssemblyName>
+    <ApplicationTitle>BeiDou Server Patch</ApplicationTitle>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\patch-data.zip" LogicalName="patch-data.zip" Condition="Exists('Resources\patch-data.zip')" />
+  </ItemGroup>
+</Project>
