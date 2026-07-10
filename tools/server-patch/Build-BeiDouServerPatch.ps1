@@ -22,11 +22,33 @@ param(
 $ErrorActionPreference = "Stop"
 
 function Get-RepoRoot {
-    $root = git rev-parse --show-toplevel
-    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($root)) {
-        throw "Not inside a git repository."
+    $root = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot "../.."))
+    if (!(Test-Path -LiteralPath (Join-Path $root ".git") -PathType Container)) {
+        throw "Cannot locate repository root from script directory: $PSScriptRoot"
     }
-    return $root.Trim()
+    return $root
+}
+
+function Resolve-RepoRelativeDirectory {
+    param(
+        [string] $RepoRoot,
+        [string] $RelativePath,
+        [string] $ParameterName
+    )
+
+    if ([string]::IsNullOrWhiteSpace($RelativePath)) {
+        throw "$ParameterName cannot be empty."
+    }
+    if ([System.IO.Path]::IsPathRooted($RelativePath)) {
+        throw "$ParameterName must be relative to the repository root: $RelativePath"
+    }
+
+    $repoFull = [System.IO.Path]::GetFullPath($RepoRoot).TrimEnd('\', '/') + [System.IO.Path]::DirectorySeparatorChar
+    $resolved = [System.IO.Path]::GetFullPath((Join-Path $repoFull $RelativePath))
+    if (-not $resolved.StartsWith($repoFull, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw "$ParameterName must stay inside the repository root: $RelativePath"
+    }
+    return $resolved
 }
 
 function ConvertTo-RelativePath {
@@ -74,7 +96,7 @@ function Add-PayloadFile {
 function Test-RuntimePath {
     param([string] $Path)
 
-    $normalized = $Path.Replace("\", "/")
+    $normalized = ConvertTo-RuntimePayloadPath -Path $Path
     return $normalized -eq "BeiDou.jar" `
         -or $normalized.StartsWith("scripts/", [StringComparison]::OrdinalIgnoreCase) `
         -or $normalized.StartsWith("scripts-zh-CN/", [StringComparison]::OrdinalIgnoreCase) `
@@ -82,8 +104,25 @@ function Test-RuntimePath {
         -or $normalized.StartsWith("wz-zh-CN/", [StringComparison]::OrdinalIgnoreCase)
 }
 
+function ConvertTo-RuntimePayloadPath {
+    param([string] $Path)
+
+    $normalized = $Path.Replace("\", "/")
+    if ($normalized.StartsWith("gms-server/", [StringComparison]::OrdinalIgnoreCase)) {
+        $candidate = $normalized.Substring("gms-server/".Length)
+        if ($candidate.StartsWith("scripts/", [StringComparison]::OrdinalIgnoreCase) `
+            -or $candidate.StartsWith("scripts-zh-CN/", [StringComparison]::OrdinalIgnoreCase) `
+            -or $candidate.StartsWith("wz/", [StringComparison]::OrdinalIgnoreCase) `
+            -or $candidate.StartsWith("wz-zh-CN/", [StringComparison]::OrdinalIgnoreCase)) {
+            return $candidate
+        }
+    }
+    return $normalized
+}
+
 $repoRoot = Get-RepoRoot
 Set-Location $repoRoot
+$outputRoot = Resolve-RepoRelativeDirectory -RepoRoot $repoRoot -RelativePath $OutputDir -ParameterName "OutputDir"
 
 if (-not $SkipMavenPackage) {
     mvn -pl gms-server -am clean package -DskipTests
@@ -94,7 +133,7 @@ if (!(Test-Path -LiteralPath $jarPath -PathType Leaf)) {
     throw "Missing built jar: $jarPath"
 }
 
-$buildRoot = Join-Path $repoRoot "$OutputDir/BeiDou-Server-$From-to-$To-patch-build"
+$buildRoot = Join-Path $outputRoot "BeiDou-Server-$From-to-$To-patch-build"
 $payloadRoot = Join-Path $buildRoot "payload"
 $installerRoot = Join-Path $repoRoot "tools/server-patch/Installer"
 $resourceZip = Join-Path $installerRoot "Resources/patch-data.zip"
@@ -104,7 +143,7 @@ if (Test-Path -LiteralPath $buildRoot) {
 }
 New-Item -ItemType Directory -Force -Path $payloadRoot | Out-Null
 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $resourceZip) | Out-Null
-New-Item -ItemType Directory -Force -Path (Join-Path $repoRoot $OutputDir) | Out-Null
+New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
 
 $copyManifest = [System.Collections.Generic.List[object]]::new()
 $deleteManifest = [System.Collections.Generic.List[string]]::new()
@@ -132,13 +171,14 @@ foreach ($line in $diffLines) {
         continue
     }
 
+    $payloadPath = ConvertTo-RuntimePayloadPath -Path $path
     if ($status.StartsWith("D", [StringComparison]::OrdinalIgnoreCase)) {
-        $deleteManifest.Add($path) | Out-Null
+        $deleteManifest.Add($payloadPath) | Out-Null
         continue
     }
 
     $source = Join-Path $repoRoot ($path.Replace("/", [IO.Path]::DirectorySeparatorChar))
-    Add-PayloadFile -Source $source -RelativePath $path -Manifest $copyManifest -PayloadRoot $payloadRoot
+    Add-PayloadFile -Source $source -RelativePath $payloadPath -Manifest $copyManifest -PayloadRoot $payloadRoot
 }
 
 if (Test-Path -LiteralPath "client-update/manifest.json" -PathType Leaf) {
@@ -185,8 +225,8 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 $exeSource = Join-Path $buildRoot "publish/$assemblyName.exe"
-$exeTarget = Join-Path $repoRoot "$OutputDir/$assemblyName.exe"
-$zipTarget = Join-Path $repoRoot "$OutputDir/$assemblyName.zip"
+$exeTarget = Join-Path $outputRoot "$assemblyName.exe"
+$zipTarget = Join-Path $outputRoot "$assemblyName.zip"
 Copy-Item -LiteralPath $exeSource -Destination $exeTarget -Force
 if (Test-Path -LiteralPath $zipTarget) {
     Remove-Item -LiteralPath $zipTarget -Force
@@ -197,9 +237,9 @@ $exeHash = (Get-FileHash -LiteralPath $exeTarget -Algorithm SHA256).Hash
 $zipHash = (Get-FileHash -LiteralPath $zipTarget -Algorithm SHA256).Hash
 
 [PSCustomObject]@{
-    Exe = $exeTarget
+    Exe = ConvertTo-RelativePath -Root $repoRoot -Path $exeTarget
     ExeSha256 = $exeHash
-    Zip = $zipTarget
+    Zip = ConvertTo-RelativePath -Root $repoRoot -Path $zipTarget
     ZipSha256 = $zipHash
     PayloadFileCount = $copyManifest.Count
     DeleteFileCount = $deleteManifest.Count
