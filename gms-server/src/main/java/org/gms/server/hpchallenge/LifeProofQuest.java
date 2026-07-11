@@ -2334,6 +2334,7 @@ public final class LifeProofQuest {
             return;
         }
         Objective objective = objective(meta.stage(), selected.task());
+        QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
         int progress = selected.currentCount();
         if (selected.completed()) {
             progress = objective.requiredCount();
@@ -2344,12 +2345,16 @@ public final class LifeProofQuest {
             progress = chr.getMeso() >= objective.mesoCost() ? objective.requiredCount() : 0;
             HpChallengeService.setLifeProofOptionalProgress(chr, meta.stage(), meta.selectorNo(), progress);
         } else if (objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS) {
-            // KILL/BOSS progress is already stored in hp_challenge_progress by kill handlers.
-            // selected.currentCount() reflects the DB value; keep it as the authoritative progress.
+            // Write DB progress to native mobId keys so Character.raiseQuestMobCount
+            // can continue from the correct count after login / channel change.
+            String progressStr = StringUtil.getLeftPaddedStr(Integer.toString(
+                    Math.min(objective.requiredCount(), progress)), '0', 3);
+            for (int targetId : objective.targetIds()) {
+                status.setProgress(targetId, progressStr);
+            }
         }
 
         String value = progress >= objective.requiredCount() ? "001" : "000";
-        QuestStatus status = chr.getQuest(Quest.getInstance(meta.questId()));
         String before = status.getProgress(CUSTOM_PROGRESS_KEY);
         if (value.equals(before)) {
             if ("001".equals(value)) {
