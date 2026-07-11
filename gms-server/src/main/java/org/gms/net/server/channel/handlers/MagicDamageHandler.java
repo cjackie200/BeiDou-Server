@@ -26,6 +26,8 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
+import org.gms.client.status.MonsterStatus;
+import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.constants.skills.Bishop;
@@ -35,17 +37,15 @@ import org.gms.constants.skills.ILArchMage;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.Packet;
 import org.gms.server.StatEffect;
-import org.gms.client.status.MonsterStatus;
-import org.gms.client.status.MonsterStatusEffect;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.life.Monster;
 import org.gms.util.PacketCreator;
 
-import java.util.Collections;
-
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,18 +56,10 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-
-		/*long timeElapsed = currentServerTime() - chr.getAutobanManager().getLastSpam(8);
-		if(timeElapsed < 300) {
-			AutobanFactory.FAST_ATTACK.alert(chr, "Time: " + timeElapsed);
-		}
-		chr.getAutobanManager().spam(8);*/
-
         AttackInfo attack = parseDamage(p, chr, false, true);
 
         if (chr.getBuffEffect(BuffStat.MORPH) != null) {
             if (chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
-                // How are they attacking when the client won't let them?
                 chr.getClient().disconnect(false, false);
                 return;
             }
@@ -78,10 +70,15 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 
-        int charge = (attack.skill == Evan.FIRE_BREATH || attack.skill == Evan.ICE_BREATH || attack.skill == FPArchMage.BIG_BANG || attack.skill == ILArchMage.BIG_BANG || attack.skill == Bishop.BIG_BANG) ? attack.charge : -1;
-        Packet packet = PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, charge, attack.speed, attack.direction, attack.display);
+        if ((attack.skill == 2001004 || attack.skill == 2101005) && attack.numAttacked > 0) {
+            addBounceTargets(attack, chr);
+        }
 
+        int charge = (attack.skill == Evan.FIRE_BREATH || attack.skill == Evan.ICE_BREATH || attack.skill == FPArchMage.BIG_BANG || attack.skill == ILArchMage.BIG_BANG || attack.skill == Bishop.BIG_BANG) ? attack.charge : -1;
+        Packet packet = PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel, attack.stance,
+                attack.numAttackedAndDamage, attack.allDamage, charge, attack.speed, attack.direction, attack.display);
         chr.getMap().broadcastMessage(chr, packet, false, true);
+
         StatEffect effect = attack.getAttackEffect(chr, null);
         Skill skill = SkillFactory.getSkill(attack.skill);
         StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
@@ -95,12 +92,7 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         }
         applyAttack(attack, chr, effect.getAttackCount());
 
-        // Server-side bounce for Magic Claw and Poison Breath
-        if (attack.skill == 2001004 || attack.skill == 2101005) {
-            applyBounce(attack, chr);
-        }
-
-        Skill eaterSkill = SkillFactory.getSkill((chr.getJob().getId() - (chr.getJob().getId() % 10)) * 10000);// MP Eater, works with right job
+        Skill eaterSkill = SkillFactory.getSkill((chr.getJob().getId() - (chr.getJob().getId() % 10)) * 10000);
         int eaterLevel = chr.getSkillLevel(eaterSkill);
         if (eaterLevel > 0) {
             for (Integer singleDamage : attack.allDamage.keySet()) {
@@ -109,12 +101,14 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         }
     }
 
-    private void applyBounce(AttackInfo attack, Character chr) {
+    /** Find bounce targets and add them to the attack packet BEFORE broadcast, so all clients see the visual. */
+    private void addBounceTargets(AttackInfo attack, Character chr) {
         MapleMap map = chr.getMap();
         Set<Integer> hitOids = attack.allDamage.keySet();
 
         Point primaryPos = null;
         int primaryDamage = 0;
+        int numDamage = attack.numAttackedAndDamage & 0xF;
         for (Map.Entry<Integer, List<Integer>> entry : attack.allDamage.entrySet()) {
             Monster m = map.getMonsterByOid(entry.getKey());
             if (m != null && entry.getValue() != null && !entry.getValue().isEmpty()) {
@@ -126,44 +120,40 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         if (primaryPos == null || primaryDamage <= 0) {
             return;
         }
-        final Point bounceOrigin = primaryPos;
+        final Point origin = primaryPos;
 
         List<Monster> candidates = new ArrayList<>();
         for (Monster m : map.getAllMonsters()) {
             if (m.isAlive() && !hitOids.contains(m.getObjectId())) {
-                double dx = m.getPosition().x - bounceOrigin.x;
-                double dy = m.getPosition().y - bounceOrigin.y;
+                double dx = m.getPosition().x - origin.x;
+                double dy = m.getPosition().y - origin.y;
                 if (Math.sqrt(dx * dx + dy * dy) <= 200) {
                     candidates.add(m);
                 }
             }
         }
-
         candidates.sort(Comparator.comparingDouble(m -> {
-            double dx = m.getPosition().x - bounceOrigin.x;
-            double dy = m.getPosition().y - bounceOrigin.y;
+            double dx = m.getPosition().x - origin.x;
+            double dy = m.getPosition().y - origin.y;
             return Math.sqrt(dx * dx + dy * dy);
         }));
 
         float[] decayRates = {0.95f, 0.90f, 0.85f, 0.80f, 0.75f};
         int bounceCount = Math.min(5, candidates.size());
-        Skill skill = SkillFactory.getSkill(attack.skill);
-        StatEffect bounceEffect = skill.getEffect(attack.skilllevel);
-        boolean applyPoison = attack.skill == 2101005 && bounceEffect != null;
         for (int i = 0; i < bounceCount; i++) {
             Monster target = candidates.get(i);
             int bounceDmg = Math.max(1, (int) (primaryDamage * decayRates[i]));
-            // Apply poison BEFORE damage (monster must be alive for status)
-            if (applyPoison && bounceEffect.makeChanceResult()) {
-                Map<MonsterStatus, Integer> stati = bounceEffect.getMonsterStati();
-                if (!stati.isEmpty()) {
-                    MonsterStatusEffect poisonEffect = new MonsterStatusEffect(stati, skill, null, false);
-                    target.applyStatus(chr, poisonEffect, bounceEffect.isPoison(), bounceEffect.getDuration());
-                }
+            List<Integer> dmgList = new ArrayList<>();
+            for (int d = 0; d < numDamage; d++) {
+                dmgList.add(bounceDmg);
             }
-            if (map.damageMonster(chr, target, bounceDmg)) {
-                map.broadcastMessage(PacketCreator.damageMonster(target.getObjectId(), bounceDmg), target.getPosition());
-            }
+            attack.allDamage.put(target.getObjectId(), dmgList);
         }
+
+        // Update numAttacked in the combined byte
+        int newNumAttacked = attack.numAttacked + bounceCount;
+        attack.numAttackedAndDamage = (byte) ((newNumAttacked << 4) | numDamage);
+        attack.numAttacked = newNumAttacked;
     }
+
 }
