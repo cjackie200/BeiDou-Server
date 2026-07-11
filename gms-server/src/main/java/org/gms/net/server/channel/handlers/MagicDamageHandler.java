@@ -153,7 +153,7 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         for (int i = 0; i < bounceCount; i++) {
             Monster target = candidates.get(i);
             int bounceDmg = Math.max(1, (int) (primaryDamage * decayRates[i]));
-            // Apply poison BEFORE damage so the monster is still alive for status
+            // Apply poison BEFORE damage (monster must be alive for status)
             if (applyPoison && bounceEffect.makeChanceResult()) {
                 Map<MonsterStatus, Integer> stati = bounceEffect.getMonsterStati();
                 if (!stati.isEmpty()) {
