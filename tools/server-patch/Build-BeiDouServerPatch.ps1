@@ -16,7 +16,11 @@ param(
 
     [string] $Dotnet = "dotnet",
 
-    [switch] $SkipMavenPackage
+    [switch] $SkipMavenPackage,
+
+    [switch] $IncludeWorkingTree,
+
+    [switch] $CreateZip
 )
 
 $ErrorActionPreference = "Stop"
@@ -133,7 +137,9 @@ if (!(Test-Path -LiteralPath $jarPath -PathType Leaf)) {
     throw "Missing built jar: $jarPath"
 }
 
-$buildRoot = Join-Path $outputRoot "BeiDou-Server-$From-to-$To-patch-build"
+$safePatchVersion = $PatchVersion -replace '[^A-Za-z0-9._-]', '-'
+$artifactName = "BeiDou-Server-$safePatchVersion-patch"
+$buildRoot = Join-Path $outputRoot "$artifactName-build"
 $payloadRoot = Join-Path $buildRoot "payload"
 $installerRoot = Join-Path $repoRoot "tools/server-patch/Installer"
 $resourceZip = Join-Path $installerRoot "Resources/patch-data.zip"
@@ -150,10 +156,24 @@ $deleteManifest = [System.Collections.Generic.List[string]]::new()
 
 Add-PayloadFile -Source $jarPath -RelativePath "BeiDou.jar" -Manifest $copyManifest -PayloadRoot $payloadRoot
 
-$diffLines = git diff --name-status "$From..$To"
+$diffLines = [System.Collections.Generic.List[string]]::new()
+git diff --name-status "$From..$To" | ForEach-Object { $diffLines.Add($_) | Out-Null }
 if ($LASTEXITCODE -ne 0) {
     throw "git diff failed for $From..$To"
 }
+
+if ($IncludeWorkingTree) {
+    git diff --name-status $To | ForEach-Object { $diffLines.Add($_) | Out-Null }
+    if ($LASTEXITCODE -ne 0) {
+        throw "git working tree diff failed for $To"
+    }
+    git ls-files --others --exclude-standard | ForEach-Object { $diffLines.Add("A`t$_") | Out-Null }
+    if ($LASTEXITCODE -ne 0) {
+        throw "git untracked file listing failed"
+    }
+}
+
+$diffLines = $diffLines | Sort-Object -Unique
 
 foreach ($line in $diffLines) {
     if ([string]::IsNullOrWhiteSpace($line)) {
@@ -182,6 +202,16 @@ foreach ($line in $diffLines) {
 }
 
 if (Test-Path -LiteralPath "client-update/manifest.json" -PathType Leaf) {
+    $clientManifest = Get-Content -LiteralPath "client-update/manifest.json" -Raw | ConvertFrom-Json
+    foreach ($version in $StaticVersions) {
+        $versionEntry = $clientManifest.versions | Where-Object { $_.version -eq $version } | Select-Object -First 1
+        if ($null -eq $versionEntry) {
+            throw "Static update version is missing from client manifest: $version"
+        }
+        if ($null -eq $versionEntry.releaseNotes -or @($versionEntry.releaseNotes).Count -eq 0) {
+            throw "Static update version must include releaseNotes: $version"
+        }
+    }
     Add-PayloadFile -Source "client-update/manifest.json" -RelativePath "client-update/manifest.json" -Manifest $copyManifest -PayloadRoot $payloadRoot
 }
 
@@ -214,7 +244,7 @@ if (Test-Path -LiteralPath $resourceZip) {
 }
 Compress-Archive -Path (Join-Path $payloadRoot "*") -DestinationPath $resourceZip -Force
 
-$assemblyName = "BeiDou-Server-$From-to-$To-patch"
+$assemblyName = $artifactName
 & $Dotnet publish $installerRoot -c Release -r win-x64 --self-contained true `
     -p:PublishSingleFile=true `
     -p:AssemblyName=$assemblyName `
@@ -226,20 +256,25 @@ if ($LASTEXITCODE -ne 0) {
 
 $exeSource = Join-Path $buildRoot "publish/$assemblyName.exe"
 $exeTarget = Join-Path $outputRoot "$assemblyName.exe"
-$zipTarget = Join-Path $outputRoot "$assemblyName.zip"
 Copy-Item -LiteralPath $exeSource -Destination $exeTarget -Force
-if (Test-Path -LiteralPath $zipTarget) {
-    Remove-Item -LiteralPath $zipTarget -Force
-}
-Compress-Archive -LiteralPath $exeTarget -DestinationPath $zipTarget -Force
-
 $exeHash = (Get-FileHash -LiteralPath $exeTarget -Algorithm SHA256).Hash
-$zipHash = (Get-FileHash -LiteralPath $zipTarget -Algorithm SHA256).Hash
+
+$zipPath = $null
+$zipHash = $null
+if ($CreateZip) {
+    $zipTarget = Join-Path $outputRoot "$assemblyName.zip"
+    if (Test-Path -LiteralPath $zipTarget) {
+        Remove-Item -LiteralPath $zipTarget -Force
+    }
+    Compress-Archive -LiteralPath $exeTarget -DestinationPath $zipTarget -Force
+    $zipPath = ConvertTo-RelativePath -Root $repoRoot -Path $zipTarget
+    $zipHash = (Get-FileHash -LiteralPath $zipTarget -Algorithm SHA256).Hash
+}
 
 [PSCustomObject]@{
     Exe = ConvertTo-RelativePath -Root $repoRoot -Path $exeTarget
     ExeSha256 = $exeHash
-    Zip = ConvertTo-RelativePath -Root $repoRoot -Path $zipTarget
+    Zip = $zipPath
     ZipSha256 = $zipHash
     PayloadFileCount = $copyManifest.Count
     DeleteFileCount = $deleteManifest.Count

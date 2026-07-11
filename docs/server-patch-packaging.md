@@ -69,8 +69,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tools/server-patch/Build-Bei
 
 输出：
 
-- `deploy/BeiDou-Server-<FROM>-to-<TO>-patch.exe`
-- `deploy/BeiDou-Server-<FROM>-to-<TO>-patch.zip`
+- `deploy/BeiDou-Server-<VERSION>-patch.exe`
+- `deploy/BeiDou-Server-<VERSION>-patch.zip`
+
+`<VERSION>` 取自 `-PatchVersion`，不使用提交时间或本机路径，便于不同电脑生成一致的版本化产物名。
 
 以上都是相对于仓库根目录的路径。`-OutputDir` 也只接受仓库内相对路径，例如
 `deploy` 或 `artifacts/server-patch`；绝对路径及会通过 `..` 跳出仓库的路径会被拒绝。
@@ -104,9 +106,9 @@ zip 内只能有同名 exe，不能放备用脚本、payload 目录或散文件�
 打包后至少确认：
 
 ```powershell
-Get-ChildItem deploy/BeiDou-Server-<FROM>-to-<TO>-patch.zip
-Get-FileHash deploy/BeiDou-Server-<FROM>-to-<TO>-patch.exe -Algorithm SHA256
-Get-FileHash deploy/BeiDou-Server-<FROM>-to-<TO>-patch.zip -Algorithm SHA256
+Get-ChildItem deploy/BeiDou-Server-<VERSION>-patch.zip
+Get-FileHash deploy/BeiDou-Server-<VERSION>-patch.exe -Algorithm SHA256
+Get-FileHash deploy/BeiDou-Server-<VERSION>-patch.zip -Algorithm SHA256
 ```
 
 还要检查：

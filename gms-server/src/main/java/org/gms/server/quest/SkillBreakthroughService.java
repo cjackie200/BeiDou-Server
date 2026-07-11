@@ -1,6 +1,7 @@
 package org.gms.server.quest;
 
 import org.gms.client.Character;
+import org.gms.client.Job;
 import org.gms.client.QuestStatus;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
@@ -10,16 +11,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public final class SkillBreakthroughService {
-    public static final int QUEST_ID = 30006;
+    public static final int FIRST_QUEST_ID = 30006;
+    public static final int LAST_QUEST_ID = 30009;
+    public static final int QUEST_ID = FIRST_QUEST_ID;
     public static final int ZAKUM_MOB_ID = 8800002;
     public static final int REQUIRED_ZAKUM_KILLS = 1;
+    public static final int LEGACY_PROGRESS_MARKER = -30009;
+    public static final String LEGACY_PROGRESS_VALUE = "legacy-all";
 
-    private static final Map<Integer, List<Integer>> SKILLS_BY_JOB = new HashMap<>();
+    private static final Map<Integer, Stage> STAGES_BY_QUEST = Map.of(
+            30006, new Stage(1, 30006, 2220000, 3, 10),
+            30007, new Stage(2, 30007, 3220000, 3, 30),
+            30008, new Stage(3, 30008, 7220000, 3, 70),
+            30009, new Stage(4, 30009, ZAKUM_MOB_ID, REQUIRED_ZAKUM_KILLS, 120)
+    );
+    private static final Map<Integer, List<Integer>> SKILLS_BY_FINAL_JOB = new HashMap<>();
+    private static final Map<Integer, Integer> STAGE_BY_SKILL = new HashMap<>();
     private static final Set<Integer> BREAKTHROUGH_SKILLS = new HashSet<>();
 
     static {
@@ -53,32 +66,79 @@ public final class SkillBreakthroughService {
     private SkillBreakthroughService() {
     }
 
-    private static void register(int jobId, int... skillIds) {
+    private static void register(int finalJobId, int... skillIds) {
         List<Integer> skills = new ArrayList<>(skillIds.length);
         for (int skillId : skillIds) {
+            int stage = GameConstants.getJobBranch(Job.getById(skillId / 10000));
+            if (stage < 1 || stage > 4) {
+                throw new IllegalArgumentException("Invalid breakthrough skill job stage: " + skillId);
+            }
             skills.add(skillId);
             BREAKTHROUGH_SKILLS.add(skillId);
+            STAGE_BY_SKILL.put(skillId, stage);
         }
-        SKILLS_BY_JOB.put(jobId, Collections.unmodifiableList(skills));
+        SKILLS_BY_FINAL_JOB.put(finalJobId, Collections.unmodifiableList(skills));
     }
 
     public static boolean isSupportedJob(int jobId) {
-        return SKILLS_BY_JOB.containsKey(jobId);
+        return !getSkillsForJobAndStage(jobId, 0).isEmpty();
     }
 
     public static boolean isQuestId(int questId) {
-        return questId == QUEST_ID;
+        return STAGES_BY_QUEST.containsKey(questId);
     }
 
     public static boolean isQuestMob(int questId, int mobId) {
-        return isQuestId(questId) && mobId == ZAKUM_MOB_ID;
+        Stage stage = STAGES_BY_QUEST.get(questId);
+        return stage != null && stage.mobId() == mobId;
+    }
+
+    public static int getQuestMobId(int questId) {
+        Stage stage = STAGES_BY_QUEST.get(questId);
+        return stage == null ? 0 : stage.mobId();
     }
 
     public static int getRequiredMobKills(int questId, int mobId) {
-        if (!isQuestMob(questId, mobId)) {
-            return 0;
+        Stage stage = STAGES_BY_QUEST.get(questId);
+        return stage != null && stage.mobId() == mobId ? stage.requiredKills() : 0;
+    }
+
+    public static int getStageForQuest(int questId) {
+        Stage stage = STAGES_BY_QUEST.get(questId);
+        return stage == null ? 0 : stage.stage();
+    }
+
+    public static int getMinimumLevel(Character player, int questId) {
+        Stage stage = STAGES_BY_QUEST.get(questId);
+        if (stage == null || player == null) {
+            return Integer.MAX_VALUE;
         }
-        return REQUIRED_ZAKUM_KILLS;
+        if (stage.stage() == 1 && player.getJob().getId() / 100 == 2) {
+            return 8;
+        }
+        return stage.minimumLevel();
+    }
+
+    public static boolean canStartQuest(Character player, int questId) {
+        Stage stage = STAGES_BY_QUEST.get(questId);
+        if (player == null || stage == null || player.getLevel() < getMinimumLevel(player, questId)) {
+            return false;
+        }
+        if (GameConstants.getJobBranch(player.getJob()) < stage.stage()) {
+            return false;
+        }
+        if (getSkillsForJobAndStage(player.getJob().getId(), stage.stage()).isEmpty()) {
+            return false;
+        }
+        for (int previousStage = 1; previousStage < stage.stage(); previousStage++) {
+            if (getSkillsForJobAndStage(player.getJob().getId(), previousStage).isEmpty()) {
+                continue;
+            }
+            if (!hasCompletedStage(player, previousStage)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isBreakthroughSkill(int skillId) {
@@ -89,29 +149,49 @@ public final class SkillBreakthroughService {
         if (player == null) {
             return false;
         }
-        return player.getQuest(Quest.getInstance(QUEST_ID)).getStatus() == QuestStatus.Status.COMPLETED;
+        for (int stage = 1; stage <= 4; stage++) {
+            if (!getSkillsForJobAndStage(player.getJob().getId(), stage).isEmpty()
+                    && !hasCompletedStage(player, stage)) {
+                return false;
+            }
+        }
+        return isSupportedJob(player.getJob().getId());
+    }
+
+    public static boolean hasCompletedStage(Character player, int stage) {
+        int questId = questIdForStage(stage);
+        return player != null && questId != 0
+                && player.getQuest(Quest.getInstance(questId)).getStatus() == QuestStatus.Status.COMPLETED;
     }
 
     public static boolean canAssignLevel(Character player, Skill skill, int nextLevel) {
         if (player == null || skill == null) {
             return false;
         }
-        if (!isBreakthroughSkill(skill.getId())) {
+        if (!isBreakthroughSkill(skill.getId()) || nextLevel < skill.getMaxLevel()) {
             return true;
         }
-        if (nextLevel < skill.getMaxLevel()) {
-            return true;
-        }
-        return nextLevel == skill.getMaxLevel() && hasCompletedBreakthrough(player);
+        Integer stage = STAGE_BY_SKILL.get(skill.getId());
+        return nextLevel == skill.getMaxLevel() && stage != null && hasCompletedStage(player, stage);
     }
 
-    public static CompletionReward grantCompletionReward(Character player) {
-        if (player == null) {
+    public static CompletionReward grantCompletionReward(Character player, int questId) {
+        Stage stage = STAGES_BY_QUEST.get(questId);
+        if (player == null || stage == null) {
             return CompletionReward.unsupported();
         }
 
-        List<Integer> skillIds = SKILLS_BY_JOB.get(player.getJob().getId());
-        if (skillIds == null || skillIds.isEmpty()) {
+        QuestStatus current = player.getQuest(Quest.getInstance(questId));
+        if (current.getStatus() != QuestStatus.Status.STARTED
+                || getProgress(current, stage.mobId()) < stage.requiredKills()) {
+            return CompletionReward.unsupported();
+        }
+        boolean legacyAll = questId == LAST_QUEST_ID
+                && LEGACY_PROGRESS_VALUE.equals(current.getProgress(LEGACY_PROGRESS_MARKER));
+        List<Integer> skillIds = legacyAll
+                ? getSkillsForJobAndStage(player.getJob().getId(), 0)
+                : getSkillsForJobAndStage(player.getJob().getId(), stage.stage());
+        if (skillIds.isEmpty()) {
             return CompletionReward.unsupported();
         }
 
@@ -122,7 +202,6 @@ public final class SkillBreakthroughService {
             if (skill == null) {
                 continue;
             }
-
             int skillLevel = player.getSkillLevel(skill);
             int maxLevel = skill.getMaxLevel();
             int masterLevel = Math.max(player.getMasterLevel(skill), maxLevel);
@@ -134,12 +213,64 @@ public final class SkillBreakthroughService {
             grantedSkills.add(skillName == null ? String.valueOf(skillId) : skillName);
         }
 
-        return new CompletionReward(true, grantedSp, Collections.unmodifiableList(grantedSkills));
+        if (legacyAll) {
+            completeLegacyPreviousStages(player);
+        }
+        return new CompletionReward(true, grantedSp, Collections.unmodifiableList(grantedSkills), legacyAll);
     }
 
-    public record CompletionReward(boolean supported, int grantedSp, List<String> grantedSkills) {
+    public static CompletionReward grantCompletionReward(Character player) {
+        return grantCompletionReward(player, QUEST_ID);
+    }
+
+    public static List<Integer> getSkillsForJobAndStage(int jobId, int stage) {
+        Job currentJob = Job.getById(jobId);
+        LinkedHashSet<Integer> result = new LinkedHashSet<>();
+        for (Map.Entry<Integer, List<Integer>> entry : SKILLS_BY_FINAL_JOB.entrySet()) {
+            Job finalJob = Job.getById(entry.getKey());
+            if (!finalJob.isA(currentJob)) {
+                continue;
+            }
+            for (int skillId : entry.getValue()) {
+                if (stage == 0 || STAGE_BY_SKILL.get(skillId) == stage) {
+                    result.add(skillId);
+                }
+            }
+        }
+        return List.copyOf(result);
+    }
+
+    private static void completeLegacyPreviousStages(Character player) {
+        for (int stage = 1; stage < 4; stage++) {
+            if (getSkillsForJobAndStage(player.getJob().getId(), stage).isEmpty()) {
+                continue;
+            }
+            Quest quest = Quest.getInstance(questIdForStage(stage));
+            QuestStatus completed = new QuestStatus(quest, QuestStatus.Status.COMPLETED);
+            completed.setCompletionTime(System.currentTimeMillis());
+            player.updateQuestStatus(completed);
+        }
+    }
+
+    private static int getProgress(QuestStatus status, int mobId) {
+        try {
+            return Integer.parseInt(status.getProgress(mobId));
+        } catch (NumberFormatException ex) {
+            return 0;
+        }
+    }
+
+    private static int questIdForStage(int stage) {
+        return stage >= 1 && stage <= 4 ? FIRST_QUEST_ID + stage - 1 : 0;
+    }
+
+    public record Stage(int stage, int questId, int mobId, int requiredKills, int minimumLevel) {
+    }
+
+    public record CompletionReward(boolean supported, int grantedSp, List<String> grantedSkills,
+                                   boolean legacyAllStages) {
         public static CompletionReward unsupported() {
-            return new CompletionReward(false, 0, List.of());
+            return new CompletionReward(false, 0, List.of(), false);
         }
     }
 }
