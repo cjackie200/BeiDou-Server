@@ -1286,7 +1286,9 @@ public class Monster extends AbstractLoadedLife {
                 // stacks at the highest MAD seen so far (no downgrade on skill switch).
                 int skillMad = status.getSkill().getEffect(poisonLevel).getMatk();
                 int effectiveMad = Math.max(skillMad, capturedMaxMad);
-                int newStacks = Math.min(MonsterPoisonDot.MAX_FP_POISON_STACKS, capturedStacks + 1);
+                int newStacks = capturedStacks > 0
+                        ? Math.min(MonsterPoisonDot.MAX_FP_POISON_STACKS, capturedStacks + 2)
+                        : 1;
                 poisonDamage = MonsterPoisonDot.calculateFpPoisonDamage(from, status.getSkill(),
                         poisonLevel, effectiveMad, newStacks);
                 fpPoisonStacks = newStacks;
