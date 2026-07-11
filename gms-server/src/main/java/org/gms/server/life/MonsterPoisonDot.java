@@ -19,7 +19,8 @@ final class MonsterPoisonDot {
     static final int DEFAULT_ELEMENT_RATE = 100;
     static final int DEFAULT_TICK_DELAY_MS = 1000;
     static final short WEAPON_SLOT = -11;
-    static final int FP_DAMAGE_DIVISOR = 1500;
+    static final int FP_DAMAGE_DIVISOR = 1000;
+    private static final float FP_MASTERY = 0.6f;
     static final int MAX_FP_POISON_STACKS = 5;
 
     private MonsterPoisonDot() {
@@ -101,6 +102,17 @@ final class MonsterPoisonDot {
         // baseDamage = (MATK×3 + INT×2) × skillMAD × (skillLevel + 10) / divisor
         long baseDamage = (totalMatk * 3L + totalInt * 2L) * skillMad * (skillLevel + 10L) / FP_DAMAGE_DIVISOR;
         return capDotDamage(baseDamage * stacks);
+    }
+
+    static int randomizeFpPoisonTick(int maxDamage) {
+        if (maxDamage <= 0) {
+            return 0;
+        }
+        int min = (int) (maxDamage * FP_MASTERY);
+        if (min >= maxDamage) {
+            return maxDamage;
+        }
+        return min + org.gms.util.Randomizer.nextInt(maxDamage - min + 1);
     }
 
     static int applyPoisonElementRate(int baseDamage, int rate) {

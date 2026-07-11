@@ -127,6 +127,7 @@ public class Monster extends AbstractLoadedLife {
     private int fpPoisonStacks = 0;
     private int fpPoisonMaxMad = 0;
     private int fpPoisonSkillId = 0;
+    private int fpPoisonDotMaxDamage = 0;
 
     public Monster(int id, MonsterStats stats) {
         super(id);
@@ -1305,6 +1306,9 @@ public class Monster extends AbstractLoadedLife {
                 poisonDamage = MonsterPoisonDot.applyPoisonEffectivenessRate(poisonDamage,
                         getMonsterEffectiveness(Element.POISON));
             }
+            if (MonsterPoisonDot.isFpMagePoisonDot(status.getSkill())) {
+                fpPoisonDotMaxDamage = poisonDamage;
+            }
             status.setValue(MonsterStatus.POISON, MonsterPoisonDot.poisonStatusValue(poisonDamage, playerPoisonDot));
             animationTime = broadcastStatusEffect(status);
 
@@ -1782,7 +1786,12 @@ public class Monster extends AbstractLoadedLife {
                 return;
             }
 
-            int damage = MonsterPoisonDot.damageForTick(curHp, dealDamage, lethal);
+            int effectiveDealDamage = dealDamage;
+            if (fpPoisonDotMaxDamage > 0) {
+                // FP poison DOT: per-tick mastery randomization (60% mastery)
+                effectiveDealDamage = MonsterPoisonDot.randomizeFpPoisonTick(fpPoisonDotMaxDamage);
+            }
+            int damage = MonsterPoisonDot.damageForTick(curHp, effectiveDealDamage, lethal);
             if (damage <= 0) {
                 return;
             }
