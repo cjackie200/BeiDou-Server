@@ -502,12 +502,7 @@ public final class LifeProofQuest {
             // not in the quest status per-mob map. Use questProgressValue which reads the DB source.
             if (meta.kind() == QuestKind.OPTION_SLOT) {
                 ProgressValue progress = questProgressValue(chr, meta);
-                StringBuilder mobNames = new StringBuilder();
-                for (int i = 0; i < objective.targetIds().size(); i++) {
-                    if (i > 0) mobNames.append("/");
-                    mobNames.append(MonsterInformationProvider.getInstance().getMobNameFromId(objective.targetIds().get(i)));
-                }
-                String label = mobNames.isEmpty() ? "击杀进度" : mobNames + " 进度";
+                String label = dedupMobNames(objective) + " 进度";
                 return List.of(new InteractionHookProgressEntry.Condition(
                         progress.current(), progress.required(),
                         label + "：#b" + progress.current() + "#k/#r" + progress.required() + "#k"));
@@ -532,14 +527,10 @@ public final class LifeProofQuest {
                 return conditions;
             }
             int progress = mobProgress(chr, meta);
-            StringBuilder mobNames = new StringBuilder();
-            for (int i = 0; i < objective.targetIds().size(); i++) {
-                if (i > 0) mobNames.append("/");
-                mobNames.append(MonsterInformationProvider.getInstance().getMobNameFromId(objective.targetIds().get(i)));
-            }
+            String names = dedupMobNames(objective);
             return List.of(new InteractionHookProgressEntry.Condition(
                     progress, objective.requiredCount(),
-                    mobNames + " #b" + progress + "#k/#r" + objective.requiredCount() + "#k"));
+                    names + " #b" + progress + "#k/#r" + objective.requiredCount() + "#k"));
         }
 
         ProgressValue progress = questProgressValue(chr, meta);
@@ -651,7 +642,27 @@ public final class LifeProofQuest {
 
     public static void onStarted(Character chr, int questId) {
         QuestMeta meta = QUESTS.get(questId);
-        if (chr == null || meta == null || !meta.objective().isCustomProgress()) {
+        if (chr == null || meta == null) {
+            return;
+        }
+
+        // Initialize native mob progress keys for MAIN KILL/BOSS quests
+        // so that Character.raiseQuestMobCount -> QuestStatus.progress(mobId)
+        // can increment and send SHOW_STATUS_INFO, triggering the client's
+        // built-in mob kill counter at screen center-top.
+        Objective objective = meta.objective();
+        if ((objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS)
+                && meta.kind() == QuestKind.MAIN) {
+            QuestStatus status = chr.getQuest(Quest.getInstance(questId));
+            for (int targetId : objective.targetIds()) {
+                status.setProgress(targetId, "000");
+            }
+            chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+            chr.announceUpdateQuest(DelayedQuestUpdate.INFO, status);
+            return;
+        }
+
+        if (!meta.objective().isCustomProgress()) {
             return;
         }
         QuestStatus status = chr.getQuest(Quest.getInstance(questId));
@@ -671,7 +682,14 @@ public final class LifeProofQuest {
         }
         Quest quest = Quest.getInstance(questId);
         QuestStatus status = new QuestStatus(quest, QuestStatus.Status.STARTED, npcId);
-        status.setProgress(CUSTOM_PROGRESS_KEY, "000");
+        // Initialize native mob progress keys for KILL/BOSS objectives
+        // so the vanilla client mob counter works via Character.raiseQuestMobCount
+        Objective objective = effectiveObjective(chr, meta);
+        if (objective != null && (objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS)) {
+            for (int targetId : objective.targetIds()) {
+                status.setProgress(targetId, "000");
+            }
+        }
         chr.updateQuestStatus(status);
         syncActiveObjectiveProgress(chr);
         refreshQuestRules(chr);
@@ -1435,11 +1453,36 @@ public final class LifeProofQuest {
             return "目标怪物：未指定";
         }
         StringBuilder sb = new StringBuilder("目标怪物：");
+        String prevName = null;
         for (int i = 0; i < objective.targetIds().size(); i++) {
-            if (i > 0) {
+            int targetId = objective.targetIds().get(i);
+            String name = MonsterInformationProvider.getInstance().getMobNameFromId(targetId);
+            if (name.equals(prevName)) {
+                continue;
+            }
+            if (sb.length() > "目标怪物：".length()) {
                 sb.append("/");
             }
-            sb.append("#o").append(objective.targetIds().get(i)).append("#");
+            sb.append("#o").append(targetId).append("#");
+            prevName = name;
+        }
+        return sb.toString();
+    }
+
+    /** Builds deduplicated mob name string joined by "/" for conditions display. */
+    private static String dedupMobNames(Objective objective) {
+        StringBuilder sb = new StringBuilder();
+        String prevName = null;
+        for (int targetId : objective.targetIds()) {
+            String name = MonsterInformationProvider.getInstance().getMobNameFromId(targetId);
+            if (name.equals(prevName)) {
+                continue;
+            }
+            if (!sb.isEmpty()) {
+                sb.append("/");
+            }
+            sb.append(name);
+            prevName = name;
         }
         return sb.toString();
     }
@@ -1528,16 +1571,24 @@ public final class LifeProofQuest {
         }
 
         if (active.kind() == QuestKind.OPTION_SLOT) {
-            int before = mobProgress(chr, active);
-            if (!HpChallengeService.incrementLifeProofOptionalProgress(chr, active.stage(), active.selectorNo(),
-                    HpChallengeService.TargetType.KILL, mobId, "")) {
-                return;
+            // Generic path (Character.raiseQuestMobCount -> QuestStatus.progress)
+            // already incremented the native mob counter. Read current progress
+            // from QuestStatus and sync to DB for persistence.
+            QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
+            int progress = 0;
+            for (int targetId : objective.targetIds()) {
+                progress = Math.max(progress, parseProgress(status.getProgress(targetId)));
             }
-            syncActiveObjectiveProgress(chr);
-            int after = mobProgress(chr, active);
-            chr.yellowMessage("生命之证：" + objective.description() + " " + after + "/"
-                    + objective.requiredCount());
-            if (before < objective.requiredCount() && after >= objective.requiredCount()) {
+            progress = Math.min(objective.requiredCount(), progress);
+
+            HpChallengeService.LifeProofOptionalProgress selected = HpChallengeService.selectedLifeProofOptional(
+                    chr, active.stage(), active.selectorNo());
+            int before = selected != null ? selected.currentCount() : 0;
+            if (progress > before) {
+                HpChallengeService.setLifeProofOptionalProgress(chr, active.stage(), active.selectorNo(), progress);
+                syncActiveObjectiveProgress(chr);
+            }
+            if (before < objective.requiredCount() && progress >= objective.requiredCount()) {
                 refreshQuestRules(chr);
             } else {
                 refreshQuestProgress(chr);
@@ -1552,20 +1603,11 @@ public final class LifeProofQuest {
     }
 
     public static boolean shouldSkipGenericMobProgress(Character chr, QuestStatus status, int mobId) {
-        if (chr == null || status == null || status.getStatus() != QuestStatus.Status.STARTED) {
-            return false;
-        }
-        QuestMeta meta = QUESTS.get((int) status.getQuest().getId());
-        if (meta == null || meta != currentStartedVisibleQuest(chr)) {
-            return false;
-        }
-        if (meta.kind() != QuestKind.OPTION_SLOT) {
-            return false;
-        }
-        Objective objective = effectiveObjective(chr, meta);
-        return objective != null
-                && (objective.type() == ObjectiveType.KILL || objective.type() == ObjectiveType.BOSS)
-                && objective.targetIds().contains(mobId);
+        // All LifeProof KILL/BOSS quests (MAIN and OPTION_SLOT) now use native mob progress
+        // via QuestStatus, initialized in onStarted / startOptionSlot.
+        // Character.raiseQuestMobCount -> QuestStatus.progress(mobId) triggers the
+        // vanilla client mob counter at screen center-top.
+        return false;
     }
 
     private static boolean migrateLegacyMainMobProgress(QuestStatus status, Objective objective) {
