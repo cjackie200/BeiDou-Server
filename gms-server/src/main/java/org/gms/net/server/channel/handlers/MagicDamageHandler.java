@@ -155,9 +155,11 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
             int bounceDmg = Math.max(1, (int) (primaryDamage * decayRates[i]));
             // Apply poison BEFORE damage so the monster is still alive for status
             if (applyPoison && bounceEffect.makeChanceResult()) {
-                MonsterStatusEffect poisonEffect = new MonsterStatusEffect(
-                        Collections.singletonMap(MonsterStatus.POISON, 1), skill, null, false);
-                target.applyStatus(chr, poisonEffect, true, bounceEffect.getDuration());
+                Map<MonsterStatus, Integer> stati = bounceEffect.getMonsterStati();
+                if (!stati.isEmpty()) {
+                    MonsterStatusEffect poisonEffect = new MonsterStatusEffect(stati, skill, null, false);
+                    target.applyStatus(chr, poisonEffect, bounceEffect.isPoison(), bounceEffect.getDuration());
+                }
             }
             if (map.damageMonster(chr, target, bounceDmg)) {
                 map.broadcastMessage(PacketCreator.damageMonster(target.getObjectId(), bounceDmg), target.getPosition());
