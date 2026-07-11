@@ -35,9 +35,13 @@ import org.gms.constants.skills.ILArchMage;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.Packet;
 import org.gms.server.StatEffect;
+import org.gms.client.status.MonsterStatus;
+import org.gms.client.status.MonsterStatusEffect;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.life.Monster;
 import org.gms.util.PacketCreator;
+
+import java.util.Collections;
 
 import java.awt.Point;
 import java.util.ArrayList;
@@ -143,11 +147,19 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
 
         float[] decayRates = {0.95f, 0.90f, 0.85f, 0.80f, 0.75f};
         int bounceCount = Math.min(5, candidates.size());
+        Skill skill = SkillFactory.getSkill(attack.skill);
+        StatEffect bounceEffect = skill.getEffect(attack.skilllevel);
+        boolean applyPoison = attack.skill == 2101005 && bounceEffect != null;
         for (int i = 0; i < bounceCount; i++) {
             Monster target = candidates.get(i);
             int bounceDmg = Math.max(1, (int) (primaryDamage * decayRates[i]));
             if (map.damageMonster(chr, target, bounceDmg)) {
                 map.broadcastMessage(PacketCreator.damageMonster(target.getObjectId(), bounceDmg), target.getPosition());
+            }
+            if (applyPoison && bounceEffect.makeChanceResult()) {
+                MonsterStatusEffect poisonEffect = new MonsterStatusEffect(
+                        Collections.singletonMap(MonsterStatus.POISON, 1), skill, null, false);
+                target.applyStatus(chr, poisonEffect, true, bounceEffect.getDuration());
             }
         }
     }
