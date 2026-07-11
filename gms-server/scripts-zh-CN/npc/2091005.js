@@ -28,6 +28,7 @@
 var disabled = false;
 var belts = Array(1132000, 1132001, 1132002, 1132003, 1132004);
 var belt_level = Array(25, 35, 45, 60, 75);
+var VANQUISHER_KILLS_REQUIRED = 10;
 var belt_on_inventory;
 var belt_points;
 
@@ -256,15 +257,15 @@ function action(mode, type, selection) {
                         }
                     } else if (selectedMenu == 4) { //I want to receive a medal.
                         if (status == 1 && cm.getPlayer().getVanquisherStage() <= 0) {
-                            cm.sendYesNo("你还没有尝试过勋章吗？如果你在勇士部落道场中打败某种类型的怪物#b100次#k，你就可以获得一个称号，叫做#b#t" + (1142033 + cm.getPlayer().getVanquisherStage()) + "##k。看起来你甚至还没有获得#b#t" + (1142033 + cm.getPlayer().getVanquisherStage()) + "##k... 你想尝试一下#b#t" + (1142033 + cm.getPlayer().getVanquisherStage()) + "##k吗？");
+                            cm.sendYesNo("你还没有尝试过勋章吗？如果你在勇士部落道场中打败某种类型的怪物#b" + VANQUISHER_KILLS_REQUIRED + "次#k，你就可以获得一个称号，叫做#b#t" + (1142033 + cm.getPlayer().getVanquisherStage()) + "##k。看起来你甚至还没有获得#b#t" + (1142033 + cm.getPlayer().getVanquisherStage()) + "##k... 你想尝试一下#b#t" + (1142033 + cm.getPlayer().getVanquisherStage()) + "##k吗？");
                         } else if (status == 2 || cm.getPlayer().getVanquisherStage() > 0) {
                             if (mode == 0) {
                                 cm.sendNext("如果你不想的话，没关系。");
                             } else {
                                 if (cm.getPlayer().getDojoStage() > 37) {
                                     cm.sendNext("你已经完成了所有勋章挑战。");
-                                } else if (cm.getPlayer().getVanquisherKills() < 100 && cm.getPlayer().getVanquisherStage() > 0) {
-                                    cm.sendNext("你仍然需要 #b" + (100 - cm.getPlayer().getVanquisherKills()) + "#k 才能获得 #b#t" + (1142032 + cm.getPlayer().getVanquisherStage()) + "##k。请再努力一点。提醒一下，只有在武陵道场由我们的大师召唤的怪物才算数。哦，还要确保你不是在打怪后就退出！#r如果你打败怪物后没有进入下一关，就不算胜利#k。");
+                                } else if (cm.getPlayer().getVanquisherKills() < VANQUISHER_KILLS_REQUIRED && cm.getPlayer().getVanquisherStage() > 0) {
+                                    cm.sendNext("你仍然需要 #b" + (VANQUISHER_KILLS_REQUIRED - cm.getPlayer().getVanquisherKills()) + "#k 才能获得 #b#t" + (1142032 + cm.getPlayer().getVanquisherStage()) + "##k。请再努力一点。提醒一下，只有在武陵道场由我们的大师召唤的怪物才算数。哦，还要确保你不是在打怪后就退出！#r如果你打败怪物后没有进入下一关，就不算胜利#k。");
                                 } else if (cm.getPlayer().getVanquisherStage() <= 0) {
                                     cm.getPlayer().setVanquisherStage(1);
                                 } else {
