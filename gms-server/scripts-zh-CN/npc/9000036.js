@@ -37,6 +37,45 @@ var cost;
 var qty = 1;
 var equip;
 var maxEqp = 0;
+var ItemInformationProvider = Java.type('org.gms.server.ItemInformationProvider');
+
+function getStat(stats, key) {
+    var value = stats.get(key);
+    return value == null ? 0 : Number(value);
+}
+
+function equipStatsText(itemId) {
+    var stats = ItemInformationProvider.getInstance().getEquipStats(itemId);
+    if (stats == null || stats.isEmpty()) {
+        return "#r属性数据不可用#b";
+    }
+
+    var parts = [];
+    var fields = [
+        ["reqLevel", "等级"], ["STR", "力量"], ["DEX", "敏捷"],
+        ["INT", "智力"], ["LUK", "运气"], ["MHP", "HP"],
+        ["MMP", "MP"], ["PAD", "物攻"], ["MAD", "魔攻"],
+        ["PDD", "物防"], ["MDD", "魔防"], ["ACC", "命中"],
+        ["EVA", "回避"], ["Speed", "移速"], ["Jump", "跳跃"]
+    ];
+    for (var i = 0; i < fields.length; i++) {
+        var value = getStat(stats, fields[i][0]);
+        if (value != 0) {
+            parts.push(fields[i][1] + (fields[i][0] == "reqLevel" ? " " : "+") + value);
+        }
+    }
+
+    var slots = getStat(stats, "tuc");
+    if (slots != 0) {
+        parts.push("升级次数 " + slots);
+    }
+    return parts.length == 0 ? "无基础属性" : parts.join("  ");
+}
+
+function addEquipOption(text, index, itemId) {
+    return text + "\r\n#L" + index + "##i" + itemId + "# #t" + itemId + "##b" +
+        "\r\n  #d" + equipStatsText(itemId) + "#b#l";
+}
 
 function start() {
     const GameConfig = Java.type('org.gms.config.GameConfig');
@@ -66,19 +105,19 @@ function action(mode, type, selection) {
             var selStr = "Well, I've got these pendants on my repertoire:#b";
             items = [1122018, 1122007, 1122001, 1122003, 1122004, 1122006, 1122002, 1122005, 1122058];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##b";
+                selStr = addEquipOption(selStr, i, items[i]);
             }
         } else if (selection == 1) { //face accessory
             var selStr = "Hmm, face accessories? There you go: #b";
             items = [1012181, 1012182, 1012183, 1012184, 1012185, 1012186, 1012108, 1012109, 1012110, 1012111];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##b";
+                selStr = addEquipOption(selStr, i, items[i]);
             }
         } else if (selection == 2) { //eye accessory
             var selStr = "Got hard sight? Okay, so which glasses do you want me to make?#b";
             items = [1022073, 1022088, 1022103, 1022089, 1022082];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##b";
+                selStr = addEquipOption(selStr, i, items[i]);
             }
         } else if (selection == 3) { //belt & medal
             var selStr = "Hmm... For these, things get a little tricky. Since these items are too short and too similar one another, I don't really know what item will emerge when I finish the synthesis. Still wanna try for something?";
@@ -107,7 +146,7 @@ function action(mode, type, selection) {
             items = [1112407, 1112408, 1112401, 1112413, 1112414, 1112405, 1112402];
 
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##b";
+                selStr = addEquipOption(selStr, i, items[i]);
             }
 
         }/*else if (selection == 5) { //make necklace

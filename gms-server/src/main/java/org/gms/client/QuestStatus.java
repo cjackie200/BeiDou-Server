@@ -142,7 +142,10 @@ public class QuestStatus {
             progress.putIfAbsent(DARK_WUKONG_HUNT_MOB, "000");
         }
         if (SkillBreakthroughService.isQuestId(questID)) {
-            progress.putIfAbsent(SkillBreakthroughService.ZAKUM_MOB_ID, "000");
+            int mobId = SkillBreakthroughService.getQuestMobId(questID);
+            if (mobId > 0) {
+                progress.putIfAbsent(mobId, "000");
+            }
         }
         //this.setUpdated();
     }

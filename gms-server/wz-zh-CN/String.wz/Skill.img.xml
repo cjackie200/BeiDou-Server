@@ -1,4 +1,4 @@
-﻿<imgdir name="Skill.img">
+<imgdir name="Skill.img">
     <imgdir name="000">
         <string name="bookName" value="冒险家技能" />
     </imgdir>
@@ -372,7 +372,7 @@
         <string name="h8" value="持续155秒，消耗MP 10，物理防御力+16" />
         <string name="h9" value="持续165秒，消耗MP 10，物理防御力+18" />
         <string name="desc" value="[最高等级 : 21]\n一定时间内物理防御力增加.\n必需技能：#c恢复术等级3以上#" />
-        <string name="h21" value="持续时间1200,防御100（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,防御100（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1001004">
         <string name="name" value="强力攻击" />
@@ -397,7 +397,7 @@
         <string name="h8" value="消费MP6，攻击力200%" />
         <string name="h9" value="消费MP6，攻击力205%" />
         <string name="desc" value="[最高等级 : 21]\n消费MP，\n用所装备的武器给怪物以致命一击" />
-        <string name="h21" value="伤害380%,2段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害380%,2段伤害（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1001005">
         <string name="name" value="群体攻击" />
@@ -422,7 +422,7 @@
         <string name="h8" value="消耗HP10和MP8，攻击力93%" />
         <string name="h9" value="消耗HP10和MP8，攻击力96%" />
         <string name="desc" value="[最高等级 : 21]\n消费HP和MP，\n用装备的武器同时攻击周围的多个怪物.\n必需技能：#c强力攻击等级1以上#" />
-        <string name="h21" value="伤害200%,2段伤害，增加距离（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害200%,2段伤害，增加距离（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="110">
         <string name="bookName" value="剑客技能" />
@@ -525,7 +525,7 @@
         <string name="h8" value="出现概率16%，发挥140%的最终攻击" />
         <string name="h9" value="出现概率18%，发挥145%的最终攻击" />
         <string name="desc" value="[最高等级 : 31]\n第一次攻击后发动连续攻击\n(必须装备单手剑或双手剑)\n必需技能 : #c精准剑等级3以上#" />
-        <string name="h31" value="30%触发概率,1200%伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="30%触发概率,1200%伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1100003">
         <string name="name" value="终极斧" />
@@ -560,7 +560,7 @@
         <string name="h8" value="出现概率16%，发挥140%的最终攻击" />
         <string name="h9" value="出现概率18%，发挥145%的最终攻击" />
         <string name="desc" value="[最高等级 : 31]\n第一次攻击后发动连续攻击\n(必须装备单手斧，双手斧)\n必需技能 : #c精准斧等级3以上#" />
-        <string name="h31" value="30%触发概率,1200%伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="30%触发概率,1200%伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="11001001">
         <string name="name" value="圣甲术" />
@@ -671,7 +671,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n消费HP和MP,攻击速度提升两个等级\n(必须装备单手剑，双手剑)\n必需技能 : #c精准剑等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1101005">
         <string name="name" value="快速斧" />
@@ -696,7 +696,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n攻击速度提升三个等级\n(装备单手斧，双手斧）\n必需技能：#c精准斧等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1101006">
         <string name="name" value="愤怒之火" />
@@ -721,7 +721,7 @@
         <string name="h8" value="消耗MP12，持续88秒，物理攻击力+6，物理防御力-6" />
         <string name="h9" value="消耗MP12，持续94秒，物理攻击力+7，物理防御力-7" />
         <string name="desc" value="[最高等级 : 21]\n提升周围组队成员的物理攻击力，\n降低物理防御力" />
-        <string name="h21" value="持续时间1200,MP消耗20,攻击增加20,防御减少100（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,MP消耗20,攻击增加20,防御减少100（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1101007">
         <string name="name" value="伤害反击" />
@@ -1049,7 +1049,7 @@
         <string name="h8" value="消耗MP25,120秒内造成伤害110%,最高不超过3个斗气" />
         <string name="h9" value="消耗MP25,120秒内造成伤害111%,最高不超过3个斗气" />
         <string name="desc" value="[最高等级:31]\n进入斗气集中状态。每次攻击会累积1个斗气，\n最高累积5个斗气。伤害以3个斗气为基准" />
-        <string name="h31" value="伤害150%,持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害150%,持续时间1200（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1111003">
         <string name="name" value="狂乱之剑" />
@@ -1244,7 +1244,7 @@
         <string name="h8" value="消费MP8，造成伤害56%，攻击范围 300%， 以66%几率出现昏迷攻击，持续6秒" />
         <string name="h9" value="消费MP8，造成伤害58%，攻击范围 300%， 以68%几率出现昏迷攻击，持续6秒" />
         <string name="desc" value="[最高等级：31]\n向周边怪物发出虎吼施加伤害，\n同时一定几率让其昏迷。一次不能攻击8只以上。\n冷却时间:#c3秒#" />
-        <string name="h31" value="伤害150%,百分百眩晕，MP消耗50，增加范围，攻击8怪（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害150%,百分百眩晕，MP消耗50，增加范围，攻击8怪（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="11111001">
         <string name="name" value="斗气集中" />
@@ -1449,7 +1449,7 @@
         <string name="h8" value="增加8%伤害，最高斗气量增加为 2，38%几率累积两个斗气" />
         <string name="h9" value="增加9%伤害，最高斗气量增加为 2，39%几率累积两个斗气" />
         <string name="desc" value="最高斗气量增加为 10\n一定几率以两个为单位累积斗气量\n必要技能：#c斗气集中等级30以上#" />
-        <string name="h31" value="伤害100%,最高斗气增加为5（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害100%,最高斗气增加为5（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1120004">
         <string name="name" value="阿基里斯" />
@@ -1620,7 +1620,7 @@
         <string name="h8" value="消耗MP 36，80秒内有56%的几率不会出现退后现象" />
         <string name="h9" value="消耗MP 36，90秒内有58%的几率不会出现退后现象" />
         <string name="desc" value="凭借着强韧的精神，\n受到敌人的攻击仍不会后退" />
-        <string name="h31" value="持续时间1200,100%概率触发（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,100%概率触发（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1121006">
         <string name="name" value="突进" />
@@ -1689,7 +1689,7 @@
         <string name="h8" value="消耗MP 16，伤害 170%，3名攻击" />
         <string name="h9" value="消耗MP 16，伤害 175%，3名攻击" />
         <string name="desc" value="连续攻击2次前面的敌人" />
-        <string name="h31" value="伤害200%,攻击4名敌人,5段伤害（增加范围）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害200%,攻击4名敌人,5段伤害（增加范围）（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1121010">
         <string name="name" value="葵花宝典" />
@@ -1724,7 +1724,7 @@
         <string name="h8" value="消耗MP 18，持续时间 80秒 攻击力 15 上升" />
         <string name="h9" value="消耗MP 19，持续时间 90秒 攻击力 15 上升" />
         <string name="desc" value="使用10个斗气能量，一定时间内提高攻击力。\n需要技能：#c进阶斗气25级以上\n冷却时间 : 4分钟#" />
-        <string name="h31" value="持续时间1200,攻击增加33（会与愤怒之火抵消,建议不突破）（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,攻击增加33（会与愤怒之火抵消,建议不突破）（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1121011">
         <string name="name" value="勇士的意志" />
@@ -1836,7 +1836,7 @@
         <string name="h8" value="出现概率16%，发挥140%的最终攻击" />
         <string name="h9" value="出现概率18%，发挥145%的最终攻击" />
         <string name="desc" value="[最高等级 : 31]\n第一次攻击后发动连续攻击\n(必须装备单手剑，双手剑)\n必需技能: #c精准剑等级3以上#" />
-        <string name="h31" value="30%概率触发,伤害1200%（完成150级突破任务后可学习）" />
+        <string name="h31" value="30%概率触发,伤害1200%（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1200003">
         <string name="name" value="终极钝器" />
@@ -1871,7 +1871,7 @@
         <string name="h8" value="概率16%，发挥140%的最终攻击" />
         <string name="h9" value="概率18%，发挥145%的最终攻击" />
         <string name="desc" value="[最高等级 : 31]\n第一次攻击后发动连续攻击\n(必须装备单手钝器或双手钝器)\n必需技能: #c精准钝器等级3以上#" />
-        <string name="h31" value="30%概率触发,伤害1200%（完成150级突破任务后可学习）" />
+        <string name="h31" value="30%概率触发,伤害1200%（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="12001001">
         <string name="name" value="魔法盾" />
@@ -1972,7 +1972,7 @@
         <string name="h8" value="消耗HP22和MP22，增加剑的攻击速度(持续80秒)" />
         <string name="h9" value="消耗HP21和MP21，增加剑的攻击速度(持续90秒)" />
         <string name="desc" value="[最高等级 : 21]\n攻击速度提升两个等级\n(装备单手剑，双手剑)\n必需技能: #c精准剑等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1201005">
         <string name="name" value="快速钝器" />
@@ -1997,7 +1997,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n功击速度提升三个等级\n(必须装备单手钝器或双手钝器)\n必需技能: #c精准钝器等级5#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1201006">
         <string name="name" value="压制术" />
@@ -2056,7 +2056,7 @@
         <string name="h8" value="消耗MP15，持续24秒，反击受到怪物伤害的18%" />
         <string name="h9" value="消耗MP15，持续27秒，反击受到怪物伤害的19%" />
         <string name="desc" value="[最高等级 : 31]\n按怪物对自身伤害的一定量反击怪物\n(怪物所受的伤害以最大HP10%为限度)\n必需技能：#c压制术等级3以上#" />
-        <string name="h31" value="持续时间1200,反击60%伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,反击60%伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="121">
         <string name="bookName" value="骑士技能" />
@@ -2398,7 +2398,7 @@
         <string name="h8" value="消费MP25，造成伤害124%,持续时间80秒,属性纯度50%" />
         <string name="h9" value="消费MP25，造成伤害127%,持续时间90秒,属性纯度50%" />
         <string name="desc" value="[最高等级:31]\n一定时间内,给剑赋予火焰属性。\n超过时间或使用属性攻击会被取消。\n（建议只加20点，20点后只增加持续时间）" />
-        <string name="h31" value="持续时间1200,伤害200%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,伤害200%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1211004">
         <string name="name" value="烈焰钝器" />
@@ -2433,7 +2433,7 @@
         <string name="h8" value="消费MP25，造成伤害124%,持续时间80秒,属性纯度50%" />
         <string name="h9" value="消费MP25，造成伤害127%,持续时间90秒,属性纯度50%" />
         <string name="desc" value="[最高等级:31]\n一定时间内,给钝器赋予火焰属性。\n超过时间或使用属性攻击会被取消.\n（建议只加20点，20点后只增加持续时间）" />
-        <string name="h31" value="持续时间1200,伤害200%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,伤害200%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1211005">
         <string name="name" value="寒冰之剑" />
@@ -2468,7 +2468,7 @@
         <string name="h8" value="消费MP25，造成伤害124%,持续时间80秒,属性纯度50%" />
         <string name="h9" value="消费MP25，造成伤害127%,持续时间90秒,属性纯度50%" />
         <string name="desc" value="[最高等级:31]\n一定时间内,给剑赋予冰属性.\n超过时间或使用属性攻击会被取消.\n（建议只加20点，20点后只增加持续时间）" />
-        <string name="h31" value="持续时间1200,伤害190%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,伤害190%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1211006">
         <string name="name" value="寒冰钝器" />
@@ -2503,7 +2503,7 @@
         <string name="h8" value="消费MP25，造成伤害124%,持续时间80秒,属性纯度50%" />
         <string name="h9" value="消费MP25，造成伤害127%,持续时间90秒,属性纯度50%" />
         <string name="desc" value="[最高等级:31]\n一定时间内,给钝器赋予冰属性。\n超过时间或使用属性攻击会被取消.\n（建议只加20点，20点后只增加持续时间）" />
-        <string name="h31" value="持续时间1200,伤害190%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,伤害190%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1211007">
         <string name="name" value="雷电之击：剑" />
@@ -2538,7 +2538,7 @@
         <string name="h8" value="消费MP25，造成伤害124%,持续时间80秒,属性纯度50%" />
         <string name="h9" value="消费MP25，造成伤害127%,持续时间90秒,属性纯度50%" />
         <string name="desc" value="[最高等级:31]\n一定时间内,给剑赋予雷属性。\n超过时间或使用属性攻击会被取消.\n（建议只加20点，20点后只增加持续时间）" />
-        <string name="h31" value="持续时间1200,伤害205%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,伤害205%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1211008">
         <string name="name" value="雷电之击：钝器" />
@@ -2573,7 +2573,7 @@
         <string name="h8" value="消费MP25，造成伤害124%,持续时间80秒,属性纯度50%" />
         <string name="h9" value="消费MP25，造成伤害127%,持续时间90秒,属性纯度50%" />
         <string name="desc" value="[最高等级:31]\n一定时间内,给钝器赋予雷属性。\n超过时间或使用属性攻击会被取消.\n（建议只加20点，20点后只增加持续时间）" />
-        <string name="h31" value="持续时间1200,伤害205%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,伤害205%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1211009">
         <string name="name" value="防御崩坏" />
@@ -2928,7 +2928,7 @@
         <string name="h8" value="消耗MP 36，80秒内有56%的几率不会出现退后现象" />
         <string name="h9" value="消耗MP 36，90秒内有58%的几率不会出现退后现象" />
         <string name="desc" value="凭借着强韧的精神，\n受到敌人的攻击仍不会后退" />
-        <string name="h31" value="持续时间1200,100%概率触发（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,100%概率触发（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1221003">
         <string name="name" value="圣灵之剑" />
@@ -2953,7 +2953,7 @@
         <string name="h8" value="消耗MP 20，伤害136%，持续时间180秒,属性纯度50%" />
         <string name="h9" value="消耗MP 20，伤害138%，持续时间190秒,属性纯度50%" />
         <string name="desc" value="在一定时间内赋予剑圣属性。\n若已到时间或使用属性攻击便会取消" />
-        <string name="h21" value="持续时间1200,伤害220%（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,伤害220%（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1221004">
         <string name="name" value="圣灵之锤" />
@@ -2978,7 +2978,7 @@
         <string name="h8" value="消耗MP 20，伤害136%，持续时间180秒,属性纯度50%" />
         <string name="h9" value="消耗MP 20，伤害138%，持续时间190秒,属性纯度50%" />
         <string name="desc" value="在一定时间内赋予棍圣属性。\n若以到时间或使用属性攻击便会取消" />
-        <string name="h21" value="持续时间1200,伤害220%（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,伤害220%（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1221007">
         <string name="name" value="突进" />
@@ -3047,7 +3047,7 @@
         <string name="h8" value="消耗MP 20，伤害 190%" />
         <string name="h9" value="消耗MP 20，伤害 195%" />
         <string name="desc" value="给单个敌人一次强攻击" />
-        <string name="h31" value="伤害220%,攻击4名敌人,5段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害220%,攻击4名敌人,5段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1221011">
         <string name="name" value="圣域" />
@@ -3215,7 +3215,7 @@
         <string name="h8" value="出现概率16%，发挥140%的最终攻击" />
         <string name="h9" value="出现概率18%，发挥145%的最终攻击" />
         <string name="desc" value="[最高等级 : 31]\n第一次攻击后发动连续攻击\n(必须装备枪)\n必需技能: #c精准枪等级3以上#" />
-        <string name="h31" value="30%概率触发,伤害1200%（完成150级突破任务后可学习）" />
+        <string name="h31" value="30%概率触发,伤害1200%（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1300003">
         <string name="name" value="终极矛" />
@@ -3250,7 +3250,7 @@
         <string name="h8" value="出现概率16%，发挥140%的最终攻击" />
         <string name="h9" value="出现概率18%，发挥145%的最终攻击" />
         <string name="desc" value="[最高等级 : 31]\n第一次攻击后发动连续攻击\n(必须装备矛)\n必需技能: #c精准矛等级3以上#" />
-        <string name="h31" value="30%概率触发,伤害1200%（完成150级突破任务后可学习）" />
+        <string name="h31" value="30%概率触发,伤害1200%（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="13001002">
         <string name="name" value="集中术" />
@@ -3337,7 +3337,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n攻击速度提升两个等级\n(必须装备枪)\n必需技能: #c精准枪等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1301005">
         <string name="name" value="快速矛" />
@@ -3362,7 +3362,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n攻击速度提升两个等级\n(必须装备矛)\n必需技能: #c精准矛等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1301006">
         <string name="name" value="极限防御" />
@@ -3421,7 +3421,7 @@
         <string name="h8" value="消耗MP20，最大HP和最大MP增加16%(持续80秒)" />
         <string name="h9" value="消耗MP20，最大HP和最大MP增加18%(持续90秒)" />
         <string name="desc" value="[最高等级 : 31]\n增加周围所有队员的最大HP和最大MP.\n必需: #c极限防御等级3以上#" />
-        <string name="h31" value="持续时间1200,最大HP60%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,最大HP60%（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="131">
         <string name="bookName" value="龙骑士技能" />
@@ -3681,7 +3681,7 @@
         <string name="h8" value="消费MP13，造成伤害90%，对一个人三次攻击" />
         <string name="h9" value="消费MP13，造成伤害95%，对一个人三次攻击" />
         <string name="desc" value="[最高等级:31]\n用枪对前方怪物连续刺击" />
-        <string name="h31" value="伤害230%,攻击4名敌人,5段伤害（增加范围）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害230%,攻击4名敌人,5段伤害（增加范围）（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1311002">
         <string name="name" value="矛连击" />
@@ -3716,7 +3716,7 @@
         <string name="h8" value="消费MP13，造成伤害136%，对一个人三次攻击" />
         <string name="h9" value="消费MP13，造成伤害144%，对一个人三次攻击" />
         <string name="desc" value="[最高等级:31]\n用矛对前方怪物连续刺击" />
-        <string name="h31" value="伤害230%,攻击4名敌人,5段伤害（增加范围）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害230%,攻击4名敌人,5段伤害（增加范围）（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1311003">
         <string name="name" value="无双枪" />
@@ -3751,7 +3751,7 @@
         <string name="h8" value="消费HP20,MP10，造成伤害220%" />
         <string name="h9" value="消费HP20,MP10，造成伤害235%" />
         <string name="desc" value="[最高等级:31]\n对中距离多个怪物进行攻击，\n最多攻击6个怪物" />
-        <string name="h31" value="伤害300%,攻击6名敌人,1段伤害（增加范围）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害300%,攻击6名敌人,1段伤害（增加范围）（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1311004">
         <string name="name" value="无双矛" />
@@ -3786,7 +3786,7 @@
         <string name="h8" value="消费HP20,MP10，造成伤害150%" />
         <string name="h9" value="消费HP20,MP10，造成伤害160%" />
         <string name="desc" value="[最高等级:31]\n对中距离多个怪物进行攻击，\n最多攻击6个怪物" />
-        <string name="h31" value="伤害300%,攻击6名敌人,1段伤害（增加范围）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害300%,攻击6名敌人,1段伤害（增加范围）（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1311005">
         <string name="name" value="龙之献祭" />
@@ -3855,7 +3855,7 @@
         <string name="h8" value="消费MP16 HP52%，造成伤害138%，攻击范围400%，4秒间昏倒" />
         <string name="h9" value="消费MP16 HP51%，造成伤害144%，攻击范围400%，4秒间昏倒" />
         <string name="desc" value="[最高等级:31]\n用巨大的龙的咆哮攻击15个以下的怪物。\n发动时HP会大幅减少，只有HP50％以上时才可以使用.\n#c冷却时间: 3秒#，\n必需技能: #c龙之献祭等级3以上#" />
-        <string name="h31" value="伤害260%,MP消耗30(其他不变）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害260%,MP消耗30(其他不变）（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1311007">
         <string name="name" value="防御崩坏" />
@@ -4146,7 +4146,7 @@
         <string name="h8" value="HP 80% 以下时，伤害 132%" />
         <string name="h9" value="HP 80% 以下时，伤害 136%" />
         <string name="desc" value="HP下降到一定水平的话，黑骑士内心中\n沉睡的灵魂爆发，使攻击伤害增加。 \n体力恢复的话，技能效果消失" />
-        <string name="h31" value="伤害200%,HP低于100%触发（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害200%,HP低于100%触发（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1320008">
         <string name="name" value="灵魂治愈" />
@@ -4307,7 +4307,7 @@
         <string name="h8" value="消耗MP 36，80秒内有56%的几率不会出现退后现象" />
         <string name="h9" value="消耗MP 36，90秒内有58%的几率不会出现退后现象" />
         <string name="desc" value="凭借着强韧的精神，\n受到敌人的攻击仍不会后退" />
-        <string name="h31" value="持续时间1200,100%概率触发（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,100%概率触发（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="1321003">
         <string name="name" value="突进" />
@@ -5527,7 +5527,7 @@
         <string name="h8" value="持续288秒，消费MP6，用MP代替损伤的36%" />
         <string name="h9" value="持续309秒，消费MP6，用MP代替损伤的39%" />
         <string name="desc" value="[最高等级 : 21]\n一定时间内，受到伤害时按比例由MP承担；\nMP不足时，剩余伤害由HP承担。" />
-        <string name="h21" value="持续时间1200MP，代替损伤90%（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200MP，代替损伤90%（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2001003">
         <string name="name" value="魔法铠甲" />
@@ -5552,7 +5552,7 @@
         <string name="h8" value="持续172秒，消费MP8，物理防御力+16" />
         <string name="h9" value="持续186秒，消费MP8，物理防御力+18" />
         <string name="desc" value="[最高等级 : 21]\n一定时间内提高物理防御力。\n必要技能：#c魔法盾 Lv.3#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2001004">
         <string name="name" value="魔法弹" />
@@ -5601,7 +5601,7 @@
         <string name="h8" value="消费MP12，基本攻击力20，熟练度30%" />
         <string name="h9" value="消费MP12，基本攻击力21，熟练度35%" />
         <string name="desc" value="[最高等级 : 21]\n消耗MP，对1个敌人连续造成2次魔法伤害。\n必要技能：#c魔法弹 Lv.1#" />
-        <string name="h21" value="基本攻击力70,熟练度60%,2段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="基本攻击力70,熟练度60%,2段伤害（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="210">
         <string name="bookName" value="火毒魔法技能" />
@@ -5737,7 +5737,7 @@
         <string name="h8" value="消耗MP10，队员魔法攻击力+8，持续80秒" />
         <string name="h9" value="消耗MP10，队员魔法攻击力+9，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n通过精神交流一定时间内提高周围所有队员的魔力。提高值和持续时间随等级提升增加。\n必需技能: #c魔力吸收等级3以上#" />
-        <string name="h21" value="持续时间1200,魔力+30（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,魔力+30（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2101002">
         <string name="name" value="快速移动" />
@@ -5820,7 +5820,7 @@
         <string name="h8" value="消耗MP14，魔法攻击力54，熟练度25%" />
         <string name="h9" value="消耗MP14，魔法攻击力57，熟练度25%" />
         <string name="desc" value="[最高等级 : 31]\n放出火箭，攻击怪物。\n攻击冰属性的怪物时更有效" />
-        <string name="h31" value="攻击力200,3段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力200,3段伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2101005">
         <string name="name" value="毒雾术" />
@@ -6049,7 +6049,7 @@
         <string name="h8" value="MP消耗变为140%，魔法伤害变为117%" />
         <string name="h9" value="MP消耗变为145%，魔法伤害变为118%" />
         <string name="desc" value="[最高等级:31]\n消耗更多MP,提高自己的魔法攻击力" />
-        <string name="h31" value="MP消耗190%,伤害190%（完成150级突破任务后可学习）" />
+        <string name="h31" value="MP消耗190%,伤害190%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="21101003">
         <string name="name" value="抗压" />
@@ -6259,7 +6259,7 @@
         <string name="h8" value="消耗MP28，魔法攻击力79，熟练度25%，范围130%，最多攻击6只怪物" />
         <string name="h9" value="消耗MP29，魔法攻击力81，熟练度25%，范围130%，最多攻击6只怪物" />
         <string name="desc" value="[最高等级:31]\n在自己周边引发大爆炸，范围内的怪物\n都遭受火属性攻击，最多攻击6个怪物" />
-        <string name="h31" value="攻击力160,范围200%,2段伤害,数量7（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力160,范围200%,2段伤害,数量7（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2111003">
         <string name="name" value="致命毒雾" />
@@ -6342,7 +6342,7 @@
         <string name="h8" value="消耗HP44，MP39，魔法攻击速度提升1阶段，持续80秒" />
         <string name="h9" value="消耗HP42，MP37，魔法攻击速度提升1阶段，持续90秒" />
         <string name="desc" value="[最高等级:21]\n消耗更多的HP和MP，提高魔法攻击速度.\n必需技能: #c魔力激化等级3以上#" />
-        <string name="h21" value="持续时间1200,提升3个等级（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,提升3个等级（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2111006">
         <string name="name" value="火毒合击" />
@@ -6377,7 +6377,7 @@
         <string name="h8" value="消耗MP14，魔法攻击力104，熟练度25%，48%概率中毒，持续12秒" />
         <string name="h9" value="消耗MP14，魔法攻击力107，熟练度25%，49%概率中毒，持续12秒" />
         <string name="desc" value="[最高等级:31]\n混合火和毒属性的魔法攻击一个怪物,\n一定的几率使怪物中毒" />
-        <string name="h31" value="攻击力400,1段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力400,1段伤害（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="21111001">
         <string name="name" value="灵巧击退" />
@@ -6857,7 +6857,7 @@
         <string name="h8" value="消耗MP18，魔法攻击力76，熟练度25%，持续10秒，最多攻击3只怪物" />
         <string name="h9" value="消耗MP18，魔法攻击力78，熟练度25%，持续10秒，最多攻击3只怪物" />
         <string name="desc" value="火凤球用火柱环绕怪物,给予持续伤害。\n被火凤球抓住的人冰系抗性降低" />
-        <string name="h31" value="攻击力150,攻击6名敌人,3段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力150,攻击6名敌人,3段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2121004">
         <string name="name" value="终极无限" />
@@ -6926,7 +6926,7 @@
         <string name="h8" value="消耗MP34，魔法攻击力174，召唤50秒，最多攻击1只怪物" />
         <string name="h9" value="消耗MP37，魔法攻击力177，召唤55秒，最多攻击1只怪物" />
         <string name="desc" value="一定时间内召唤冰属性的冰破魔兽。\n攻击数量随技能等级提高。\n必要技能 : #c火凤球等级5以上#" />
-        <string name="h31" value="攻击力400,持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力400,持续时间1200（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2121006">
         <string name="name" value="连环爆破" />
@@ -6961,7 +6961,7 @@
         <string name="h8" value="消耗MP16，魔法攻击力154，熟练度25%，麻痹10秒" />
         <string name="h9" value="消耗MP16，魔法攻击力157，熟练度25%，麻痹10秒" />
         <string name="desc" value="用毒属性攻击一个怪物，并使其麻痹。" />
-        <string name="h31" value="攻击力320,攻击6名敌人,5段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力320,攻击6名敌人,5段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2121007">
         <string name="name" value="天降落星" />
@@ -7056,7 +7056,7 @@
         <string name="h8" value="消耗MP10，魔法力8，持续80秒" />
         <string name="h9" value="消耗MP10，魔法力9，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n一定时间内提高周围队员的魔法攻击力，效果和持续时间随等级提高。\n必要技能：#c魔力吸收 Lv.3#" />
-        <string name="h21" value="持续时间1200,魔力+30（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,魔力+30（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2201002">
         <string name="name" value="快速移动" />
@@ -7139,7 +7139,7 @@
         <string name="h8" value="消耗MP12，魔法力34，熟练度25%" />
         <string name="h9" value="消耗MP12，魔法力37，熟练度25%" />
         <string name="desc" value="[最高等级 : 31]\n使用冰属性魔法攻击1个敌人并使其冻结；\n对火属性敌人造成更高伤害。" />
-        <string name="h31" value="攻击力200,3段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力200,3段伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2201005">
         <string name="name" value="雷电术" />
@@ -7235,7 +7235,7 @@
         <string name="h8" value="消耗MP增加140%，魔法攻击造成伤害117%" />
         <string name="h9" value="消耗MP增加145%，魔法攻击造成伤害118%" />
         <string name="desc" value="[最高等级:31]\n增加魔法技能的MP消耗，同时提高魔法伤害。" />
-        <string name="h31" value="MP消耗190%,伤害190%（完成150级突破任务后可学习）" />
+        <string name="h31" value="MP消耗190%,伤害190%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2211002">
         <string name="name" value="冰咆哮" />
@@ -7270,7 +7270,7 @@
         <string name="h8" value="消费MP28，基本攻击力46，熟练度25%,攻击范围130%" />
         <string name="h9" value="消费MP29，基本攻击力48，熟练度25%,攻击范围130%" />
         <string name="desc" value="[最高等级:31]\n召唤冰块攻击范围内最多6个敌人，非冰属性目标命中后会被冻结。" />
-        <string name="h31" value="攻击力160,范围200%,2段伤害,数量7（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力160,范围200%,2段伤害,数量7（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2211003">
         <string name="name" value="落雷枪" />
@@ -7353,7 +7353,7 @@
         <string name="h8" value="消耗HP44、MP39，持续80秒，魔法攻击速度提高1个等级" />
         <string name="h9" value="消耗HP42、MP37，持续90秒，魔法攻击速度提高1个等级" />
         <string name="desc" value="[最高等级:21]\n消耗HP和MP，提高魔法攻击速度；等级越高，持续时间越长且速度提升更高。\n必要技能：#c魔力激化 Lv.3#" />
-        <string name="h21" value="持续时间1200,提升3个等级（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,提升3个等级（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2211006">
         <string name="name" value="冰雷合击" />
@@ -7388,7 +7388,7 @@
         <string name="h8" value="消耗MP14，魔法力100，熟练度25%，命中后冻结1秒" />
         <string name="h9" value="消耗MP14，魔法力102，熟练度25%，命中后冻结1秒" />
         <string name="desc" value="[最高等级:31]\n使用冰、雷属性组合魔法攻击1个敌人，命中后使目标冻结。" />
-        <string name="h31" value="攻击力400,1段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力400,1段伤害（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="222">
         <string name="bookName" value="最高级冷气,雷电魔法" />
@@ -7528,7 +7528,7 @@
         <string name="h8" value="消耗MP18，魔法力56，熟练度25%，持续10秒，最多攻击3个敌人" />
         <string name="h9" value="消耗MP18，魔法力58，熟练度25%，持续10秒，最多攻击3个敌人" />
         <string name="desc" value="攻击多个敌人并造成持续伤害，命中后使目标对火属性攻击更脆弱。" />
-        <string name="h31" value="攻击力150,攻击6名敌人,3段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力150,攻击6名敌人,3段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2221004">
         <string name="name" value="终极无限" />
@@ -7597,7 +7597,7 @@
         <string name="h8" value="消耗MP 34，魔法力 204，持续时间 50秒" />
         <string name="h9" value="消耗MP 37，魔法力 207，持续时间 55秒" />
         <string name="desc" value="一定时间内召唤火属性火魔兽协助攻击，最多攻击3个敌人。\n必要技能：#c冰凤球 Lv.5#" />
-        <string name="h31" value="攻击力400,持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力400,持续时间1200（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2221006">
         <string name="name" value="链环闪电" />
@@ -7632,7 +7632,7 @@
         <string name="h8" value="消耗MP 16，魔法力 124，熟练度 25%，目标3名" />
         <string name="h9" value="消耗MP 16，魔法力 127，熟练度 25%，目标3名" />
         <string name="desc" value="使用高压雷电攻击1个敌人，并连锁攻击附近敌人；\n可攻击的目标数量随等级提高。" />
-        <string name="h31" value="攻击力320,攻击6名敌人,5段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力320,攻击6名敌人,5段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2221007">
         <string name="name" value="落霜冰破" />
@@ -7727,7 +7727,7 @@
         <string name="h8" value="消耗MP39，移动距离130" />
         <string name="h9" value="消耗MP36，移动距离130" />
         <string name="desc" value="[最高等级 : 21]\n用方向键可以瞬间移动一定的距离" />
-        <string name="h21" value="距离220（冰雷火毒主教一样）（完成150级突破任务后可学习）" />
+        <string name="h21" value="距离220（冰雷火毒主教一样）（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2301002">
         <string name="name" value="群体治愈" />
@@ -7762,7 +7762,7 @@
         <string name="h8" value="消耗MP12，恢复率80%，最多攻击6不死系怪物" />
         <string name="h9" value="消耗MP12，恢复率90%，最多攻击6不死系怪物" />
         <string name="desc" value="[最高等级 : 31]\n恢复周围成员的HP。\n根据周围成员人数恢复的HP值将不同\n（对周围黑暗属性的怪物造成伤害）" />
-        <string name="h31" value="消耗MP50,恢复400%,数量7（完成150级突破任务后可学习）" />
+        <string name="h31" value="消耗MP50,恢复400%,数量7（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2301003">
         <string name="name" value="神之保护" />
@@ -7811,7 +7811,7 @@
         <string name="h8" value="消耗MP12，命中率+8，回避率+8，物理防御力+8，魔法防御力+8，持续80秒" />
         <string name="h9" value="消耗MP12，命中率+9，回避率+9，物理防御力+9，魔法防御力+9，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n一定时间内，提高周围组队成员的命中率、回避率、物理防御、\n魔法防御。弓箭手的技能：集中术和各种药水不能一起使用.\n必要技能 : #c神之保护等级5以上#" />
-        <string name="h21" value="持续时间1200,命中回避双防御+120（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,命中回避双防御+120（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2301005">
         <string name="name" value="圣箭术" />
@@ -7846,7 +7846,7 @@
         <string name="h8" value="消耗MP12，魔法攻击力36，熟练度25%" />
         <string name="h9" value="消耗MP12，魔法攻击力38，熟练度25%" />
         <string name="desc" value="[最高等级 : 31]\n变出圣箭，攻击一个敌人" />
-        <string name="h31" value="消耗MP50,攻击力160,3段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="消耗MP50,攻击力160,3段伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="231">
         <string name="bookName" value="祭司技能" />
@@ -7956,7 +7956,7 @@
         <string name="h8" value="消耗MP58，54秒持续队员获得经验值116%" />
         <string name="h9" value="消耗MP59，57秒持续队员获得经验值118%" />
         <string name="desc" value="[最高等级:31]\n组队时候,能得到更多经验值。只有两个\n人以上的组队状态下才能发挥100%效果。\n必需技能 : #c净化等级3以上#" />
-        <string name="h31" value="持续1200,经验增加180%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续1200,经验增加180%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2311004">
         <string name="name" value="圣光" />
@@ -7991,7 +7991,7 @@
         <string name="h8" value="消耗MP28，魔法攻击力74，熟练度25%，最多攻击6只怪物" />
         <string name="h9" value="消耗MP29，魔法攻击力76，熟练度25%，最多攻击6只怪物" />
         <string name="desc" value="[最高等级:31]\n利用神圣光芒攻击多个怪物。\n对亡灵族怪物和恶魔怪物造成更多伤害" />
-        <string name="h31" value="攻击力145,3段伤害,数量7（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力145,3段伤害,数量7（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2311005">
         <string name="name" value="巫毒术" />
@@ -8199,7 +8199,7 @@
         <string name="h8" value="消耗MP34，魔法攻击力134，召唤50秒，最多攻击3只怪物" />
         <string name="h9" value="消耗MP37，魔法攻击力137，召唤55秒，最多攻击3只怪物" />
         <string name="desc" value="一定时间内召唤圣龙。\n攻击数量随技能等级提高。\n必需技能 : #c圣龙召唤等级15以上#" />
-        <string name="h31" value="攻击力400,持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力400,持续时间1200（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2321004">
         <string name="name" value="终极无限" />
@@ -8282,7 +8282,7 @@
         <string name="h8" value="消耗MP50，冷却时间36分钟" />
         <string name="h9" value="消耗MP45，冷却时间33分钟" />
         <string name="desc" value="用神圣的光召唤组队成员的灵魂,使之复活" />
-        <string name="h11" value="冷却时间1分钟（完成150级突破任务后可学习）" />
+        <string name="h11" value="冷却时间1分钟（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2321007">
         <string name="name" value="光芒飞箭" />
@@ -8317,7 +8317,7 @@
         <string name="h8" value="消耗MP16，魔法攻击力144，熟练度25%" />
         <string name="h9" value="消耗MP16，魔法攻击力147，熟练度25%" />
         <string name="desc" value="用神圣的弓箭，给一个敌人2次圣属性攻击" />
-        <string name="h31" value="攻击力300,攻击1名敌人,6段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力300,攻击1名敌人,6段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="2321008">
         <string name="name" value="圣光普照" />
@@ -8384,7 +8384,7 @@
         <string name="h8" value="命中率+8" />
         <string name="h9" value="命中率+9" />
         <string name="desc" value="[最高等级 : 17]\n增加攻击命中率" />
-        <string name="h17" value="命中+50（完成150级突破任务后可学习）" />
+        <string name="h17" value="命中+50（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3000001">
         <string name="name" value="强力箭" />
@@ -8409,7 +8409,7 @@
         <string name="h8" value="比率26%，伤害140%" />
         <string name="h9" value="比率28%，伤害145%" />
         <string name="desc" value="[最高等级 : 21]\n可以增加箭的攻击力" />
-        <string name="h21" value="暴击概率60%,暴击伤害240%（完成150级突破任务后可学习）" />
+        <string name="h21" value="暴击概率60%,暴击伤害240%（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3000002">
         <string name="name" value="远程箭" />
@@ -8446,7 +8446,7 @@
         <string name="h8" value="持续150秒，消费MP10，命中率+8和回避率+8" />
         <string name="h9" value="持续160秒，消费MP10，命中率+9和回避率+9" />
         <string name="desc" value="[最高等级 : 21]\n增加命中率和回避率.\n必需技能 : #c精准箭等级3以上#" />
-        <string name="h21" value="持续时间1200,命中+100,回避+100（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,命中+100,回避+100（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3001004">
         <string name="name" value="断魂箭" />
@@ -8495,7 +8495,7 @@
         <string name="h8" value="消耗MP12，攻击力 124%" />
         <string name="h9" value="消耗MP12，攻击力 127%" />
         <string name="desc" value="[最高等级 : 21]\n一次射出两支箭，攻击怪物两次。\n必需技能 : #c断魂箭等级1以上#" />
-        <string name="h21" value="攻击力200%,2段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="攻击力200%,2段伤害（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="310">
         <string name="bookName" value="猎人技能" />
@@ -8557,7 +8557,7 @@
         <string name="h8" value="出现概率16%，发挥140%的最终攻击" />
         <string name="h9" value="出现概率18%，发挥145%的最终攻击" />
         <string name="desc" value="[最高等级 : 31]\n使用攻击技能后一定几率发动连续攻击\n（必须装备弓）.\n必要技能 : #c精准弓３级以上#" />
-        <string name="h31" value="30%触发概率,450%伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="30%触发概率,450%伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3101002">
         <string name="name" value="快速箭" />
@@ -8582,7 +8582,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n攻击速度提升2个等级\n(必须装备弓)\n必需技能 : #c精准弓等级5以上#" />
-        <string name="h21" value="持续时间1200,提升3个等级（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,提升3个等级（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3101003">
         <string name="name" value="强弓" />
@@ -8631,7 +8631,7 @@
         <string name="h8" value="消耗MP15，持续240秒" />
         <string name="h9" value="消耗MP15，持续270秒" />
         <string name="desc" value="[最高等级 : 21]\n一定时间内，攻击时不消耗箭。\n必需技能 : #c快速箭等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3101005">
         <string name="name" value="爆炸箭" />
@@ -8666,7 +8666,7 @@
         <string name="h8" value="消耗MP14，爆裂比率38%，攻击力116%" />
         <string name="h9" value="消耗MP14，爆裂比率39%，攻击力118%" />
         <string name="desc" value="[最高等级 : 31]\n用装备爆裂弹的箭攻击怪物，能造成周围\n的怪物(最多6名)受到伤害及晕倒" />
-        <string name="h31" value="爆裂比率60%，伤害170%数量7（完成150级突破任务后可学习）" />
+        <string name="h31" value="爆裂比率60%，伤害170%数量7（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="311">
         <string name="bookName" value="射手技能" />
@@ -8810,7 +8810,7 @@
         <string name="h8" value="消费MP18，造成伤害194%" />
         <string name="h9" value="消费MP18，造成伤害197%" />
         <string name="desc" value="[最高等级:31]\n向天空射多支箭以攻击多个怪物。\n最多攻击6个,只有装备弓箭才能使用。\n必需技能 : #c贯穿箭等级5以上#" />
-        <string name="h31" value="伤害280,1段伤害,数量7（范围增加）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害280,1段伤害,数量7（范围增加）（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3111005">
         <string name="name" value="银鹰召唤" />
@@ -8879,7 +8879,7 @@
         <string name="h29" value="消费MP32, 造成伤害99%, 4次攻击" />
         <string name="h30" value="消费MP32, 造成伤害100%, 4次攻击" />
         <string name="desc" value="[最高等级:31]\n向一个怪物连续射4支箭" />
-        <string name="h31" value="伤害140%,6段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害140%,6段伤害（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="312">
         <string name="bookName" value="神射手" />
@@ -8984,7 +8984,7 @@
         <string name="h8" value="消耗MP 29，持续时间 80秒，4%的必杀几率，伤害 18% 上升" />
         <string name="h9" value="消耗MP 29，持续时间 90秒，5%的必杀几率，伤害 19% 上升" />
         <string name="desc" value="赋予组队成员针对敌人寻找弱点\n并给予敌人致命伤的能力" />
-        <string name="h31" value="持续时间1200,暴击概率25%,暴击伤害45%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,暴击概率25%,暴击伤害45%（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3121003">
         <string name="name" value="飞龙冲击波" />
@@ -9053,7 +9053,7 @@
         <string name="h8" value="消耗MP 6，伤害 88%" />
         <string name="h9" value="消耗MP 6，伤害 89%" />
         <string name="desc" value="像暴风雨一样快速的发射箭. \n摁住此技能键的状态可持续发射" />
-        <string name="h31" value="伤害150%,2段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害150%,2段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3121006">
         <string name="name" value="火凤凰" />
@@ -9156,7 +9156,7 @@
         <string name="h8" value="消耗MP 18，攻击力 15 上升，消耗MP -16%，持续时间 120秒" />
         <string name="h9" value="消耗MP 19，攻击力 15 上升，消耗MP -18%，持续时间 120秒" />
         <string name="desc" value="一定时间内攻击力上升,\n技能使用时的魔法值也下降.\n#c 冷却时间 : 4分#" />
-        <string name="h31" value="持续时间1200,冷却时间0,攻击力+40（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,冷却时间0,攻击力+40（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3121009">
         <string name="name" value="勇士的意志" />
@@ -9227,7 +9227,7 @@
         <string name="h8" value="出现概率16%，发挥140%的最终攻击" />
         <string name="h9" value="出现概率18%，发挥145%的最终攻击" />
         <string name="desc" value="[最高等级 : 31]\n第一次攻击后发动连续攻击\n(必须装备弩)\n必需技能 : #c精准弩等级3以上#" />
-        <string name="h31" value="30%触发概率,450%伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="30%触发概率,450%伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3201002">
         <string name="name" value="快速弩" />
@@ -9252,7 +9252,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n攻击速度提升3个等级\n(必须装备弩)\n必需技能 : #c精准弩等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3201003">
         <string name="name" value="强弩" />
@@ -9301,7 +9301,7 @@
         <string name="h8" value="消耗MP15，持续240秒" />
         <string name="h9" value="消耗MP15，持续270秒" />
         <string name="desc" value="[最高等级 : 21]\n一定时间内，攻击时不消耗箭\n必需技能 : #c快速弩等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3201005">
         <string name="name" value="穿透箭" />
@@ -9336,7 +9336,7 @@
         <string name="h8" value="消耗MP24，攻击力156%" />
         <string name="h9" value="消耗MP24，攻击力158%" />
         <string name="desc" value="[最高等级 : 31]\n使用钢铁弩箭贯穿怪物，最多能同时攻击\n8个怪物，但怪物伤害依数量而減少" />
-        <string name="h31" value="攻击力300%,1段伤害,数量7（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力300%,1段伤害,数量7（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="321">
         <string name="bookName" value="游侠技能" />
@@ -9480,7 +9480,7 @@
         <string name="h8" value="消费MP18，造成伤害174%" />
         <string name="h9" value="消费MP18，造成伤害177%" />
         <string name="desc" value="[最高等级:31]\n向地下射箭然后钻上来攻击怪物。最多\n攻击6个怪物,只有装备弩弓才能使用.\n必需技能 : #c贯穿箭等级5以上#" />
-        <string name="h31" value="伤害200%,2段伤害（范围增加）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害200%,2段伤害（范围增加）（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3211005">
         <string name="name" value="金鹰召唤" />
@@ -9549,7 +9549,7 @@
         <string name="h8" value="消费MP26，造成伤害88%，5次攻击" />
         <string name="h9" value="消费MP26，造成伤害89%，5次攻击" />
         <string name="desc" value="[最高等级:31]\n向单个怪物连续射5支箭" />
-        <string name="h31" value="伤害180%,7段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害180%,7段伤害（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="322">
         <string name="bookName" value="弩箭神" />
@@ -9689,7 +9689,7 @@
         <string name="h8" value="消耗MP 29，持续时间 80秒，4%的必杀几率，伤害 18% 上升" />
         <string name="h9" value="消耗MP 29，持续时间 90秒，5%的必杀几率，伤害 19% 上升" />
         <string name="desc" value="赋予组队成员针对敌人寻找弱点\n并给予敌人致命伤的能力" />
-        <string name="h31" value="持续时间1200,暴击概率25%,暴击伤害55%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,暴击概率25%,暴击伤害55%（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="3221003">
         <string name="name" value="飞龙冲击波" />
@@ -9862,7 +9862,7 @@
         <string name="h8" value="命中率+8，回避率+8" />
         <string name="h9" value="命中率+9，回避率+9" />
         <string name="desc" value="[最高等级 : 21]\n增加命中率和回避率" />
-        <string name="h21" value="命中回避+50（完成150级突破任务后可学习）" />
+        <string name="h21" value="命中回避+50（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4000001">
         <string name="name" value="远程暗器" />
@@ -9947,7 +9947,7 @@
         <string name="h8" value="消耗MP10，伤害112%，攻击2次" />
         <string name="h9" value="消耗MP10，伤害114%，攻击2次" />
         <string name="desc" value="[最高等级 : 21]\n消耗MP，用短刀对1个敌人连续攻击2次。" />
-        <string name="h21" value="伤害200%,攻击3名敌人,2段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害200%,攻击3名敌人,2段伤害（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4001344">
         <string name="name" value="双飞斩" />
@@ -9972,7 +9972,7 @@
         <string name="h8" value="消耗MP10，伤害90%，投掷2枚飞镖" />
         <string name="h9" value="消耗MP10，伤害94%，投掷2枚飞镖" />
         <string name="desc" value="[最高等级 : 21]\n使用飞镖对1个敌人连续攻击2次，\n伤害受LUK影响，不受拳套熟练度影响。" />
-        <string name="h21" value="伤害180%（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害180%（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="410">
         <string name="bookName" value="刺客技能" />
@@ -10034,7 +10034,7 @@
         <string name="h8" value="出现比率28%，攻击力134%" />
         <string name="h9" value="出现比率29%，攻击力137%" />
         <string name="desc" value="[最高等级 : 31]\n发挥更强力的攻击(装备拳套系类武器)\n必需技能 : #c精准暗器等级3以上#" />
-        <string name="h31" value="暴击概率55%,暴击伤害250%（完成150级突破任务后可学习）" />
+        <string name="h31" value="暴击概率55%,暴击伤害250%（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4100002">
         <string name="name" value="恢复术" />
@@ -10083,7 +10083,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n一定时间内攻击速度提升2个等级\n(必需装备拳套，使用飞镖)\n必需技能 : #c精准暗器等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4101004">
         <string name="name" value="轻功" />
@@ -10108,7 +10108,7 @@
         <string name="h8" value="消耗MP15，持续80秒，移动速度+16，跳跃力+8" />
         <string name="h9" value="消耗MP15，持续90秒，移动速度+18，跳跃力+9" />
         <string name="desc" value="[最高等级 : 21]\n提高所有队员的移动速度和跳跃力" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4101005">
         <string name="name" value="生命吸收" />
@@ -10170,7 +10170,7 @@
         <string name="h8" value="恢复量124%，增加适用时间124%" />
         <string name="h9" value="恢复量127%，增加适用时间127%" />
         <string name="desc" value="[最高等级:21]\n提高恢复类道具的恢复量和持续时间；\n对按百分比恢复的道具不适用。" />
-        <string name="h21" value="恢复200%（完成150级突破任务后可学习）" />
+        <string name="h21" value="恢复200%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4111001">
         <string name="name" value="聚财术" />
@@ -10229,7 +10229,7 @@
         <string name="h8" value="消费MP165，召回石1个，持续60秒，分身普通攻击力为自身的43%，技术攻击力为自身的22%" />
         <string name="h9" value="消费MP160，召回石1个，持续60秒，分身普通攻击力为自身的46%，技术攻击力为自身的23%" />
         <string name="desc" value="[最高等级:31]\n消耗召唤石召唤影分身，分身会模仿角色攻击，\n一定时间后自动消失。" />
-        <string name="h31" value="持续时间1200,普通攻击伤害100%,技能伤害100%（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间1200,普通攻击伤害100%,技能伤害100%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4111003">
         <string name="name" value="影网术" />
@@ -10322,7 +10322,7 @@
         <string name="h8" value="消耗MP16，消耗3枚飞镖，最多攻击4个敌人，伤害100%" />
         <string name="h9" value="消耗MP16，消耗3枚飞镖，最多攻击4个敌人，伤害105%" />
         <string name="desc" value="[最高等级:31]\n消耗MP制造巨大飞镖，贯穿敌人并攻击后方敌人。" />
-        <string name="h31" value="伤害280%,攻击7名敌人,1段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害280%,攻击7名敌人,1段伤害（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4111006">
         <string name="name" value="二段跳" />
@@ -10588,7 +10588,7 @@
         <string name="h8" value="消耗MP 13，伤害 116%，投掷3枚飞镖" />
         <string name="h9" value="消耗MP 13，伤害 118%，投掷3枚飞镖" />
         <string name="desc" value="同时投掷3枚飞镖攻击1个敌人。" />
-        <string name="h31" value="伤害180%,4段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害180%,4段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4121008">
         <string name="name" value="忍者冲击" />
@@ -10707,7 +10707,7 @@
         <string name="h8" value="消耗HP22和MP22，持续80秒" />
         <string name="h9" value="消耗HP21和MP21，持续90秒" />
         <string name="desc" value="[最高等级 : 21]\n攻击速度提升2个等级(装备短刀，拳刃)\n必需技能 : #c精准短刀等级5以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4201003">
         <string name="name" value="轻功" />
@@ -10732,7 +10732,7 @@
         <string name="h8" value="消耗MP15，持续80秒，移动速度+16，跳跃力+8" />
         <string name="h9" value="消耗MP15，持续90秒，移动速度+18，跳跃力+9" />
         <string name="desc" value="[最高等级 : 21]\n提高所有队员的移动速度和跳跃力" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4201004">
         <string name="name" value="神通术" />
@@ -10801,7 +10801,7 @@
         <string name="h8" value="消耗MP15，以68%伤害攻击4次" />
         <string name="h9" value="消耗MP15，以72%伤害攻击4次" />
         <string name="desc" value="[最高等级 : 31]\n消耗MP，用短刀对1个敌人连续攻击。" />
-        <string name="h31" value="伤害110%,攻击3名敌人,7段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害110%,攻击3名敌人,7段伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="421">
         <string name="bookName" value="独行客技能" />
@@ -10955,7 +10955,7 @@
         <string name="h8" value="消耗MP13，伤害130%，召唤2个分身，最多攻击3个敌人" />
         <string name="h9" value="消耗MP13，伤害140%，召唤2个分身，最多攻击3个敌人" />
         <string name="desc" value="[最高等级:31]\n召唤分身攻击周围敌人，最多攻击6个敌人。" />
-        <string name="h31" value="伤害250%,攻击6名敌人,1段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害250%,攻击6名敌人,1段伤害（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4211005">
         <string name="name" value="金钱护盾" />
@@ -10980,7 +10980,7 @@
         <string name="h8" value="消耗MP25，持续64秒，伤害减半，按减免后伤害的87%消耗金币" />
         <string name="h9" value="消耗MP25，持续67秒，伤害减半，按减免后伤害的86%消耗金币" />
         <string name="desc" value="[最高等级:21]\n用金币抵消受到伤害的一半；\n每次受到伤害时按比例消耗金币。\n必要技能：#c转化术 Lv.3#" />
-        <string name="h21" value="持续时间1200,金钱代替70%伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,金钱代替70%伤害（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4211006">
         <string name="name" value="金钱炸弹" />
@@ -11154,7 +11154,7 @@
         <string name="h29" value="消耗MP 41，伤害 590%，攻击3次，12秒内累计伤害，最后一击必杀伤害 245%，成功率 88%" />
         <string name="h30" value="消耗MP 40，伤害 600%，攻击3次，12秒内累计伤害，最后一击必杀伤害 250%，成功率 90%" />
         <string name="desc" value="隐身状态下靠近敌人并攻击要害；\n进行3次攻击后，最后一击有一定概率造成必杀伤害。" />
-        <string name="h31" value="攻击力600%,必杀伤害350%,4段伤害,攻击3名（完成150级突破任务后可学习）" />
+        <string name="h31" value="攻击力600%,必杀伤害350%,4段伤害,攻击3名（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4221003">
         <string name="name" value="挑衅" />
@@ -11257,7 +11257,7 @@
         <string name="h8" value="消耗MP 23，持续时间 38秒，范围 130%" />
         <string name="h9" value="消耗MP 24，持续时间 39秒，范围 130%" />
         <string name="desc" value="为了从危险中迅速逃脱扔烟雾弹.\n组队成员在烟雾弹内不受敌人的伤害.\n#c冷却时间 : 10分#" />
-        <string name="h31" value="持续时间120,冷却时间300（完成150级突破任务后可学习）" />
+        <string name="h31" value="持续时间120,冷却时间300（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4221007">
         <string name="name" value="一出双击" />
@@ -11292,7 +11292,7 @@
         <string name="h29" value="消耗MP 26 , 给4个敌人伤害 495%, 88%几率击晕敌人" />
         <string name="h30" value="消耗MP 26 , 给4个敌人伤害 500%, 90%几率击晕敌人" />
         <string name="desc" value="用迅速的速度砍2次多数敌人.\n一定几率使敌人眩晕" />
-        <string name="h31" value="伤害600%,攻击5名敌人,5段伤害（无延迟，范围增加）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害600%,攻击5名敌人,5段伤害（无延迟，范围增加）（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="4221008">
         <string name="name" value="勇士的意志" />
@@ -11329,7 +11329,7 @@
         <string name="h8" value="增加命中率 8，回避率 8" />
         <string name="h9" value="增加命中率 9，回避率 9" />
         <string name="desc" value="[最高等级 : 21]\n增加命中率和回避率" />
-        <string name="h21" value="命中回避+50（完成150级突破任务后可学习）" />
+        <string name="h21" value="命中回避+50（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5001001">
         <string name="name" value="百裂拳" />
@@ -11354,7 +11354,7 @@
         <string name="h8" value="消耗MP 8，伤害 198%" />
         <string name="h9" value="消耗MP 8，伤害 204%" />
         <string name="desc" value="[最高等级 : 21]\n消耗MP，用拳头快速攻击敌人" />
-        <string name="h21" value="伤害480%,攻击1名敌人,2段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害480%,攻击1名敌人,2段伤害（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5001002">
         <string name="name" value="半月踢" />
@@ -11379,7 +11379,7 @@
         <string name="h8" value="消耗MP 10，伤害 142%，最多攻击 4只" />
         <string name="h9" value="消耗MP 10，伤害 146%，最多攻击 4只" />
         <string name="desc" value="[最高等级 : 21]\n后旋跳，用腿给周围多数的敌人击退攻击" />
-        <string name="h21" value="伤害280%,攻击7名敌人,1段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害280%,攻击7名敌人,1段伤害（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5001003">
         <string name="name" value="双弹射击" />
@@ -11404,7 +11404,7 @@
         <string name="h8" value="消耗MP 5，伤害 106%" />
         <string name="h9" value="消耗MP 5，伤害 108%" />
         <string name="desc" value="[最高等级 : 21]\n同时发射二颗子弹，攻击敌人" />
-        <string name="h21" value="伤害200%,攻击1名敌人,2段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害200%,攻击1名敌人,2段伤害（完成一转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5001005">
         <string name="name" value="疾驰" />
@@ -11484,7 +11484,7 @@
         <string name="h8" value="消耗MP 18，伤害 184%，最多攻击 3只" />
         <string name="h9" value="消耗MP 20，伤害 192%，最多攻击 3只" />
         <string name="desc" value="[最高等级 : 21]\n快速滑向后方，给与背后多数的敌人伤害. " />
-        <string name="h21" value="伤害360%,攻击5名敌人,1段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害360%,攻击5名敌人,1段伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5101003">
         <string name="name" value="升龙连击" />
@@ -11509,7 +11509,7 @@
         <string name="h8" value="消耗MP 20，伤害 230%" />
         <string name="h9" value="消耗MP 20，伤害 240%" />
         <string name="desc" value="[最高等级 : 21]\n用拳头二度连续攻击，使敌人重伤" />
-        <string name="h21" value="伤害290%,攻击1名敌人,4段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害290%,攻击1名敌人,4段伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5101004">
         <string name="name" value="贯骨击" />
@@ -11534,7 +11534,7 @@
         <string name="h8" value="消耗MP 24，伤害 240%，最多攻击 3只" />
         <string name="h9" value="消耗MP 28，伤害 255%，最多攻击 3只" />
         <string name="desc" value="[最高等级 : 21]\n向前方的多数敌人施加拳击" />
-        <string name="h21" value="伤害680%,攻击6名敌人,1段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害680%,攻击6名敌人,1段伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5101005">
         <string name="name" value="生命分流" />
@@ -11573,7 +11573,7 @@
         <string name="h8" value="消耗HP22，MP 22  80秒内提高指节的攻击速度" />
         <string name="h9" value="消耗HP21，MP 21  90秒内提高指节的攻击速度" />
         <string name="desc" value="[最高等级 : 21]\n消耗HP,MP，一定时间内使拳的攻击速度提升。\n只有佩戴指节时才可发动技能.\n必要技能 : #c精准拳5级以上" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5101007">
         <string name="name" value="橡木伪装" />
@@ -11740,7 +11740,7 @@
         <string name="h8" value="消耗MP 36 和 魔法石 1个，物理，魔力防御力 16 增加" />
         <string name="h9" value="消耗MP 38 和 魔法石 1个，物理，魔力防御力 18 增加" />
         <string name="desc" value="[最高等级 : 21]\n在120秒内保持超人变形状态。 \n限制使用的技能: 双弹射击，橡木伪装，金手指，索命" />
-        <string name="h21" value="持续时间1200,冷却时间0秒（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,冷却时间0秒（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5111006">
         <string name="name" value="碎石乱击" />
@@ -11775,7 +11775,7 @@
         <string name="h8" value="消耗MP 22，伤害 370%，最多攻击 4只 攻击" />
         <string name="h9" value="消耗MP 22，伤害 385%，最多攻击 4只 攻击" />
         <string name="desc" value="[最高等级 : 31]\n猛烈地撞击大地引起冲击，伤害多个怪物。\n只有在 #c超人变形，超级变身# 状态下使用.\n必要技能 : #c超人变形 1级以上#" />
-        <string name="h31" value="伤害400%,攻击8名敌人,1段伤害（范围增加）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害400%,攻击8名敌人,1段伤害（范围增加）（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="512">
         <string name="bookName" value="冲锋队长的达成" />
@@ -11847,7 +11847,7 @@
         <string name="h8" value="消耗MP 24，伤害 380%，4只 攻击" />
         <string name="h9" value="消耗MP 25，伤害 395%，4只 攻击" />
         <string name="desc" value="召唤沉睡的龙，给与多数的敌人伤害" />
-        <string name="h31" value="伤害810%,攻击8名敌人,2段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害810%,攻击8名敌人,2段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5121002">
         <string name="name" value="超能量" />
@@ -11906,7 +11906,7 @@
         <string name="h8" value="消耗MP36和魔法石1个，防御力+48" />
         <string name="h9" value="消耗MP38和魔法石1个，防御力+49" />
         <string name="desc" value="在120秒内保持超人变形状态。\n限制技能 : 双弹射击和橡木伪装都无法使用。\n必要技能 : #c变身 20级以上#" />
-        <string name="h21" value="持续时间1200,冷却时间0秒（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200,冷却时间0秒（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5121004">
         <string name="name" value="金手指" />
@@ -11941,7 +11941,7 @@
         <string name="h8" value="消耗MP 20，以伤害 160% 攻击敌人8次" />
         <string name="h9" value="消耗MP 20，以伤害 170% 攻击敌人8次" />
         <string name="desc" value="超越极限的快速攻击，给一个敌人带来大的\n伤害，只能在超级变身状态下使用，具有眩\n晕效果。只有在 #c超级变身# 状态下才可以使用.\n必要技能 : #c超级变身 1级以上#" />
-        <string name="h31" value="伤害500%,攻击2名敌人,8段伤害（无延迟）（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害500%,攻击2名敌人,8段伤害（无延迟）（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5121005">
         <string name="name" value="索命" />
@@ -12010,7 +12010,7 @@
         <string name="h8" value="消耗MP 24，伤害 122%" />
         <string name="h9" value="消耗MP 25，伤害 126%" />
         <string name="desc" value="极快的速度在近距离的一个怪物攻击6下" />
-        <string name="h31" value="伤害450%,8段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害450%,8段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5121008">
         <string name="name" value="勇士的意志" />
@@ -12124,7 +12124,7 @@
         <string name="h8" value="消耗MP 15，伤害 160%，最多攻击 3只" />
         <string name="h9" value="消耗MP 15，伤害 165%，最多攻击 3只" />
         <string name="desc" value="[最高等级 : 21]\n极短的时间内开枪，攻击多数敌人" />
-        <string name="h21" value="伤害300%,攻击6名敌人,1段伤害（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害300%,攻击6名敌人,1段伤害（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5201002">
         <string name="name" value="投弹攻击" />
@@ -12173,7 +12173,7 @@
         <string name="h8" value="消耗HP 22，MP 22  80秒内的攻击速度提升" />
         <string name="h9" value="消耗HP 21，MP 21  90秒内的攻击速度提升" />
         <string name="desc" value="[最高等级 : 21]\n消耗HP,MP，在一定时间内提升枪的攻击速度。\n只适用于装备枪的时候。\n必要技能 : #c精准枪5级以上#" />
-        <string name="h21" value="持续时间1200（完成150级突破任务后可学习）" />
+        <string name="h21" value="持续时间1200（完成二转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5201004">
         <string name="name" value="迷惑射击" />
@@ -12263,7 +12263,7 @@
         <string name="h8" value="消耗MP 16，伤害 170%" />
         <string name="h9" value="消耗MP 17，伤害 175%" />
         <string name="desc" value="[最高等级 : 21]\n双弹射杀使用时的弹数和攻击力增加。\n必要技能 : #c双弹射击 20等级#   " />
-        <string name="h21" value="伤害380%（完成150级突破任务后可学习）" />
+        <string name="h21" value="伤害380%（完成三转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5211001">
         <string name="name" value="章鱼炮台" />
@@ -12587,7 +12587,7 @@
         <string name="h8" value="消耗MP 38，伤害 660%，冷却时间 5秒" />
         <string name="h9" value="消耗MP 39，伤害 680%，冷却时间 5秒" />
         <string name="desc" value="召唤海鸥群的炸弹攻击，攻击6个以下的敌人。 \n必要技能 : #c海鸥空袭15级以上#" />
-        <string name="h31" value="伤害1200%,攻击10名敌人,冷却时间3秒（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害1200%,攻击10名敌人,冷却时间3秒（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5221004">
         <string name="name" value="金属风暴" />
@@ -12622,7 +12622,7 @@
         <string name="h8" value="消耗MP 6，伤害 156%" />
         <string name="h9" value="消耗MP 6，伤害 158%" />
         <string name="desc" value="发射非常快的子弹。\n摁住此技能键的状态可持续。\n必要技能 : #c三连射杀 20等级#" />
-        <string name="h31" value="伤害280%，2段（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害280%，2段（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5221006">
         <string name="name" value="武装" />
@@ -12637,7 +12637,7 @@
         <string name="h8" value="消耗MP 36，物理，魔力防御力 80 增加" />
         <string name="h9" value="消耗MP 38，物理，魔力防御力 90 增加" />
         <string name="desc" value="登上海盗船。受到伤害时耐久度减少，耐久\n度为0时，一定时间内将不能乘坐海盗船。\n可使用技能 : 武装，投弹攻击，速射，烈焰喷射，\n寒冰喷射，海鸥空袭，章鱼炮台，冒险岛勇士，\n勇士的意志 #c耐久度耗尽后冷却时间 : 90秒#" />
-        <string name="h11" value="冷却时间0秒（移速 跳跃提升）（完成150级突破任务后可学习）" />
+        <string name="h11" value="冷却时间0秒（移速 跳跃提升）（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5221007">
         <string name="name" value="急速射" />
@@ -12672,7 +12672,7 @@
         <string name="h8" value="消耗MP 26，240%的伤害攻击敌人 3次" />
         <string name="h9" value="消耗MP 26，245%的伤害攻击敌人 3次" />
         <string name="desc" value="连续发射数发炮弹。\n只能是“武装”技能使用状态下才可使用。\n必要技能 : #c武装 1级以上#" />
-        <string name="h31" value="伤害450%,6段伤害（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害450%,6段伤害（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5221008">
         <string name="name" value="重量炮击" />
@@ -12707,7 +12707,7 @@
         <string name="h8" value="消耗MP 26，伤害 460%，4只 攻击" />
         <string name="h9" value="消耗MP 26，伤害 470%，4只 攻击" />
         <string name="desc" value="向敌人发射结实的炮弹。\n只能是“武装”技能使用状态下才可使用。\n必要技能 : #c武装 1级以上#" />
-        <string name="h31" value="伤害1000%,攻击7名敌人（完成150级突破任务后可学习）" />
+        <string name="h31" value="伤害1000%,攻击7名敌人（完成四转突破任务后可学习）" />
     </imgdir>
     <imgdir name="5221009">
         <string name="name" value="心灵控制" />

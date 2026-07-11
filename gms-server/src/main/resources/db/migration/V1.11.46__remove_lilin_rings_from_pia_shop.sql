@@ -1,0 +1,3 @@
+DELETE FROM shopitems
+WHERE shopid = 9000069
+  AND itemid IN (1112413, 1112414, 1112405);

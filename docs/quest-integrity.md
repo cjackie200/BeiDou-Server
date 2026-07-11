@@ -18,8 +18,13 @@
 `infoex` 的 `cond=0/1/2` 分别表示字符串精确相等、数值大于等于、数值小于等于；阈值条件的
 实际进度或期望值无法解析为整数时必须 fail-closed。
 
-`30006` 技能突破任务已补齐任务脚本、扎昆击杀进度、技能上限/SP 奖励服务、四个服务端 Quest
-资源节点和回归测试，因此不再属于禁用任务。
+`30006..30009` 为分阶段技能突破任务，分别对应一至四转。任务只在当前职业对应阶段存在突破
+技能时出现；空阶段自动跳过。目标依次为木妖王 3 只、树妖王 3 只、肯德熊 3 只和扎昆最终
+本体 1 只。每阶段只解锁该转技能并发放对应 SP，服务端加点门禁以阶段任务完成状态为准。
+
+旧版 `30006` 已完成角色迁移为全阶段完成；旧版进行中角色迁移到 `30009` 并保留扎昆进度，
+通过内部 `legacy-all` 进度标记在完成时一次性结算原版全部阶段奖励。该标记不得出现在客户端
+QuestInfo 文本中。
 
 ## 动作执行约束
 
@@ -54,6 +59,7 @@ Quest XML 和回归测试。
 - `QuestActionRegressionTest` 覆盖缺失 Check、禁用 ID、自动任务元数据、原生物品/金币/声望/技能
   动作和关键任务链。
 - `ItemActionTest`、`PetSkillActionTest`、`QuestRequirementRegressionTest` 覆盖动作和条件边界。
-- `SkillBreakthroughQuestTest` 覆盖 `30006` 灯泡节点、扎昆进度、突破技能资源和职业映射。
+- `SkillBreakthroughQuestTest` 覆盖 `30006..30009` 灯泡节点、分阶段怪物进度、突破技能资源、
+  职业映射和旧任务迁移。
 - 客户端资源用 `WzPatchTool inspect` 逐节点确认，并运行 `ring-verify`、`life-proof-verify`、
   `elemental-resonance-verify`。

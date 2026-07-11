@@ -76593,22 +76593,8 @@
     <imgdir name="30006">
         <imgdir name="0">
             <int name="npc" value="9900000"/>
-            <int name="lvmin" value="150"/>
+            <int name="lvmin" value="8"/>
             <int name="lvmax" value="250"/>
-            <imgdir name="job">
-                <int name="0" value="112"/>
-                <int name="1" value="122"/>
-                <int name="2" value="132"/>
-                <int name="3" value="212"/>
-                <int name="4" value="222"/>
-                <int name="5" value="232"/>
-                <int name="6" value="312"/>
-                <int name="7" value="322"/>
-                <int name="8" value="412"/>
-                <int name="9" value="422"/>
-                <int name="10" value="512"/>
-                <int name="11" value="522"/>
-            </imgdir>
             <int name="normalAutoStart" value="1"/>
             <string name="startscript" value="q30006s"/>
         </imgdir>
@@ -76617,10 +76603,52 @@
             <string name="endscript" value="q30006e"/>
             <imgdir name="mob">
                 <imgdir name="0">
-                    <int name="id" value="8800002"/>
-                    <int name="count" value="1"/>
+                    <int name="id" value="2220000"/>
+                    <int name="count" value="3"/>
                 </imgdir>
             </imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="30007">
+        <imgdir name="0">
+            <int name="npc" value="9900000"/>
+            <int name="lvmin" value="30"/>
+            <int name="lvmax" value="250"/>
+            <int name="normalAutoStart" value="1"/>
+            <string name="startscript" value="q30007s"/>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="9900000"/>
+            <string name="endscript" value="q30007e"/>
+            <imgdir name="mob"><imgdir name="0"><int name="id" value="3220000"/><int name="count" value="3"/></imgdir></imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="30008">
+        <imgdir name="0">
+            <int name="npc" value="9900000"/>
+            <int name="lvmin" value="70"/>
+            <int name="lvmax" value="250"/>
+            <int name="normalAutoStart" value="1"/>
+            <string name="startscript" value="q30008s"/>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="9900000"/>
+            <string name="endscript" value="q30008e"/>
+            <imgdir name="mob"><imgdir name="0"><int name="id" value="7220000"/><int name="count" value="3"/></imgdir></imgdir>
+        </imgdir>
+    </imgdir>
+    <imgdir name="30009">
+        <imgdir name="0">
+            <int name="npc" value="9900000"/>
+            <int name="lvmin" value="120"/>
+            <int name="lvmax" value="250"/>
+            <int name="normalAutoStart" value="1"/>
+            <string name="startscript" value="q30009s"/>
+        </imgdir>
+        <imgdir name="1">
+            <int name="npc" value="9900000"/>
+            <string name="endscript" value="q30009e"/>
+            <imgdir name="mob"><imgdir name="0"><int name="id" value="8800002"/><int name="count" value="1"/></imgdir></imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="4100">

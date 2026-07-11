@@ -1,7 +1,7 @@
 var SkillBreakthroughService = Java.type("org.gms.server.quest.SkillBreakthroughService");
 
-var QUEST_ID = 30006;
-var STAGE_NAME = "一转";
+var QUEST_ID = 30007;
+var STAGE_NAME = "二转";
 var status = -1;
 
 function start(mode, type, selection) {
@@ -28,6 +28,7 @@ function start(mode, type, selection) {
     }
     qm.dispose();
 }
+
 function end(mode, type, selection) {
     if (!advance(mode)) {
         return;
@@ -66,3 +67,4 @@ function advance(mode) {
     }
     return true;
 }
+
