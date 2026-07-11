@@ -2219,7 +2219,7 @@ public class MapleMap {
                     }
                 }
             };
-            poisonSchedule = tMan.register(poisonTask, 2000, 2500);
+            poisonSchedule = tMan.register(poisonTask, 1000, 1000);
         } else if (recovery) {
             Runnable poisonTask = () -> {
                 List<MapObject> players = getMapObjectsInBox(mist.getBox(), Collections.singletonList(MapObjectType.PLAYER));
