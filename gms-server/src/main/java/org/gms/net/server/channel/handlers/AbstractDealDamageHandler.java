@@ -217,11 +217,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 if (attack.numAttacked > mobCount) {
-                    // Allow bounce skills (Magic Claw / Poison Breath) to hit up to 6 targets
-                    if (attack.skill != 2001004 && attack.skill != 2101005) {
-                        AutobanFactory.MOB_COUNT.autoban(player, "技能: " + attack.skill + "; Count: " + attack.numAttacked + " Max: " + attackEffect.getMobCount());
-                        return;
-                    }
+                    AutobanFactory.MOB_COUNT.autoban(player, "技能: " + attack.skill + "; Count: " + attack.numAttacked + " Max: " + attackEffect.getMobCount());
+                    return;
                 }
             }
             if (!player.isAlive()) {
