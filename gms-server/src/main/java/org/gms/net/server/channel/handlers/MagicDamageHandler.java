@@ -153,21 +153,14 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         for (int i = 0; i < bounceCount; i++) {
             Monster target = candidates.get(i);
             int bounceDmg = Math.max(1, (int) (primaryDamage * decayRates[i]));
-            // Broadcast a fake magic attack packet so the client renders the hit effect
-            byte bounceNumAttackedAndDamage = (byte) ((1 << 4) | 1); // 1 target, 1 damage line
-            Map<Integer, List<Integer>> bounceDmgMap = Collections.singletonMap(
-                    target.getObjectId(), Collections.singletonList(bounceDmg));
-            Packet bouncePacket = PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel,
-                    attack.stance, bounceNumAttackedAndDamage, bounceDmgMap, -1,
-                    attack.speed, attack.direction, attack.display);
-            map.broadcastMessage(chr, bouncePacket, false, true);
-            if (map.damageMonster(chr, target, bounceDmg)) {
-                map.broadcastMessage(PacketCreator.damageMonster(target.getObjectId(), bounceDmg), target.getPosition());
-            }
+            // Apply poison BEFORE damage so the monster is still alive for status
             if (applyPoison && bounceEffect.makeChanceResult()) {
                 MonsterStatusEffect poisonEffect = new MonsterStatusEffect(
                         Collections.singletonMap(MonsterStatus.POISON, 1), skill, null, false);
                 target.applyStatus(chr, poisonEffect, true, bounceEffect.getDuration());
+            }
+            if (map.damageMonster(chr, target, bounceDmg)) {
+                map.broadcastMessage(PacketCreator.damageMonster(target.getObjectId(), bounceDmg), target.getPosition());
             }
         }
     }
