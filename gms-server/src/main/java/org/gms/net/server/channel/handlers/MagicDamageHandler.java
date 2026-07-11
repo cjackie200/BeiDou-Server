@@ -35,7 +35,16 @@ import org.gms.constants.skills.ILArchMage;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.Packet;
 import org.gms.server.StatEffect;
+import org.gms.server.maps.MapleMap;
+import org.gms.server.life.Monster;
 import org.gms.util.PacketCreator;
+
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -82,6 +91,11 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         }
         applyAttack(attack, chr, effect.getAttackCount());
 
+        // Server-side bounce for Magic Claw and Poison Breath
+        if (attack.skill == 2001004 || attack.skill == 2101005) {
+            applyBounce(attack, chr);
+        }
+
         Skill eaterSkill = SkillFactory.getSkill((chr.getJob().getId() - (chr.getJob().getId() % 10)) * 10000);// MP Eater, works with right job
         int eaterLevel = chr.getSkillLevel(eaterSkill);
         if (eaterLevel > 0) {
@@ -91,4 +105,50 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         }
     }
 
+    private void applyBounce(AttackInfo attack, Character chr) {
+        MapleMap map = chr.getMap();
+        Set<Integer> hitOids = attack.allDamage.keySet();
+
+        Point primaryPos = null;
+        int primaryDamage = 0;
+        for (Map.Entry<Integer, List<Integer>> entry : attack.allDamage.entrySet()) {
+            Monster m = map.getMonsterByOid(entry.getKey());
+            if (m != null && entry.getValue() != null && !entry.getValue().isEmpty()) {
+                primaryPos = m.getPosition();
+                primaryDamage = entry.getValue().get(0);
+                break;
+            }
+        }
+        if (primaryPos == null || primaryDamage <= 0) {
+            return;
+        }
+        final Point bounceOrigin = primaryPos;
+
+        List<Monster> candidates = new ArrayList<>();
+        for (Monster m : map.getAllMonsters()) {
+            if (m.isAlive() && !hitOids.contains(m.getObjectId())) {
+                double dx = m.getPosition().x - bounceOrigin.x;
+                double dy = m.getPosition().y - bounceOrigin.y;
+                if (Math.sqrt(dx * dx + dy * dy) <= 200) {
+                    candidates.add(m);
+                }
+            }
+        }
+
+        candidates.sort(Comparator.comparingDouble(m -> {
+            double dx = m.getPosition().x - bounceOrigin.x;
+            double dy = m.getPosition().y - bounceOrigin.y;
+            return Math.sqrt(dx * dx + dy * dy);
+        }));
+
+        float[] decayRates = {0.95f, 0.90f, 0.85f, 0.80f, 0.75f};
+        int bounceCount = Math.min(5, candidates.size());
+        for (int i = 0; i < bounceCount; i++) {
+            Monster target = candidates.get(i);
+            int bounceDmg = Math.max(1, (int) (primaryDamage * decayRates[i]));
+            if (map.damageMonster(chr, target, bounceDmg)) {
+                map.broadcastMessage(PacketCreator.damageMonster(target.getObjectId(), bounceDmg), target.getPosition());
+            }
+        }
+    }
 }

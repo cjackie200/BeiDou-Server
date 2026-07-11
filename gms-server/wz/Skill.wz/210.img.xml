@@ -798,7 +798,6 @@
                 <int name="z" value="0" />
             </canvas>
             <string name="elemAttr" value="s" />
-            <imgdir name="action"><string name="0" value="chainlightning" /></imgdir>
             <imgdir name="level">
                 <imgdir name="1">
                     <string name="hs" value="h1" />
