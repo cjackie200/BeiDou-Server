@@ -31,6 +31,9 @@ public class MapMonitor {
     private Portal portal;
 
     public MapMonitor(final MapleMap map, String portal) {
+        if (map == null) {
+            throw new IllegalArgumentException("MapMonitor requires a valid map");
+        }
         this.map = map;
         this.portal = map.getPortal(portal);
         this.monitorSchedule = TimerManager.getInstance().register(() -> {
@@ -40,18 +43,23 @@ public class MapMonitor {
         }, 5000);
     }
 
-    private void cancelAction() {
+    private synchronized void cancelAction() {
+        MapleMap monitoredMap = map;
+        if (monitoredMap == null) {
+            return;
+        }
+
         if (monitorSchedule != null) {  // thanks Thora for pointing a NPE occurring here
             monitorSchedule.cancel(false);
             monitorSchedule = null;
         }
 
-        map.killAllMonsters();
-        map.clearDrops();
+        monitoredMap.killAllMonsters();
+        monitoredMap.clearDrops();
         if (portal != null) {
             portal.setPortalStatus(Portal.OPEN);
         }
-        map.resetReactors();
+        monitoredMap.resetReactors();
 
         map = null;
         portal = null;

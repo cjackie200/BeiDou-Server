@@ -301,8 +301,12 @@ public class QuestStatus {
 
     public String getProgressData() {
         StringBuilder str = new StringBuilder();
-        for (String ps : progress.values()) {
-            str.append(ps);
+        for (Map.Entry<Integer, String> entry : progress.entrySet()) {
+            // Negative IDs are server-only metadata and are not part of the
+            // client's positional quest-progress string.
+            if (entry.getKey() >= 0) {
+                str.append(entry.getValue());
+            }
         }
         return str.toString();
     }
