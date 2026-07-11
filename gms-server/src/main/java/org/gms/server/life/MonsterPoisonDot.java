@@ -19,6 +19,8 @@ final class MonsterPoisonDot {
     static final int DEFAULT_ELEMENT_RATE = 100;
     static final int DEFAULT_TICK_DELAY_MS = 1000;
     static final short WEAPON_SLOT = -11;
+    static final int FP_DAMAGE_DIVISOR = 1500;
+    static final int MAX_FP_POISON_STACKS = 5;
 
     private MonsterPoisonDot() {
     }
@@ -73,6 +75,32 @@ final class MonsterPoisonDot {
         }
 
         return capDotDamage((long) Math.ceil(maxHp / (double) denominator));
+    }
+
+    static boolean isFpMagePoisonDot(Skill skill) {
+        if (skill == null) {
+            return false;
+        }
+        return switch (skill.getId()) {
+            case FPWizard.POISON_BREATH, FPMage.POISON_MIST, FPMage.ELEMENT_COMPOSITION -> true;
+            default -> false;
+        };
+    }
+
+    static int calculateFpPoisonDamage(Character from, Skill skill, int skillLevel, int skillMad, int stacks) {
+        if (from == null || skill == null || skillLevel <= 0 || skillMad <= 0) {
+            return 0;
+        }
+        if (stacks <= 0) {
+            stacks = 1;
+        }
+
+        int totalMatk = from.getTotalMagic();
+        int totalInt = from.getTotalInt();
+
+        // baseDamage = (MATK×3 + INT×2) × skillMAD × (skillLevel + 10) / divisor
+        long baseDamage = (totalMatk * 3L + totalInt * 2L) * skillMad * (skillLevel + 10L) / FP_DAMAGE_DIVISOR;
+        return capDotDamage(baseDamage * stacks);
     }
 
     static int applyPoisonElementRate(int baseDamage, int rate) {

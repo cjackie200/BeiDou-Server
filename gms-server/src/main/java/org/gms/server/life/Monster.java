@@ -124,6 +124,9 @@ public class Monster extends AbstractLoadedLife {
     private final Lock aggroUpdateLock = new ReentrantLock();
     private int poisonFireWeaknessToken = 0;
     private int nextPoisonFireWeaknessToken = 0;
+    private int fpPoisonStacks = 0;
+    private int fpPoisonMaxMad = 0;
+    private int fpPoisonSkillId = 0;
 
     public Monster(int id, MonsterStats stats) {
         super(id);
@@ -1214,6 +1217,20 @@ public class Monster extends AbstractLoadedLife {
 
         final Channel ch = map.getChannelServer();
         final int mapid = map.getId();
+        // Capture existing FP poison stacks before old effect is cleared.
+        // Same-skill reapplication refreshes duration and increments stacks (max 5);
+        // different FP poison skill inherits stacks at the higher MAD value.
+        int capturedStacks = 0;
+        int capturedMaxMad = 0;
+        if (poison && playerPoisonDot && MonsterPoisonDot.isFpMagePoisonDot(status.getSkill())) {
+            if (statis.containsKey(MonsterStatus.POISON)) {
+                MonsterStatusEffect oldPoison = stati.get(MonsterStatus.POISON);
+                if (oldPoison != null && MonsterPoisonDot.isFpMagePoisonDot(oldPoison.getSkill())) {
+                    capturedStacks = fpPoisonStacks;
+                    capturedMaxMad = fpPoisonMaxMad;
+                }
+            }
+        }
         if (statis.size() > 0) {
             statiLock.lock();
             try {
@@ -1261,14 +1278,32 @@ public class Monster extends AbstractLoadedLife {
         int animationTime;
         if (poison) {
             int poisonLevel = from.getSkillLevel(status.getSkill());
-            int poisonDamage = MonsterPoisonDot.calculateBasePoisonDamage(getMaxHp(), poisonLevel);
+            int poisonDamage;
+            if (playerPoisonDot && MonsterPoisonDot.isFpMagePoisonDot(status.getSkill())) {
+                // FP mage poison DOT: MATK/INT-based formula with stacking (max 5 stacks).
+                // Reapplication refreshes duration; different FP poison skill inherits
+                // stacks at the highest MAD seen so far (no downgrade on skill switch).
+                int skillMad = status.getSkill().getEffect(poisonLevel).getMatk();
+                int effectiveMad = Math.max(skillMad, capturedMaxMad);
+                int newStacks = Math.min(MonsterPoisonDot.MAX_FP_POISON_STACKS, capturedStacks + 1);
+                poisonDamage = MonsterPoisonDot.calculateFpPoisonDamage(from, status.getSkill(),
+                        poisonLevel, effectiveMad, newStacks);
+                fpPoisonStacks = newStacks;
+                fpPoisonMaxMad = effectiveMad;
+                fpPoisonSkillId = status.getSkill().getId();
+            } else {
+                if (playerPoisonDot) {
+                    poisonDamage = MonsterPoisonDot.calculateBasePoisonDamage(getMaxHp(), poisonLevel);
+                } else {
+                    poisonDamage = MonsterPoisonDot.calculateBasePoisonDamage(getMaxHp(), poisonLevel);
+                    poisonDamage = MonsterPoisonDot.legacyDotDamage(poisonDamage);
+                }
+            }
             if (playerPoisonDot) {
                 poisonDamage = MonsterPoisonDot.applyPoisonElementRate(poisonDamage,
                         MonsterPoisonDot.resolvePoisonElementRate(from, status.getSkill()));
                 poisonDamage = MonsterPoisonDot.applyPoisonEffectivenessRate(poisonDamage,
                         getMonsterEffectiveness(Element.POISON));
-            } else {
-                poisonDamage = MonsterPoisonDot.legacyDotDamage(poisonDamage);
             }
             status.setValue(MonsterStatus.POISON, MonsterPoisonDot.poisonStatusValue(poisonDamage, playerPoisonDot));
             animationTime = broadcastStatusEffect(status);
