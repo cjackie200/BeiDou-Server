@@ -53,6 +53,7 @@ function action(mode, type, selection) {
 		text += "#L71#超级传送#l \t #L4#爆率一览#l \t #L73#" + mobVacText + "#l\r\n";
 		text += "#L2#在线奖励#l \t #L74#全服仓库#l \t #L75#宠物排除#l\r\n";
 		text += "#L76#背包设置#l \t #L77#修复技能点#l \t #L78#其他物品转换#l\r\n";
+		text += "#L79#批量洗点#l\r\n";
         if (isSuperShopPublic()) {
             text += "#L62#超级商店#l\r\n";
         }
@@ -127,6 +128,9 @@ function doSelect(selection) {
             break;
         case 78:
             openNpc("其他物品转换");
+            break;
+        case 79:
+            openNpc("批量洗点");
             break;
         // GM功能
         case 61:

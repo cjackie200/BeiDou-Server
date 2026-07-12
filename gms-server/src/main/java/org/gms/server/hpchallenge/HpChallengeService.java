@@ -120,12 +120,43 @@ public final class HpChallengeService {
         return state != null && state.routeLocked();
     }
 
+    public static boolean isLifeProofStarted(Character chr) {
+        if (chr == null) {
+            return false;
+        }
+        State state = loadState(chr.getId());
+        return state != null && !"WASHING".equalsIgnoreCase(state.status());
+    }
+
+    public static boolean markWashingRoute(Character chr) {
+        if (chr == null) {
+            return false;
+        }
+        try (Connection con = DatabaseConnection.getConnection()) {
+            State state = loadState(con, chr.getId());
+            if (state != null) {
+                return "WASHING".equalsIgnoreCase(state.status());
+            }
+            try (PreparedStatement ps = con.prepareStatement("""
+                    INSERT INTO hp_challenge_state
+                    (character_id, route_locked, current_stage, highest_rewarded_stage, status)
+                    VALUES (?, 0, 1, 0, 'WASHING')
+                    """)) {
+                ps.setInt(1, chr.getId());
+                return ps.executeUpdate() == 1;
+            }
+        } catch (SQLException e) {
+            log.warn("mark washing route failed", e);
+            return false;
+        }
+    }
+
     public static boolean blocksHpMpAp(Character chr, int apFrom, int apTo) {
-        return isRouteLocked(chr) && (isHpMpAp(apFrom) || isHpMpAp(apTo));
+        return isLifeProofStarted(chr) && (isHpMpAp(apFrom) || isHpMpAp(apTo));
     }
 
     public static boolean blocksHpMpAp(Character chr, int apTo) {
-        return isRouteLocked(chr) && isHpMpAp(apTo);
+        return isLifeProofStarted(chr) && isHpMpAp(apTo);
     }
 
     public static void onMapChanged(Character chr) {
@@ -678,6 +709,9 @@ public final class HpChallengeService {
         try (Connection con = DatabaseConnection.getConnection()) {
             State state = loadState(con, chr.getId());
             if (state != null) {
+                if ("WASHING".equalsIgnoreCase(state.status())) {
+                    return false;
+                }
                 ensureProgressRows(con, chr, Math.max(1, Math.min(7, state.currentStage())));
                 return true;
             }

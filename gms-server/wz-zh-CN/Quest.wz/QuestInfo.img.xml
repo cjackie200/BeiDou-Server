@@ -3433,20 +3433,19 @@
         <string name="2" value="已经完成一转突破任务。"/>
         <int name="area" value="30"/>
         <int name="autoStart" value="1"/>
-        <int name="autoPreComplete" value="1"/>
         <string name="type" value="[北斗冒险岛]"/>
     </imgdir>
     <imgdir name="30007">
         <string name="name" value="二转突破任务"/><string name="0" value="达到30级后，可以挑战树妖王解锁二转突破技能。"/><string name="1" value="击败#b#o3220000##k 3只。"/><string name="2" value="已经完成二转突破任务。"/>
-        <int name="area" value="30"/><int name="autoStart" value="1"/><int name="autoPreComplete" value="1"/><string name="type" value="[北斗冒险岛]"/>
+        <int name="area" value="30"/><int name="autoStart" value="1"/><string name="type" value="[北斗冒险岛]"/>
     </imgdir>
     <imgdir name="30008">
         <string name="name" value="三转突破任务"/><string name="0" value="达到70级后，可以挑战肯德熊解锁三转突破技能。"/><string name="1" value="击败#b#o7220000##k 3只。"/><string name="2" value="已经完成三转突破任务。"/>
-        <int name="area" value="30"/><int name="autoStart" value="1"/><int name="autoPreComplete" value="1"/><string name="type" value="[北斗冒险岛]"/>
+        <int name="area" value="30"/><int name="autoStart" value="1"/><string name="type" value="[北斗冒险岛]"/>
     </imgdir>
     <imgdir name="30009">
         <string name="name" value="四转突破任务"/><string name="0" value="达到120级后，可以挑战扎昆解锁四转突破技能。"/><string name="1" value="击败#b#o8800002##k 1只。"/><string name="2" value="已经完成四转突破任务。"/>
-        <int name="area" value="30"/><int name="autoStart" value="1"/><int name="autoPreComplete" value="1"/><string name="type" value="[北斗冒险岛]"/>
+        <int name="area" value="30"/><int name="autoStart" value="1"/><string name="type" value="[北斗冒险岛]"/>
     </imgdir>
     <imgdir name="5100">
         <string name="name" value="生命之证 I：拜访赫丽娜" />

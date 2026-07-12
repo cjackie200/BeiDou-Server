@@ -43,6 +43,7 @@ import org.gms.client.inventory.manipulator.KarmaManipulator;
 import org.gms.client.processor.npc.DueyProcessor;
 import org.gms.client.processor.stat.AssignAPProcessor;
 import org.gms.client.processor.stat.AssignSPProcessor;
+import org.gms.client.processor.stat.ResetScrollService;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -180,11 +181,22 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
             if (itemId > ItemId.AP_RESET) {
                 int SPTo = p.readInt();
+                int SPFrom = p.readInt();
+                if (itemId >= 5050001 && itemId <= 5050004) {
+                    int stage = itemId - ItemId.AP_RESET;
+                    int refunded = ResetScrollService.resetSkillStage(player, stage);
+                    if (refunded <= 0) {
+                        player.dropMessage(5, "该转职阶段没有可返还的技能点。");
+                        c.enableActions();
+                        return;
+                    }
+                    player.dropMessage(5, "已重置" + stage + "转全部技能，并返还 " + refunded + " 点技能点。");
+                    remove(c, position, itemId);
+                    return;
+                }
                 if (!AssignSPProcessor.canSPAssign(c, SPTo)) {  // exploit found thanks to Arnah
                     return;
                 }
-
-                int SPFrom = p.readInt();
                 Skill skillSPTo = SkillFactory.getSkill(SPTo);
                 Skill skillSPFrom = SkillFactory.getSkill(SPFrom);
                 byte curLevel = player.getSkillLevel(skillSPTo);
