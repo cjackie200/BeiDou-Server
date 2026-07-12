@@ -6,7 +6,7 @@ var toStat = 0;
 var amount = 0;
 var AP_SCROLL = 5050000;
 var stats = [64, 128, 256, 512, 2048, 8192];
-var names = ["力量", "敏捷", "智力", "运气", "最大HP", "最大MP"];
+var names = ["力量", "敏捷", "智力", "运气", "HP", "MP"];
 var HpChallengeService = Java.type("org.gms.server.hpchallenge.HpChallengeService");
 var lifeProofStarted = false;
 
@@ -22,7 +22,7 @@ function action(mode, type, selection) {
     }
     status++;
     if (status == 0 && lifeProofStarted) {
-        cm.sendNext("生命之证任务已经开始，无法再洗最大HP或最大MP。接下来只显示力量、敏捷、智力和运气。");
+        cm.sendNext("生命之证任务已经开始，无法再洗HP或MP。接下来只显示力量、敏捷、智力和运气。");
         return;
     }
     var step = status - (lifeProofStarted ? 1 : 0);
@@ -48,7 +48,10 @@ function action(mode, type, selection) {
         var text = "请选择要增加的属性：\r\n\r\n";
         var limit = lifeProofStarted ? 4 : stats.length;
         for (var i = 0; i < limit; i++) {
-            if (stats[i] != fromStat) {
+            var hpMpSwap = fromStat == 2048 || fromStat == 8192;
+            var isSwapTarget = fromStat == 2048 && stats[i] == 8192
+                    || fromStat == 8192 && stats[i] == 2048;
+            if (stats[i] != fromStat && (!hpMpSwap || isSwapTarget)) {
                 text += "#L" + i + "#" + names[i] + "#l\r\n";
             }
         }
@@ -70,10 +73,12 @@ function action(mode, type, selection) {
         }
         if ((fromStat == 2048 || fromStat == 8192 || toStat == 2048 || toStat == 8192)
                 && !HpChallengeService.markWashingRoute(cm.getPlayer())) {
-            cm.sendOk("生命之证任务已经开始，无法再洗最大HP或最大MP。");
+            cm.sendOk("生命之证任务已经开始，无法再洗HP或MP。");
             cm.dispose();
             return;
         }
+        var oldHp = cm.getPlayer().getMaxHp();
+        var oldMp = cm.getPlayer().getMaxMp();
         var completed = ResetScrollService.batchResetAp(cm.getClient(), fromStat, toStat, amount);
         if (completed > 0) {
             cm.gainItem(AP_SCROLL, -completed);
@@ -81,10 +86,23 @@ function action(mode, type, selection) {
         if (completed != amount) {
             cm.sendOk("只完成了 " + completed + " 点洗点，已按实际完成数量扣除卷轴。请检查属性限制后重试。");
         } else {
-            cm.sendOk("洗点完成：" + statName(fromStat) + " -" + amount + "，" + statName(toStat) + " +" + amount + "。");
+            var result = "洗点完成，共处理 " + completed + " 点。";
+            var hpChange = cm.getPlayer().getMaxHp() - oldHp;
+            var mpChange = cm.getPlayer().getMaxMp() - oldMp;
+            if (hpChange != 0) result += "\r\nHP " + signedNumber(hpChange);
+            if (mpChange != 0) result += "\r\nMP " + signedNumber(mpChange);
+            if (hpChange == 0 && mpChange == 0) {
+                result += "\r\n" + statName(fromStat) + " -" + completed
+                        + "，" + statName(toStat) + " +" + completed + "。";
+            }
+            cm.sendOk(result);
         }
         cm.dispose();
     }
+}
+
+function signedNumber(value) {
+    return value > 0 ? "+" + value : "" + value;
 }
 
 function statName(stat) {

@@ -1,0 +1,1119 @@
+{
+    "latestVersion":  "v1.0.9",
+    "versions":  [
+                     {
+                         "version":  "v1.0.2",
+                         "requiredFrom":  "v1.0.1",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Quest/Act.img",
+                                           "size":  688687,
+                                           "sha256":  "465993DEE0D5F0E9E5C23D2A373395FF21A083B11412D6BA639423B439B03298",
+                                           "url":  "/client-update/files/v1.0.2/Data/Quest/Act.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/Check.img",
+                                           "size":  841333,
+                                           "sha256":  "B1C4370AD74738858F51D4FA3008C5F40090EB81653B66322A4ED641B7F59DD3",
+                                           "url":  "/client-update/files/v1.0.2/Data/Quest/Check.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/QuestInfo.img",
+                                           "size":  1320314,
+                                           "sha256":  "DDCC049667B1C97D13D164FA53064E4BCDCB85A0BDD2096A55D4C581F730FE5F",
+                                           "url":  "/client-update/files/v1.0.2/Data/Quest/QuestInfo.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/Say.img",
+                                           "size":  2355348,
+                                           "sha256":  "619AF62F3BB35496BA9434BF8B6EC61D122371D146939FD717B01BB1B60F35D1",
+                                           "url":  "/client-update/files/v1.0.2/Data/Quest/Say.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/100.img",
+                                           "size":  565402,
+                                           "sha256":  "41BEDA5C06FC8A67BFA88D3CCF562FAEBA5BCD11EDFE1B030A83CE51C17FB3CD",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/100.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/110.img",
+                                           "size":  98188,
+                                           "sha256":  "83A0A3F75E6F222648936F09D1F36447C127CDD6BF4A7A00BAD0C01A3C75B593",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/110.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/111.img",
+                                           "size":  5642057,
+                                           "sha256":  "53F8CA63948ECADA8C8A16ECF38151B31E16569A2B88FA43BFEE6C7D2BFB625A",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/111.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/112.img",
+                                           "size":  1393382,
+                                           "sha256":  "7B52A30FA071D9378C5110AC2BA5B2547066A3C35E128AE390A6CB3EFC130346",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/112.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/120.img",
+                                           "size":  104997,
+                                           "sha256":  "A14F3CBC0B800AE21FCCD1402AB70F8A1D22B0C664A6F9DFB4FDE3C4D7EFA9A4",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/120.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/121.img",
+                                           "size":  797897,
+                                           "sha256":  "2BD91F0A907A61A9E80A5303D7C79B4EC458198DFF7E53B3187A90AADDF9712B",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/121.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/122.img",
+                                           "size":  2000272,
+                                           "sha256":  "352299EDF99D9EA189151A5988BFFD60EB8FBFF181FCDFE201B48D21977D1AED",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/122.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/130.img",
+                                           "size":  141660,
+                                           "sha256":  "C46C64398144706A319093E41FF797E0E7519CCF51ACDAC2E13FD4916EF7DF01",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/130.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/131.img",
+                                           "size":  849922,
+                                           "sha256":  "EAE742D8E75A9C9033ADBE5CCAA6C777E524B1C264883BFF272B78D4AE273EBD",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/131.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/132.img",
+                                           "size":  1314631,
+                                           "sha256":  "5492A3853A717D3B0D93A7556EF0CF4B896164EE763E23EDD56E44A3B28B3BC4",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/132.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/200.img",
+                                           "size":  155248,
+                                           "sha256":  "C8FE43CCCFCBEF81A41F5C8ED3428689ADD84924FF990B2D6A898DC46C210751",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/200.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/210.img",
+                                           "size":  144703,
+                                           "sha256":  "0F38D7912B77CC859E19D3BC6E77DDC23D161AC907632289968C7FE7CE2467A6",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/210.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/211.img",
+                                           "size":  531075,
+                                           "sha256":  "95A850CA1F7EB33BCF959E19919FEDD3170E9CBA987A522BF504663A4808BAF7",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/211.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/212.img",
+                                           "size":  4563942,
+                                           "sha256":  "378E7A014E3E44E96B54C711431DD576B3B48EB08F9E7BAF36E671D063CA3F1F",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/212.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/220.img",
+                                           "size":  185485,
+                                           "sha256":  "9F72F58D6378645DFC7A9D85A5B886DC5CD2F1CC73808206C7F2B66A4A58ABF8",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/220.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/221.img",
+                                           "size":  430152,
+                                           "sha256":  "B423E43798E7F96168A0B1A69E03F90E894A74654BEB07CC4CFA3EAB4A1D4C11",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/221.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/222.img",
+                                           "size":  4188938,
+                                           "sha256":  "DDE7C232A84C0A34748FA05B1BA71E45496D4115CA3DCCAA31150286297E0460",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/222.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/230.img",
+                                           "size":  113796,
+                                           "sha256":  "80BE2A675756DF3FF7C2A7C33C02ACA442A37000483BD0BA50C967A15B422634",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/230.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/231.img",
+                                           "size":  844105,
+                                           "sha256":  "D494A81E784074E1214936DBF3BCBD67AB946E9AD6A49267CA307B0583678D4F",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/231.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/232.img",
+                                           "size":  4664320,
+                                           "sha256":  "0F875330C2D3DA4D468E1E7A7920B2A110071B5212F69EA8C6366813F908DCE4",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/232.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/300.img",
+                                           "size":  308782,
+                                           "sha256":  "1E01DF202FBFA7E063A4178A23B95364B2545E98B65305691F1E6A544CB91262",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/300.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/310.img",
+                                           "size":  182205,
+                                           "sha256":  "A1B744837CFFCE0936E1E0C98243B15B801A346CBD0DCC6074C2A647F49F2ACC",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/310.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/311.img",
+                                           "size":  380149,
+                                           "sha256":  "30C8BB75F532BA4D5D13243442D2F01CF0D627E89047F0DD6AEB5DB45F39B6FC",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/311.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/312.img",
+                                           "size":  1871690,
+                                           "sha256":  "A70E61A3D5951CE427807B76B94F0F43EF4B2BFDD94D506A33D1AC7364C474AE",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/312.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/320.img",
+                                           "size":  82049,
+                                           "sha256":  "BDD6AA1E16A9E724DCEDC42EC726201381BDE00D0FB059B1E260CF79425BFD8B",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/320.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/321.img",
+                                           "size":  398002,
+                                           "sha256":  "43131632E1DD6874110780DF7D2C06D5766843B803FC4F0135A3F2F40A383880",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/321.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/322.img",
+                                           "size":  2102016,
+                                           "sha256":  "89F493339B0AFEB21176907EE5BA6D8880D46CED0274633A3B65FD81F546AC5C",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/322.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/400.img",
+                                           "size":  178740,
+                                           "sha256":  "CE9A2E420E00E9D48D48F4C12913FA829D93D3125E1C1FACEB6E1FDD1F4C2BF7",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/400.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/410.img",
+                                           "size":  49509,
+                                           "sha256":  "66B155F31EBB4C4D7ABE4578F1A287A72C9B1A18C9FE82AF0901DF31DE8AB598",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/410.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/411.img",
+                                           "size":  417776,
+                                           "sha256":  "881C7D887C37678366479F018ADB589906DC818172B0F132FC6BED6A4A70759E",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/411.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/412.img",
+                                           "size":  972584,
+                                           "sha256":  "72CAF14B0A602B6C0F029C786588C92869931A0E52E196EB57A824A4B42F0178",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/412.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/420.img",
+                                           "size":  93038,
+                                           "sha256":  "2AE4828E1FFB6376C5CB71C63F0F03BBA51C462D1EBA1A8DDDD97E0A6DE18B0D",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/420.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/421.img",
+                                           "size":  552149,
+                                           "sha256":  "E95BDB68BD30A843B7B7770D64AA1B5310D0F45FA563F4957849F0E55E2138E4",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/421.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/422.img",
+                                           "size":  1158228,
+                                           "sha256":  "2E4ABACFCD038E78828BAA30B208DEC3640E15D7724EE85A8D605D67D1B66C7D",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/422.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/500.img",
+                                           "size":  294751,
+                                           "sha256":  "0C4F5479B94B00C5D0644670A827BBC2D60487DA54108E7BA83F77A0A629302C",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/500.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/510.img",
+                                           "size":  174547,
+                                           "sha256":  "B760B31890DF790881863BCF238BCD855DFA5874CF80066CF625BF27FCFD61C1",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/510.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/511.img",
+                                           "size":  368835,
+                                           "sha256":  "16B7920146D1BE761D2616FE85E11ACEB7C9A6FCC39F31C37CEEA6052C67FA67",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/511.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/512.img",
+                                           "size":  1706077,
+                                           "sha256":  "6522CDF0B8EAEAE6F1689C9093507ECC1D445559584D261CC5B02549AE8CCEC6",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/512.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/520.img",
+                                           "size":  143639,
+                                           "sha256":  "B4A181347D89E757450E0F5F62E94BDE43F787F6503A718E249D3EE4DED3E73E",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/520.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/521.img",
+                                           "size":  425546,
+                                           "sha256":  "CD4457EAB711C650185F40F437CFE2ECC6B838E1583CBE1E1A1A82A31D6FF94E",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/521.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/522.img",
+                                           "size":  2002466,
+                                           "sha256":  "0A83D8769F1C0663B05472DC99A45350AE4FCA6408A2511762370AC13D9A6866",
+                                           "url":  "/client-update/files/v1.0.2/Data/Skill/522.img"
+                                       },
+                                       {
+                                           "path":  "Data/String/Skill.img",
+                                           "size":  881151,
+                                           "sha256":  "2A2B08A2C00DE208E47DFC13564ABDBD06300E9CEF4200884DA57DE128684376",
+                                           "url":  "/client-update/files/v1.0.2/Data/String/Skill.img"
+                                       },
+                                       {
+                                           "path":  "ijl15.dll",
+                                           "size":  570368,
+                                           "sha256":  "B0A6464696EC87EE88CAFAAB63529121FF9F8CEAEDD0E865F71F503EFE74E578",
+                                           "url":  "/client-update/files/v1.0.2/ijl15.dll"
+                                       }
+                                   ]
+                     },
+                     {
+                         "version":  "v1.0.3",
+                         "requiredFrom":  "v1.0.2",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Quest/Check.img",
+                                           "size":  841381,
+                                           "sha256":  "637335A3173FEE92A959FB16C89DF638633DCCC97C3A604109E5A866B105AACF",
+                                           "url":  "/client-update/files/v1.0.3/Data/Quest/Check.img"
+                                       }
+                                   ]
+                     },
+                     {
+                         "version":  "v1.0.4",
+                         "requiredFrom":  "v1.0.3",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Skill/100.img",
+                                           "size":  565402,
+                                           "sha256":  "446B0A65BB8B0EE804730379A574C96D68D0AB2B9C25DE14D7E345BEA0DF637F",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/100.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/110.img",
+                                           "size":  98188,
+                                           "sha256":  "D0DDA9617BC7651D93771228A85346F827CDF8A11875122DC93638FEA9BCCC28",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/110.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/111.img",
+                                           "size":  5642057,
+                                           "sha256":  "3E1C80C416CEA3AFE3F0A04ECB6E0EE4A458A309A30429F34FDA270516FD3689",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/111.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/112.img",
+                                           "size":  1393382,
+                                           "sha256":  "50C95016AB8038CA4B30A25164470E7D181F448E7FF54365F8C5FD7F2D7FC04C",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/112.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/120.img",
+                                           "size":  104997,
+                                           "sha256":  "C8F32F0C216F6A4303C879D95E7475B097B7C32A6498868C1BBE69724F095625",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/120.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/121.img",
+                                           "size":  797897,
+                                           "sha256":  "8EC7B6895C5ACB26F534ECD6F96E83C75B6E57C6F0B61B4DA03E619B8CF6C850",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/121.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/122.img",
+                                           "size":  2000272,
+                                           "sha256":  "EFAD647DC4E2574C0AE488C62A4CABA6EC23CCD0A9D3A22139C120E545DB8202",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/122.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/130.img",
+                                           "size":  141660,
+                                           "sha256":  "726A5B712E817016F6940E4E11EA450676F1C4117D5FF8E437417CA1558D4D54",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/130.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/131.img",
+                                           "size":  849922,
+                                           "sha256":  "99B2361771C4D442C096A121C4F0393C546DB01C878F8C63A3C8FDB51EA42AA1",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/131.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/132.img",
+                                           "size":  1314631,
+                                           "sha256":  "4A9BB826D6A18B3F42977397F0F9337B56DF01D18933291EF369ECBA8F150991",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/132.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/200.img",
+                                           "size":  155248,
+                                           "sha256":  "766BE42561F2B370D836D679BC231DF79BD0E8942952C65E8955603E3FCEED1E",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/200.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/210.img",
+                                           "size":  144703,
+                                           "sha256":  "8E2DD23CA3AC3AAF6BCD9E78A3AF1BFD9234223C98BDA0BC1B8883F3CD32B2E4",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/210.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/211.img",
+                                           "size":  531075,
+                                           "sha256":  "64A22906EE5737CB8CFE4AC5F5156C2E1342D0875E2259D83F86A3ED58F68925",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/211.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/212.img",
+                                           "size":  4563942,
+                                           "sha256":  "9AD9B7E51ED0ABFD0467297752A73F62F0A5120E2FDDE26664D2954A835E911D",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/212.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/220.img",
+                                           "size":  185485,
+                                           "sha256":  "C4D3A67888C05EE9DC15FA351A734FE5BD9CED994104286A13DA11FC66394A39",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/220.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/221.img",
+                                           "size":  430152,
+                                           "sha256":  "197D82C85190BB40E5977B1459A00CB229F16708C187ADE7BDC0531BCCF49E8B",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/221.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/222.img",
+                                           "size":  4188938,
+                                           "sha256":  "B14651A94707B9D5023F09132FF58E705A8AA5D32619BE8CAE1BEA30AC9CCA64",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/222.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/230.img",
+                                           "size":  113796,
+                                           "sha256":  "3C09FEE9AB5B985356E162D9B05ADA8B262BEA099AE4943ABF0F629F62CB1708",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/230.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/231.img",
+                                           "size":  844105,
+                                           "sha256":  "4387DF04F7FA77276F7E09234CD3D917DC9BD84BE76F2AB47923D10E97BB4881",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/231.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/232.img",
+                                           "size":  4664320,
+                                           "sha256":  "D5E30D4C2B2E26F9C2EC8C9AFF9F473C69C6E60936A5D782A577A286DF46638D",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/232.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/300.img",
+                                           "size":  308782,
+                                           "sha256":  "48F717EDE28485EE4F4A23ADC163CC3264565FDF286B566DD2E7A5C2A43BCB98",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/300.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/310.img",
+                                           "size":  182205,
+                                           "sha256":  "4430D3914FCA15ABCFAB9219D3591E8A3373EF163CF913ABCA6D90028441190F",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/310.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/311.img",
+                                           "size":  380149,
+                                           "sha256":  "CD3A52722D100E02B64C84C9D8317704867FEB4BD14F86539863C17B8AFA89B1",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/311.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/312.img",
+                                           "size":  1871690,
+                                           "sha256":  "2578B9AD1DD022DEDE020960A8F20A7E235B81018B081A7723C7ADD9443FBF7E",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/312.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/320.img",
+                                           "size":  82049,
+                                           "sha256":  "6D3E44613AD8C1B296F3BA3CA9BC56271DB34A8A966F046062E79DC5B5724B95",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/320.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/321.img",
+                                           "size":  398002,
+                                           "sha256":  "30C02991A800C75C6899E18C68B2243D194C5C4ACE6454999701C33EBC0ABBA5",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/321.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/322.img",
+                                           "size":  2102016,
+                                           "sha256":  "2AF880900F33AE84C81042E828CDEF4B484C9559F25BA69A009993A866D1C2D2",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/322.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/400.img",
+                                           "size":  178740,
+                                           "sha256":  "8AB6A5C3D94C2E044D2E3F1EA612B1F6AF91DFB8AA08D1AF34AEA2AE0E7E266A",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/400.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/410.img",
+                                           "size":  49509,
+                                           "sha256":  "927E58F05F0602665DECB7D2958C50402C971829350999E8454F78B5A443D0E2",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/410.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/411.img",
+                                           "size":  417776,
+                                           "sha256":  "54CC019E3BBD1A1A1E493D491D5406B151A263463E8772DE31C4DAEA8C53BA17",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/411.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/412.img",
+                                           "size":  972584,
+                                           "sha256":  "D505239258D75AF38ADB543ADE7657D5F7BE5EE7D459B09732DB80A7096C34BF",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/412.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/420.img",
+                                           "size":  93038,
+                                           "sha256":  "19C6CB0E260A3D91E53AB2099469618AC1F1B4D65845B967B999FCDF0187E468",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/420.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/421.img",
+                                           "size":  552149,
+                                           "sha256":  "9E6341A03A5BB4F209775A0210798B17BA4D8C17FA0C0CD512494C525FDEFEE3",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/421.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/422.img",
+                                           "size":  1158228,
+                                           "sha256":  "7764DE9CA9D17E894B4D2CBC27E3FDAEFB22BD3166145132C3547546C670B8CC",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/422.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/500.img",
+                                           "size":  294751,
+                                           "sha256":  "86D31B646F0E9A6A688ABB892D6A6A2ADFB137F4A29A63F19FCC4B4748EF2141",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/500.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/510.img",
+                                           "size":  174547,
+                                           "sha256":  "9BAB4C68BDB79998659FD4D860F39E4665647FA1BE3D216578E8B6F4E81F84AF",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/510.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/511.img",
+                                           "size":  368835,
+                                           "sha256":  "5E76E72E3ED662745CD01A8F7EC49ADAA10B0384EDFDBD9EBFAD490042C077E4",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/511.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/512.img",
+                                           "size":  1706077,
+                                           "sha256":  "A11BEF3A955A891BF6AFA20901BE875363101A8AE84B6CF6EBB00ED533956C99",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/512.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/520.img",
+                                           "size":  143639,
+                                           "sha256":  "0A15C5B250E0C1F439B0E78A7D3E4EA83F06E21BC6E9AD05160617DA8989999E",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/520.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/521.img",
+                                           "size":  425546,
+                                           "sha256":  "DBA292C46B4C771054A02FFDDBD4D5099691C7D54F1EF551BF3D0CED86E199BA",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/521.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/522.img",
+                                           "size":  2002466,
+                                           "sha256":  "FDCF5B9DA4A726AD2F4678BF6D6187E1E45C5516B1A2C2F7FDB157C9B7A96DC4",
+                                           "url":  "/client-update/files/v1.0.4/Data/Skill/522.img"
+                                       }
+                                   ]
+                     },
+                     {
+                         "version":  "v1.0.5",
+                         "requiredFrom":  "v1.0.4",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Character/Weapon/01372035.img",
+                                           "size":  27266,
+                                           "sha256":  "0F5FC9FEEDD2F3D388EA960422073E7CC3C135AB67FFFC354BB270AC295EC2E6",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372035.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372036.img",
+                                           "size":  27542,
+                                           "sha256":  "97BED1A8F8B98D5A55BA0A00FF83AEFC7187C7E65319ED735DE1103A98DCBF71",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372036.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372037.img",
+                                           "size":  27376,
+                                           "sha256":  "62A291CEF67425F7B503138C2B9329118F0F9FE293C72E730AF4FA1DB16F24CD",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372037.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372038.img",
+                                           "size":  27206,
+                                           "sha256":  "2E1B95F795771B3CD1024BAE274502D8C67CEB46E906700AD0ECB6EB8E748457",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372038.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372039.img",
+                                           "size":  35871,
+                                           "sha256":  "FF2CE3C72EE549A8606CF4CD78A9B81C3EC679E42A90FC4C1448F6E746192F19",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372039.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372040.img",
+                                           "size":  35885,
+                                           "sha256":  "3F859EC31F531038D44A9CAC1A858CDD934F7462E1F2BAA5542A483BB0012859",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372040.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372041.img",
+                                           "size":  35692,
+                                           "sha256":  "88AF257141CF72E59DB32677DF821DA9F24CC8D03E348A21D79FA22F42848337",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372041.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372042.img",
+                                           "size":  35482,
+                                           "sha256":  "255251754C1FBFB78797A8D98071C3B5DFC30B4F7CB98EBF298E97867B3C0F0A",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372042.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372047.img",
+                                           "size":  21171,
+                                           "sha256":  "847C1E2304F54F160314532E79FB142B23229E5D0F2C73F0B4F0892126718145",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372047.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372048.img",
+                                           "size":  27381,
+                                           "sha256":  "95747AA9B0015FE02590A5D8D9E9DF37B87C5F4D8178C296ABF5117B41F95D53",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372048.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372059.img",
+                                           "size":  32845,
+                                           "sha256":  "2DDDCA811FB908D50341E492D0DC48B24DF0E904BCD2EEA3D4B5EA606B742BB9",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372059.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372060.img",
+                                           "size":  33468,
+                                           "sha256":  "166DFED134668BFCFF35A7B483D37C48BD3B356865400E573C32A1A788BF58FF",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372060.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372061.img",
+                                           "size":  32792,
+                                           "sha256":  "C274410FCB58B49966A3EF7AD2AEDF9ABA03071B7150024DE671D89DC79DF91C",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372061.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372062.img",
+                                           "size":  32852,
+                                           "sha256":  "50E983A2C7CCF56CDD54E4CE306D61771F6C501EAAA88A875B11509BEEBCCF4E",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372062.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01372063.img",
+                                           "size":  28292,
+                                           "sha256":  "A9B26A13C8428116A6B3AB1065DC37DC6545AB05FB0187254689E6A39489AB4E",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01372063.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382045.img",
+                                           "size":  39440,
+                                           "sha256":  "61BBA6437A31331EEE24B830FC244C3BB2118F59E41F6164A5B37F0AB3ACAA8D",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382045.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382046.img",
+                                           "size":  39876,
+                                           "sha256":  "D9A557BA07EB5525C17C0B38A20A7D584EDA0F98FA4091FDCE230C5E9E8712BC",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382046.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382047.img",
+                                           "size":  39595,
+                                           "sha256":  "9C3DECA3FC08B6FC175E0A4BED14F260264BBC125D1EF3FA61C4C9EF85B47B03",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382047.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382048.img",
+                                           "size":  39388,
+                                           "sha256":  "66B483B55269C333A2240A01F549668DDED6EFC3D972F2527285B6B708E7E708",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382048.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382049.img",
+                                           "size":  49839,
+                                           "sha256":  "3AD1129D1B6E7B85E8ED558F1CB7B498DB9C8EB7A5FA662EE3D30F9FCF4D2E2C",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382049.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382050.img",
+                                           "size":  50301,
+                                           "sha256":  "9E333CDFDD1D717AD8194B2849779D34BEEEA643B439C153A8BCE9994A6D112F",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382050.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382051.img",
+                                           "size":  49960,
+                                           "sha256":  "C5133F1DB7FD75CC795CEAF5350E11F455AEDDBE2C1489410C0904D9567625EA",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382051.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382052.img",
+                                           "size":  49703,
+                                           "sha256":  "C7EF200CBE848D843980218528C87930F28FFDC4E5E773859677021DFA120353",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382052.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382061.img",
+                                           "size":  29801,
+                                           "sha256":  "B05979BC5DFD8837F20405D38F43623979EED0A7713631526E12A37B4AA2D139",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382061.img"
+                                       },
+                                       {
+                                           "path":  "Data/Character/Weapon/01382063.img",
+                                           "size":  37156,
+                                           "sha256":  "8BE8D9F227A97E33D03ECC8D0DB01716CDBE1E926DC3D13B25AB295E791813FB",
+                                           "url":  "/client-update/files/v1.0.5/Data/Character/Weapon/01382063.img"
+                                       },
+                                       {
+                                           "path":  "Data/Item/Etc/0403.img",
+                                           "size":  1353284,
+                                           "sha256":  "1EADBD3ED7C718F1F4951513C3D527C3C3F77275050B7C9738DAA6C1A8A94025",
+                                           "url":  "/client-update/files/v1.0.5/Data/Item/Etc/0403.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/Act.img",
+                                           "size":  688771,
+                                           "sha256":  "A15CB216454DC21871A479DA0A1AABAF6CD436BFE6BFA3469E025CDB0ACDE653",
+                                           "url":  "/client-update/files/v1.0.5/Data/Quest/Act.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/Check.img",
+                                           "size":  847305,
+                                           "sha256":  "69F462F4A316EDA5D030D3214278C7502580E96BA7440AD6038ECF99C9492C09",
+                                           "url":  "/client-update/files/v1.0.5/Data/Quest/Check.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/QuestInfo.img",
+                                           "size":  1385942,
+                                           "sha256":  "B268032C7BAB9743FCCA38FE6AE80B26C88DB2C0D15B69EB78C49B4A94AAB078",
+                                           "url":  "/client-update/files/v1.0.5/Data/Quest/QuestInfo.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/Say.img",
+                                           "size":  2350314,
+                                           "sha256":  "C52268898AD33A77E0F966048FA6E0CF5EEAC222A4F86B1CE194F8926913B605",
+                                           "url":  "/client-update/files/v1.0.5/Data/Quest/Say.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/100.img",
+                                           "size":  565402,
+                                           "sha256":  "446B0A65BB8B0EE804730379A574C96D68D0AB2B9C25DE14D7E345BEA0DF637F",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/100.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/110.img",
+                                           "size":  98188,
+                                           "sha256":  "D0DDA9617BC7651D93771228A85346F827CDF8A11875122DC93638FEA9BCCC28",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/110.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/111.img",
+                                           "size":  5642057,
+                                           "sha256":  "3E1C80C416CEA3AFE3F0A04ECB6E0EE4A458A309A30429F34FDA270516FD3689",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/111.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/112.img",
+                                           "size":  1393382,
+                                           "sha256":  "50C95016AB8038CA4B30A25164470E7D181F448E7FF54365F8C5FD7F2D7FC04C",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/112.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/120.img",
+                                           "size":  104997,
+                                           "sha256":  "C8F32F0C216F6A4303C879D95E7475B097B7C32A6498868C1BBE69724F095625",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/120.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/121.img",
+                                           "size":  797897,
+                                           "sha256":  "8EC7B6895C5ACB26F534ECD6F96E83C75B6E57C6F0B61B4DA03E619B8CF6C850",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/121.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/122.img",
+                                           "size":  2000272,
+                                           "sha256":  "EFAD647DC4E2574C0AE488C62A4CABA6EC23CCD0A9D3A22139C120E545DB8202",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/122.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/130.img",
+                                           "size":  141660,
+                                           "sha256":  "726A5B712E817016F6940E4E11EA450676F1C4117D5FF8E437417CA1558D4D54",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/130.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/131.img",
+                                           "size":  849922,
+                                           "sha256":  "99B2361771C4D442C096A121C4F0393C546DB01C878F8C63A3C8FDB51EA42AA1",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/131.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/132.img",
+                                           "size":  1314631,
+                                           "sha256":  "4A9BB826D6A18B3F42977397F0F9337B56DF01D18933291EF369ECBA8F150991",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/132.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/200.img",
+                                           "size":  155248,
+                                           "sha256":  "766BE42561F2B370D836D679BC231DF79BD0E8942952C65E8955603E3FCEED1E",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/200.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/210.img",
+                                           "size":  144703,
+                                           "sha256":  "8E2DD23CA3AC3AAF6BCD9E78A3AF1BFD9234223C98BDA0BC1B8883F3CD32B2E4",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/210.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/211.img",
+                                           "size":  531075,
+                                           "sha256":  "64A22906EE5737CB8CFE4AC5F5156C2E1342D0875E2259D83F86A3ED58F68925",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/211.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/212.img",
+                                           "size":  4563942,
+                                           "sha256":  "9AD9B7E51ED0ABFD0467297752A73F62F0A5120E2FDDE26664D2954A835E911D",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/212.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/220.img",
+                                           "size":  185485,
+                                           "sha256":  "C4D3A67888C05EE9DC15FA351A734FE5BD9CED994104286A13DA11FC66394A39",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/220.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/221.img",
+                                           "size":  430152,
+                                           "sha256":  "197D82C85190BB40E5977B1459A00CB229F16708C187ADE7BDC0531BCCF49E8B",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/221.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/222.img",
+                                           "size":  4188938,
+                                           "sha256":  "B14651A94707B9D5023F09132FF58E705A8AA5D32619BE8CAE1BEA30AC9CCA64",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/222.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/230.img",
+                                           "size":  113796,
+                                           "sha256":  "3C09FEE9AB5B985356E162D9B05ADA8B262BEA099AE4943ABF0F629F62CB1708",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/230.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/231.img",
+                                           "size":  844105,
+                                           "sha256":  "4387DF04F7FA77276F7E09234CD3D917DC9BD84BE76F2AB47923D10E97BB4881",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/231.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/232.img",
+                                           "size":  4664320,
+                                           "sha256":  "D5E30D4C2B2E26F9C2EC8C9AFF9F473C69C6E60936A5D782A577A286DF46638D",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/232.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/300.img",
+                                           "size":  308782,
+                                           "sha256":  "48F717EDE28485EE4F4A23ADC163CC3264565FDF286B566DD2E7A5C2A43BCB98",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/300.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/310.img",
+                                           "size":  182205,
+                                           "sha256":  "4430D3914FCA15ABCFAB9219D3591E8A3373EF163CF913ABCA6D90028441190F",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/310.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/311.img",
+                                           "size":  380149,
+                                           "sha256":  "CD3A52722D100E02B64C84C9D8317704867FEB4BD14F86539863C17B8AFA89B1",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/311.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/312.img",
+                                           "size":  1871690,
+                                           "sha256":  "2578B9AD1DD022DEDE020960A8F20A7E235B81018B081A7723C7ADD9443FBF7E",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/312.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/320.img",
+                                           "size":  82049,
+                                           "sha256":  "6D3E44613AD8C1B296F3BA3CA9BC56271DB34A8A966F046062E79DC5B5724B95",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/320.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/321.img",
+                                           "size":  398002,
+                                           "sha256":  "30C02991A800C75C6899E18C68B2243D194C5C4ACE6454999701C33EBC0ABBA5",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/321.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/322.img",
+                                           "size":  2102016,
+                                           "sha256":  "2AF880900F33AE84C81042E828CDEF4B484C9559F25BA69A009993A866D1C2D2",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/322.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/400.img",
+                                           "size":  178740,
+                                           "sha256":  "8AB6A5C3D94C2E044D2E3F1EA612B1F6AF91DFB8AA08D1AF34AEA2AE0E7E266A",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/400.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/410.img",
+                                           "size":  49509,
+                                           "sha256":  "927E58F05F0602665DECB7D2958C50402C971829350999E8454F78B5A443D0E2",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/410.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/411.img",
+                                           "size":  417776,
+                                           "sha256":  "54CC019E3BBD1A1A1E493D491D5406B151A263463E8772DE31C4DAEA8C53BA17",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/411.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/412.img",
+                                           "size":  972584,
+                                           "sha256":  "D505239258D75AF38ADB543ADE7657D5F7BE5EE7D459B09732DB80A7096C34BF",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/412.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/420.img",
+                                           "size":  93038,
+                                           "sha256":  "19C6CB0E260A3D91E53AB2099469618AC1F1B4D65845B967B999FCDF0187E468",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/420.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/421.img",
+                                           "size":  552149,
+                                           "sha256":  "9E6341A03A5BB4F209775A0210798B17BA4D8C17FA0C0CD512494C525FDEFEE3",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/421.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/422.img",
+                                           "size":  1158228,
+                                           "sha256":  "7764DE9CA9D17E894B4D2CBC27E3FDAEFB22BD3166145132C3547546C670B8CC",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/422.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/500.img",
+                                           "size":  294751,
+                                           "sha256":  "86D31B646F0E9A6A688ABB892D6A6A2ADFB137F4A29A63F19FCC4B4748EF2141",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/500.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/510.img",
+                                           "size":  174547,
+                                           "sha256":  "9BAB4C68BDB79998659FD4D860F39E4665647FA1BE3D216578E8B6F4E81F84AF",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/510.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/511.img",
+                                           "size":  368835,
+                                           "sha256":  "5E76E72E3ED662745CD01A8F7EC49ADAA10B0384EDFDBD9EBFAD490042C077E4",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/511.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/512.img",
+                                           "size":  1706077,
+                                           "sha256":  "A11BEF3A955A891BF6AFA20901BE875363101A8AE84B6CF6EBB00ED533956C99",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/512.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/520.img",
+                                           "size":  143639,
+                                           "sha256":  "0A15C5B250E0C1F439B0E78A7D3E4EA83F06E21BC6E9AD05160617DA8989999E",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/520.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/521.img",
+                                           "size":  425546,
+                                           "sha256":  "DBA292C46B4C771054A02FFDDBD4D5099691C7D54F1EF551BF3D0CED86E199BA",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/521.img"
+                                       },
+                                       {
+                                           "path":  "Data/Skill/522.img",
+                                           "size":  2002466,
+                                           "sha256":  "FDCF5B9DA4A726AD2F4678BF6D6187E1E45C5516B1A2C2F7FDB157C9B7A96DC4",
+                                           "url":  "/client-update/files/v1.0.5/Data/Skill/522.img"
+                                       },
+                                       {
+                                           "path":  "Data/String/Eqp.img",
+                                           "size":  326430,
+                                           "sha256":  "9D734831A0B5D12F4AA4307919AADA85A9D58B3333E7C6F599FF31AF9FED2291",
+                                           "url":  "/client-update/files/v1.0.5/Data/String/Eqp.img"
+                                       },
+                                       {
+                                           "path":  "Data/String/Etc.img",
+                                           "size":  210599,
+                                           "sha256":  "5803816016829B4E33E8259A44F509E37E6D108FA9386621C734FB3370FE5E34",
+                                           "url":  "/client-update/files/v1.0.5/Data/String/Etc.img"
+                                       },
+                                       {
+                                           "path":  "Data/String/Mob.img",
+                                           "size":  68440,
+                                           "sha256":  "FDF6835EFE3222AA63DEC5D97A8CF585DD7683970D9EEFB91DDBA65A52C6CF5A",
+                                           "url":  "/client-update/files/v1.0.5/Data/String/Mob.img"
+                                       },
+                                       {
+                                           "path":  "Data/String/Skill.img",
+                                           "size":  881151,
+                                           "sha256":  "2A2B08A2C00DE208E47DFC13564ABDBD06300E9CEF4200884DA57DE128684376",
+                                           "url":  "/client-update/files/v1.0.5/Data/String/Skill.img"
+                                       },
+                                       {
+                                           "path":  "ijl15.dll",
+                                           "size":  568832,
+                                           "sha256":  "1E66237E149297984F20EB4D0BFCF1EC0765E76A7C7014844B9492A152902678",
+                                           "url":  "/client-update/files/v1.0.5/ijl15.dll"
+                                       }
+                                   ]
+                     },
+                     {
+                         "version":  "v1.0.6",
+                         "requiredFrom":  "v1.0.5",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Character/Shoes/01072153.img",
+                                           "size":  1112,
+                                           "sha256":  "6901227F866DE45F181421F8AFB818359B87E76F996510E087C5278046D2EA40",
+                                           "url":  "/client-update/files/v1.0.6/Data/Character/Shoes/01072153.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/Act.img",
+                                           "size":  688927,
+                                           "sha256":  "59DB41BEBEAAF329A227CA96901873C2CDD79382B8B2D21E7AEEB77C5A7C2B82",
+                                           "url":  "/client-update/files/v1.0.6/Data/Quest/Act.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/Check.img",
+                                           "size":  847721,
+                                           "sha256":  "D4E94899A44BB5E942BC6D94E43ECC88926CFD631612E5F4DEB3B0CDEEDF9BB7",
+                                           "url":  "/client-update/files/v1.0.6/Data/Quest/Check.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/QuestInfo.img",
+                                           "size":  1386447,
+                                           "sha256":  "E0CB59B9DA3C965AA63FE5B14675BDDCBB511A27F01959CA3D5FB2E5AF927718",
+                                           "url":  "/client-update/files/v1.0.6/Data/Quest/QuestInfo.img"
+                                       },
+                                       {
+                                           "path":  "Data/Quest/Say.img",
+                                           "size":  2351003,
+                                           "sha256":  "0239DE370CB9BE5DDE1E2B30BE2371F1057F6AE78E6BCFD6B722246A3A354AE3",
+                                           "url":  "/client-update/files/v1.0.6/Data/Quest/Say.img"
+                                       },
+                                       {
+                                           "path":  "Data/String/Skill.img",
+                                           "size":  881007,
+                                           "sha256":  "A01DCEB36C45E417748EF24388A076016470F066677EFBD74FE928F4F0ECACB0",
+                                           "url":  "/client-update/files/v1.0.6/Data/String/Skill.img"
+                                       }
+                                   ],
+                         "releaseNotes":  [
+                                              "突破任务改为按一转、二转、三转、四转分阶段开放，每阶段只解锁本转技能并赠送对应突破技能点。",
+                                              "一转击败木妖王3只，二转击败树妖王3只，三转击败肯德熊3只，四转击败扎昆1只。",
+                                              "职业在某转没有突破技能时自动跳过该阶段；高转角色可以按顺序补做遗漏的突破任务。",
+                                              "旧版突破任务已完成角色保留全部解锁；旧任务进行中角色保留扎昆进度并按旧待遇结算。",
+                                              "技能详情中的突破等级说明改为完成对应转职突破任务后可学习。",
+                                              "透明鞋子移动速度由250调整为100，已经获得的透明鞋子同步生效。",
+                                              "工作人员E的装备制作列表新增基础属性和可升级次数显示。",
+                                              "彪鲁的绝对音感兑换下架三枚利琳戒指，其他兑换保持不变。"
+                                          ]
+                     },
+                     {
+                         "version":  "v1.0.7",
+                         "baseVersion":  "v1.0.6",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Quest/Check.img",
+                                           "size":  847874,
+                                           "sha256":  "B86697AC89A5FE84070692E164A6E6B6FE9AA3D4D2376649B87BF3ED552B6700",
+                                           "url":  "/client-update/files/v1.0.7/Data/Quest/Check.img"
+                                       }
+                                   ],
+                         "releaseNotes":  [
+                                              "突破任务改为逐阶段显示，完成当前阶段后才会出现下一阶段任务。",
+                                              "旧版四转突破任务进行中的角色不再重复显示一至三转突破任务。"
+                                          ]
+                     },
+                     {
+                         "version":  "v1.0.8",
+                         "baseVersion":  "v1.0.7",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Quest/QuestInfo.img",
+                                           "size":  1386419,
+                                           "sha256":  "1023B9577525B5293CC6B514924D1439D23009C883682ED46B6360F7579B4C45",
+                                           "url":  "/client-update/files/v1.0.8/Data/Quest/QuestInfo.img"
+                                       }
+                                   ],
+                         "releaseNotes":  [
+                                              "突破任务接取后不再常驻灯泡列表。",
+                                              "当前阶段击杀目标完成后，灯泡会重新出现用于领取突破奖励。"
+                                          ]
+                     },
+                     {
+                         "version":  "v1.0.9",
+                         "baseVersion":  "v1.0.8",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Quest/QuestInfo.img",
+                                           "size":  1386412,
+                                           "sha256":  "9C31D464057BFC324DD2C630277859F1C068B3735792A8A7978047A954B9093E",
+                                           "url":  "/client-update/files/v1.0.9/Data/Quest/QuestInfo.img"
+                                       }
+                                   ],
+                         "releaseNotes":  [
+                                              "修复黑悟空任务接取后灯泡仍然显示的问题。",
+                                              "黑悟空任务完成击杀条件后，灯泡会重新出现用于交付任务。"
+                                          ]
+                     }
+                 ]
+}

@@ -698,6 +698,42 @@ public class AssignAPProcessor {
             c.unlockClient();
         }
     }
+
+    static boolean swapHpMpByResetFormula(Character player, int apFrom) {
+        reloadConfig();
+        if (player == null || apFrom != 2048 && apFrom != 8192) {
+            return false;
+        }
+        if (apFrom == 8192) {
+            int hpGain = calcHpChange(player, true);
+            int mpLoss = takeMp(player.getJob());
+            if (player.getMaxHp() + hpGain > 30000 || player.getMaxMp() - mpLoss < 0) {
+                return false;
+            }
+            int currentMp = player.getMp();
+            if (!player.assignMP(-mpLoss, 0)) {
+                return false;
+            }
+            if (!useFixedRatioHpmpUpdate) {
+                player.updateMp(Math.max(0, currentMp - mpLoss));
+            }
+            return player.assignHP(hpGain, 0);
+        }
+
+        int mpGain = calcMpChange(player, true);
+        int hpLoss = takeHp(player.getJob());
+        if (player.getMaxMp() + mpGain > 30000 || player.getMaxHp() - hpLoss < 1) {
+            return false;
+        }
+        int currentHp = player.getHp();
+        if (!player.assignHP(-hpLoss, 0)) {
+            return false;
+        }
+        if (!useFixedRatioHpmpUpdate) {
+            player.updateHp(Math.max(1, currentHp - hpLoss));
+        }
+        return player.assignMP(mpGain, 0);
+    }
     /**
      * 手动分配AP点到指定属性
      * 处理流程：
@@ -794,7 +830,7 @@ public class AssignAPProcessor {
      * @param usedAPReset 是否来自AP重置操作
      * @return HP增加量
      */
-    private static int calcHpChange(Character player, boolean usedAPReset) {
+    static int calcHpChange(Character player, boolean usedAPReset) {
         reloadConfig();  // 重新加载最新配置参数
 
         //========== 基础参数初始化 ==========//
@@ -877,7 +913,7 @@ public class AssignAPProcessor {
      * @param usedAPReset 是否来自AP重置操作
      * @return MP增加量
      */
-    private static int calcMpChange(Character player, boolean usedAPReset) {
+    static int calcMpChange(Character player, boolean usedAPReset) {
         reloadConfig();  // 重新加载最新配置参数
 
         //========== 基础参数初始化 ==========//
@@ -950,7 +986,7 @@ public class AssignAPProcessor {
      * @param job 职业
      * @return HP减少量
      */
-    private static int takeHp(Job job) {
+    static int takeHp(Job job) {
         int MaxHP = 0;
 
         if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
@@ -975,7 +1011,7 @@ public class AssignAPProcessor {
      * @param job 职业
      * @return MP减少量
      */
-    private static int takeMp(Job job) {
+    static int takeMp(Job job) {
         int MaxMP = 0;
 
         if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {

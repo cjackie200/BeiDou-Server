@@ -3423,7 +3423,6 @@
         <string name="2" value="消灭了#b暗黑#o4230101##k200只，冒险岛世界得以净化。"/>
         <int name="area" value="30"/>
         <int name="autoStart" value="1"/>
-        <int name="autoPreComplete" value="1"/>
         <string name="type" value="[北斗冒险岛]"/>
     </imgdir>
     <imgdir name="30006">

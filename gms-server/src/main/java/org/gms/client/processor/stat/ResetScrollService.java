@@ -56,11 +56,11 @@ public final class ResetScrollService {
 
     private static int removableHp(Character player) {
         int minimum = player.getLevel() * 14 + 148;
-        if (player.getMaxHp() < minimum || player.getHpMpApUsed() < 1) {
+        if (player.getMaxHp() <= minimum) {
             return 0;
         }
-        int loss = hpLoss(player.getJob());
-        return Math.min(player.getHpMpApUsed(), (player.getMaxHp() - minimum) / loss + 1);
+        int loss = AssignAPProcessor.takeHp(player.getJob());
+        return (player.getMaxHp() - minimum) / loss;
     }
 
     private static int removableMp(Character player) {
@@ -78,29 +78,11 @@ public final class ResetScrollService {
         } else {
             minimum = 14 * level + 135;
         }
-        if (player.getMaxMp() < minimum || player.getHpMpApUsed() < 1) {
+        if (player.getMaxMp() <= minimum) {
             return 0;
         }
-        int loss = mpLoss(job);
-        return Math.min(player.getHpMpApUsed(), (player.getMaxMp() - minimum) / loss + 1);
-    }
-
-    private static int hpLoss(Job job) {
-        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) return 54;
-        if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) return 10;
-        if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) return 42;
-        if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)
-                || job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) return 20;
-        return 12;
-    }
-
-    private static int mpLoss(Job job) {
-        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) return 4;
-        if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) return 30;
-        if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) return 16;
-        if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)
-                || job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) return 12;
-        return 8;
+        int loss = AssignAPProcessor.takeMp(job);
+        return (player.getMaxMp() - minimum) / loss;
     }
 
     public static int batchResetAp(Client client, int from, int to, int amount) {
@@ -111,9 +93,29 @@ public final class ResetScrollService {
         if (getRemovableAp(player, from) < amount) {
             return 0;
         }
+        if (from == 2048 && to == 8192 || from == 8192 && to == 2048) {
+            return batchSwapHpMp(client, from, amount);
+        }
         int completed = 0;
         while (completed < amount && AssignAPProcessor.APResetAction(client, from, to)) {
             completed++;
+        }
+        return completed;
+    }
+
+    private static int batchSwapHpMp(Client client, int from, int amount) {
+        Character player = client.getPlayer();
+        int completed = 0;
+        client.lockClient();
+        try {
+            while (completed < amount && getRemovableAp(player, from) > 0) {
+                if (!AssignAPProcessor.swapHpMpByResetFormula(player, from)) {
+                    break;
+                }
+                completed++;
+            }
+        } finally {
+            client.unlockClient();
         }
         return completed;
     }
