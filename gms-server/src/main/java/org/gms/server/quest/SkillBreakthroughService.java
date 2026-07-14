@@ -219,6 +219,13 @@ public final class SkillBreakthroughService {
         return new CompletionReward(true, grantedSp, Collections.unmodifiableList(grantedSkills), legacyAll);
     }
 
+    public static boolean isReadyForCompletion(Character player, int questId) {
+        if (player == null || !isQuestId(questId)) {
+            return false;
+        }
+        return player.getQuest(Quest.getInstance(questId)).isRemoteCompletionReady();
+    }
+
     public static CompletionReward grantCompletionReward(Character player) {
         return grantCompletionReward(player, QUEST_ID);
     }

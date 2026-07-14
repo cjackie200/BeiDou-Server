@@ -1,5 +1,5 @@
 {
-    "latestVersion":  "v1.0.9",
+    "latestVersion":  "v1.0.10",
     "versions":  [
                      {
                          "version":  "v1.0.2",
@@ -1113,6 +1113,22 @@
                          "releaseNotes":  [
                                               "修复黑悟空任务接取后灯泡仍然显示的问题。",
                                               "黑悟空任务完成击杀条件后，灯泡会重新出现用于交付任务。"
+                                          ]
+                     },
+                     {
+                         "version":  "v1.0.10",
+                         "baseVersion":  "v1.0.9",
+                         "files":  [
+                                       {
+                                           "path":  "ijl15.dll",
+                                           "size":  587776,
+                                           "sha256":  "58FE385CD25A532C3BEC89F746383AAE0BF8E1043A5A2B8D776C0F8905D52762",
+                                           "url":  "/client-update/files/v1.0.10/ijl15.dll"
+                                       }
+                                   ],
+                         "releaseNotes":  [
+                                              "三转及以上技能加点时，低转技能总投入不足将由服务端明确提示具体转职阶段和缺少点数。",
+                                              "修复黑悟空与分阶段突破任务达到目标后的交付灯泡流程。"
                                           ]
                      }
                  ]

@@ -35,6 +35,8 @@ import java.util.Map;
  * @author Matze
  */
 public class QuestStatus {
+    public static final int REMOTE_COMPLETION_MARKER = -30000;
+    public static final String REMOTE_COMPLETION_READY = "ready";
     private static final short DARK_WUKONG_HUNT_QUEST = 30005;
     private static final int DARK_WUKONG_HUNT_MOB = 4230101;
 
@@ -309,5 +311,14 @@ public class QuestStatus {
             }
         }
         return str.toString();
+    }
+
+    public boolean isRemoteCompletionReady() {
+        return REMOTE_COMPLETION_READY.equals(progress.get(REMOTE_COMPLETION_MARKER));
+    }
+
+    public void markRemoteCompletionReady() {
+        progress.put(REMOTE_COMPLETION_MARKER, REMOTE_COMPLETION_READY);
+        status = Status.NOT_STARTED;
     }
 }

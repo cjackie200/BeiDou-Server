@@ -16,18 +16,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public final class GlobalStorageService {
     public static final int PAGE_COUNT = 20;
     public static final int PAGE_SIZE = 200;
 
-    private static final DateTimeFormatter DISPLAY_TIME = DateTimeFormatter.ofPattern("MM-dd HH:mm");
     private static final Object LOCK = new Object();
 
     private GlobalStorageService() {
@@ -173,7 +171,7 @@ public final class GlobalStorageService {
                 if (quantity > source.getQuantity()) {
                     return Result.fail("\u5b58\u5165\u6570\u91cf\u8d85\u8fc7\u6301\u6709\u6570\u91cf\u3002");
                 }
-                if (countPageItems(pageNo) >= PAGE_SIZE) {
+                if (countPageItems(pageNo) >= PAGE_SIZE && !hasStack(itemId, type.getType())) {
                     return Result.fail("\u5f53\u524d\u5185\u90e8\u5206\u7247\u5df2\u6ee1\u3002");
                 }
 
@@ -195,7 +193,9 @@ public final class GlobalStorageService {
 
     public static Result depositAuto(Character player, int inventoryType, int slot, int quantity) {
         synchronized (LOCK) {
-            int pageNo = findAvailablePage();
+            InventoryType type = InventoryType.getByType((byte) inventoryType);
+            Item source = isNormalInventoryType(type) ? player.getInventory(type).getItem((short) slot) : null;
+            int pageNo = source == null ? -1 : findStoragePage(source);
             if (pageNo < 1) {
                 return Result.fail("\u5168\u670d\u4ed3\u5e93\u5df2\u6ee1\u3002");
             }
@@ -204,6 +204,13 @@ public final class GlobalStorageService {
     }
 
     public static Result withdraw(Character player, long entryId) {
+        return withdraw(player, entryId, Integer.MAX_VALUE);
+    }
+
+    public static Result withdraw(Character player, long entryId, int requestedQuantity) {
+        if (requestedQuantity < 1) {
+            return Result.fail("取出数量不正确。");
+        }
         synchronized (LOCK) {
             try (Connection con = DatabaseConnection.getConnection()) {
                 con.setAutoCommit(false);
@@ -214,14 +221,21 @@ public final class GlobalStorageService {
                         return Result.fail("\u7269\u54c1\u5df2\u7ecf\u4e0d\u5b58\u5728\uff0c\u53ef\u80fd\u88ab\u5176\u4ed6\u73a9\u5bb6\u53d6\u8d70\u4e86\u3002");
                     }
 
-                    Item item = loadItem(con, entryId, entry.itemId, entry.inventoryType, entry.quantity, entry.owner,
+                    int quantity = entry.inventoryType == InventoryType.EQUIP.getType()
+                            ? 1
+                            : Math.min(entry.quantity, Math.min(requestedQuantity, Short.MAX_VALUE));
+                    Item item = loadItem(con, entryId, entry.itemId, entry.inventoryType, quantity, entry.owner,
                             entry.petId, entry.flag, entry.expiration, entry.giftFrom);
                     if (!InventoryManipulator.checkSpace(player.getClient(), item.getItemId(), item.getQuantity(), item.getOwner())) {
                         con.rollback();
                         return Result.fail("\u80cc\u5305\u7a7a\u95f4\u4e0d\u8db3\u3002");
                     }
 
-                    deleteItem(con, entryId);
+                    if (quantity >= entry.quantity) {
+                        deleteItem(con, entryId);
+                    } else {
+                        updateQuantity(con, entryId, entry.quantity - quantity);
+                    }
                     logAction(con, "WITHDRAW", entry.pageNo, entryId, item, player);
                     con.commit();
 
@@ -285,16 +299,15 @@ public final class GlobalStorageService {
                 List<Item> candidates = new ArrayList<>(inventory.list());
                 candidates.sort(Comparator.comparingInt(Item::getPosition));
                 for (Item candidate : candidates) {
-                    int pageNo = findAvailablePage();
-                    if (pageNo < 1) {
-                        storageFull = true;
-                        break;
-                    }
-
                     Item source = inventory.getItem(candidate.getPosition());
                     if (source == null || source.getInventoryType() != type || !isAllowed(source)) {
                         skipped++;
                         continue;
+                    }
+                    int pageNo = findStoragePage(source);
+                    if (pageNo < 1) {
+                        storageFull = true;
+                        break;
                     }
 
                     Item storedItem = source.copy();
@@ -328,6 +341,30 @@ public final class GlobalStorageService {
     public static String getItemName(int itemId) {
         String name = ItemInformationProvider.getInstance().getName(itemId);
         return name == null ? String.valueOf(itemId) : name;
+    }
+
+    public static int getEquipJobCategory(int itemId) {
+        Map<String, Integer> stats = ItemInformationProvider.getInstance().getEquipStats(itemId);
+        Integer reqJob = stats == null ? null : stats.get("reqJob");
+        if (reqJob == null || reqJob <= 0) {
+            return 0;
+        }
+        if ((reqJob & 1) != 0) {
+            return 1;
+        }
+        if ((reqJob & 2) != 0) {
+            return 2;
+        }
+        if ((reqJob & 4) != 0) {
+            return 3;
+        }
+        if ((reqJob & 8) != 0) {
+            return 4;
+        }
+        if ((reqJob & 16) != 0) {
+            return 5;
+        }
+        return 0;
     }
 
     public static boolean isAllowed(Item item) {
@@ -376,6 +413,39 @@ public final class GlobalStorageService {
         return -1;
     }
 
+    private static int findStoragePage(Item item) {
+        if (item.getInventoryType() != InventoryType.EQUIP) {
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement(
+                         "SELECT page_no FROM global_storage_items WHERE itemid = ? AND inventorytype = ? ORDER BY id LIMIT 1")) {
+                ps.setInt(1, item.getItemId());
+                ps.setInt(2, item.getInventoryType().getType());
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException("Failed to find global storage stack", e);
+            }
+        }
+        return findAvailablePage();
+    }
+
+    private static boolean hasStack(int itemId, int inventoryType) {
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                     "SELECT 1 FROM global_storage_items WHERE itemid = ? AND inventorytype = ? LIMIT 1")) {
+            ps.setInt(1, itemId);
+            ps.setInt(2, inventoryType);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to check global storage stack", e);
+        }
+    }
+
     private static int countAllItems() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM global_storage_items")) {
@@ -403,7 +473,7 @@ public final class GlobalStorageService {
         try (Connection con = DatabaseConnection.getConnection()) {
             con.setAutoCommit(false);
             try {
-                long id = insertItem(con, item, pageNo, player);
+                long id = mergeOrInsertItem(con, item, pageNo, player);
                 logAction(con, "DEPOSIT", pageNo, id, item, player);
                 con.commit();
                 return id;
@@ -412,6 +482,33 @@ public final class GlobalStorageService {
                 throw e;
             } finally {
                 con.setAutoCommit(true);
+            }
+        }
+    }
+
+    private static long mergeOrInsertItem(Connection con, Item item, int pageNo, Character player) throws SQLException {
+        if (item.getInventoryType() != InventoryType.EQUIP) {
+            Long existingId = findStackForUpdate(con, item.getItemId(), item.getInventoryType().getType());
+            if (existingId != null) {
+                try (PreparedStatement ps = con.prepareStatement(
+                        "UPDATE global_storage_items SET quantity = quantity + ? WHERE id = ?")) {
+                    ps.setInt(1, item.getQuantity());
+                    ps.setLong(2, existingId);
+                    ps.executeUpdate();
+                }
+                return existingId;
+            }
+        }
+        return insertItem(con, item, pageNo, player);
+    }
+
+    private static Long findStackForUpdate(Connection con, int itemId, int inventoryType) throws SQLException {
+        String sql = "SELECT id FROM global_storage_items WHERE itemid = ? AND inventorytype = ? ORDER BY id LIMIT 1 FOR UPDATE";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, itemId);
+            ps.setInt(2, inventoryType);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getLong(1) : null;
             }
         }
     }
@@ -555,6 +652,14 @@ public final class GlobalStorageService {
         }
     }
 
+    private static void updateQuantity(Connection con, long id, int quantity) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("UPDATE global_storage_items SET quantity = ? WHERE id = ?")) {
+            ps.setInt(1, quantity);
+            ps.setLong(2, id);
+            ps.executeUpdate();
+        }
+    }
+
     private static void logAction(Connection con, String action, int pageNo, long storageItemId, Item item, Character player) throws SQLException {
         String sql = """
                 INSERT INTO global_storage_logs
@@ -575,8 +680,6 @@ public final class GlobalStorageService {
     }
 
     private static Entry readEntry(ResultSet rs) throws SQLException {
-        Timestamp time = rs.getTimestamp("create_time");
-        String displayTime = time == null ? "" : time.toLocalDateTime().format(DISPLAY_TIME);
         return new Entry(
                 rs.getLong("id"),
                 rs.getInt("page_no"),
@@ -590,14 +693,13 @@ public final class GlobalStorageService {
                 rs.getString("gift_from"),
                 rs.getInt("deposit_account_id"),
                 rs.getInt("deposit_char_id"),
-                rs.getString("deposit_char_name"),
-                displayTime
+                rs.getString("deposit_char_name")
         );
     }
 
     public record Entry(long id, int pageNo, int itemId, int inventoryType, int quantity, String owner,
                         int petId, int flag, long expiration, String giftFrom, int depositAccountId,
-                        int depositCharId, String depositCharName, String createTime) {
+                        int depositCharId, String depositCharName) {
         public String getName() {
             return getItemName(itemId);
         }

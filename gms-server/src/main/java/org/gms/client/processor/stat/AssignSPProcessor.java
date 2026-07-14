@@ -27,6 +27,8 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
+import org.gms.client.Job;
+import org.gms.model.pojo.SkillEntry;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.skills.Aran;
@@ -81,6 +83,10 @@ public class AssignSPProcessor {
             Skill skill = SkillFactory.getSkill(skillid);
             int curLevel = player.getSkillLevel(skill);
             int nextLevel = curLevel + 1;
+            if (!hasRequiredEarlierJobSp(player, skillid)) {
+                player.sendPacket(PacketCreator.enableActions());
+                return;
+            }
             if (!SkillBreakthroughService.canAssignLevel(player, skill, nextLevel)) {
                 player.sendPacket(PacketCreator.enableActions());
                 return;
@@ -106,5 +112,37 @@ public class AssignSPProcessor {
         } finally {
             c.unlockClient();
         }
+    }
+
+    private static boolean hasRequiredEarlierJobSp(Character player, int skillId) {
+        int targetStage = GameConstants.getJobBranch(Job.getById(skillId / 10000));
+        if (targetStage <= 1 || targetStage > 4) {
+            return true;
+        }
+
+        int[] invested = new int[5];
+        for (var entry : player.getSkills().entrySet()) {
+            Skill learnedSkill = entry.getKey();
+            SkillEntry learned = entry.getValue();
+            if (learned == null || learned.skillLevel <= 0) {
+                continue;
+            }
+            int stage = GameConstants.getJobBranch(Job.getById(learnedSkill.getId() / 10000));
+            if (stage >= 1 && stage <= 4) {
+                invested[stage] += learned.skillLevel;
+            }
+        }
+
+        int firstJobRequirement = player.getJob().isA(Job.MAGICIAN) ? 67 : 61;
+        int[] required = {0, firstJobRequirement, 121, 151, 0};
+        for (int stage = 1; stage < targetStage; stage++) {
+            int missing = required[stage] - invested[stage];
+            if (missing > 0) {
+                player.message(stage + "转技能总投入不足：当前已投入 " + invested[stage]
+                        + " 点，还需要投入 " + missing + " 点后才能学习" + targetStage + "转技能。");
+                return false;
+            }
+        }
+        return true;
     }
 }

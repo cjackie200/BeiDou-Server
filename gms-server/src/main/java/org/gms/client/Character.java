@@ -86,6 +86,7 @@ import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.ElementalResonanceQuest;
 import org.gms.server.quest.Quest;
+import org.gms.server.quest.SkillBreakthroughService;
 import org.gms.service.*;
 import org.gms.util.*;
 import org.gms.util.packets.WeddingPackets;
@@ -6881,6 +6882,10 @@ public class Character extends AbstractCharacterObject {
                     }
 
                     if (qs.progress(id)) {
+                        if ((qs.getQuestID() == 30005 || SkillBreakthroughService.isQuestId(qs.getQuestID()))
+                                && qs.getQuest().canComplete(this, null)) {
+                            qs.markRemoteCompletionReady();
+                        }
                         announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
                         if (qs.getInfoNumber() > 0) {
                             announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, true);

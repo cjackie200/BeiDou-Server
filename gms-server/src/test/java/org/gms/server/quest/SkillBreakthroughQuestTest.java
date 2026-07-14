@@ -45,7 +45,8 @@ class SkillBreakthroughQuestTest {
 
             Element info = child(img("wz-zh-CN/Quest.wz/QuestInfo.img.xml"), questId);
             assertEquals("1", attr(child(info, "autoStart"), "value"));
-            assertEquals("1", attr(child(info, "autoPreComplete"), "value"));
+            assertFalse(hasChild(info, "autoPreComplete"),
+                    "running breakthrough quests must not remain in the lightbulb list");
             assertNotNull(child(img("wz-zh-CN/Quest.wz/Act.img.xml"), questId));
             assertNotNull(child(img("wz-zh-CN/Quest.wz/Say.img.xml"), questId));
         }
@@ -176,6 +177,17 @@ class SkillBreakthroughQuestTest {
             }
         }
         throw new AssertionError("Missing child '" + name + "' under '" + parent.getAttribute("name") + "'");
+    }
+
+    private static boolean hasChild(Element parent, String name) {
+        NodeList children = parent.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            Node node = children.item(i);
+            if (node instanceof Element element && name.equals(element.getAttribute("name"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static String attr(Element element, String name) {
