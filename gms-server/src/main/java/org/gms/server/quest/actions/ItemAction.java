@@ -67,7 +67,6 @@ public class ItemAction extends AbstractQuestAction {
             int id = DataTool.getInt(iEntry.getChildByPath("id"));
             int count = DataTool.getInt(iEntry.getChildByPath("count"), 1);
             if (count == 0) {
-                log.warn("Ignored zero-quantity item action for item {} in quest {}", id, questID);
                 continue;
             }
             int period = DataTool.getInt(iEntry.getChildByPath("period"), 0);

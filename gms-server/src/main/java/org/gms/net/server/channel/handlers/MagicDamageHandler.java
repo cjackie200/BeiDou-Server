@@ -16,6 +16,7 @@ import org.gms.constants.skills.ILArchMage;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.Packet;
 import org.gms.server.StatEffect;
+import org.gms.server.TimerManager;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.life.Monster;
 import org.gms.util.PacketCreator;
@@ -61,9 +62,19 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
                 chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(effect_.getCooldown()));
             }
         }
+        MagicBoltShot magicBoltShot = attack.skill == 2001004
+                ? captureMagicBoltShot(attack, chr.getMap())
+                : null;
         applyAttack(attack, chr, effect.getAttackCount());
 
-        if (attack.skill == 2001004 || attack.skill == 2101005) {
+        if (magicBoltShot != null) {
+            MapleMap castMap = chr.getMap();
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMap() == castMap) {
+                    applyMagicBoltSecondShot(attack, chr, magicBoltShot);
+                }
+            }, 150);
+        } else if (attack.skill == 2101005) {
             applyBounce(attack, chr);
         }
 
@@ -137,11 +148,49 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         }
     }
 
+    private MagicBoltShot captureMagicBoltShot(AttackInfo attack, MapleMap map) {
+        for (Map.Entry<Integer, List<Integer>> entry : attack.allDamage.entrySet()) {
+            Monster monster = map.getMonsterByOid(entry.getKey());
+            List<Integer> damageLines = entry.getValue();
+            if (monster != null && damageLines != null && !damageLines.isEmpty()) {
+                return new MagicBoltShot(monster.getObjectId(), monster.getPosition(), damageLines.get(0));
+            }
+        }
+        return null;
+    }
+
+    private void applyMagicBoltSecondShot(AttackInfo attack, Character chr, MagicBoltShot shot) {
+        MapleMap map = chr.getMap();
+        Monster target = map.getMonsterByOid(shot.primaryOid());
+        if (target == null || !target.isAlive()) {
+            target = map.getAllMonsters().stream()
+                    .filter(Monster::isAlive)
+                    .filter(monster -> monster.getObjectId() != shot.primaryOid())
+                    .filter(monster -> shot.origin().distance(monster.getPosition()) <= 200)
+                    .min(Comparator.comparingDouble(monster -> shot.origin().distance(monster.getPosition())))
+                    .orElse(null);
+        }
+        if (target == null) {
+            return;
+        }
+
+        int damage = Math.max(1, shot.damage());
+        byte attackedAndDamage = (byte) ((1 << 4) | 1);
+        Map<Integer, List<Integer>> damageMap = Map.of(target.getObjectId(), List.of(damage));
+        map.broadcastMessage(PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel,
+                attack.stance, attackedAndDamage, damageMap, -1, attack.speed,
+                attack.direction, attack.display));
+        map.damageMonster(chr, target, damage);
+    }
+
     static int calculateBounceCount(int alreadyHitCount, int candidateCount) {
         if (candidateCount <= 0 || alreadyHitCount >= 6) {
             return 0;
         }
         return Math.min(5, Math.min(candidateCount, 6 - Math.max(0, alreadyHitCount)));
+    }
+
+    private record MagicBoltShot(int primaryOid, Point origin, int damage) {
     }
 
 }
