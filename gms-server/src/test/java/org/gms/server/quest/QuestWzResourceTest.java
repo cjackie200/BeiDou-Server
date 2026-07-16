@@ -80,7 +80,8 @@ class QuestWzResourceTest {
         assertEquals("q30005e", value(child(quest30005Check, "imgdir", "1"), "string", "endscript"));
         Element quest30005Info = topLevelQuest(questInfo, 30005);
         assertEquals("1", value(quest30005Info, "int", "autoStart"));
-        assertEquals("1", value(quest30005Info, "int", "autoPreComplete"));
+        assertFalse(hasChild(quest30005Info, "int", "autoPreComplete"),
+                "accepted Black Wukong quest must leave the lightbulb list until completion");
 
         Element quest29508Check = topLevelQuest(check, 29508);
         assertEquals("q29508s", value(child(quest29508Check, "imgdir", "0"), "string", "startscript"));

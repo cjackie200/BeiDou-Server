@@ -6,6 +6,9 @@ var state = "main";
 var viewGroup = 1;
 var viewPageNo = 1;
 var viewKeyword = "";
+var equipJobCategory = -1;
+var depositInventoryType = 1;
+var pendingWithdrawEntry = null;
 var entries = new ArrayList();
 var depositItems = new ArrayList();
 var lastWithdrawMessage = "";
@@ -28,6 +31,12 @@ function action(mode, type, selection) {
         handleView(selection);
     } else if (state === "searchInput") {
         handleSearchInput();
+    } else if (state === "equipCategory") {
+        handleEquipCategory(selection);
+    } else if (state === "withdrawQuantity") {
+        handleWithdrawQuantity(selection);
+    } else if (state === "depositType") {
+        handleDepositType(selection);
     } else if (state === "depositItem") {
         handleDepositItem(selection);
     } else if (state === "batchType") {
@@ -56,17 +65,47 @@ function showMain() {
 }
 
 function handleMain(selection) {
-    if (selection >= 1 && selection <= 3) {
+    if (selection === 1) {
+        showEquipCategory();
+    } else if (selection >= 2 && selection <= 3) {
         viewKeyword = "";
         showGroup(selection, 1);
     } else if (selection === 4) {
         lastDepositMessage = "";
-        showDepositItemList();
+        showDepositType();
     } else if (selection === 5) {
         showBatchType();
     } else {
         cm.dispose();
     }
+}
+
+function showEquipCategory() {
+    state = "equipCategory";
+    var text = "#e查看/取出装备 - 选择职业#n\r\n\r\n";
+    text += "#L0#全部装备#l\r\n";
+    text += "#L1#通用装备#l\r\n";
+    text += "#L2#战士装备#l\r\n";
+    text += "#L3#魔法师装备#l\r\n";
+    text += "#L4#弓箭手装备#l\r\n";
+    text += "#L5#飞侠装备#l\r\n";
+    text += "#L6#海盗装备#l\r\n";
+    text += "#L900000#返回全服仓库#l";
+    cm.sendSimple(text);
+}
+
+function handleEquipCategory(selection) {
+    if (selection === 900000) {
+        showMain();
+        return;
+    }
+    if (selection < 0 || selection > 6) {
+        showEquipCategory();
+        return;
+    }
+    equipJobCategory = selection - 1;
+    viewKeyword = "";
+    showGroup(1, 1);
 }
 
 function showGroup(group, page) {
@@ -79,7 +118,7 @@ function showGroup(group, page) {
     viewPageNo = Math.max(1, Math.min(page, maxPage));
     entries = sliceEntries(sortedEntries, viewPageNo);
 
-    var text = "#e全服仓库 - " + getGroupName(group) + "#n\r\n";
+    var text = "#e全服仓库 - " + getGroupName(group) + getEquipCategorySuffix(group) + "#n\r\n";
     text += "数量：#b" + total + "#k  列表页：" + viewPageNo + " / " + maxPage + "\r\n";
     if (viewKeyword !== "") {
         text += "当前搜索：#b" + viewKeyword + "#k\r\n";
@@ -107,7 +146,7 @@ function showGroup(group, page) {
             var entry = entries.get(i);
             text += "#L" + i + "##v" + entry.itemId() + "# #z" + entry.itemId() + "#";
             text += " x" + entry.quantity();
-            text += " #d[" + entry.depositCharName() + " " + entry.createTime() + "]#k#l\r\n";
+            text += "#l\r\n";
         }
     }
 
@@ -123,7 +162,11 @@ function showGroup(group, page) {
 
 function handleView(selection) {
     if (selection === 900000) {
-        showMain();
+        if (viewGroup === 1) {
+            showEquipCategory();
+        } else {
+            showMain();
+        }
         return;
     }
     if (selection === 900001) {
@@ -150,7 +193,26 @@ function handleView(selection) {
     }
 
     var entry = entries.get(selection);
-    var result = GlobalStorageService.withdraw(cm.getPlayer(), entry.id());
+    if (entry.inventoryType() !== 1 && entry.quantity() > 1) {
+        pendingWithdrawEntry = entry;
+        state = "withdrawQuantity";
+        cm.sendGetNumber("#e取出数量#n\r\n#v" + entry.itemId() + "# #z" + entry.itemId()
+                + "#\r\n仓库共有 #b" + entry.quantity() + "#k 个，请输入取出数量。",
+                1, 1, Math.min(entry.quantity(), 32767));
+        return;
+    }
+    var result = GlobalStorageService.withdraw(cm.getPlayer(), entry.id(), 1);
+    lastWithdrawMessage = result.message();
+    showGroup(viewGroup, viewPageNo);
+}
+
+function handleWithdrawQuantity(quantity) {
+    if (pendingWithdrawEntry === null) {
+        showGroup(viewGroup, viewPageNo);
+        return;
+    }
+    var result = GlobalStorageService.withdraw(cm.getPlayer(), pendingWithdrawEntry.id(), quantity);
+    pendingWithdrawEntry = null;
     lastWithdrawMessage = result.message();
     showGroup(viewGroup, viewPageNo);
 }
@@ -168,22 +230,15 @@ function getSortedEntries(group, keyword) {
     }
 
     var allEntries = GlobalStorageService.listByInventoryGroup(group, 1, total);
-    var currentCharName = String(cm.getPlayer().getName());
     var items = [];
     for (var i = 0; i < allEntries.size(); i++) {
         var entry = allEntries.get(i);
-        if (matchesKeyword(entry, keyword)) {
+        if (matchesKeyword(entry, keyword) && matchesEquipJobCategory(entry)) {
             items.push(entry);
         }
     }
 
     items.sort(function (left, right) {
-        var leftOwned = String(left.depositCharName()) === currentCharName ? 0 : 1;
-        var rightOwned = String(right.depositCharName()) === currentCharName ? 0 : 1;
-        if (leftOwned !== rightOwned) {
-            return leftOwned - rightOwned;
-        }
-
         var categoryDiff = getItemCategory(left.itemId()) - getItemCategory(right.itemId());
         if (categoryDiff !== 0) {
             return categoryDiff;
@@ -206,6 +261,13 @@ function getSortedEntries(group, keyword) {
         sortedEntries.add(items[index]);
     }
     return sortedEntries;
+}
+
+function matchesEquipJobCategory(entry) {
+    if (entry.inventoryType() !== 1 || equipJobCategory < 0) {
+        return true;
+    }
+    return GlobalStorageService.getEquipJobCategory(entry.itemId()) === equipJobCategory;
 }
 
 function sliceEntries(sortedEntries, page) {
@@ -241,9 +303,33 @@ function getItemCategory(itemId) {
     return Math.floor(itemId / 10000);
 }
 
+function showDepositType() {
+    state = "depositType";
+    var text = "#e存入单个物品 - 选择背包页签#n\r\n\r\n";
+    text += "#L1#装备栏#l\r\n";
+    text += "#L2#消耗栏#l\r\n";
+    text += "#L3#设置栏#l\r\n";
+    text += "#L4#其他栏#l\r\n";
+    text += "#L900000#返回全服仓库#l";
+    cm.sendSimple(text);
+}
+
+function handleDepositType(selection) {
+    if (selection === 900000) {
+        showMain();
+        return;
+    }
+    if (selection < 1 || selection > 4) {
+        showDepositType();
+        return;
+    }
+    depositInventoryType = selection;
+    showDepositItemList();
+}
+
 function showDepositItemList() {
     state = "depositItem";
-    depositItems = GlobalStorageService.getDepositableItems(cm.getPlayer());
+    depositItems = GlobalStorageService.getDepositableItems(cm.getPlayer(), depositInventoryType);
 
     var text = "#e选择要存入的物品#n\r\n";
     text += "全服仓库剩余：#b" + GlobalStorageService.getRemainingCapacity() + "#k 格\r\n";
@@ -265,13 +351,17 @@ function showDepositItemList() {
         }
     }
 
-    text += "\r\n#L900000#返回全服仓库#l";
+    text += "\r\n#L900001#切换背包页签#l  #L900000#返回全服仓库#l";
     cm.sendSimple(text);
 }
 
 function handleDepositItem(selection) {
     if (selection === 900000) {
         showMain();
+        return;
+    }
+    if (selection === 900001) {
+        showDepositType();
         return;
     }
     if (selection < 0 || selection >= depositItems.size()) {
@@ -332,7 +422,7 @@ function showBatchResult() {
 function handleBatchResult(selection) {
     if (selection === 1) {
         lastDepositMessage = "";
-        showDepositItemList();
+        showDepositType();
     } else if (selection === 2) {
         showBatchType();
     } else if (selection >= 3 && selection <= 5) {
@@ -351,6 +441,14 @@ function getGroupName(group) {
         return "消耗";
     }
     return "其他";
+}
+
+function getEquipCategorySuffix(group) {
+    if (group !== 1 || equipJobCategory < 0) {
+        return "";
+    }
+    var names = ["通用", "战士", "魔法师", "弓箭手", "飞侠", "海盗"];
+    return " - " + names[equipJobCategory];
 }
 
 function getInventoryName(invType) {

@@ -25,6 +25,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.QuestStatus;
 import org.gms.constants.id.MapId;
+import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.scripting.quest.QuestScriptManager;
@@ -135,6 +136,20 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         return true;
     }
 
+    private static boolean openReadyRemoteQuestCompletion(Client c, Character player, Quest quest,
+                                                           short questId, int npcId) {
+        if (!isRemoteScriptQuest(questId)) {
+            return false;
+        }
+        QuestStatus status = player.getQuest(quest);
+        if (!status.isRemoteCompletionReady()) {
+            return false;
+        }
+        status.setStatus(QuestStatus.Status.STARTED);
+        player.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+        return endQuestScriptIfPresent(c, questId, npcId);
+    }
+
     private static void completeQuestNatively(InPacket p, Character player, Quest quest, int npcId) {
         if (p.available() >= 2) {
             quest.complete(player, npcId, (int) p.readShort());
@@ -162,6 +177,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 break;
             case 1: { // Start Quest
                 int npc = p.readInt();
+                if (openReadyRemoteQuestCompletion(c, player, quest, questid, npc)) {
+                    return;
+                }
                 if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
@@ -183,6 +201,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             }
             case 2: { // Complete Quest
                 int npc = p.readInt();
+                if (openReadyRemoteQuestCompletion(c, player, quest, questid, npc)) {
+                    return;
+                }
                 if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
@@ -217,6 +238,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 break;
             case 4: { // scripted start quest
                 int npc = p.readInt();
+                if (openReadyRemoteQuestCompletion(c, player, quest, questid, npc)) {
+                    return;
+                }
                 if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }
@@ -234,6 +258,9 @@ public final class QuestActionHandler extends AbstractPacketHandler {
             }
             case 5: { // scripted end quests
                 int npc = p.readInt();
+                if (openReadyRemoteQuestCompletion(c, player, quest, questid, npc)) {
+                    return;
+                }
                 if (handleInteractionHook(c, questid, npc, action)) {
                     return;
                 }

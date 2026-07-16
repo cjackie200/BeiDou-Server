@@ -76614,6 +76614,7 @@
             <int name="npc" value="9900000"/>
             <int name="lvmin" value="30"/>
             <int name="lvmax" value="250"/>
+            <imgdir name="quest"><imgdir name="0"><int name="id" value="30006"/><int name="state" value="2"/></imgdir></imgdir>
             <int name="normalAutoStart" value="1"/>
             <string name="startscript" value="q30007s"/>
         </imgdir>
@@ -76628,6 +76629,7 @@
             <int name="npc" value="9900000"/>
             <int name="lvmin" value="70"/>
             <int name="lvmax" value="250"/>
+            <imgdir name="quest"><imgdir name="0"><int name="id" value="30007"/><int name="state" value="2"/></imgdir></imgdir>
             <int name="normalAutoStart" value="1"/>
             <string name="startscript" value="q30008s"/>
         </imgdir>
@@ -76642,6 +76644,7 @@
             <int name="npc" value="9900000"/>
             <int name="lvmin" value="120"/>
             <int name="lvmax" value="250"/>
+            <imgdir name="quest"><imgdir name="0"><int name="id" value="30008"/><int name="state" value="2"/></imgdir></imgdir>
             <int name="normalAutoStart" value="1"/>
             <string name="startscript" value="q30009s"/>
         </imgdir>

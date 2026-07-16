@@ -10,6 +10,19 @@ function start(mode, type, selection) {
     }
 
     if (status == 0) {
+        if (SkillBreakthroughService.isReadyForCompletion(qm.getPlayer(), QUEST_ID)) {
+            qm.forceStartQuest();
+            var readyReward = SkillBreakthroughService.grantCompletionReward(qm.getPlayer(), QUEST_ID);
+            if (!readyReward.supported()) {
+                qm.sendOk("突破奖励结算失败，请重新登录后再试。");
+                qm.dispose();
+                return;
+            }
+            qm.forceCompleteQuest();
+            qm.sendOk(STAGE_NAME + "突破成功！\r\n\r\n已解锁对应突破技能上限，并赠送 #b"
+                    + readyReward.grantedSp() + "#k 点突破技能点。");
+            return;
+        }
         if (!SkillBreakthroughService.canStartQuest(qm.getPlayer(), QUEST_ID)) {
             qm.sendOk("你目前还不满足" + STAGE_NAME + "突破任务的条件，请先完成此前实际存在的突破阶段。");
             qm.dispose();
@@ -67,4 +80,3 @@ function advance(mode) {
     }
     return true;
 }
-

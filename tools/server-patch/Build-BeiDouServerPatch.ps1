@@ -157,17 +157,17 @@ $deleteManifest = [System.Collections.Generic.List[string]]::new()
 Add-PayloadFile -Source $jarPath -RelativePath "BeiDou.jar" -Manifest $copyManifest -PayloadRoot $payloadRoot
 
 $diffLines = [System.Collections.Generic.List[string]]::new()
-git diff --name-status "$From..$To" | ForEach-Object { $diffLines.Add($_) | Out-Null }
+git -c core.quotepath=false diff --name-status "$From..$To" | ForEach-Object { $diffLines.Add($_) | Out-Null }
 if ($LASTEXITCODE -ne 0) {
     throw "git diff failed for $From..$To"
 }
 
 if ($IncludeWorkingTree) {
-    git diff --name-status $To | ForEach-Object { $diffLines.Add($_) | Out-Null }
+    git -c core.quotepath=false diff --name-status $To | ForEach-Object { $diffLines.Add($_) | Out-Null }
     if ($LASTEXITCODE -ne 0) {
         throw "git working tree diff failed for $To"
     }
-    git ls-files --others --exclude-standard | ForEach-Object { $diffLines.Add("A`t$_") | Out-Null }
+    git -c core.quotepath=false ls-files --others --exclude-standard | ForEach-Object { $diffLines.Add("A`t$_") | Out-Null }
     if ($LASTEXITCODE -ne 0) {
         throw "git untracked file listing failed"
     }
@@ -202,7 +202,11 @@ foreach ($line in $diffLines) {
 }
 
 if (Test-Path -LiteralPath "client-update/manifest.json" -PathType Leaf) {
-    $clientManifest = Get-Content -LiteralPath "client-update/manifest.json" -Raw | ConvertFrom-Json
+    $clientManifestPath = (Resolve-Path -LiteralPath "client-update/manifest.json").Path
+    $clientManifest = [System.IO.File]::ReadAllText(
+        $clientManifestPath,
+        [System.Text.Encoding]::UTF8
+    ) | ConvertFrom-Json
     foreach ($version in $StaticVersions) {
         $versionEntry = $clientManifest.versions | Where-Object { $_.version -eq $version } | Select-Object -First 1
         if ($null -eq $versionEntry) {
