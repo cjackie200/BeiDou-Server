@@ -87,7 +87,8 @@ zip 内只能有同名 exe，不能放备用脚本、payload 目录或散文件�
 - 执行 Maven clean package，确保 `BeiDou.jar` 是最新的。
 - 从 `git diff --name-status <FROM>..<TO>` 收集运行时资源改动。
 - 始终把 `gms-server/target/BeiDou.jar` 放入 payload。
-- 把 `client-update/manifest.json` 和 `-StaticVersions` 指定的静态版本目录放入 payload。
+- 仅当指定 `-StaticVersions` 时，把 `client-update/manifest.json` 和对应静态版本目录放入 payload；
+  纯服务端补丁不修改 IIS 客户端更新清单。
 - 生成 `copy-manifest.json`、`delete-manifest.json` 和 `patch-metadata.json`。
 - 发布 Windows x64 单文件 GUI 安装器。
 - 输出 exe、zip 和 SHA256。

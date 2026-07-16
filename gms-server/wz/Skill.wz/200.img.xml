@@ -513,120 +513,140 @@
                     <string name="hs" value="h1" />
                     <int name="mpCon" value="6" />
                     <int name="mad" value="20" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="1" />
                 </imgdir>
                 <imgdir name="2">
                     <string name="hs" value="h2" />
                     <int name="mpCon" value="6" />
                     <int name="mad" value="21" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="1" />
                 </imgdir>
                 <imgdir name="3">
                     <string name="hs" value="h3" />
                     <int name="mpCon" value="6" />
                     <int name="mad" value="22" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="2" />
                 </imgdir>
                 <imgdir name="4">
                     <string name="hs" value="h4" />
                     <int name="mpCon" value="6" />
                     <int name="mad" value="23" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="2" />
                 </imgdir>
                 <imgdir name="5">
                     <string name="hs" value="h5" />
                     <int name="mpCon" value="7" />
                     <int name="mad" value="26" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="3" />
                 </imgdir>
                 <imgdir name="6">
                     <string name="hs" value="h6" />
                     <int name="mpCon" value="7" />
                     <int name="mad" value="27" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="3" />
                 </imgdir>
                 <imgdir name="7">
                     <string name="hs" value="h7" />
                     <int name="mpCon" value="7" />
                     <int name="mad" value="28" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="4" />
                 </imgdir>
                 <imgdir name="8">
                     <string name="hs" value="h8" />
                     <int name="mpCon" value="8" />
                     <int name="mad" value="31" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="4" />
                 </imgdir>
                 <imgdir name="9">
                     <string name="hs" value="h9" />
                     <int name="mpCon" value="8" />
                     <int name="mad" value="32" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="5" />
                 </imgdir>
                 <imgdir name="10">
                     <string name="hs" value="h10" />
                     <int name="mpCon" value="9" />
                     <int name="mad" value="35" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="5" />
                 </imgdir>
                 <imgdir name="11">
                     <string name="hs" value="h11" />
                     <int name="mpCon" value="9" />
                     <int name="mad" value="36" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="6" />
                 </imgdir>
                 <imgdir name="12">
                     <string name="hs" value="h12" />
                     <int name="mpCon" value="10" />
                     <int name="mad" value="39" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="6" />
                 </imgdir>
                 <imgdir name="13">
                     <string name="hs" value="h13" />
                     <int name="mpCon" value="10" />
                     <int name="mad" value="40" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="7" />
                 </imgdir>
                 <imgdir name="14">
                     <string name="hs" value="h14" />
                     <int name="mpCon" value="11" />
                     <int name="mad" value="43" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="7" />
                 </imgdir>
                 <imgdir name="15">
                     <string name="hs" value="h15" />
                     <int name="mpCon" value="11" />
                     <int name="mad" value="44" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="8" />
                 </imgdir>
                 <imgdir name="16">
                     <string name="hs" value="h16" />
                     <int name="mpCon" value="12" />
                     <int name="mad" value="47" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="8" />
                 </imgdir>
                 <imgdir name="17">
                     <string name="hs" value="h17" />
                     <int name="mpCon" value="12" />
                     <int name="mad" value="48" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="9" />
                 </imgdir>
                 <imgdir name="18">
                     <string name="hs" value="h18" />
                     <int name="mpCon" value="13" />
                     <int name="mad" value="51" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="9" />
                 </imgdir>
                 <imgdir name="19">
                     <string name="hs" value="h19" />
                     <int name="mpCon" value="13" />
                     <int name="mad" value="52" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="10" />
                 </imgdir>
                 <imgdir name="20">
                     <string name="hs" value="h20" />
                     <int name="mpCon" value="14" />
                     <int name="mad" value="55" /><int name="mobCount" value="6" />
+                    <int name="attackCount" value="2" />
                     <int name="mastery" value="10" />
                 </imgdir>
             </imgdir>
