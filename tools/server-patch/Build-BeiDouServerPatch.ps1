@@ -201,7 +201,7 @@ foreach ($line in $diffLines) {
     Add-PayloadFile -Source $source -RelativePath $payloadPath -Manifest $copyManifest -PayloadRoot $payloadRoot
 }
 
-if (Test-Path -LiteralPath "client-update/manifest.json" -PathType Leaf) {
+if ($StaticVersions.Count -gt 0 -and (Test-Path -LiteralPath "client-update/manifest.json" -PathType Leaf)) {
     $clientManifestPath = (Resolve-Path -LiteralPath "client-update/manifest.json").Path
     $clientManifest = [System.IO.File]::ReadAllText(
         $clientManifestPath,

@@ -110,7 +110,7 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         }));
 
         float[] decayRates = {0.95f, 0.90f, 0.85f, 0.80f, 0.75f};
-        int bounceCount = Math.min(5, candidates.size());
+        int bounceCount = calculateBounceCount(hitOids.size(), candidates.size());
         Skill skill = SkillFactory.getSkill(attack.skill);
         StatEffect bounceEffect = skill.getEffect(attack.skilllevel);
         boolean applyPoison = attack.skill == 2101005 && bounceEffect != null;
@@ -136,4 +136,12 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
             map.damageMonster(chr, target, bounceDmg);
         }
     }
+
+    static int calculateBounceCount(int alreadyHitCount, int candidateCount) {
+        if (candidateCount <= 0 || alreadyHitCount >= 6) {
+            return 0;
+        }
+        return Math.min(5, Math.min(candidateCount, 6 - Math.max(0, alreadyHitCount)));
+    }
+
 }

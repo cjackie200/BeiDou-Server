@@ -55,6 +55,8 @@ class SkillBreakthroughQuestTest {
     @Test
     void breakthroughSkillsUseCurrentMaxPlusOneLevels() throws Exception {
         assertSkillLevelValue(1001004, 21, "damage", "380");
+        assertSkillLevelValue(2301005, 31, "mad", "160");
+        assertSkillLevelValue(2301005, 31, "attackCount", "3");
         assertSkillLevelValue(3121002, 31, "y", "145");
         assertSkillLevelValue(5221006, 11, "cooltime", "0");
         assertSkillLevelValue(5221006, 11, "speed", "40");
