@@ -1,5 +1,5 @@
 {
-    "latestVersion":  "v1.0.11",
+    "latestVersion":  "v1.0.12",
     "versions":  [
                      {
                          "version":  "v1.0.2",
@@ -1137,15 +1137,31 @@
                          "files":  [
                                        {
                                            "path":  "Data/Skill/200.img",
-                                           "size":  155810,
-                                           "sha256":  "B1FF7795DB8C866269DC85B1FF3F3DB368DEC3F48082F6E1F49A7648D344F409",
+                                           "size":  155070,
+                                           "sha256":  "8BE1C5AC09970338BBE428ED41712B458DCBFC2DE57DD5003F3870A39A7FABE1",
                                            "url":  "/client-update/files/v1.0.11/Data/Skill/200.img"
                                        }
                                    ],
                          "releaseNotes":  [
-                                              "法师魔法弹改为每次施法显示两个前后排列的魔法弹，并同步造成两段伤害。",
-                                              "修复多目标弹射数量可能超过技能目标上限的问题。",
+                                              "法师魔法弹改为两枚独立攻击：第二枚延迟发射，原目标死亡时自动转向附近怪物。",
+                                              "魔法弹两枚弹体分别结算一次伤害，不再把两段伤害叠在同一弹体动画上。",
                                               "补齐圣箭术突破等级的三段伤害服务端数据。"
+                                          ]
+                     },
+                     {
+                         "version":  "v1.0.12",
+                         "baseVersion":  "v1.0.11",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Skill/200.img",
+                                           "size":  155810,
+                                           "sha256":  "B1FF7795DB8C866269DC85B1FF3F3DB368DEC3F48082F6E1F49A7648D344F409",
+                                           "url":  "/client-update/files/v1.0.12/Data/Skill/200.img"
+                                       }
+                                   ],
+                         "releaseNotes":  [
+                                              "恢复魔法弹客户端双弹可见动画，攻击时可以看到两枚魔法弹。",
+                                              "服务端继续按150毫秒延迟独立结算第二枚；原目标死亡时转向200范围内最近怪物。"
                                           ]
                      }
                  ]
