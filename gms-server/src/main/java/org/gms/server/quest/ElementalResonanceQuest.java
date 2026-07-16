@@ -55,7 +55,7 @@ public final class ElementalResonanceQuest {
             new Stage(2, (short) 29992, 100, "元素共鸣:回响",
                     new int[]{1382045, 1382046, 1382047, 1382048, 1382061},
                     List.of(boss(5220004, 4033015), boss(5220003, 4033016), boss(6220000, 4033017)),
-                    List.of(req(4000144, 100), req(4000146, 100), req(4000176, 20), req(BLACK_CRYSTAL, 2), req(STAR_ROCK, 1)),
+                    List.of(req(4000144, 100), req(4000146, 100), req(4000176, 2), req(BLACK_CRYSTAL, 2), req(STAR_ROCK, 1)),
                     8_000_000,
                     List.of(req(BLACK_CRYSTAL, 1), req(STAR_ROCK, 1)),
                     2_000_000,

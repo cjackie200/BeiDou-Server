@@ -648,7 +648,7 @@ class ElementalResonanceQuestTest {
     private static void addTierTwoBaseMaterials(Character chr) {
         addItem(chr, 4000144, 100);
         addItem(chr, 4000146, 100);
-        addItem(chr, 4000176, 20);
+        addItem(chr, 4000176, 2);
         addItem(chr, 4021008, 2);
         addItem(chr, 4021009, 1);
     }
