@@ -215,9 +215,15 @@ if ($StaticVersions.Count -gt 0 -and (Test-Path -LiteralPath "client-update/mani
         if ($null -eq $versionEntry) {
             throw "Static update version is missing from client manifest: $version"
         }
-        if ($null -eq $versionEntry.releaseNotes -or @($versionEntry.releaseNotes).Count -eq 0) {
-            throw "Static update version must include releaseNotes: $version"
-        }
+    }
+    $latestVersionEntry = $clientManifest.versions |
+        Where-Object { $_.version -eq $clientManifest.latestVersion } |
+        Select-Object -First 1
+    if ($null -eq $latestVersionEntry) {
+        throw "Client manifest latestVersion is missing from versions: $($clientManifest.latestVersion)"
+    }
+    if ($null -eq $latestVersionEntry.releaseNotes -or @($latestVersionEntry.releaseNotes).Count -eq 0) {
+        throw "Client manifest latest version must include releaseNotes: $($clientManifest.latestVersion)"
     }
     Add-PayloadFile -Source "client-update/manifest.json" -RelativePath "client-update/manifest.json" -Manifest $copyManifest -PayloadRoot $payloadRoot
 }

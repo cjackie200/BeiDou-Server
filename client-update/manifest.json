@@ -1,5 +1,5 @@
 {
-    "latestVersion":  "v1.0.13",
+    "latestVersion":  "v1.0.14",
     "versions":  [
                      {
                          "version":  "v1.0.2",
@@ -1178,6 +1178,22 @@
                          "releaseNotes":  [
                                               "修正生命之证任务中怪物名称与目标ID不一致的说明。",
                                               "统一骷髅指挥官、死灵王、绿帽海贼、邪恶绵羊、泥人妖、追忆系列等任务目标名称。"
+                                          ]
+                     },
+                     {
+                         "version":  "v1.0.14",
+                         "baseVersion":  "v1.0.13",
+                         "files":  [
+                                       {
+                                           "path":  "ijl15.dll",
+                                           "size":  587776,
+                                           "sha256":  "F9142CFDF082DFBF64B86B6E781D4ED7500184026AD45F4C2A422186F8C84A0B",
+                                           "url":  "/client-update/files/v1.0.14/ijl15.dll"
+                                       }
+                                   ],
+                         "releaseNotes":  [
+                                              "全职业玩家等级上限由200级开放至250级，骑士团同步开放至250级。",
+                                              "新增201至249级经验曲线，并同步修复客户端200级以上经验条与升级需求显示。"
                                           ]
                      }
                  ]
