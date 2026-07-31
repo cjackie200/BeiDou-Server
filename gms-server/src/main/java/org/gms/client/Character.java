@@ -5014,7 +5014,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getMaxClassLevel() {
-        return isCygnus() ? 120 : 200;
+        return ExpTable.MAX_PLAYER_LEVEL;
     }
 
     public int getMaxLevel() {

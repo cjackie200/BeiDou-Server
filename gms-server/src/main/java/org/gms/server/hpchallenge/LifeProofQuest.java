@@ -1571,21 +1571,20 @@ public final class LifeProofQuest {
         }
 
         if (active.kind() == QuestKind.OPTION_SLOT) {
-            // Generic path (Character.raiseQuestMobCount -> QuestStatus.progress)
-            // already incremented the native mob counter. Read current progress
-            // from QuestStatus and sync to DB for persistence.
             QuestStatus status = chr.getQuest(Quest.getInstance(active.questId()));
-            int progress = 0;
-            for (int targetId : objective.targetIds()) {
-                progress = Math.max(progress, parseProgress(status.getProgress(targetId)));
-            }
-            progress = Math.min(objective.requiredCount(), progress);
-
             HpChallengeService.LifeProofOptionalProgress selected = HpChallengeService.selectedLifeProofOptional(
                     chr, active.stage(), active.selectorNo());
             int before = selected != null ? selected.currentCount() : 0;
-            if (progress > before) {
-                HpChallengeService.setLifeProofOptionalProgress(chr, active.stage(), active.selectorNo(), progress);
+            int progress = advanceOptionSlotMobProgress(status, objective, before);
+            if (progress <= before) {
+                return;
+            }
+            if (HpChallengeService.setLifeProofOptionalProgress(
+                    chr, active.stage(), active.selectorNo(), progress)) {
+                chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, false);
+                if (status.getInfoNumber() > 0) {
+                    chr.announceUpdateQuest(DelayedQuestUpdate.UPDATE, status, true);
+                }
                 syncActiveObjectiveProgress(chr);
             }
             if (before < objective.requiredCount() && progress >= objective.requiredCount()) {
@@ -1600,6 +1599,22 @@ public final class LifeProofQuest {
         boolean changed = migrateLegacyMainMobProgress(status, objective);
         changed = syncSharedMainMobProgress(status, objective) || changed;
         refreshMainMobProgress(chr, active, status, changed);
+    }
+
+    static int advanceOptionSlotMobProgress(QuestStatus status, Objective objective, int persistedProgress) {
+        if (status == null || objective == null || objective.targetIds().isEmpty()) {
+            return Math.max(0, persistedProgress);
+        }
+        int progress = Math.max(0, persistedProgress);
+        for (int targetId : objective.targetIds()) {
+            progress = Math.max(progress, parseProgress(status.getProgress(targetId)));
+        }
+        progress = Math.min(objective.requiredCount(), progress + 1);
+        String value = paddedProgress(progress);
+        for (int targetId : objective.targetIds()) {
+            status.setProgress(targetId, value);
+        }
+        return progress;
     }
 
     public static boolean shouldSkipGenericMobProgress(Character chr, QuestStatus status, int mobId) {

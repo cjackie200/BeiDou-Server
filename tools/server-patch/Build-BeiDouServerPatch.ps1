@@ -130,6 +130,9 @@ $outputRoot = Resolve-RepoRelativeDirectory -RepoRoot $repoRoot -RelativePath $O
 
 if (-not $SkipMavenPackage) {
     mvn -pl gms-server -am clean package -DskipTests
+    if ($LASTEXITCODE -ne 0) {
+        throw "Maven clean package failed with exit code $LASTEXITCODE."
+    }
 }
 
 $jarPath = Join-Path $repoRoot "gms-server/target/BeiDou.jar"

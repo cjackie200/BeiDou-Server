@@ -3535,7 +3535,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5108">
-        <string name="name" value="生命之证 I：击杀指挥官骷髅" />
+        <string name="name" value="生命之证 I：击杀骷髅指挥官" />
         <string name="0" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o7130103# #r#a51081##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -3725,7 +3725,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5133">
-        <string name="name" value="生命之证 I：击杀强化死灵" />
+        <string name="name" value="生命之证 I：击杀死灵王" />
         <string name="0" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。 前往#p1032001#，接受下一项战斗试炼。" />
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o7130300# #r#a51331##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -4295,7 +4295,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5208">
-        <string name="name" value="生命之证 I：击杀双刀蓝帽海贼" />
+        <string name="name" value="生命之证 I：击杀绿帽海贼" />
         <string name="0" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。 前往#p1090000#，接受下一项战斗试炼。" />
         <string name="1" value="导师要你先确认五大职业的意志，再从旧日强敌身上取回第一枚印记。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7160000# #r#a52081##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -4441,7 +4441,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5229">
-        <string name="name" value="生命之证 II：击杀短刃蜥蜴" />
+        <string name="name" value="生命之证 II：击杀邪恶绵羊" />
         <string name="0" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8140110# #r#a52291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -4912,7 +4912,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5304">
-        <string name="name" value="生命之证 II：击杀幼年纽特" />
+        <string name="name" value="生命之证 II：击杀小蜥蜴" />
         <string name="0" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。 前往#p1052001#，接受下一项战斗试炼。" />
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8190000# #r#a53041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -4923,7 +4923,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5305">
-        <string name="name" value="生命之证 II：击杀龙巢泥人妖" />
+        <string name="name" value="生命之证 II：击杀泥人妖" />
         <string name="0" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。 前往#p1052001#，接受下一项战斗试炼。" />
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8190005# #r#a53051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5080,7 +5080,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5330">
-        <string name="name" value="生命之证 II：击杀龙巢魔像" />
+        <string name="name" value="生命之证 II：击杀泥人妖" />
         <string name="0" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。 前往#p1090000#，接受下一项战斗试炼。" />
         <string name="1" value="龙林中的气息开始回应，必须证明你能在神木村独自站稳。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8190005# #r#a53301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5226,7 +5226,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5354">
-        <string name="name" value="生命之证 III：击杀双刀蓝帽海贼" />
+        <string name="name" value="生命之证 III：击杀绿帽海贼" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o7160000# #r#a53541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5237,7 +5237,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5355">
-        <string name="name" value="生命之证 III：击杀强化死灵" />
+        <string name="name" value="生命之证 III：击杀死灵王" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o7130300# #r#a53551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5394,7 +5394,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5380">
-        <string name="name" value="生命之证 III：击杀强化恶灵娃娃" />
+        <string name="name" value="生命之证 III：击杀大恶灵附身的娃娃" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1032001#，接受下一项战斗试炼。" />
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o6230500# #r#a53801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5529,7 +5529,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5403">
-        <string name="name" value="生命之证 III：击杀双刀蓝帽海贼" />
+        <string name="name" value="生命之证 III：击杀绿帽海贼" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1012100#，接受下一项战斗试炼。" />
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o7160000# #r#a54031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5708,7 +5708,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5430">
-        <string name="name" value="生命之证 III：击杀暗黑拉什" />
+        <string name="name" value="生命之证 III：击杀黑暗莱西" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1052001#，接受下一项战斗试炼。" />
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o7130501# #r#a54301##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5843,7 +5843,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5453">
-        <string name="name" value="生命之证 III：击杀拉什" />
+        <string name="name" value="生命之证 III：击杀莱西" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1090000#，接受下一项战斗试炼。" />
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7130500# #r#a54531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5854,7 +5854,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5454">
-        <string name="name" value="生命之证 III：击杀霍比" />
+        <string name="name" value="生命之证 III：击杀侏儒怪" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1090000#，接受下一项战斗试炼。" />
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7130600# #r#a54541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -5865,7 +5865,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5455">
-        <string name="name" value="生命之证 III：击杀绿霍比" />
+        <string name="name" value="生命之证 III：击杀邪恶侏儒怪" />
         <string name="0" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。 前往#p1090000#，接受下一项战斗试炼。" />
         <string name="1" value="时间裂缝会放大生命的缺口，只有稳定心神的人才能继续前行。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o7130601# #r#a54551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -6000,7 +6000,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5478">
-        <string name="name" value="生命之证 IV：击杀记忆的祭司" />
+        <string name="name" value="生命之证 IV：击杀追忆的祭司" />
         <string name="0" value="远征的号角已经响起，你需要跨过真正的首领试炼。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200001# #r#a54781##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -6011,7 +6011,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5479">
-        <string name="name" value="生命之证 IV：击杀记忆的神官" />
+        <string name="name" value="生命之证 IV：击杀追忆的神官" />
         <string name="0" value="远征的号角已经响起，你需要跨过真正的首领试炼。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200002# #r#a54791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -6022,7 +6022,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5480">
-        <string name="name" value="生命之证 IV：击杀记忆的守护兵" />
+        <string name="name" value="生命之证 IV：击杀追忆的守护兵" />
         <string name="0" value="远征的号角已经响起，你需要跨过真正的首领试炼。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200003# #r#a54801##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -6325,7 +6325,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5529">
-        <string name="name" value="生命之证 IV：击杀短刃蜥蜴" />
+        <string name="name" value="生命之证 IV：击杀邪恶绵羊" />
         <string name="0" value="远征的号角已经响起，你需要跨过真正的首领试炼。 前往#p1012100#，接受下一项战斗试炼。" />
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8140110# #r#a55291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -6482,7 +6482,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5554">
-        <string name="name" value="生命之证 IV：击杀记忆的守护队长" />
+        <string name="name" value="生命之证 IV：击杀追忆的守护队长" />
         <string name="0" value="远征的号角已经响起，你需要跨过真正的首领试炼。 前往#p1052001#，接受下一项战斗试炼。" />
         <string name="1" value="远征的号角已经响起，你需要跨过真正的首领试炼。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200004# #r#a55541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -6785,7 +6785,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5603">
-        <string name="name" value="生命之证 V：击杀记忆的守护兵" />
+        <string name="name" value="生命之证 V：击杀追忆的守护兵" />
         <string name="0" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200003# #r#a56031##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -6796,7 +6796,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5604">
-        <string name="name" value="生命之证 V：击杀记忆的守护队长" />
+        <string name="name" value="生命之证 V：击杀追忆的守护队长" />
         <string name="0" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。 前往#p1022000#，接受下一项战斗试炼。" />
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1022000#提交。\r\n#o8200004# #r#a56041##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -7121,7 +7121,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5655">
-        <string name="name" value="生命之证 V：击杀记忆的神官" />
+        <string name="name" value="生命之证 V：击杀追忆的神官" />
         <string name="0" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。 前往#p1012100#，接受下一项战斗试炼。" />
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1012100#提交。\r\n#o8200002# #r#a56551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -7267,7 +7267,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5679">
-        <string name="name" value="生命之证 V：击杀记忆的祭司" />
+        <string name="name" value="生命之证 V：击杀追忆的祭司" />
         <string name="0" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。 前往#p1052001#，接受下一项战斗试炼。" />
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200001# #r#a56791##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -7435,7 +7435,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5705">
-        <string name="name" value="生命之证 V：击杀炸弹鱼屋" />
+        <string name="name" value="生命之证 V：击杀刺鳍鱼之屋" />
         <string name="0" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。 前往#p1090000#，接受下一项战斗试炼。" />
         <string name="1" value="深海会吞没迟疑，生命之证需要从暗流中重新凝聚。\r\n完成指定战斗后，回#p1090000#提交。\r\n#o8140555# #r#a57051##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -7727,7 +7727,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5753">
-        <string name="name" value="生命之证 VI：击杀记忆的神官" />
+        <string name="name" value="生命之证 VI：击杀追忆的神官" />
         <string name="0" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。 前往#p1032001#，接受下一项战斗试炼。" />
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200002# #r#a57531##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -7738,7 +7738,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5754">
-        <string name="name" value="生命之证 VI：击杀记忆的守护兵" />
+        <string name="name" value="生命之证 VI：击杀追忆的守护兵" />
         <string name="0" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。 前往#p1032001#，接受下一项战斗试炼。" />
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200003# #r#a57541##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -7749,7 +7749,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5755">
-        <string name="name" value="生命之证 VI：击杀记忆的守护队长" />
+        <string name="name" value="生命之证 VI：击杀追忆的守护队长" />
         <string name="0" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。 前往#p1032001#，接受下一项战斗试炼。" />
         <string name="1" value="神殿记录着过去与后悔，只有看清自身的人才能拿起下一枚印记。\r\n完成指定战斗后，回#p1032001#提交。\r\n#o8200004# #r#a57551##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -8837,7 +8837,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5929">
-        <string name="name" value="生命之证 VII：击杀记忆的守护兵" />
+        <string name="name" value="生命之证 VII：击杀追忆的守护兵" />
         <string name="0" value="最后的印记只承认完成全部试炼的冒险家。 前往#p1052001#，接受下一项战斗试炼。" />
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200003# #r#a59291##k" />
         <string name="2" value="这一步生命之证已经记录。" />
@@ -8848,7 +8848,7 @@
         <int name="area" value="31" />
       </imgdir>
     <imgdir name="5930">
-        <string name="name" value="生命之证 VII：击杀记忆的守护队长" />
+        <string name="name" value="生命之证 VII：击杀追忆的守护队长" />
         <string name="0" value="最后的印记只承认完成全部试炼的冒险家。 前往#p1052001#，接受下一项战斗试炼。" />
         <string name="1" value="最后的印记只承认完成全部试炼的冒险家。\r\n完成指定战斗后，回#p1052001#提交。\r\n#o8200004# #r#a59301##k" />
         <string name="2" value="这一步生命之证已经记录。" />

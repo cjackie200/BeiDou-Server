@@ -1,5 +1,5 @@
 {
-    "latestVersion":  "v1.0.12",
+    "latestVersion":  "v1.0.13",
     "versions":  [
                      {
                          "version":  "v1.0.2",
@@ -1162,6 +1162,22 @@
                          "releaseNotes":  [
                                               "恢复魔法弹客户端双弹可见动画，攻击时可以看到两枚魔法弹。",
                                               "服务端继续按150毫秒延迟独立结算第二枚；原目标死亡时转向200范围内最近怪物。"
+                                          ]
+                     },
+                     {
+                         "version":  "v1.0.13",
+                         "baseVersion":  "v1.0.12",
+                         "files":  [
+                                       {
+                                           "path":  "Data/Quest/QuestInfo.img",
+                                           "size":  1386381,
+                                           "sha256":  "7E3DDA0BC7EDD571D94190764E448E817C29771C1E2E20F7F396FCDB6D8FCFE6",
+                                           "url":  "/client-update/files/v1.0.13/Data/Quest/QuestInfo.img"
+                                       }
+                                   ],
+                         "releaseNotes":  [
+                                              "修正生命之证任务中怪物名称与目标ID不一致的说明。",
+                                              "统一骷髅指挥官、死灵王、绿帽海贼、邪恶绵羊、泥人妖、追忆系列等任务目标名称。"
                                           ]
                      }
                  ]

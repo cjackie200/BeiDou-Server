@@ -347,6 +347,43 @@ class LifeProofQuestTest {
     }
 
     @Test
+    void singleTargetCombatDescriptionsMatchMonsterIds() throws Exception {
+        Document mobStrings = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(resolveQuestXml("wz-zh-CN/String.wz/Mob.img.xml").toFile());
+        Map<Integer, String> mobNames = new HashMap<>();
+        NodeList mobs = mobStrings.getDocumentElement().getChildNodes();
+        for (int index = 0; index < mobs.getLength(); index++) {
+            if (!(mobs.item(index) instanceof Element mob) || !"imgdir".equals(mob.getTagName())) {
+                continue;
+            }
+            String name = childValue(mob, "string", "name");
+            if (!name.isBlank()) {
+                mobNames.put(Integer.parseInt(mob.getAttribute("name")), name);
+            }
+        }
+
+        for (int stageNo = 1; stageNo <= 7; stageNo++) {
+            HpChallengeService.StageConfig stage = HpChallengeService.stage(stageNo);
+            List<HpChallengeService.Task> tasks = new java.util.ArrayList<>(stage.commonTasks());
+            stage.jobTasks().values().forEach(tasks::addAll);
+            tasks.addAll(stage.optionalTasks());
+            for (HpChallengeService.Task task : tasks) {
+                if (task.targetIds().size() != 1
+                        || task.targetType() != HpChallengeService.TargetType.KILL
+                        && task.targetType() != HpChallengeService.TargetType.BOSS) {
+                    continue;
+                }
+                int mobId = task.targetIds().getFirst();
+                String mobName = mobNames.get(mobId);
+                assertTrue(mobName != null && task.description().contains(mobName),
+                        "life proof description must match mob id: stage=" + stageNo
+                                + ", task=" + task.key() + ", mobId=" + mobId
+                                + ", mobName=" + mobName + ", description=" + task.description());
+            }
+        }
+    }
+
+    @Test
     void lifeProofNpcDialogsUseOriginalStepStyleText() throws Exception {
         DataSource dataSource = mock(DataSource.class);
         Connection connection = mock(Connection.class);
@@ -488,6 +525,20 @@ class LifeProofQuestTest {
         } finally {
             setUpApplicationContext();
         }
+    }
+
+    @Test
+    void dynamicOptionalKillProgressAdvancesWithoutStaticWzMobRequirement() {
+        int questId = LifeProofQuest.questId(4, HpChallengeService.JobBranch.WARRIOR,
+                LifeProofQuest.OPTION_SLOT_START);
+        QuestStatus status = new QuestStatus(Quest.getInstance(questId), QuestStatus.Status.STARTED, 1022000);
+        LifeProofQuest.Objective objective = new LifeProofQuest.Objective(
+                LifeProofQuest.ObjectiveType.KILL, 1800, "击杀老骷髅龙", List.of(8190004), 0, 0, false);
+
+        int progress = LifeProofQuest.advanceOptionSlotMobProgress(status, objective, 0);
+
+        assertEquals(1, progress);
+        assertEquals("001", status.getProgress(8190004));
     }
 
     @Test
