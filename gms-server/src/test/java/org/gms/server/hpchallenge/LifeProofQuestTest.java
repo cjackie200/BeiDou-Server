@@ -111,6 +111,27 @@ class LifeProofQuestTest {
     }
 
     @Test
+    void onlyActiveOptionalSlotsAreEligibleForReselectionByForfeit() {
+        int main = LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR,
+                LifeProofQuest.MAIN_SLOT_START);
+        int selector = LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR,
+                LifeProofQuest.SELECTOR_SLOT_START);
+        int optionSlot = LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR,
+                LifeProofQuest.OPTION_SLOT_START);
+        int retiredOption = LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR,
+                LifeProofQuest.OPTION_SLOT_START + LifeProofQuest.OPTIONAL_REQUIRED_COUNT);
+        int reward = LifeProofQuest.questId(1, HpChallengeService.JobBranch.WARRIOR,
+                LifeProofQuest.REWARD_SLOT);
+
+        assertTrue(LifeProofQuest.isForfeitBlocked(main));
+        assertTrue(LifeProofQuest.isForfeitBlocked(selector));
+        assertFalse(LifeProofQuest.isForfeitBlocked(optionSlot));
+        assertTrue(LifeProofQuest.isReselectableForfeitQuest(optionSlot));
+        assertFalse(LifeProofQuest.isReselectableForfeitQuest(retiredOption));
+        assertTrue(LifeProofQuest.isForfeitBlocked(reward));
+    }
+
+    @Test
     void lifeProofStateCompletedStagesUseCurrentStageAndHighestRewardedStage() {
         assertEquals(Set.of(1, 2), HpChallengeService.lifeProofStateCompletedStages(3, 0));
         assertEquals(Set.of(1, 2), HpChallengeService.lifeProofStateCompletedStages(1, 2));
@@ -420,6 +441,46 @@ class LifeProofQuestTest {
         } finally {
             setUpApplicationContext();
         }
+    }
+
+    @Test
+    void perfectPitchCompletesAnUnfinishedMainTaskWithoutConsumingOriginalRequirement() throws Exception {
+        LifeProofQuest.QuestMeta meta = LifeProofQuest.allVisibleQuests().stream()
+                .filter(candidate -> candidate.branch() == HpChallengeService.JobBranch.WARRIOR)
+                .filter(candidate -> candidate.kind() == LifeProofQuest.QuestKind.MAIN)
+                .filter(candidate -> candidate.objective().type() == LifeProofQuest.ObjectiveType.KILL)
+                .findFirst()
+                .orElseThrow();
+        Character chr = newLifeProofCharacter(Job.HERO);
+        addNpc(chr, LifeProofQuest.completeNpcId(meta));
+        putQuest(chr, meta.questId(), QuestStatus.Status.STARTED, "000");
+        addItem(chr, LifeProofQuest.PERFECT_PITCH_ITEM_ID,
+                LifeProofQuest.PERFECT_PITCH_COMPLETION_COST);
+
+        String prompt = LifeProofQuest.endPrompt(chr, meta.questId(), LifeProofQuest.completeNpcId(meta));
+        assertTrue(LifeProofQuest.isReadyResult(prompt), prompt);
+        assertTrue(LifeProofQuest.resultMessage(prompt).contains("是否使用绝对音感"), prompt);
+
+        String result = LifeProofQuest.complete(chr, meta.questId(), LifeProofQuest.completeNpcId(meta));
+        assertTrue(LifeProofQuest.isOkResult(result), result);
+        assertTrue(LifeProofQuest.resultMessage(result).contains("已消耗 10 个绝对音感"), result);
+        assertEquals(0, chr.getInventory(InventoryType.ETC)
+                .countById(LifeProofQuest.PERFECT_PITCH_ITEM_ID));
+    }
+
+    @Test
+    void perfectPitchAlternativeExcludesSelectorsAndStageRewards() {
+        LifeProofQuest.QuestMeta selector = LifeProofQuest.allVisibleQuests().stream()
+                .filter(meta -> meta.kind() == LifeProofQuest.QuestKind.SELECTOR)
+                .findFirst()
+                .orElseThrow();
+        LifeProofQuest.QuestMeta reward = LifeProofQuest.allVisibleQuests().stream()
+                .filter(meta -> meta.kind() == LifeProofQuest.QuestKind.REWARD)
+                .findFirst()
+                .orElseThrow();
+
+        assertFalse(LifeProofQuest.supportsPerfectPitchCompletion(selector));
+        assertFalse(LifeProofQuest.supportsPerfectPitchCompletion(reward));
     }
 
     @Test

@@ -1588,13 +1588,13 @@ public final class HpChallengeService {
         }
     }
 
-    static void clearLifeProofOptionalSelection(Character chr, int stage, int optionNo) {
+    static boolean clearLifeProofOptionalSelection(Character chr, int stage, int optionNo) {
         if (chr == null || optionNo <= 0) {
-            return;
+            return false;
         }
         Task task = optionalTask(stage, optionNo);
         if (task == null) {
-            return;
+            return false;
         }
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("""
@@ -1606,9 +1606,10 @@ public final class HpChallengeService {
             ps.setInt(1, chr.getId());
             ps.setInt(2, stage);
             ps.setString(3, task.key());
-            ps.executeUpdate();
+            return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             log.warn("clear life proof optional selection failed", e);
+            return false;
         }
     }
 

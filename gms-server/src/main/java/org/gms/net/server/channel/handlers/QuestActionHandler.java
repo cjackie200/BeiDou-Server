@@ -230,8 +230,12 @@ public final class QuestActionHandler extends AbstractPacketHandler {
                 break;
             }
             case 3: // forfeit quest
-                if (LifeProofQuest.isForfeitBlocked(questid)) {
-                    player.dropMessage(5, "生命之证任务不能放弃。");
+                if (LifeProofQuest.isQuestId(questid)) {
+                    if (LifeProofQuest.forfeitForReselection(player, questid)) {
+                        player.dropMessage(5, "已放弃当前附加试炼，请重新选择任务目标。生命之证路线保持不变。");
+                    } else {
+                        player.dropMessage(5, "只有进行中的生命之证附加试炼可以放弃并重新选择。");
+                    }
                     return;
                 }
                 quest.forfeit(player);

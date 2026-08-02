@@ -44,6 +44,8 @@ public final class LifeProofQuest {
     public static final int RESERVED_SLOT = 24;
     public static final int OPTIONAL_REQUIRED_COUNT = 3;
     public static final int PROOF_ITEM_ID = 4033011;
+    public static final int PERFECT_PITCH_ITEM_ID = 4310000;
+    public static final int PERFECT_PITCH_COMPLETION_COST = 10;
 
     /**
      * Returns the map-collection item ID for the player's current active LifeProof MAP quest,
@@ -160,7 +162,37 @@ public final class LifeProofQuest {
     }
 
     public static boolean isForfeitBlocked(int questId) {
-        return isQuestId(questId);
+        return isQuestId(questId) && !isReselectableForfeitQuest(questId);
+    }
+
+    public static boolean isReselectableForfeitQuest(int questId) {
+        QuestMeta meta = QUESTS.get(questId);
+        return meta != null && meta.kind() == QuestKind.OPTION_SLOT;
+    }
+
+    public static boolean forfeitForReselection(Character chr, int questId) {
+        QuestMeta meta = QUESTS.get(questId);
+        if (chr == null || meta == null || !isReselectableForfeitQuest(questId)
+                || chr.getQuestStatus(questId) != QuestStatus.Status.STARTED.getId()) {
+            return false;
+        }
+
+        HpChallengeService.LifeProofOptionalProgress selected = selectedOptional(chr, meta);
+        if (selected == null || selected.completed()
+                || !HpChallengeService.clearLifeProofOptionalSelection(
+                chr, meta.stage(), selected.task().optionNo())) {
+            return false;
+        }
+
+        if (!Quest.getInstance(questId).forfeit(chr)) {
+            return false;
+        }
+
+        int selectorQuestId = questId(meta.stage(), meta.branch(),
+                SELECTOR_SLOT_START + meta.selectorNo() - 1);
+        Quest.getInstance(selectorQuestId).reset(chr);
+        refreshQuestRules(chr);
+        return true;
     }
 
     public static int startedVisibleQuestIdForNpc(Character chr, int npcId) {
@@ -1046,7 +1078,19 @@ public final class LifeProofQuest {
         if (canConfirmAtNpc(chr, quest, meta, npcId)) {
             return ready(completePrompt(chr, meta, npcId));
         }
-        return info(progressPrompt(chr, meta, npcId));
+        String progress = progressPrompt(chr, meta, npcId);
+        if (!supportsPerfectPitchCompletion(meta)) {
+            return info(progress);
+        }
+        int held = itemCount(chr, PERFECT_PITCH_ITEM_ID);
+        String alternative = "\r\n\r\n也可以在提交NPC处消耗#b"
+                + PERFECT_PITCH_COMPLETION_COST + "个#t" + PERFECT_PITCH_ITEM_ID
+                + "##k完成当前任务。持有：#b" + held + "#k/#r"
+                + PERFECT_PITCH_COMPLETION_COST + "#k";
+        if (canUsePerfectPitchCompletion(chr, meta, npcId) && held >= PERFECT_PITCH_COMPLETION_COST) {
+            return ready(progress + alternative + "\r\n\r\n是否使用绝对音感完成当前任务？");
+        }
+        return info(progress + alternative);
     }
 
     public static String complete(Character chr, int questId, int npcId) {
@@ -1063,7 +1107,20 @@ public final class LifeProofQuest {
             markNpcTalkProgress(chr, meta, npcId, false);
         }
         syncActiveObjectiveProgress(chr);
+        boolean perfectPitchCompletion = false;
         if (!canSubmitAtNpc(chr, quest, npcId)) {
+            if (!canUsePerfectPitchCompletion(chr, meta, npcId)) {
+                return error(submitBlockedText(chr, meta, npcId));
+            }
+            if (itemCount(chr, PERFECT_PITCH_ITEM_ID) < PERFECT_PITCH_COMPLETION_COST) {
+                return error("绝对音感不足，需要 " + PERFECT_PITCH_COMPLETION_COST + " 个。");
+            }
+            if (!removeItem(chr, PERFECT_PITCH_ITEM_ID, PERFECT_PITCH_COMPLETION_COST)) {
+                return error("扣除绝对音感失败，请重新打开任务后再试。");
+            }
+            perfectPitchCompletion = true;
+        }
+        if (!perfectPitchCompletion && !canSubmitAtNpc(chr, quest, npcId)) {
             return error(submitBlockedText(chr, meta, npcId));
         }
         if (meta.kind() == QuestKind.REWARD) {
@@ -1078,7 +1135,7 @@ public final class LifeProofQuest {
             return error(result);
         }
 
-        if (objective.isCollection()) {
+        if (!perfectPitchCompletion && objective.isCollection()) {
             List<ItemCollection> multi = multiItemCollections(meta);
             if (multi != null) {
                 if (!removeMultiItems(chr, multi)) {
@@ -1088,7 +1145,7 @@ public final class LifeProofQuest {
                 return error("提交物品不足。");
             }
         }
-        if (objective.type() == ObjectiveType.MESO) {
+        if (!perfectPitchCompletion && objective.type() == ObjectiveType.MESO) {
             if (chr.getMeso() < objective.mesoCost()) {
                 return error("金币不足，需要 " + objective.mesoCost() + " 金币。");
             }
@@ -1104,8 +1161,25 @@ public final class LifeProofQuest {
             HpChallengeService.completeLifeProofOptional(chr, meta.stage(), meta.selectorNo());
             completeNextBridgeSilently(chr, meta);
         }
+        if (perfectPitchCompletion && meta.kind() == QuestKind.OPTION_SLOT
+                && objective.type() == ObjectiveType.MESO) {
+            HpChallengeService.completeLifeProofOptional(chr, meta.stage(), meta.selectorNo());
+            completeNextBridgeSilently(chr, meta);
+        }
         chr.yellowMessage("生命之证：" + meta.name() + "完成。");
-        return ok("这一步生命之证已经记录。");
+        return ok(perfectPitchCompletion
+                ? "已消耗 " + PERFECT_PITCH_COMPLETION_COST + " 个绝对音感完成当前任务。"
+                : "这一步生命之证已经记录。");
+    }
+
+    static boolean supportsPerfectPitchCompletion(QuestMeta meta) {
+        return meta != null && (meta.kind() == QuestKind.MAIN || meta.kind() == QuestKind.OPTION_SLOT);
+    }
+
+    private static boolean canUsePerfectPitchCompletion(Character chr, QuestMeta meta, int npcId) {
+        return supportsPerfectPitchCompletion(meta)
+                && canUseNpc(chr, npcId)
+                && npcId == completeNpcId(meta);
     }
 
     public static String afterNativeComplete(Character chr, int questId, int npcId) {
