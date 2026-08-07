@@ -5,8 +5,11 @@ import org.gms.client.QuestStatus;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
+import org.gms.client.inventory.ModifyInventory;
 import org.gms.config.GameConfig;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.constants.string.ExtendType;
+import org.gms.dao.entity.ExtendValueDO;
 import org.gms.server.ItemInformationProvider;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.server.quest.hook.InteractionHookAction;
@@ -14,10 +17,12 @@ import org.gms.server.quest.hook.InteractionHookContext;
 import org.gms.server.quest.hook.InteractionHookPackets;
 import org.gms.server.quest.hook.InteractionHookProgressEntry;
 import org.gms.util.PacketCreator;
+import org.gms.util.ExtendUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +35,15 @@ public final class MonsterCardRingQuest {
     public static final int MAX_LEVEL = 10;
     public static final int SETS_PER_LEVEL = 30;
     public static final int MATERIAL_QTY = 10;
+    public static final int PERFECT_PITCH_ITEM_ID = 4310000;
+    public static final int MAX_RING_COPY_COST = 100;
+    public static final int MAX_RING_COPY_LIMIT = 3;
     public static final short CLAIM_QUEST_ID = 29980;
     public static final short LAST_QUEST_ID = (short) (CLAIM_QUEST_ID + MAX_LEVEL);
     private static final int VIRTUAL_PROGRESS_KEY = 0;
     private static final String PROGRESS_NOT_READY = "000";
     private static final String PROGRESS_READY = "001";
+    private static final String MAX_RING_COPY_EXTEND_KEY = "monster_card_ring_max_copy_count";
 
     private static final int[] MATERIALS = {
             4021000, 4021001, 4021002, 4021003, 4021004,
@@ -58,6 +67,18 @@ public final class MonsterCardRingQuest {
 
     public static int getMaterialQty() {
         return MATERIAL_QTY;
+    }
+
+    public static int getMaxRingCopyCost() {
+        return MAX_RING_COPY_COST;
+    }
+
+    public static int getMaxRingCopyLimit() {
+        return MAX_RING_COPY_LIMIT;
+    }
+
+    public static int getMaxRingId() {
+        return BASE_RING + MAX_LEVEL;
     }
 
     public static int getMaterialForLevel(int targetLevel) {
@@ -126,7 +147,11 @@ public final class MonsterCardRingQuest {
         if (npcId != NPC_ID) {
             return Optional.empty();
         }
-        return resolveCurrentQuestId(chr);
+        Optional<Integer> currentQuestId = resolveCurrentQuestId(chr);
+        if (currentQuestId.isPresent()) {
+            return currentQuestId;
+        }
+        return hasMaxRing(chr) ? Optional.of((int) LAST_QUEST_ID) : Optional.empty();
     }
 
     public static Optional<InteractionHookProgressEntry> progressEntry(Character chr) {
@@ -198,6 +223,15 @@ public final class MonsterCardRingQuest {
         Character chr = context.player();
         syncQuestState(chr);
         int questId = context.questId();
+        if (questId == LAST_QUEST_ID && hasMaxRing(chr)) {
+            MaxRingCopyValidation validation = validateMaxRingCopy(chr);
+            if (validation.isOk()) {
+                context.sendYesNo(maxRingCopyPrompt(validation));
+            } else {
+                context.sendOk(maxRingCopyStatus(validation));
+            }
+            return;
+        }
         if (questId == CLAIM_QUEST_ID) {
             if (canClaimBaseRing(chr)) {
                 context.sendYesNo(claimPrompt());
@@ -229,6 +263,11 @@ public final class MonsterCardRingQuest {
 
         Character chr = context.player();
         int questId = context.questId();
+        if (questId == LAST_QUEST_ID && hasMaxRing(chr)) {
+            MaxRingCopyResult result = copyMaxRing(chr);
+            context.sendOk(maxRingCopyResultMessage(result));
+            return;
+        }
         if (questId == CLAIM_QUEST_ID) {
             context.sendOk(claimBaseRing(chr));
             return;
@@ -243,6 +282,42 @@ public final class MonsterCardRingQuest {
             return;
         }
         context.sendOk("这个怪物卡戒指任务暂时无法处理。");
+    }
+
+    private static boolean hasMaxRing(Character chr) {
+        if (chr == null) {
+            return false;
+        }
+        RingInfo current = getRingState(chr).getCurrent();
+        return current != null && current.getLevel() >= MAX_LEVEL;
+    }
+
+    private static String maxRingCopyPrompt(MaxRingCopyValidation validation) {
+        return maxRingCopyStatus(validation) + "\r\n\r\n"
+                + "确定消耗 #b#i" + PERFECT_PITCH_ITEM_ID + "##t" + PERFECT_PITCH_ITEM_ID + "# x"
+                + MAX_RING_COPY_COST + "#k，复制 1 个 #r#i" + getMaxRingId() + "##t" + getMaxRingId() + "##k 吗？";
+    }
+
+    private static String maxRingCopyStatus(MaxRingCopyValidation validation) {
+        StringBuilder text = new StringBuilder("#e满级怪物卡戒指复制#n\r\n\r\n");
+        text.append("消耗：#b#i").append(PERFECT_PITCH_ITEM_ID).append("##t")
+                .append(PERFECT_PITCH_ITEM_ID).append("# x").append(MAX_RING_COPY_COST).append("#k\r\n");
+        text.append("已复制：#b").append(validation.getCopyCount()).append("#k / ")
+                .append(MAX_RING_COPY_LIMIT).append(" 次\r\n");
+        text.append("剩余次数：#b").append(validation.getRemainingCopies()).append("#k 次");
+        if (!validation.isOk()) {
+            text.append("\r\n\r\n#r当前不能复制：#k").append(validation.getMessage());
+        }
+        return text.toString();
+    }
+
+    private static String maxRingCopyResultMessage(MaxRingCopyResult result) {
+        if (!result.success()) {
+            return result.message();
+        }
+        return result.message() + "\r\n\r\n已复制：#b" + result.copyCount() + "#k / "
+                + MAX_RING_COPY_LIMIT + " 次\r\n剩余次数：#b"
+                + (MAX_RING_COPY_LIMIT - result.copyCount()) + "#k 次";
     }
 
     public static boolean isClaimQuest(int questId) {
@@ -567,6 +642,112 @@ public final class MonsterCardRingQuest {
         return item;
     }
 
+    public static int getMaxRingCopyCount(Character chr) {
+        if (chr == null) {
+            return 0;
+        }
+        try {
+            ExtendValueDO value = ExtendUtil.getExtendValue(
+                    String.valueOf(chr.getId()), ExtendType.CHARACTER_EXTEND.getType(), MAX_RING_COPY_EXTEND_KEY);
+            if (value == null || value.getExtendValue() == null) {
+                return 0;
+            }
+            return Math.clamp(Integer.parseInt(value.getExtendValue()), 0, MAX_RING_COPY_LIMIT);
+        } catch (NumberFormatException e) {
+            log.warn("Invalid monster card ring copy count for character {}", chr.getId(), e);
+            return 0;
+        }
+    }
+
+    private static void setMaxRingCopyCount(Character chr, int count) {
+        ExtendUtil.saveOrUpdateExtendValue(
+                String.valueOf(chr.getId()), ExtendType.CHARACTER_EXTEND.getType(), MAX_RING_COPY_EXTEND_KEY,
+                String.valueOf(Math.clamp(count, 0, MAX_RING_COPY_LIMIT)));
+    }
+
+    public static MaxRingCopyValidation validateMaxRingCopy(Character chr) {
+        return validateMaxRingCopy(chr, getMaxRingCopyCount(chr));
+    }
+
+    static MaxRingCopyValidation validateMaxRingCopy(Character chr, int copyCount) {
+        if (chr == null || chr.getClient() == null) {
+            return MaxRingCopyValidation.fail("角色状态异常，请重新登录后再试。", copyCount);
+        }
+
+        int maxRingId = getMaxRingId();
+        int inBag = chr.getInventory(InventoryType.EQUIP).countById(maxRingId);
+        if (inBag <= 0) {
+            return MaxRingCopyValidation.fail(
+                    "请把 #b#i" + maxRingId + "##t" + maxRingId + "##k 放在装备栏背包内。", copyCount);
+        }
+        if (copyCount >= MAX_RING_COPY_LIMIT) {
+            return MaxRingCopyValidation.fail("这个角色已经复制满 " + MAX_RING_COPY_LIMIT + " 次。", copyCount);
+        }
+        if (chr.getItemQuantity(PERFECT_PITCH_ITEM_ID, false) < MAX_RING_COPY_COST) {
+            return MaxRingCopyValidation.fail(
+                    "绝对音感不足，需要 #b#i" + PERFECT_PITCH_ITEM_ID + "##t" + PERFECT_PITCH_ITEM_ID
+                            + "# x" + MAX_RING_COPY_COST + "#k。", copyCount);
+        }
+        if (chr.getInventory(InventoryType.EQUIP).isFull()) {
+            return MaxRingCopyValidation.fail("装备栏背包已满，请先空出 1 格。", copyCount);
+        }
+        return MaxRingCopyValidation.success(copyCount);
+    }
+
+    public static MaxRingCopyResult copyMaxRing(Character chr) {
+        if (chr == null) {
+            return MaxRingCopyResult.fail("角色状态异常，请重新登录后再试。", 0);
+        }
+
+        synchronized (chr) {
+            int oldCount = getMaxRingCopyCount(chr);
+            MaxRingCopyValidation validation = validateMaxRingCopy(chr, oldCount);
+            if (!validation.isOk()) {
+                return MaxRingCopyResult.fail(validation.getMessage(), oldCount);
+            }
+
+            int newCount = oldCount + 1;
+            setMaxRingCopyCount(chr, newCount);
+            InventoryManipulator.removeById(chr.getClient(), InventoryType.ETC, PERFECT_PITCH_ITEM_ID,
+                    MAX_RING_COPY_COST, true, false);
+
+            if (!gainDuplicateMaxRing(chr)) {
+                InventoryManipulator.addById(chr.getClient(), PERFECT_PITCH_ITEM_ID, (short) MAX_RING_COPY_COST);
+                setMaxRingCopyCount(chr, oldCount);
+                return MaxRingCopyResult.fail("装备栏空间不足，绝对音感没有消耗。请整理背包后再试。", oldCount);
+            }
+
+            chr.sendPacket(PacketCreator.getShowItemGain(PERFECT_PITCH_ITEM_ID,
+                    (short) -MAX_RING_COPY_COST, true));
+            syncQuestState(chr);
+            return MaxRingCopyResult.success("复制完成。\r\n你获得了 #b#i" + getMaxRingId() + "##t"
+                    + getMaxRingId() + "##k。", newCount);
+        }
+    }
+
+    private static boolean gainDuplicateMaxRing(Character chr) {
+        Item item = ItemInformationProvider.getInstance().getEquipById(getMaxRingId());
+        if (item == null) {
+            return false;
+        }
+
+        Inventory inventory = chr.getInventory(InventoryType.EQUIP);
+        inventory.lockInventory();
+        try {
+            short slot = inventory.addItem(item);
+            if (slot < 0) {
+                return false;
+            }
+            item.setPosition(slot);
+            chr.sendPacket(PacketCreator.modifyInventory(
+                    true, Collections.singletonList(new ModifyInventory(0, item))));
+        } finally {
+            inventory.unlockInventory();
+        }
+        chr.sendPacket(PacketCreator.getShowItemGain(getMaxRingId(), (short) 1, true));
+        return true;
+    }
+
     public static Map<Integer, String> getScriptableNpcIds(Character chr) {
         Map<Integer, String> configuredNpcIds = GameConfig.getServerObject(
                 "npcs_scriptable", new HashMap<Integer, String>());
@@ -817,6 +998,52 @@ public final class MonsterCardRingQuest {
 
         public int getMaterial() {
             return material;
+        }
+    }
+
+    public static final class MaxRingCopyValidation {
+        private final boolean ok;
+        private final String message;
+        private final int copyCount;
+
+        private MaxRingCopyValidation(boolean ok, String message, int copyCount) {
+            this.ok = ok;
+            this.message = message;
+            this.copyCount = Math.clamp(copyCount, 0, MAX_RING_COPY_LIMIT);
+        }
+
+        private static MaxRingCopyValidation fail(String message, int copyCount) {
+            return new MaxRingCopyValidation(false, message, copyCount);
+        }
+
+        private static MaxRingCopyValidation success(int copyCount) {
+            return new MaxRingCopyValidation(true, "", copyCount);
+        }
+
+        public boolean isOk() {
+            return ok;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public int getCopyCount() {
+            return copyCount;
+        }
+
+        public int getRemainingCopies() {
+            return MAX_RING_COPY_LIMIT - copyCount;
+        }
+    }
+
+    public record MaxRingCopyResult(boolean success, String message, int copyCount) {
+        private static MaxRingCopyResult success(String message, int copyCount) {
+            return new MaxRingCopyResult(true, message, copyCount);
+        }
+
+        private static MaxRingCopyResult fail(String message, int copyCount) {
+            return new MaxRingCopyResult(false, message, copyCount);
         }
     }
 

@@ -29,6 +29,9 @@ var BASE_RING = MonsterCardRingQuest.getBaseRingId();
 var MAX_LEVEL = MonsterCardRingQuest.getMaxLevel();
 var SETS_PER_LEVEL = MonsterCardRingQuest.getSetsPerLevel();
 var MATERIAL_QTY = MonsterCardRingQuest.getMaterialQty();
+var MAX_RING_ID = MonsterCardRingQuest.getMaxRingId();
+var MAX_RING_COPY_COST = MonsterCardRingQuest.getMaxRingCopyCost();
+var MAX_RING_COPY_LIMIT = MonsterCardRingQuest.getMaxRingCopyLimit();
 
 function start() {
     action(1, 0, 0);
@@ -62,9 +65,17 @@ function handleAction(mode, type, selection) {
         if (selection == 90) {
             prepareNextUpgradeTest();
             flow = "close";
+        } else if (selection == 91) {
+            flow = "copyConfirm";
+            cm.sendYesNo("确定消耗 #b#i4310000##t4310000# x" + MAX_RING_COPY_COST
+                + "#k，复制 1 个 #r#i" + MAX_RING_ID + "##t" + MAX_RING_ID + "##k 吗？\r\n\r\n"
+                + "每个角色最多可以复制 " + MAX_RING_COPY_LIMIT + " 次。");
         } else {
             cm.dispose();
         }
+    } else if (status == 2 && flow == "copyConfirm") {
+        copyMaxRing();
+        flow = "close";
     } else if (status >= 2) {
         cm.dispose();
     }
@@ -80,6 +91,13 @@ function sendEntry() {
     }
 
     var validation = MonsterCardRingQuest.validateUpgrade(cm.getPlayer());
+    var ringState = MonsterCardRingQuest.getRingState(cm.getPlayer());
+    var current = ringState.getCurrent();
+    if (current != null && current.getLevel() >= MAX_LEVEL) {
+        showMaxRingCopyEntry(validation);
+        return;
+    }
+
     if (validation.isOk()) {
         flow = "close";
         cm.sendOk(getProgressText(validation) + "\r\n\r\n"
@@ -96,6 +114,35 @@ function sendEntry() {
 
     flow = "close";
     cm.sendOk(text);
+}
+
+function showMaxRingCopyEntry(validation) {
+    var copyValidation = MonsterCardRingQuest.validateMaxRingCopy(cm.getPlayer());
+    var text = getProgressText(validation) + "\r\n\r\n"
+        + "#e满级戒指复制#n\r\n"
+        + "消耗：#b#i4310000##t4310000# x" + MAX_RING_COPY_COST + "#k\r\n"
+        + "已复制：#b" + copyValidation.getCopyCount() + "#k / " + MAX_RING_COPY_LIMIT + " 次\r\n"
+        + "剩余次数：#b" + copyValidation.getRemainingCopies() + "#k 次";
+
+    if (!copyValidation.isOk()) {
+        flow = "close";
+        cm.sendOk(text + "\r\n\r\n#r当前不能复制：#k" + copyValidation.getMessage());
+        return;
+    }
+
+    flow = "copySelect";
+    cm.sendSimple(text + "\r\n\r\n#L91##b复制 1 个满级怪物卡戒指#l");
+}
+
+function copyMaxRing() {
+    var result = MonsterCardRingQuest.copyMaxRing(cm.getPlayer());
+    if (!result.success()) {
+        cm.sendOk(result.message());
+        return;
+    }
+    cm.sendOk(result.message() + "\r\n\r\n"
+        + "已复制：#b" + result.copyCount() + "#k / " + MAX_RING_COPY_LIMIT + " 次\r\n"
+        + "剩余次数：#b" + (MAX_RING_COPY_LIMIT - result.copyCount()) + "#k 次");
 }
 
 function prepareNextUpgradeTest() {

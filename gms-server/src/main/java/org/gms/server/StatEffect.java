@@ -303,6 +303,10 @@ public class StatEffect {
         }
 
         ArrayList<Pair<BuffStat, Integer>> statups = new ArrayList<>();
+        if (!skill && sourceid == ItemId.WHITE_ELIXIR) {
+            // The client uses the item source id for the icon; zero HANDS is display-only.
+            statups.add(new Pair<>(BuffStat.HANDS, 0));
+        }
         ret.watk = (short) DataTool.getInt("pad", source, 0);
         ret.wdef = (short) DataTool.getInt("pdd", source, 0);
         ret.matk = (short) DataTool.getInt("mad", source, 0);
@@ -966,6 +970,9 @@ public class StatEffect {
             applyto.sendPacket(PacketCreator.enableActions());
             return false;
         }
+        if (!skill && sourceid == ItemId.WHITE_ELIXIR) {
+            applyto.activateWhiteElixirControlImmunity();
+        }
 
         if (moveTo != -1) {
             if (moveTo != applyto.getMapId()) {
@@ -1336,7 +1343,9 @@ public class StatEffect {
             }
         }
         if (primary) {
-            localDuration = alchemistModifyVal(applyfrom, localDuration, false);
+            if (sourceid != ItemId.WHITE_ELIXIR) {
+                localDuration = alchemistModifyVal(applyfrom, localDuration, false);
+            }
             applyto.getMap().broadcastMessage(applyto, PacketCreator.showBuffEffect(applyto.getId(), sourceid, 1, (byte) 3), false);
         }
         if (localstatups.size() > 0) {

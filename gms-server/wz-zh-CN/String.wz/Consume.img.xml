@@ -8225,7 +8225,7 @@
     </imgdir>
     <imgdir name="2022544">
         <string name="name" value="White Elixir"/>
-        <string name="desc" value="A legendary potion. \nRecovers 50% HP and MP and cancels abnormal statuses. It can recover all abnormal statuses."/>
+        <string name="desc" value="传说中的万能灵药。\n恢复50% HP和MP并解除异常状态。使用后5分钟内免疫诱惑和混乱状态。"/>
     </imgdir>
     <imgdir name="2022545">
         <string name="name" value="Dynamite Drink EX"/>

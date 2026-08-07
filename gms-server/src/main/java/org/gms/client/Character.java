@@ -364,6 +364,7 @@ public class Character extends AbstractCharacterObject {
     private final EnumMap<BuffStat, BuffStatValueHolder> effects = new EnumMap<>(BuffStat.class);
     private final Map<BuffStat, Byte> buffEffectsCount = new LinkedHashMap<>();
     private final Map<Disease, Long> diseaseExpires = new LinkedHashMap<>();
+    private final WhiteElixirControlImmunity whiteElixirControlImmunity = new WhiteElixirControlImmunity();
     private final Map<Integer, Map<BuffStat, BuffStatValueHolder>> buffEffects = new LinkedHashMap<>(); // non-overriding buffs thanks to Ronan
     private final Map<Integer, Long> buffExpires = new LinkedHashMap<>();
     @Getter
@@ -2552,6 +2553,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void giveDebuff(final Disease disease, MobSkill skill) {
+        if (whiteElixirControlImmunity.blocks(disease, Server.getInstance().getCurrentTime())) {
+            return;
+        }
         if (!hasDisease(disease) && getDiseasesSize() < 2) {
             if (!(disease == Disease.SEDUCE || disease == Disease.STUN)) {
                 if (hasActiveBuff(Bishop.HOLY_SHIELD)) {
@@ -2618,6 +2622,10 @@ public class Character extends AbstractCharacterObject {
         dispelDebuff(Disease.ZOMBIFY);
         dispelDebuff(Disease.CONFUSE);
         dispelDebuffs();
+    }
+
+    public void activateWhiteElixirControlImmunity() {
+        whiteElixirControlImmunity.activate(Server.getInstance().getCurrentTime());
     }
 
     public void cancelAllDebuffs() {

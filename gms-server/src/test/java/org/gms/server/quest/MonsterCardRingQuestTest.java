@@ -94,6 +94,8 @@ class MonsterCardRingQuestTest {
             assertQuest(lv10, questId, QuestStatus.Status.COMPLETED);
         }
         assertTrue(MonsterCardRingQuest.resolveCurrentQuestId(lv10).isEmpty());
+        assertEquals(29990, MonsterCardRingQuest.resolveNpcHook(
+                lv10, MonsterCardRingQuest.NPC_ID).orElseThrow());
     }
 
     @Test
@@ -268,6 +270,57 @@ class MonsterCardRingQuestTest {
         assertTrue(text.contains("#t4021000#"));
         assertTrue(text.contains("#b"));
         assertTrue(text.contains("#k"));
+    }
+
+    @Test
+    void maxRingCopyRequiresMaxRingInEquipInventory() {
+        Character chr = newCharacter(300);
+        equipRing(chr, MonsterCardRingQuest.MAX_LEVEL);
+        addItem(chr, MonsterCardRingQuest.PERFECT_PITCH_ITEM_ID, MonsterCardRingQuest.MAX_RING_COPY_COST);
+
+        var validation = MonsterCardRingQuest.validateMaxRingCopy(chr, 0);
+
+        assertFalse(validation.isOk());
+        assertTrue(validation.getMessage().contains("装备栏背包"));
+    }
+
+    @Test
+    void maxRingCopyRequiresEnoughPerfectPitch() {
+        Character chr = newCharacter(300);
+        addRing(chr, MonsterCardRingQuest.MAX_LEVEL);
+        addItem(chr, MonsterCardRingQuest.PERFECT_PITCH_ITEM_ID, MonsterCardRingQuest.MAX_RING_COPY_COST - 1);
+
+        var validation = MonsterCardRingQuest.validateMaxRingCopy(chr, 0);
+
+        assertFalse(validation.isOk());
+        assertTrue(validation.getMessage().contains("绝对音感不足"));
+    }
+
+    @Test
+    void maxRingCopyStopsAfterThreeCopies() {
+        Character chr = newCharacter(300);
+        addRing(chr, MonsterCardRingQuest.MAX_LEVEL);
+        addItem(chr, MonsterCardRingQuest.PERFECT_PITCH_ITEM_ID, MonsterCardRingQuest.MAX_RING_COPY_COST);
+
+        var validation = MonsterCardRingQuest.validateMaxRingCopy(
+                chr, MonsterCardRingQuest.MAX_RING_COPY_LIMIT);
+
+        assertFalse(validation.isOk());
+        assertEquals(0, validation.getRemainingCopies());
+        assertTrue(validation.getMessage().contains("复制满"));
+    }
+
+    @Test
+    void maxRingCopyIsReadyWithRingPitchAndRemainingAttempt() {
+        Character chr = newCharacter(300);
+        addRing(chr, MonsterCardRingQuest.MAX_LEVEL);
+        addItem(chr, MonsterCardRingQuest.PERFECT_PITCH_ITEM_ID, MonsterCardRingQuest.MAX_RING_COPY_COST);
+
+        var validation = MonsterCardRingQuest.validateMaxRingCopy(chr, 2);
+
+        assertTrue(validation.isOk());
+        assertEquals(2, validation.getCopyCount());
+        assertEquals(1, validation.getRemainingCopies());
     }
 
     private static Object bean(Map<Class<?>, Object> beans, Class<?> type) {

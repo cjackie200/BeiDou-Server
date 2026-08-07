@@ -18164,6 +18164,7 @@
       <int name="darkness" value="1"/>
       <int name="weakness" value="1"/>
       <int name="curse" value="1"/>
+      <int name="time" value="300000"/>
     </imgdir>
   </imgdir>
   <imgdir name="02022545">
