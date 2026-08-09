@@ -3093,6 +3093,15 @@
       <int name="order" value="11" />
       <int name="area" value="31" />
     </imgdir>
+    <imgdir name="29996">
+      <string name="name" value="满级怪物卡戒指复制" />
+      <string name="0" value="怪物卡戒指达到满级后，特安可可以帮你复制额外的满级戒指。" />
+      <string name="1" value="把满级怪物卡戒指放在装备栏背包内，带着100个绝对音感去找#p0002006#。每个角色最多可以复制3次。&#13;&#10;&#13;&#10;@@BD_IH_PROGRESS:29996@@" />
+      <string name="2" value="已经完成3次满级怪物卡戒指复制。" />
+      <string name="parent" value="怪物卡戒指" />
+      <int name="order" value="12" />
+      <int name="area" value="31" />
+    </imgdir>
     <imgdir name="29950">
       <string name="name" value="元素共鸣:初声 - 红蜗牛王的回声" />
       <string name="0" value="汉斯在元素矿石里听见最初的回声。等级#r70#k以上的法师可以去#p1032001#听听他的请求。" />

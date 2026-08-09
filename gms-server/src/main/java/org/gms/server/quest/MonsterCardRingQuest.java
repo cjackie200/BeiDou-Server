@@ -40,6 +40,7 @@ public final class MonsterCardRingQuest {
     public static final int MAX_RING_COPY_LIMIT = 3;
     public static final short CLAIM_QUEST_ID = 29980;
     public static final short LAST_QUEST_ID = (short) (CLAIM_QUEST_ID + MAX_LEVEL);
+    public static final short COPY_QUEST_ID = 29996;
     private static final int VIRTUAL_PROGRESS_KEY = 0;
     private static final String PROGRESS_NOT_READY = "000";
     private static final String PROGRESS_READY = "001";
@@ -101,7 +102,7 @@ public final class MonsterCardRingQuest {
     }
 
     public static boolean isQuestId(int questId) {
-        return questId >= CLAIM_QUEST_ID && questId <= LAST_QUEST_ID;
+        return questId >= CLAIM_QUEST_ID && questId <= LAST_QUEST_ID || questId == COPY_QUEST_ID;
     }
 
     public static boolean isMonsterCardRingQuest(int questId) {
@@ -113,6 +114,7 @@ public final class MonsterCardRingQuest {
         for (short questId = CLAIM_QUEST_ID; questId <= LAST_QUEST_ID; questId++) {
             questIds.add((int) questId);
         }
+        questIds.add((int) COPY_QUEST_ID);
         return questIds;
     }
 
@@ -137,8 +139,13 @@ public final class MonsterCardRingQuest {
         }
         RingState ringState = getRingState(chr);
         RingInfo current = ringState.getCurrent();
-        if (current == null || current.getLevel() >= MAX_LEVEL) {
+        if (current == null) {
             return Optional.empty();
+        }
+        if (current.getLevel() >= MAX_LEVEL) {
+            return getMaxRingCopyCount(chr) < MAX_RING_COPY_LIMIT
+                    ? Optional.of((int) COPY_QUEST_ID)
+                    : Optional.empty();
         }
         return Optional.of((int) getUpgradeQuestId(current.getLevel() + 1));
     }
@@ -151,7 +158,7 @@ public final class MonsterCardRingQuest {
         if (currentQuestId.isPresent()) {
             return currentQuestId;
         }
-        return hasMaxRing(chr) ? Optional.of((int) LAST_QUEST_ID) : Optional.empty();
+        return hasMaxRing(chr) ? Optional.of((int) COPY_QUEST_ID) : Optional.empty();
     }
 
     public static Optional<InteractionHookProgressEntry> progressEntry(Character chr) {
@@ -165,8 +172,26 @@ public final class MonsterCardRingQuest {
         syncQuestStateSilently(chr);
         RingState ringState = getRingState(chr);
         RingInfo current = ringState.getCurrent();
-        if (current == null || current.getLevel() >= MAX_LEVEL) {
+        if (current == null) {
             return List.of();
+        }
+        if (current.getLevel() >= MAX_LEVEL) {
+            if (chr.getQuestStatus(COPY_QUEST_ID) != QuestStatus.Status.STARTED.getId()) {
+                return List.of();
+            }
+            int copyCount = getMaxRingCopyCount(chr);
+            int pitchCount = chr.getItemQuantity(PERFECT_PITCH_ITEM_ID, false);
+            return List.of(new InteractionHookProgressEntry(
+                    COPY_QUEST_ID,
+                    chr.getQuestStatus(COPY_QUEST_ID),
+                    List.of(
+                            new InteractionHookProgressEntry.Condition(
+                                    copyCount, MAX_RING_COPY_LIMIT,
+                                    "满级戒指复制次数：" + copyCount + "/" + MAX_RING_COPY_LIMIT),
+                            new InteractionHookProgressEntry.Condition(
+                                    Math.min(pitchCount, MAX_RING_COPY_COST), MAX_RING_COPY_COST,
+                                    "本次绝对音感：" + pitchCount + "/" + MAX_RING_COPY_COST)
+                    )));
         }
 
         List<InteractionHookProgressEntry> entries = new ArrayList<>();
@@ -207,6 +232,9 @@ public final class MonsterCardRingQuest {
     }
 
     public static InteractionHookAction resolveCurrentAction(Character chr, int questId) {
+        if (questId == COPY_QUEST_ID) {
+            return InteractionHookAction.QUERY_PROGRESS;
+        }
         if (questId == CLAIM_QUEST_ID && canClaimBaseRing(chr)) {
             return InteractionHookAction.QUERY_START;
         }
@@ -223,7 +251,7 @@ public final class MonsterCardRingQuest {
         Character chr = context.player();
         syncQuestState(chr);
         int questId = context.questId();
-        if (questId == LAST_QUEST_ID && hasMaxRing(chr)) {
+        if (questId == COPY_QUEST_ID && hasMaxRing(chr)) {
             MaxRingCopyValidation validation = validateMaxRingCopy(chr);
             if (validation.isOk()) {
                 context.sendYesNo(maxRingCopyPrompt(validation));
@@ -263,7 +291,7 @@ public final class MonsterCardRingQuest {
 
         Character chr = context.player();
         int questId = context.questId();
-        if (questId == LAST_QUEST_ID && hasMaxRing(chr)) {
+        if (questId == COPY_QUEST_ID && hasMaxRing(chr)) {
             MaxRingCopyResult result = copyMaxRing(chr);
             context.sendOk(maxRingCopyResultMessage(result));
             return;
@@ -368,6 +396,7 @@ public final class MonsterCardRingQuest {
         if (ringState.getTotal() == 0) {
             setQuestStatus(chr, CLAIM_QUEST_ID, QuestStatus.Status.NOT_STARTED, announce);
             resetUpgradeQuests(chr, announce);
+            setQuestStatus(chr, COPY_QUEST_ID, QuestStatus.Status.NOT_STARTED, announce, null, true);
             syncClientQuestEntrypoints(chr, announce);
             return;
         }
@@ -391,6 +420,11 @@ public final class MonsterCardRingQuest {
             String progress = status == QuestStatus.Status.STARTED ? nextProgress : null;
             setQuestStatus(chr, getUpgradeQuestId(level), status, announce, progress, true);
         }
+        QuestStatus.Status copyStatus = currentLevel >= MAX_LEVEL
+                ? (getMaxRingCopyCount(chr) >= MAX_RING_COPY_LIMIT
+                ? QuestStatus.Status.COMPLETED : QuestStatus.Status.STARTED)
+                : QuestStatus.Status.NOT_STARTED;
+        setQuestStatus(chr, COPY_QUEST_ID, copyStatus, announce, null, true);
         syncClientQuestEntrypoints(chr, announce);
     }
 
@@ -756,7 +790,7 @@ public final class MonsterCardRingQuest {
         if (GameConfig.getServerBoolean("use_rebirth_system")) {
             npcsIds.put(GameConfig.getServerInt("rebirth_npc_id"), "Rebirth");
         }
-        npcsIds.remove(NPC_ID);
+        npcsIds.put(NPC_ID, "怪物卡戒指");
         return npcsIds;
     }
 

@@ -757,10 +757,22 @@ class LifeProofQuestTest {
             }
         }
 
+        Element copyQuest = topLevelImgDir(info, MonsterCardRingQuest.COPY_QUEST_ID);
+        assertEquals("怪物卡戒指", childValue(copyQuest, "string", "parent"));
+        assertEquals("12", childValue(copyQuest, "int", "order"));
+        assertEquals("31", childValue(copyQuest, "int", "area"));
+        assertEquals(1, countOccurrences(childValue(copyQuest, "string", "1"),
+                "@@BD_IH_PROGRESS:" + MonsterCardRingQuest.COPY_QUEST_ID + "@@"));
+        assertEquals("2", childValue(childImgDir(childImgDir(
+                childImgDir(topLevelImgDir(check, MonsterCardRingQuest.COPY_QUEST_ID), "0"), "quest"), "0"),
+                "int", "state"));
+        assertEquals("", childValue(childImgDir(
+                topLevelImgDir(act, MonsterCardRingQuest.COPY_QUEST_ID), "1"), "int", "nextQuest"));
+
         Set<Integer> infoIds = topLevelMonsterCardRingQuestIds(infoPath);
         Set<Integer> checkIds = topLevelMonsterCardRingQuestIds(checkPath);
         Set<Integer> actIds = topLevelMonsterCardRingQuestIds(actPath);
-        assertEquals(11, infoIds.size(), "monster card ring QuestInfo count in " + infoPath);
+        assertEquals(12, infoIds.size(), "monster card ring QuestInfo count in " + infoPath);
         assertEquals(infoIds, checkIds, "Check.img must contain every monster card ring quest in " + questDir);
         assertEquals(infoIds, actIds, "Act.img must contain every monster card ring quest in " + questDir);
     }

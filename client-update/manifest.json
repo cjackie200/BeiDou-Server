@@ -1,5 +1,5 @@
 {
-  "latestVersion": "v1.0.15",
+  "latestVersion": "v1.0.16",
   "versions": [
     {
       "version": "v1.0.2",
@@ -1216,6 +1216,34 @@
       "releaseNotes": [
         "White Elixir 使用后立即解除异常状态，并在接下来的5分钟内免疫诱惑和混乱。",
         "新增 White Elixir Buff 图标与300秒倒计时，重复使用会刷新持续时间。"
+      ]
+    },
+    {
+      "version": "v1.0.16",
+      "baseVersion": "v1.0.15",
+      "files": [
+        {
+          "path": "Data/Quest/Act.img",
+          "size": 688979,
+          "sha256": "5A9DC7C23E1055AF06500D53C233035E3202BC8AE42FC96EA4098A492AE935AE",
+          "url": "/client-update/files/v1.0.16/Data/Quest/Act.img"
+        },
+        {
+          "path": "Data/Quest/Check.img",
+          "size": 847999,
+          "sha256": "2FA367234BB1349A31831BCF354A23CE0CD881E244F664A03C54123598475D3D",
+          "url": "/client-update/files/v1.0.16/Data/Quest/Check.img"
+        },
+        {
+          "path": "Data/Quest/QuestInfo.img",
+          "size": 1386722,
+          "sha256": "7E08070CBCF61FF073D02885DEAECD4CB3213F7359B234AA41267E9820148737",
+          "url": "/client-update/files/v1.0.16/Data/Quest/QuestInfo.img"
+        }
+      ],
+      "releaseNotes": [
+        "持有满级怪物卡戒指后，自动接取满级戒指复制任务，特安可头上会显示进行中任务状态。",
+        "每次消耗100个绝对音感复制1个满级怪物卡戒指，每个角色最多复制3次；完成3次后任务自动完成。"
       ]
     }
   ]

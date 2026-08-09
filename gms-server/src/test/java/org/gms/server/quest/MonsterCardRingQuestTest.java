@@ -93,9 +93,13 @@ class MonsterCardRingQuestTest {
         for (int questId = 29980; questId <= 29990; questId++) {
             assertQuest(lv10, questId, QuestStatus.Status.COMPLETED);
         }
-        assertTrue(MonsterCardRingQuest.resolveCurrentQuestId(lv10).isEmpty());
-        assertEquals(29990, MonsterCardRingQuest.resolveNpcHook(
+        assertQuest(lv10, MonsterCardRingQuest.COPY_QUEST_ID, QuestStatus.Status.STARTED);
+        assertEquals(MonsterCardRingQuest.COPY_QUEST_ID,
+                MonsterCardRingQuest.resolveCurrentQuestId(lv10).orElseThrow());
+        assertEquals(MonsterCardRingQuest.COPY_QUEST_ID, MonsterCardRingQuest.resolveNpcHook(
                 lv10, MonsterCardRingQuest.NPC_ID).orElseThrow());
+        assertTrue(MonsterCardRingQuest.getScriptableNpcIds(lv10)
+                .containsKey(MonsterCardRingQuest.NPC_ID));
     }
 
     @Test
